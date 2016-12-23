@@ -1,12 +1,14 @@
 package utopia.genesis.event
 
+import utopia.inception.handling.Handleable
+
 /**
  * Actors are instances that are called between certain intervals to perform some logical, 
  * (duration based) operations.
  * @author Mikko Hilpinen
  * @since 23.12.2016
  */
-trait Actor
+trait Actor extends Handleable
 {
     /**
      * This method will be called at a short intervals (usually >= 60 times a second). The instance
