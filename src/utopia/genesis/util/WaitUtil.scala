@@ -38,6 +38,13 @@ object WaitUtil
     }
     
     /**
+     * Waits for a certain amount of milliseconds
+     * @param millis The amount of milliseconds waited
+     * @param lock the instance that is waited on
+     */
+    def waitMillis(millis: Double, lock: AnyRef) = waitUntil(System.nanoTime() + nanosOf(millis), lock)
+    
+    /**
      * Converts milliseconds to nanoseconds
      */
     def nanosOf(millis: Double) = (millis * 1000000).toLong
