@@ -12,7 +12,9 @@ object MathUtil
      * becomes 350
      * @param degrees The amount of degrees
      * @return The provided degree amount cast to range [0, 360[
+     * @deprecated Please use Scala's richDouble implementation instead
      */
+    @deprecated
     def degreesToRange(degrees: Double) = 
     {
         val temp = degrees % 360
@@ -23,6 +25,8 @@ object MathUtil
      * Converts from radians to degrees. The value is cast to range [0, 360[
      * @param radians The direction in radians
      * @return the direction in degrees
+     * @deprecated Please use Scala's richDouble implementation instead
      */
+    @deprecated
     def degreesOfRadians(radians: Double) = degreesToRange(Math.toDegrees(radians))
 }

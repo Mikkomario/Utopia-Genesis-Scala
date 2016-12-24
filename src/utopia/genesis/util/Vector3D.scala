@@ -4,6 +4,8 @@ import java.awt.Point
 import java.awt.geom.Point2D
 import java.awt.Dimension
 
+import utopia.genesis.util.Extensions._
+
 object Vector3D
 {
     /**
@@ -110,7 +112,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     /**
      * This vector's direction on the x-y plane in degrees
      */
-    def directionDegs = MathUtil.degreesOfRadians(directionRads)
+    def directionDegs = directionRads.toDegrees
     
     /**
      * This vector's direction on the z-y plane in radians
@@ -120,7 +122,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     /**
      * This vector's direction on the z-y plane in degrees
      */
-    def xDirectionDegs = MathUtil.degreesOfRadians(xDirectionRads)
+    def xDirectionDegs = xDirectionRads.toDegrees
     
     /**
      * This vector's direction on the x-z plane in radians
@@ -130,7 +132,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     /**
      * This vector's direction on the x-z plane in degrees
      */
-    def yDirectionDegs = MathUtil.degreesOfRadians(yDirectionRads)
+    def yDirectionDegs = yDirectionRads.toDegrees
     
     
     /**
@@ -178,6 +180,11 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     
     def /(n: Double): Vector3D = this / Vector3D(n, n, n)
     
+    /**
+     * Checks whether two vectors are approximately equal
+     */
+    def ~==(other: Vector3D) = (x ~== other.x) && (y ~== other.y) && (z ~== other.z)
+    
     
     // OTHER METHODS    ----------------
     
@@ -224,12 +231,12 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     /**
      * Checks whether this vector is parallel with another vector (has same or opposite direction)
      */
-    def isParallelWith(other: Vector3D) = crossProductLength(other) == 0
+    def isParallelWith(other: Vector3D) = crossProductLength(other) ~== 0
     
     /**
      * Checks whether this vector is perpendicular to another vector (ie. (1, 0) vs. (0, 1))
      */
-    def isPerpendicularTo(other: Vector3D) = dot(other) == 0
+    def isPerpendicularTo(other: Vector3D) = dot(other) ~== 0
     
     /**
      * Creates a new vector with the same direction with this vector
