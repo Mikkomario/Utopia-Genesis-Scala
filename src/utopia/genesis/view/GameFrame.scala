@@ -114,6 +114,7 @@ class GameFrame(val originalSize: Vector3D, title: String, borderless: Boolean =
     private def setPadding(size: Dimension, directions: String*)
     {
         // Removes any padding that is not set
+        paddings.foreach { case (dir, padding) => if (!directions.contains(dir)) remove(padding) }
         paddings = paddings.filterKeys { directions.contains(_) }
         
         // Modifies / adds the paddings
@@ -122,7 +123,7 @@ class GameFrame(val originalSize: Vector3D, title: String, borderless: Boolean =
             val padding = paddings.getOrElse(direction, 
             { 
                 val newPadding = new JPanel(null)
-                add(newPadding)
+                add(newPadding, direction)
                 paddings += direction -> newPadding
                 
                 newPadding.setOpaque(true)
