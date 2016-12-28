@@ -10,6 +10,7 @@ import java.awt.event.ComponentListener
 import java.awt.event.ComponentEvent
 import utopia.genesis.view.ScalingPolicy.CROP
 import utopia.genesis.util.WaitUtil
+import utopia.genesis.event.DrawableHandler
 
 /**
  * A Game panel works like any Swing panel except it's able to draw drawable object contents with a
@@ -22,6 +23,11 @@ class GamePanel(originalGameWorldSize: Vector3D, val scalingPolicy: ScalingPolic
         val maxFPS: Int, var clearPrevious: Boolean = true) extends JPanel(null) with ComponentListener
 {
     // ATTRIBUTES    -----------------
+    
+    /**
+     * The handler that keeps track of all the elements drawn by this panel
+     */
+    val handler = new DrawableHandler()
     
     private var _gameWorldSize = originalGameWorldSize
     def gameWorldSize = _gameWorldSize
@@ -73,7 +79,7 @@ class GamePanel(originalGameWorldSize: Vector3D, val scalingPolicy: ScalingPolic
         g2d.scale(scaling, scaling)
         
         g2d.setColor(Color.BLACK)
-        // TODO: Draw using the handler
+        handler.draw(g2d)
         
         g2d.setTransform(originalTransformation)
     }

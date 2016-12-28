@@ -10,6 +10,7 @@ import java.awt.Dimension
 import scala.collection.immutable.HashMap
 import java.awt.event.ComponentListener
 import java.awt.event.ComponentEvent
+import java.awt.Component
 
 /**
  * This class is used for displaying game contents in a frame. The implementation supports
@@ -17,13 +18,22 @@ import java.awt.event.ComponentEvent
  * @author Mikko Hilpinen
  * @since 25.12.2016
  */
-class GameFrame(val originalSize: Vector3D, title: String, borderless: Boolean = false, 
-        usePadding: Boolean = true) extends JFrame with ComponentListener
+class GameFrame(initialContent: Component, val originalSize: Vector3D, title: String, 
+        borderless: Boolean = false, val usePadding: Boolean = true) extends JFrame with ComponentListener
 {
     // ATTRIBUTES    ------------
     
+    private var _content = initialContent
+    def content = _content
+    def content_=(newContent: Component) = 
+    {
+        remove(_content)
+        _content = newContent
+        add(newContent, BorderLayout.CENTER)
+        updateContentSize()
+    }
+    
     private var paddings: Map[String, JPanel] = HashMap()
-    private val mainPanel = new JPanel()
     
     
     // INITIAL CODE    ----------
@@ -42,9 +52,9 @@ class GameFrame(val originalSize: Vector3D, title: String, borderless: Boolean =
         setSize(originalSize.x.toInt + insets.left + insets.right, 
                 originalSize.y.toInt + insets.top + insets.bottom)
                 
-        add(mainPanel, BorderLayout.CENTER)
+        add(initialContent, BorderLayout.CENTER)
         
-        if (usePadding) { addComponentListener(this) }
+        addComponentListener(this)
     }
     
     
@@ -54,33 +64,7 @@ class GameFrame(val originalSize: Vector3D, title: String, borderless: Boolean =
     {
         if (event.getComponent == this)
         {
-            val insets = getInsets
-            val actualSize = Vector3D(getWidth - insets.left - insets.right, 
-                                     getHeight - insets.top - insets.bottom)
-            val scaling = actualSize / originalSize
-            
-            // Calculates the content size and padding
-            if (scaling.x > scaling.y)
-            {
-                val mainPanelSize = originalSize * scaling.y
-                mainPanel.setSize(mainPanelSize.toDimension)
-                
-                val paddingSize = Vector3D((actualSize.x - mainPanelSize.x) / 2, actualSize.y)
-                setPadding(paddingSize.toDimension, BorderLayout.WEST, BorderLayout.EAST)
-            }
-            else if (scaling.y > scaling.x)
-            {
-                val mainPanelSize = originalSize * scaling.x
-                mainPanel.setSize(mainPanelSize.toDimension)
-                
-                val paddingSize = Vector3D(actualSize.x, (actualSize.y - mainPanelSize.y) / 2)
-                setPadding(paddingSize.toDimension, BorderLayout.NORTH, BorderLayout.SOUTH)
-            }
-            else
-            {
-                mainPanel.setSize((originalSize * scaling).toDimension)
-                if (!paddings.isEmpty) { paddings = HashMap() }
-            }
+            updateContentSize()
         }
     }
     
@@ -109,6 +93,45 @@ class GameFrame(val originalSize: Vector3D, title: String, borderless: Boolean =
         }
         
         setBounds(position + newSize)
+    }
+    
+    private def updateContentSize()
+    {
+        val insets = getInsets
+        val actualSize = Vector3D(getWidth - insets.left - insets.right, 
+                                 getHeight - insets.top - insets.bottom);
+        
+        if (usePadding)
+        {
+            val scaling = actualSize / originalSize
+            
+            // Calculates the content size and padding
+            if (scaling.x > scaling.y)
+            {
+                val mainPanelSize = originalSize * scaling.y
+                content.setSize(mainPanelSize.toDimension)
+                
+                val paddingSize = Vector3D((actualSize.x - mainPanelSize.x) / 2, actualSize.y)
+                setPadding(paddingSize.toDimension, BorderLayout.WEST, BorderLayout.EAST)
+            }
+            else if (scaling.y > scaling.x)
+            {
+                val mainPanelSize = originalSize * scaling.x
+                content.setSize(mainPanelSize.toDimension)
+                
+                val paddingSize = Vector3D(actualSize.x, (actualSize.y - mainPanelSize.y) / 2)
+                setPadding(paddingSize.toDimension, BorderLayout.NORTH, BorderLayout.SOUTH)
+            }
+            else
+            {
+                content.setSize((originalSize * scaling).toDimension)
+                if (!paddings.isEmpty) { paddings = HashMap() }
+            }
+        }
+        else
+        {
+            content.setSize(actualSize.toDimension)
+        }
     }
     
     private def setPadding(size: Dimension, directions: String*)
