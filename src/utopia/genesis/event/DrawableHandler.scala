@@ -36,7 +36,7 @@ class DrawableHandler extends Handler[Drawable](DrawableHandlerType) with Drawab
         
         if (sortDepth)
         {
-            sortWith({ _.depth <= _.depth })
+            sortWith({ _.depth >= _.depth })
         }
     }
 }

@@ -50,8 +50,9 @@ class GameFrame(initialContent: Component, val originalSize: Vector3D, title: St
         
         val insets = getInsets()
         setSize(originalSize.x.toInt + insets.left + insets.right, 
-                originalSize.y.toInt + insets.top + insets.bottom)
+                originalSize.y.toInt + insets.top + insets.bottom);
                 
+        setVisible(false)
         add(initialContent, BorderLayout.CENTER)
         
         addComponentListener(this)
@@ -94,6 +95,11 @@ class GameFrame(initialContent: Component, val originalSize: Vector3D, title: St
         
         setBounds(position + newSize)
     }
+    
+    /**
+     * Displays the frame
+     */
+    def display() = setVisible(true)
     
     private def updateContentSize()
     {

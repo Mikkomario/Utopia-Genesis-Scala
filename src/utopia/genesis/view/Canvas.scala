@@ -19,8 +19,9 @@ import utopia.genesis.event.DrawableHandler
  * @author Mikko Hilpinen
  * @since 28.12.2016
  */
-class GamePanel(originalGameWorldSize: Vector3D, val scalingPolicy: ScalingPolicy = PROJECT, 
-        val maxFPS: Int, var clearPrevious: Boolean = true) extends JPanel(null) with ComponentListener
+class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60, 
+        val scalingPolicy: ScalingPolicy = PROJECT, var clearPrevious: Boolean = true) extends 
+        JPanel(null) with ComponentListener
 {
     // ATTRIBUTES    -----------------
     
