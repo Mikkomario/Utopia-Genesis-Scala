@@ -100,6 +100,11 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     def toPoint = new Point(x.toInt, y.toInt)
     
     /**
+     * Converts this vector to a more precise point
+     */
+    def toPoint2D = new Point2D.Double(x, y)
+    
+    /**
      * Converts this vector to a dimension
      */
     def toDimension = new Dimension(x.toInt, y.toInt)
