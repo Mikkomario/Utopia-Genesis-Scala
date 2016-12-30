@@ -283,6 +283,27 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      */
     def withYDirectionDegs(directionDegs: Double) = withYDirectionRads(Math.toRadians(directionDegs))
     
+    /**
+     * Rotates the vector around a certain origin point
+     * @param origin The point this vector is rotated around
+     * @rotationRads The amount of rotation in radians
+     * @return The rotated vector
+     */
+    def rotatedRads(origin: Vector3D, rotationRads: Double) = 
+    {
+        val separator = this - origin
+        origin + Vector3D.lenDirRads(separator.length, 
+                separator.directionRads + rotationRads).copy(z = z)
+    }
+    
+    /**
+     * Rotates the vector around a certain origin point
+     * @param origin The point this vector is rotated around
+     * @rotationRads The amount of rotation in degrees
+     * @return The rotated vector
+     */
+    def rotatedDegs(origin: Vector3D, rotationDegs: Double) = rotatedRads(origin, rotationDegs.toRadians)
+    
     private def calculateDirection(x: Double, y: Double) = Math.atan2(x, y)
     
     // can't divide with 0 (the number is kept as it is)
