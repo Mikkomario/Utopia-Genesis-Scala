@@ -67,6 +67,54 @@ object Vector3D
 		 */
         Vector3D(u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z, u.x * v.y - u.y * v.x)
     }
+    
+    /**
+     * Combines two vectors into a third vector using a binary operator
+     * @param first The first vector used at the left hand side of the operator
+     * @param second the second vector used at the right hand side of the operator
+     * @param f The binary operator that determines the coordinates of the returned vector
+     * @return A vector with values combined from the two vectors using the provided operator
+     */
+    def combine(first: Vector3D, second: Vector3D, f: (Double, Double) => Double) = 
+    {
+        val v1 = first.toVector
+        val v2 = second.toVector
+        
+        val combo = for { i <- 0 to 2 } yield f(v1(i), v2(i))
+        Vector3D(combo(0), combo(1), combo(2))
+    }
+    
+    /**
+     * Performs a check over two vectors using a binary operator. Returns true if the condition 
+     * holds for any coordinate pair between the two vectors.
+     * @param first The first vector used at the left hand side of the operator
+     * @param second the second vector used at the right hand side of the operator
+     * @param condition The binary operator that determines the return value of the function
+     * @return True if the condition returned true for any two coordinates, false otherwise
+     */
+    def exists(first: Vector3D, second: Vector3D, condition: (Double, Double) => Boolean): Boolean = 
+    {
+        val v1 = first.toVector
+        val v2 = second.toVector
+        
+        for (i <- 0 to (v1.size - 1))
+        {
+            if (condition(v1(i), v2(i))) { return true }
+        }
+        
+        false
+    }
+    
+    /**
+     * Performs a check over two vectors using a binary operator. Returns true if the condition 
+     * holds for all coordinate pair between the two vectors.
+     * @param first The first vector used at the left hand side of the operator
+     * @param second the second vector used at the right hand side of the operator
+     * @param condition The binary operator that determines the return value of the function
+     * @return True if the condition returned true for every two coordinates, false otherwise
+     */
+    def forall(first: Vector3D, second: Vector3D, condition: (Double, Double) => Boolean) = 
+            !exists(first, second, { !condition(_, _) })
 }
 
 /**
@@ -162,9 +210,9 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     /**
      * This vector inverted
      */
-    def unary_- = Vector3D(-x, -y, -z)
+    def unary_- = map {-_}
     
-    def +(other: Vector3D) = Vector3D(x + other.x, y + other.y, z + other.z)
+    def +(other: Vector3D) = Vector3D.combine(this, other, { _ + _ })
     
     /**
      * This vector with increased length
@@ -183,18 +231,18 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      */
     def -(n: Double) = this + (-n)
     
-    def *(other: Vector3D) = Vector3D(x * other.x, y * other.y, z * other.z)
+    def *(other: Vector3D) = Vector3D.combine(this, other, { _ * _ })
     
-    def *(n: Double) = Vector3D(x * n, y * n, z * n)
+    def *(n: Double) = map { _ * n }
     
-    def /(other: Vector3D) = Vector3D(divided(x, other.x), divided(y, other.y), divided(z, other.z))
+    def /(other: Vector3D) = Vector3D.combine(this, other, divided)
     
     def /(n: Double): Vector3D = this / Vector3D(n, n, n)
     
     /**
      * Checks whether two vectors are approximately equal
      */
-    def ~==(other: Vector3D) = (x ~== other.x) && (y ~== other.y) && (z ~== other.z)
+    def ~==(other: Vector3D) = Vector3D.forall(this, other, { _ ~== _ })
     
     
     // OTHER METHODS    ----------------
@@ -250,6 +298,17 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     def isPerpendicularTo(other: Vector3D) = dot(other) ~== 0
     
     /**
+     * Checks whether this vector is between the two vector values in every coordinate axis
+     * (inclusive)
+     * @param min The minimum vector
+     * @param max The maximum vector
+     * @return Whether the coordinates of this vector are between the min and max coordinates
+     * respectively
+     */
+    def isBetween(min: Vector3D, max: Vector3D) = Vector3D.forall(this, min, { _ >= _ }) && 
+            Vector3D.forall(this, max, { _ <= _ })
+    
+    /**
      * Creates a new vector with the same direction with this vector
      * @param length The length of the new vector
      */
@@ -303,6 +362,13 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      * @return The rotated vector
      */
     def rotatedDegs(origin: Vector3D, rotationDegs: Double) = rotatedRads(origin, rotationDegs.toRadians)
+    
+    /**
+     * Transforms the coordinates of this vector and returns the transformed vector
+     * @param f The map function that maps the current coordinates into new coordinates
+     * @return A vector with the mapped coordinates
+     */
+    def map(f: Double => Double) = Vector3D(f(x), f(y), f(z))
     
     private def calculateDirection(x: Double, y: Double) = Math.atan2(x, y)
     
