@@ -1,6 +1,7 @@
 package utopia.genesis.util
 
 import java.awt.geom.AffineTransform
+import utopia.genesis.util.Extensions._
 
 object Transformation
 {
@@ -95,6 +96,13 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def -(other: Transformation) = this + (-other)
     
     /**
+     * Checks whether the two transformations are practically (approximately) identical with each
+     * other
+     */
+    def ~==(other: Transformation) = (position ~== other.position) && (scaling ~== other.scaling) && 
+            (rotationRads ~== other.rotationRads) && (shear ~== other.shear)
+    
+    /**
      * Transforms a <b>relative</b> vector <b>into absolute</b> vector
      * @param relative a relative vector that will be transformed
      */
@@ -102,7 +110,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     
     /**
      * Combines the two transformations together. The end result is effectively same as transforming 
-     * the target with this transformation, then with the provided transformation.<p>
+     * the target with the provided transformation, then with this transformation.<p>
      * Please notice that the scaling and rotation affect the scaling and translation applied (for
      * example, adding translation of (1, 0, 0) to a transformation with
      * zero position and scaling of 2 will create a transformation with (2, 0, 0) position and

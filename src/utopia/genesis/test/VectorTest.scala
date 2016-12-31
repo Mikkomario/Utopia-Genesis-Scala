@@ -27,6 +27,12 @@ object VectorTest extends App
     assert(v1 == Vector3D(1) + Vector3D(0, 1))
     
     assert(Vector3D.lenDirRads(1, 0) == Vector3D(1))
+    assert(Vector3D.lenDirDegs(1, 90) ~== Vector3D(0, 1))
+    assert(Vector3D.lenDirDegs(1, 180) ~== Vector3D(-1))
+    
+    val v2 = Vector3D(1)
+    
+    assert(v2.rotatedDegs(90) ~== Vector3D(0, 1))
     
     println("Success")
 }

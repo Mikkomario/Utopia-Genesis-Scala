@@ -36,7 +36,7 @@ object Vector3D
      * @param directionRads The direction of the new vector in degrees
      * @return A vector with provided direction and length
      */
-    def lenDirDegs(length: Double, directionDegs: Double) = lenDirRads(length, Math.toRadians(directionDegs))
+    def lenDirDegs(length: Double, directionDegs: Double) = lenDirRads(length, directionDegs.toRadians)
     
     /**
      * Converts a point into a vector
@@ -351,6 +351,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     def rotatedRads(rotationRads: Double, origin: Vector3D = Vector3D.zero) = 
     {
         val separator = this - origin
+        
         origin + Vector3D.lenDirRads(separator.length, 
                 separator.directionRads + rotationRads).copy(z = z)
     }
@@ -371,7 +372,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      */
     def map(f: Double => Double) = Vector3D(f(x), f(y), f(z))
     
-    private def calculateDirection(x: Double, y: Double) = Math.atan2(x, y)
+    private def calculateDirection(x: Double, y: Double) = Math.atan2(y, x)
     
     // can't divide with 0 (the number is kept as it is)
     private def divided(a: Double, b: Double) = if (b == 0) a else a / b
