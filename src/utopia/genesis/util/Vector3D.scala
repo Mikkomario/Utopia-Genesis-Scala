@@ -69,6 +69,14 @@ object Vector3D
     }
     
     /**
+     * Calculates the average point of the provided vectors
+     * @return The average point of the provided vectors
+     * @throws UnsupportedOperationException If the collection is empty
+     */
+    @throws(classOf[UnsupportedOperationException])
+    def average(vectors: Traversable[Vector3D]) = vectors.reduceLeft { _ + _ } / vectors.size
+    
+    /**
      * Combines two vectors into a third vector using a binary operator
      * @param first The first vector used at the left hand side of the operator
      * @param second the second vector used at the right hand side of the operator
