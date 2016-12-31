@@ -344,11 +344,11 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     
     /**
      * Rotates the vector around a certain origin point
-     * @param origin The point this vector is rotated around
      * @rotationRads The amount of rotation in radians
+     * @param origin The point this vector is rotated around (defaults to zero)
      * @return The rotated vector
      */
-    def rotatedRads(origin: Vector3D, rotationRads: Double) = 
+    def rotatedRads(rotationRads: Double, origin: Vector3D = Vector3D.zero) = 
     {
         val separator = this - origin
         origin + Vector3D.lenDirRads(separator.length, 
@@ -357,11 +357,12 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     
     /**
      * Rotates the vector around a certain origin point
-     * @param origin The point this vector is rotated around
      * @rotationRads The amount of rotation in degrees
+     * @param origin The point this vector is rotated around (default to zero)
      * @return The rotated vector
      */
-    def rotatedDegs(origin: Vector3D, rotationDegs: Double) = rotatedRads(origin, rotationDegs.toRadians)
+    def rotatedDegs(rotationDegs: Double, origin: Vector3D = Vector3D.zero) = 
+            rotatedRads(rotationDegs.toRadians, origin)
     
     /**
      * Transforms the coordinates of this vector and returns the transformed vector
