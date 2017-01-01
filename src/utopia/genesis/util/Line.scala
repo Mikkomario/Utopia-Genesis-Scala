@@ -51,7 +51,14 @@ case class Line(val start: Vector3D, val end: Vector3D)
      */
     def apply(t: Double) = start + vector * t
     
-    def intersection(other: Line) = 
+    /**
+     * Calculates the intersection point between this and another line
+     * @param other the other line
+     * @param onlyPointsInSegment Should the intersection be limited to line segment area. Defaults
+     * to true
+     * @return The intersection between the two lines or None if there is no intersection
+     */
+    def intersection(other: Line, onlyPointsInSegment: Boolean = true) = 
     {
         // a (V1 x V2) = (P2 - P1) x V2
         // Where P is the start point and Vs are the vector parts
@@ -70,7 +77,17 @@ case class Line(val start: Vector3D, val end: Vector3D)
             val a = if (leftVector.directionRads ~== rightVector.directionRads) 
                 rightVector.length / leftVector.length else -rightVector.length / leftVector.length;
             
-            Some(apply(a))
+            val intersectionPoint = apply(a)
+            
+            if (onlyPointsInSegment)
+            {
+                if (a >= 0 && a <= 1 && intersectionPoint.isBetween(other.start, other.end)) 
+                    Some(intersectionPoint) else None
+            }
+            else
+            {
+                Some(intersectionPoint)
+            }
         }
     }
     
@@ -84,7 +101,7 @@ case class Line(val start: Vector3D, val end: Vector3D)
      * circle. Enter point and exit point (in that order) in case the line traverses through the 
      * circle
      */
-    def intersection(circle: Circle, onlyPointsInSegment: Boolean = true) = 
+    def circleIntersection(circle: Circle, onlyPointsInSegment: Boolean = true) = 
     {
         /*
 		 * Terms for the quadratic equation

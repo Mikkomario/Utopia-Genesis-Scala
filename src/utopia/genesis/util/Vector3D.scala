@@ -77,6 +77,16 @@ object Vector3D
     def average(vectors: Traversable[Vector3D]) = vectors.reduceLeft { _ + _ } / vectors.size
     
     /**
+     * Creates a vector that has the smallest available value on each axis from the two candidates
+     */
+    def min(first: Vector3D, second: Vector3D) = combine(first, second, (a, b) => if (a <= b) a else b)
+    
+    /**
+     * Creates a vector that has the largest available value on each axis from the two candidates
+     */
+    def max(first: Vector3D, second: Vector3D) = combine(first, second, (a, b) => if (a >= b) a else b)
+    
+    /**
      * Combines two vectors into a third vector using a binary operator
      * @param first The first vector used at the left hand side of the operator
      * @param second the second vector used at the right hand side of the operator
@@ -310,13 +320,10 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     /**
      * Checks whether this vector is between the two vector values in every coordinate axis
      * (inclusive)
-     * @param min The minimum vector
-     * @param max The maximum vector
-     * @return Whether the coordinates of this vector are between the min and max coordinates
-     * respectively
+     * @return Whether the coordinates of this vector are in the area formed by the two coordinates
      */
-    def isBetween(min: Vector3D, max: Vector3D) = Vector3D.forall(this, min, { _ >= _ }) && 
-            Vector3D.forall(this, max, { _ <= _ })
+    def isBetween(a: Vector3D, b: Vector3D) = Vector3D.forall(this, Vector3D.min(a, b), { _ >= _ }) && 
+            Vector3D.forall(this, Vector3D.max(a, b), { _ <= _ });
     
     /**
      * Creates a new vector with the same direction with this vector
