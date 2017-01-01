@@ -34,5 +34,12 @@ object VectorTest extends App
     
     assert(v2.rotatedDegs(90) ~== Vector3D(0, 1))
     
+    // (-1, 7, 4) x (-5, 8, 4) = (-4, -16, 27)
+    println(Vector3D(-1, 7, 4) cross Vector3D(-5, 8, 4))
+    assert(Vector3D(-1, 7, 4) cross Vector3D(-5, 8, 4) ~== Vector3D(-4, -16, 27))
+    // (10, 0, 0) x (10, 0, -2) = (0, 20, 0)
+    println(Vector3D(10, 0, 0) cross Vector3D(10, 0, -2))
+    assert(Vector3D(10, 0, 0) cross Vector3D(10, 0, -2) ~== Vector3D(0, 20, 0))
+    
     println("Success")
 }
