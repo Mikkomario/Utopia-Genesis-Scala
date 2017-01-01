@@ -270,18 +270,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      * The length of the cross product of these two vectors. |a||b|sin(a, b)
      */
     // = |a||b|sin(a, b)e, |e| = 1 (in this we skip the e)
-    def crossProductLength(other: Vector3D) = 
-    {
-        val radDiff = 
-        { 
-            if (in2D == Vector3D.zero || other.in2D == Vector3D.zero) 
-                yDirectionRads - other.yDirectionRads 
-            else 
-                directionRads - other.directionRads
-        }
-            
-        length * other.length * Math.sin(radDiff)
-    }
+    def crossProductLength(other: Vector3D) = length * other.length * Math.sin(angleDifferenceRads(other))
     
     /**
      * Projects this vector over the another vector. The projected vector will be parallel to the
@@ -304,6 +293,19 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      * Checks whether this vector is perpendicular to another vector (ie. (1, 0) vs. (0, 1))
      */
     def isPerpendicularTo(other: Vector3D) = dot(other) ~== 0
+    
+    /**
+     * Calculates the directional difference between the two vectors in radians
+     */
+    def angleDifferenceRads(other: Vector3D) = 
+    {
+        // This vector is used as the 'x'-axis, while a perpendicular vector is used as the 'y'-axis
+        // The other vector is then measured against these axes
+        val x = other projectedOver this
+        val y = other - x
+        
+        Math.atan2(y.length, x.length).abs
+    }
     
     /**
      * Checks whether this vector is between the two vector values in every coordinate axis

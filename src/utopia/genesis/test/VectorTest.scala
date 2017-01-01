@@ -34,6 +34,13 @@ object VectorTest extends App
     
     assert(v2.rotatedDegs(90) ~== Vector3D(0, 1))
     
+    
+    assert(v1.angleDifferenceRads(Vector3D(1)).toDegrees ~== 45)
+    assert((Vector3D(1) angleDifferenceRads Vector3D(0, 1)).toDegrees ~== 90)
+    
+    // (-1, 7, 0) x (-5, 8, 0) = (0, 0, 27)
+    println(Vector3D(-1, 7) cross Vector3D(-5, 8))
+    assert(Vector3D(-1, 7) cross Vector3D(-5, 8) ~== Vector3D(0, 0, 27))
     // (-1, 7, 4) x (-5, 8, 4) = (-4, -16, 27)
     println(Vector3D(-1, 7, 4) cross Vector3D(-5, 8, 4))
     assert(Vector3D(-1, 7, 4) cross Vector3D(-5, 8, 4) ~== Vector3D(-4, -16, 27))
