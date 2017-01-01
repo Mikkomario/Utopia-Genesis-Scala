@@ -73,4 +73,93 @@ case class Line(val start: Vector3D, val end: Vector3D)
             Some(apply(a))
         }
     }
+    
+    /**
+     * Finds the intersection points between this line and a circle. Only works in 2D.
+     * @param circle a circle
+     * @param onlyPointsInSegment determines whether only points between this line's start and end
+     * point should be included. Defaults to true.
+     * @return The intersection points between this line and the circle. Empty if there is no
+     * intersection, one point if the line is tangential to the circle or starts / ends inside the
+     * circle. Enter point and exit point (in that order) in case the line traverses through the 
+     * circle
+     */
+    def intersection(circle: Circle, onlyPointsInSegment: Boolean = true) = 
+    {
+        /*
+		 * Terms for the quadratic equation
+		 * --------------------------------
+		 * 
+		 * a = (x1 - x0)^2 + (y1 - y0)^2
+		 * b = 2 * (x1 - x0) * (x0 - cx) + 2 * (y1 - y0) * (y0 - cy)
+		 * c = (x0 - cx)^2 + (y0 - cy)^2 - r^2
+		 * 
+		 * Where (x1, y1) is the end point, (x0, y0) is the starting point, (cx, cy) is the 
+		 * circle origin and r is the circle radius
+		 * 
+		 * Vx = (x1 - x0), The transition vector (end - start)
+		 * Vy = (y1 - y0)
+		 * 
+		 * Lx = (x0 - cx), The transition vector from the circle origin to the line start
+		 * Ly = (y0 - cy)	(start - origin)
+		 * 
+		 * With this added:
+		 * a = Vx^2  +  Vy^2
+		 * b = 2 * Vx * Lx  +  2 * Vy * Ly
+		 * c = Lx^2  +  Ly^2  -  r^2
+		 */
+        val L = start - circle.origin
+        
+        val a = math.pow(vector.x, 2) + math.pow(vector.y, 2)
+        val b = 2 * vector.x * L.x + 2 * vector.y * L.y
+        val c = math.pow(L.x, 2) + math.pow(L.y, 2) - math.pow(circle.radius, 2)
+        
+        /*
+		 * The equation
+		 * ------------
+		 * 
+		 * t = (-b +- sqrt(b^2 - 4*a*c)) / (2*a)
+		 * Where t is the modifier for the intersection points [0, 1] would be on the line
+		 * Where b^2 - 4*a*c is called the discriminant and where a != 0
+		 * 
+		 * If The discriminant is negative, there is no intersection
+		 * If the discriminant is 0, there is a single intersection point
+		 * Otherwise there are two
+		 */
+        var intersectionPoints = Vector[Vector3D]()
+        
+        val discriminant = math.pow(b, 2) - 4 * a * c
+        
+        if (a != 0 && discriminant >= 0)
+        {
+            val discriminantRoot = math.sqrt(discriminant)
+            val tEnter = (-b - discriminantRoot) / (2 * a)
+            
+            /*
+			 * The intersection points
+			 * -----------------------
+			 * 
+			 * The final intersection points are simply
+			 * start + t * V
+			 * Where start is the line start position, and V is the line translation vector 
+			 * (end - start)
+			 */
+            if (!onlyPointsInSegment || (tEnter >= 0 && tEnter <= 1))
+            {
+                intersectionPoints :+= apply(tEnter)
+            }
+            
+            if (!(discriminant ~== 0))
+            {
+                val tExit = (-b + discriminantRoot) / (2 * a)
+                
+                if (!onlyPointsInSegment || (tExit >= 0 && tExit <= 1))
+                {
+                    intersectionPoints :+= apply(tExit)
+                }
+            }
+        }
+        
+        intersectionPoints
+    }
 }

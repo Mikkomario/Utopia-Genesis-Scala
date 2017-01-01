@@ -29,7 +29,7 @@ object Vector3D
      * @return A vector with provided direction and length
      */
     def lenDirRads(length: Double, directionRads: Double) = Vector3D(
-            Math.cos(directionRads) * length, Math.sin(directionRads) * length)
+            math.cos(directionRads) * length, math.sin(directionRads) * length)
     /**
      * Creates a new vector with certain length and direction using degree units
      * @param length the length of the new vector
@@ -200,7 +200,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     /**
      * The length of this vector
      */
-    def length = Math.sqrt(this dot this)
+    def length = math.sqrt(this dot this)
     
     /**
      * A normal for this vector
@@ -270,7 +270,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      * The length of the cross product of these two vectors. |a||b|sin(a, b)
      */
     // = |a||b|sin(a, b)e, |e| = 1 (in this we skip the e)
-    def crossProductLength(other: Vector3D) = length * other.length * Math.sin(angleDifferenceRads(other))
+    def crossProductLength(other: Vector3D) = length * other.length * math.sin(angleDifferenceRads(other))
     
     /**
      * Projects this vector over the another vector. The projected vector will be parallel to the
@@ -304,7 +304,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
         val x = other projectedOver this
         val y = other - x
         
-        Math.atan2(y.length, x.length).abs
+        math.atan2(y.length, x.length).abs
     }
     
     /**
@@ -350,7 +350,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      * Creates a new vector with the same length with this vector
      * @param directionRads The vector's new direction on the x-z plane, in degrees
      */
-    def withYDirectionDegs(directionDegs: Double) = withYDirectionRads(Math.toRadians(directionDegs))
+    def withYDirectionDegs(directionDegs: Double) = withYDirectionRads(directionDegs.toRadians)
     
     /**
      * Rotates the vector around a certain origin point
@@ -382,7 +382,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      */
     def map(f: Double => Double) = Vector3D(f(x), f(y), f(z))
     
-    private def calculateDirection(x: Double, y: Double) = Math.atan2(y, x)
+    private def calculateDirection(x: Double, y: Double) = math.atan2(y, x)
     
     // can't divide with 0 (the number is kept as it is)
     private def divided(a: Double, b: Double) = if (b == 0) a else a / b
