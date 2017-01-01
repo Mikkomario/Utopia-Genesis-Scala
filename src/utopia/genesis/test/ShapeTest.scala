@@ -2,6 +2,7 @@ package utopia.genesis.test
 
 import utopia.genesis.util.Line
 import utopia.genesis.util.Vector3D
+import utopia.genesis.util.Circle
 
 /**
  * This test is for some intersection methods and other shape (line, circle) specific methods
@@ -23,6 +24,18 @@ object ShapeTest extends App
     
     assert(line1.intersection(line3).isEmpty)
     assert(line1.intersection(line4).isDefined)
+    
+    val line5 = Line(Vector3D(1, 2, 0), Vector3D(1, 1, 0))
+    assert(line1.intersection(line5, false).isDefined)
+    assert(line1.intersection(line5, true).isEmpty)
+    assert(line5.intersection(line1, true).isEmpty)
+    
+    val circle1 = Circle(Vector3D(3), 2)
+    
+    assert(line1.circleIntersection(circle1).size == 2)
+    assert(line2.circleIntersection(circle1).size == 1)
+    assert(line5.circleIntersection(circle1).isEmpty)
+    assert(line5.circleIntersection(circle1, false).size == 1)
     
     println("Success")
 }
