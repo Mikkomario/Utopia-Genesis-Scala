@@ -91,6 +91,8 @@ case class Line(val start: Vector3D, val end: Vector3D)
         }
     }
     
+    // Do a sphere intersection https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
+    
     /**
      * Finds the intersection points between this line and a circle. Only works in 2D.
      * @param circle a circle
