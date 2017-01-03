@@ -94,6 +94,76 @@ case class Line(val start: Vector3D, val end: Vector3D)
     // Do a sphere intersection https://en.wikipedia.org/wiki/Line%E2%80%93sphere_intersection
     
     /**
+     * Calculates the intersection points between a line and a sphere in 3D. There are from 0 to 2
+     * intersection points
+     * @param circle The circle / sphere this line may intersect with
+     * @param onlyPointsInSegment Determines whether only points that lie in this specific line 
+     * segment should be included. If false, finds the intersection points as if the line had 
+     * infinite length. Defaults to true.
+     * @return The intersection points between this line (segment) and the circle
+     */
+    def sphereIntersection(circle: Circle, onlyPointsInSegment: Boolean = true) = 
+    {
+        /* Circle Equation: |x - c|^2 = r^2 
+         * where x is a point on the circle, c is circle origin and r is circle radius
+         * 
+         * Line Equation: x = o + vt
+         * where x is point on the line, o is the line start point and v is the line's vector
+         * portion. t is a scale for the vector portion ([0, 1] are on the line segment)
+         * 
+         * From these we get: |o + vt - c|^2 = r^2
+         * -> ... -> t^2(v . v) + 2t(v . (o - c)) + (o - c) . (o - c) - r^2 = 0
+         * 
+         * Using quadratic formula we get the terms
+         * a = v . v
+         * b = 2(v . (o - c))
+         * c = (o - c) . (o - c) - r^2
+         */
+        val a = vector dot vector
+        val b = 2 * (vector dot (start - circle.origin))
+        val c = (start - circle.origin) dot (start - circle.origin) - math.pow(circle.radius, 2)
+        
+        // The discriminant portion of the equation determines the amount of intersection points (0 - 2)
+        // d = b^2 - 4 * a * c
+        val discriminant = math.pow(b, 2) - 4 * a * c
+        println(discriminant)
+        
+        if (discriminant < 0)
+        {
+            Vector[Vector3D]()
+        }
+        else
+        {
+            var intersectionPoints = Vector[Vector3D]()
+            
+            // t = (-b +- sqrt(d)) / 2a
+            val tEnter = (-b - math.sqrt(discriminant)) / (2 * a)
+            println(tEnter)
+            if (!onlyPointsInSegment || (tEnter >= 0 && tEnter <= 1))
+            {
+                intersectionPoints :+= apply(tEnter)
+            }
+            
+            if (discriminant ~== 0)
+            {
+                Vector(tEnter)
+            }
+            else
+            {
+                val tExit = (-b + math.sqrt(discriminant) / (2 * a))
+                println(tExit)
+                if (!onlyPointsInSegment || (tExit >= 0 && tExit <= 1))
+                {
+                    intersectionPoints :+= apply(tExit)
+                }
+            }
+            
+            println(intersectionPoints)
+            intersectionPoints
+        }
+    }
+    
+    /**
      * Finds the intersection points between this line and a circle. Only works in 2D.
      * @param circle a circle
      * @param onlyPointsInSegment determines whether only points between this line's start and end
