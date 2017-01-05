@@ -102,7 +102,7 @@ case class Line(val start: Vector3D, val end: Vector3D)
      * infinite length. Defaults to true.
      * @return The intersection points between this line (segment) and the circle
      */
-    def sphereIntersection(circle: Circle, onlyPointsInSegment: Boolean = true) = 
+    def circleIntersection(circle: Circle, onlyPointsInSegment: Boolean = true) = 
     {
         /* Circle Equation: |x - c|^2 = r^2 
          * where x is a point on the circle, c is circle origin and r is circle radius
@@ -113,15 +113,17 @@ case class Line(val start: Vector3D, val end: Vector3D)
          * 
          * From these we get: |o + vt - c|^2 = r^2
          * -> ... -> t^2(v . v) + 2t(v . (o - c)) + (o - c) . (o - c) - r^2 = 0
+         * And if we add L = o - c...
          * 
          * Using quadratic formula we get the terms
          * a = v . v
-         * b = 2(v . (o - c))
-         * c = (o - c) . (o - c) - r^2
+         * b = 2(v . L)
+         * c = L . L - r^2
          */
+        val distanceVector = start - circle.origin
         val a = vector dot vector
-        val b = 2 * (vector dot (start - circle.origin))
-        val c = (start - circle.origin) dot (start - circle.origin) - math.pow(circle.radius, 2)
+        val b = 2 * (vector dot distanceVector)
+        val c = (distanceVector dot distanceVector) - math.pow(circle.radius, 2)
         
         // The discriminant portion of the equation determines the amount of intersection points (0 - 2)
         // d = b^2 - 4 * a * c
@@ -163,7 +165,7 @@ case class Line(val start: Vector3D, val end: Vector3D)
         }
     }
     
-    /**
+    /*
      * Finds the intersection points between this line and a circle. Only works in 2D.
      * @param circle a circle
      * @param onlyPointsInSegment determines whether only points between this line's start and end
@@ -173,6 +175,7 @@ case class Line(val start: Vector3D, val end: Vector3D)
      * circle. Enter point and exit point (in that order) in case the line traverses through the 
      * circle
      */
+    /*
     def circleIntersection(circle: Circle, onlyPointsInSegment: Boolean = true) = 
     {
         /*
@@ -250,5 +253,5 @@ case class Line(val start: Vector3D, val end: Vector3D)
         }
         
         intersectionPoints
-    }
+    }*/
 }

@@ -32,10 +32,10 @@ object ShapeTest extends App
     
     val circle1 = Circle(Vector3D(3), 2)
     
-    assert(line1.sphereIntersection(circle1, false).size == 2)
-    assert(line2.sphereIntersection(circle1).size == 1)
-    assert(line5.sphereIntersection(circle1).isEmpty)
-    assert(line5.sphereIntersection(circle1, false).size == 1)
+    assert(line1.circleIntersection(circle1, false).size == 2)
+    assert(line2.circleIntersection(circle1).size == 1)
+    assert(line5.circleIntersection(circle1).isEmpty)
+    assert(line5.circleIntersection(circle1, false).size == 1)
     
     println("Success")
 }
