@@ -37,5 +37,11 @@ object ShapeTest extends App
     assert(line5.circleIntersection(circle1).isEmpty)
     assert(line5.circleIntersection(circle1, false).size == 1)
     
+    val circle2 = Circle(Vector3D(4), 1)
+    
+    assert(circle1 contains circle2)
+    assert(!circle2.contains(circle1))
+    assert(!circle1.contains(Circle(Vector3D(5), 1)))
+    
     println("Success")
 }
