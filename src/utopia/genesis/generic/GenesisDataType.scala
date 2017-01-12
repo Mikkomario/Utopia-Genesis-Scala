@@ -5,19 +5,20 @@ import utopia.flow.generic.DataType
 import utopia.genesis.util.Line
 import utopia.genesis.util.Circle
 import utopia.flow.generic.AnyType
+import utopia.flow.generic.EnvironmentNotSetupException
 
 /**
  * Vectors are used for representing motion, force and coordinates
  */
-object Vector3DType extends DataType("Vector3D", classOf[Vector3D])
+object Vector3DType extends DataType("Vector3D", classOf[Vector3D]) with GenesisDataType
 /**
  * Lines are geometric 3D shapes that have a start and an end point
  */
-object LineType extends DataType("Line", classOf[Line])
+object LineType extends DataType("Line", classOf[Line]) with GenesisDataType
 /**
  * Circles are geometric shapes that have an origin and a radius
  */
-object CircleType extends DataType("Circle", classOf[Circle])
+object CircleType extends DataType("Circle", classOf[Circle]) with GenesisDataType
 
 /**
  * This class is used for introducing and managing Genesis-specific data types
@@ -43,5 +44,9 @@ object GenesisDataType
 
 sealed trait GenesisDataType
 {
-    // TODO: Throw error if the data types have not been set up properly
+    if (!GenesisDataType.isSetup)
+    {
+        throw new EnvironmentNotSetupException(
+                "GenesisDataType.setup() must be called before using this data type.")
+    }
 }
