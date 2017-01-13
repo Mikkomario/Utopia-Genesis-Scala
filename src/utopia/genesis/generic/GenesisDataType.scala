@@ -6,6 +6,7 @@ import utopia.genesis.util.Line
 import utopia.genesis.util.Circle
 import utopia.flow.generic.AnyType
 import utopia.flow.generic.EnvironmentNotSetupException
+import utopia.flow.generic.ConversionHandler
 
 /**
  * Vectors are used for representing motion, force and coordinates
@@ -39,6 +40,7 @@ object GenesisDataType
         
         DataType.setup()
         DataType.introduceTypes(Vector3DType, LineType, CircleType)
+        ConversionHandler.addCaster(GenesisValueCaster)
     }
 }
 
