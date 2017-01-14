@@ -4,6 +4,7 @@ import utopia.genesis.util.Vector3D
 import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.util.Line
 import utopia.genesis.util.Circle
+import utopia.genesis.util.Transformation
 
 object GenesisValue
 {
@@ -19,6 +20,10 @@ object GenesisValue
      * Wraps a circle into a value
      */
     def of(circle: Circle) = new Value(Some(circle), CircleType)
+    /**
+     * Wraps a transformation into a value
+     */
+    def of(transformation: Transformation) = new Value(Some(transformation), TransformationType)
     
     
     implicit class GValue(val v: Value) extends AnyVal
@@ -37,6 +42,11 @@ object GenesisValue
          * A circle value of this value. None if the value couldn't be casted.
          */
         def circle = v.objectValue(CircleType).map { _.asInstanceOf[Circle] }
+        
+        /**
+         * A transformation value of this value. None if the value couldn't be casted.
+         */
+        def transformation = v.objectValue(TransformationType).map { _.asInstanceOf[Transformation] }
         
         /**
          * The vector value of this value, or the provided default value in case the value couldn't
@@ -59,5 +69,14 @@ object GenesisValue
          * radius.
          */
         def circleOr(default: Circle = Circle(Vector3D.zero, 0)) = circle.getOrElse(default)
+        
+        /**
+         * The transformation value of this value, or the provided default value in case the value
+         * couldn't be cast.
+         * @param default The default transformation value. Defaults to identity transformation,
+         * which doesn't modify an object's state
+         */
+        def transformationOr(default: Transformation = Transformation.identity) = 
+                transformation.getOrElse(default)
     }
 }

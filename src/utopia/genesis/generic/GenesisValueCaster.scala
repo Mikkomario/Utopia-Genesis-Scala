@@ -16,6 +16,7 @@ import utopia.flow.generic.ModelType
 import utopia.genesis.util.Line
 import utopia.genesis.util.Circle
 import utopia.flow.generic.ConversionReliability._
+import utopia.genesis.util.Transformation
 
 /**
  * This object handles casting of Genesis-specific data types
@@ -32,12 +33,14 @@ object GenesisValueCaster extends ValueCaster
             Conversion(Vector3DType, ModelType, PERFECT), 
             Conversion(LineType, ModelType, PERFECT), 
             Conversion(CircleType, ModelType, PERFECT), 
+            Conversion(TransformationType, ModelType, PERFECT), 
             Conversion(VectorType, Vector3DType, MEANING_LOSS), 
             Conversion(ModelType, Vector3DType, MEANING_LOSS), 
             Conversion(LineType, Vector3DType, DATA_LOSS), 
             Conversion(VectorType, LineType, MEANING_LOSS), 
             Conversion(ModelType, LineType, MEANING_LOSS), 
-            Conversion(ModelType, CircleType, MEANING_LOSS))
+            Conversion(ModelType, CircleType, MEANING_LOSS), 
+            Conversion(ModelType, TransformationType, MEANING_LOSS))
     
     
     // IMPLEMENTED METHODS    -----
@@ -51,6 +54,7 @@ object GenesisValueCaster extends ValueCaster
             case Vector3DType => vector3DOf(value)
             case LineType => lineOf(value)
             case CircleType => circleOf(value)
+            case TransformationType => transformationOf(value)
             case _ => None
         }
         
@@ -101,6 +105,15 @@ object GenesisValueCaster extends ValueCaster
                         ("origin", GenesisValue of circle.origin), 
                         ("radius", Value of circle.radius))))
             }
+            case TransformationType => 
+            {
+                val t = value.transformationOr()
+                Some(Model(Vector(
+                        ("position", GenesisValue of t.position), 
+                        ("scaling", GenesisValue of t.scaling), 
+                        ("rotation", Value of t.rotationRads), 
+                        ("shear", GenesisValue of t.shear))))
+            }
             case _ => None
         }
     }
@@ -131,6 +144,22 @@ object GenesisValueCaster extends ValueCaster
         if (value.dataType isOfType ModelType)
         {
             Some(Circle(value("origin").vector3DOr(), value("radius").doubleOr()))
+        }
+        else
+        {
+            None
+        }
+    }
+    
+    private def transformationOf(value: Value): Option[Transformation] = 
+    {
+        if (value.dataType isOfType ModelType)
+        {
+            Some(Transformation(
+                    value("position").vector3DOr(), 
+                    value("scaling").vector3DOr(Vector3D.identity), 
+                    value("rotation").doubleOr(), 
+                    value("shear").vector3DOr()))
         }
         else
         {

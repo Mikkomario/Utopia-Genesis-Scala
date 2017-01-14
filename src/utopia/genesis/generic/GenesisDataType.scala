@@ -7,6 +7,7 @@ import utopia.genesis.util.Circle
 import utopia.flow.generic.AnyType
 import utopia.flow.generic.EnvironmentNotSetupException
 import utopia.flow.generic.ConversionHandler
+import utopia.genesis.util.Transformation
 
 /**
  * Vectors are used for representing motion, force and coordinates
@@ -20,6 +21,10 @@ object LineType extends DataType("Line", classOf[Line]) with GenesisDataType
  * Circles are geometric shapes that have an origin and a radius
  */
 object CircleType extends DataType("Circle", classOf[Circle]) with GenesisDataType
+/**
+ * Transformations are used for transforming object states like position and scale
+ */
+object TransformationType extends DataType("Transformation", classOf[Transformation]) with GenesisDataType
 
 /**
  * This class is used for introducing and managing Genesis-specific data types
@@ -39,7 +44,7 @@ object GenesisDataType
         isSetup = true
         
         DataType.setup()
-        DataType.introduceTypes(Vector3DType, LineType, CircleType)
+        DataType.introduceTypes(Vector3DType, LineType, CircleType, TransformationType)
         ConversionHandler.addCaster(GenesisValueCaster)
     }
 }
