@@ -6,6 +6,12 @@ import utopia.genesis.util.Line
 import utopia.genesis.util.Circle
 import utopia.genesis.generic.GenesisDataType
 import utopia.genesis.generic.GenesisValue
+import utopia.flow.generic.VectorType
+import utopia.genesis.generic.Vector3DType
+import utopia.flow.generic.ModelType
+import utopia.genesis.generic.LineType
+import utopia.genesis.generic.CircleType
+import utopia.flow.datastructure.immutable.Model
 
 /**
  * This is a unit test for the new data type implementations
@@ -44,6 +50,19 @@ object DataTypeTest extends App
     
     assert(c("origin") == v2)
     assert(c("radius").doubleOr() == 12.25)
+    
+    assert(v1.castTo(VectorType).get.castTo(Vector3DType).get == v1)
+    assert(v1.castTo(ModelType).get.castTo(Vector3DType).get == v1)
+    
+    assert(l.castTo(VectorType).get.castTo(LineType).get == l)
+    assert(l.castTo(ModelType).get.castTo(LineType).get == l)
+    
+    //println(c.modelOr())
+    //println(c.castTo(ModelType).get.circleOr())
+    assert(c.castTo(ModelType).get.castTo(CircleType).get == c)
+    
+    val model = Model(Vector(("vector", v1), ("line", l), ("circle", c)))
+    println(model.toJSON)
     
     println("Success")
 }

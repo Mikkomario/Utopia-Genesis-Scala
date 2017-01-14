@@ -36,7 +36,8 @@ object GenesisValueCaster extends ValueCaster
             Conversion(ModelType, Vector3DType, MEANING_LOSS), 
             Conversion(LineType, Vector3DType, DATA_LOSS), 
             Conversion(VectorType, LineType, MEANING_LOSS), 
-            Conversion(ModelType, LineType, MEANING_LOSS))
+            Conversion(ModelType, LineType, MEANING_LOSS), 
+            Conversion(ModelType, CircleType, MEANING_LOSS))
     
     
     // IMPLEMENTED METHODS    -----
