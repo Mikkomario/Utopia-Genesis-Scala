@@ -2,6 +2,10 @@ package utopia.genesis.util
 
 import java.awt.Graphics2D
 import java.awt.AlphaComposite
+import utopia.flow.datastructure.immutable.Value
+import utopia.genesis.generic.Vector3DType
+import utopia.genesis.generic.LineType
+import utopia.genesis.generic.CircleType
 
 /**
  * This object contains some implicit extensions introduced in Genesis

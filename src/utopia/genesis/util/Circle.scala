@@ -25,6 +25,11 @@ case class Circle(val origin: Vector3D, radius: Double)
     def contains(point: Vector3D) = (point - origin).length <= radius
     
     /**
+     * Checks whether the other circle is contained within this circle's area
+     */
+    def contains(other: Circle) = (origin - other.origin).length <= radius - other.radius
+    
+    /**
      * Checks whether the two circles intersect with each other
      */
     def intersectsWith(other: Circle) = (origin - other.origin).length <= radius + other.radius
