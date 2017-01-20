@@ -5,12 +5,54 @@ import utopia.inception.event.Event
 import utopia.flow.datastructure.immutable.Model
 import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.generic.GenesisValue
+import utopia.inception.event.ConditionEventFilter
+import utopia.inception.event.EventFilter
 
 object MouseMoveEvent
 {
+    // ATTRIBUTES    ----------------
+    
     val previousPositionAttName = "position_previous"
     val mousePositionAttName = "position"
     val durationMillisAttName = "duration"
+    
+    
+    // OTHER METHODS    ------------
+    
+    /**
+     * Creates an event filter that only accepts mouse events originating from the specified area
+     * @param containment a function that determines whether a position resides within a specific
+     * area
+     */
+    def overAreaFilter(containment: Vector3D => Boolean) = new EventFilter[MouseMoveEvent](
+            { _.isOverArea(containment) });
+    
+    /**
+     * Creates an event filter that only accepts mouse events originating from the mouse entering 
+     * the specified area
+     * @param containment a function that determines whether a position resides within a specific
+     * area
+     */
+    def enterAreaFilter(containment: Vector3D => Boolean) = new EventFilter[MouseMoveEvent](
+            { _.enteredArea(containment)});
+    
+    /**
+     * Creates an event filter that only accepts mouse events originating from the mouse exiting the
+     * specified area
+     * @param containment a function that determines whether a position resides within a specific
+     * area
+     */
+    def exitedAreaFilter(containment: Vector3D => Boolean) = new EventFilter[MouseMoveEvent](
+            { _.exitedArea(containment) });
+    
+    /**
+     * Creates an event filter that only accepts events where the velocity the mouse cursor moved 
+     * was large enough
+     * @param minVelocity The minimum required velocity for the mouse cursor, pixels per
+     * millisecond.
+     */
+    def minVelocityFilter(minVelocity: Double) = new EventFilter[MouseMoveEvent](
+            { _.velocity.length > minVelocity });
 }
 
 /**
@@ -27,6 +69,19 @@ class MouseMoveEvent(val mousePosition: Vector3D,
             (MouseMoveEvent.previousPositionAttName, GenesisValue of previousMousePosition), 
             (MouseMoveEvent.mousePositionAttName, GenesisValue of mousePosition), 
             (MouseMoveEvent.durationMillisAttName, Value of durationMillis)));
+    
+    
+    // COMPUTED PROPERTIES    -----------
+    
+    /**
+     * The movement vector for the mouse cursor for the duration of the event
+     */
+    def transition = mousePosition - previousMousePosition
+    
+    /**
+     * The velocity vector for the mouse cursor in pixels per millisecond
+     */
+    def velocity = transition / durationMillis
     
     
     // OTHER METHODS    -----------------
