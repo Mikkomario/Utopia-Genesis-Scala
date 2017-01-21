@@ -63,6 +63,9 @@ object MouseMoveEvent
 class MouseMoveEvent(val mousePosition: Vector3D, 
         val previousMousePosition: Vector3D, val durationMillis: Double) extends Event
 {
+    // TODO: You may wish to add mouse button state as contextual information since some 
+    // instances are interested in mouse dragging, etc.
+    
     // ATTRIBUTES    --------------------
     
     override lazy val identifiers = Model(Vector(
