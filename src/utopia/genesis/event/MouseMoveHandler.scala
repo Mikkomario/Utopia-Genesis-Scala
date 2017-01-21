@@ -13,18 +13,13 @@ case object MouseMoveHandlerType extends HandlerType(classOf[MouseMoveListener])
  */
 class MouseMoveHandler extends Handler[MouseMoveListener](MouseMoveHandlerType) with MouseMoveListener
 {
-    // ATTRIBUTES    --------------
-    
-    override val mouseMoveEventFilter = new AnyEventFilter[MouseMoveEvent]()
-    
-    
     // IMPLEMENTED METHODS    -----
     
-    override def onMouseMoveEvent(event: MouseMoveEvent) = foreach(true, listener => 
+    override def onMouseMove(event: MouseMoveEvent) = foreach(true, listener => 
     {
         if (listener.mouseMoveEventFilter(event))
         {
-            listener.onMouseMoveEvent(event)
+            listener.onMouseMove(event)
         }
         true
     })
