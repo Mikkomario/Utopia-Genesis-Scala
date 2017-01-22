@@ -9,6 +9,11 @@ import utopia.genesis.util.Extensions._
  */
 case class Circle(val origin: Vector3D, radius: Double)
 {
+    // COMPUTED PROPERTIES    ---------
+    
+    def diameter = radius * 2
+    
+    
     // OPERATORS    -------------------
     
     /**
