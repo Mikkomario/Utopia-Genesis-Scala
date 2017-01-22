@@ -14,7 +14,6 @@ object MouseMoveEvent
     
     val previousPositionAttName = "position_previous"
     val mousePositionAttName = "position"
-    val durationMillisAttName = "duration"
     
     
     // OTHER METHODS    ------------
@@ -46,10 +45,8 @@ object MouseMoveEvent
             { _.exitedArea(containment) });
     
     /**
-     * Creates an event filter that only accepts events where the velocity the mouse cursor moved 
-     * was large enough
-     * @param minVelocity The minimum required velocity for the mouse cursor, pixels per
-     * millisecond.
+     * Creates an event filter that only accepts events where the mouse cursor moved with enough
+     * speed
      */
     def minVelocityFilter(minVelocity: Double) = new EventFilter[MouseMoveEvent](
             { _.velocity.length > minVelocity });
@@ -60,8 +57,8 @@ object MouseMoveEvent
  * @author Mikko Hilpinen
  * @since 10.1.2017
  */
-class MouseMoveEvent(val mousePosition: Vector3D, 
-        val previousMousePosition: Vector3D, val durationMillis: Double) extends Event
+class MouseMoveEvent(val mousePosition: Vector3D, val previousMousePosition: Vector3D, 
+        val durationMillis: Double) extends Event
 {
     // TODO: You may wish to add mouse button state as contextual information since some 
     // instances are interested in mouse dragging, etc.
@@ -70,8 +67,7 @@ class MouseMoveEvent(val mousePosition: Vector3D,
     
     override lazy val identifiers = Model(Vector(
             (MouseMoveEvent.previousPositionAttName, GenesisValue of previousMousePosition), 
-            (MouseMoveEvent.mousePositionAttName, GenesisValue of mousePosition), 
-            (MouseMoveEvent.durationMillisAttName, Value of durationMillis)));
+            (MouseMoveEvent.mousePositionAttName, GenesisValue of mousePosition)));
     
     
     // COMPUTED PROPERTIES    -----------
@@ -82,7 +78,7 @@ class MouseMoveEvent(val mousePosition: Vector3D,
     def transition = mousePosition - previousMousePosition
     
     /**
-     * The velocity vector for the mouse cursor in pixels per millisecond
+     * The velocity vector of the mouse cursor, in pixels per millisecond
      */
     def velocity = transition / durationMillis
     
