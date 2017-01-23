@@ -5,7 +5,6 @@ import java.awt.geom.Point2D
 import java.awt.Dimension
 
 import utopia.genesis.util.Extensions._
-import java.awt.Rectangle
 
 object Vector3D
 {
@@ -240,7 +239,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     /**
      * Creates a set of bounds based on this position and a certain size
      */
-    def +(size: Dimension) = new Rectangle(toPoint, size)
+    def +(size: Dimension) = new java.awt.Rectangle(toPoint, size)
     
     def -(other: Vector3D) = this + (-other)
     

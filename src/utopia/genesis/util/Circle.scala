@@ -14,7 +14,35 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
     
     override def toShape = new Ellipse2D.Double(origin.x - radius, origin.y - radius, radius * 2, radius * 2)
     
+    /**
+     * The diameter of the circle, from one side to another
+     */
     def diameter = radius * 2
+    
+    /**
+     * The perimeter of the 2D circle
+     */
+    def perimeter = 2 * math.Pi * radius
+    
+    /**
+     * A version of this circle where the origin lies on the x-y plane
+     */
+    def in2D = Circle(origin.in2D, radius)
+    
+    /**
+     * The area of the circle in square pixels
+     */
+    def area = math.Pi * radius * radius
+    
+    /**
+     * The surface area of this 3D sphere
+     */
+    def surfaceArea = 4 * math.Pi * radius * radius
+    
+    /**
+     * The volume inside this 3D sphere
+     */
+    def volume = 4 * math.Pi * math.pow(radius, 3) / 3
     
     
     // OPERATORS    -------------------
@@ -31,6 +59,29 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
      * Checks whether the circle contains the provided point
      */
     def contains(point: Vector3D) = (point - origin).length <= radius
+    
+    /**
+     * Checks whether the sphere fully contains the provided line
+     */
+    def contains(line: Line): Boolean = contains(line.start) && contains(line.end)
+    
+    /**
+     * Checks whether the circle contains the provided point when both shapes are projected to x-y
+     * axis
+     */
+    def contains2D(point: Vector3D) = contains(point.in2D)
+    
+    /**
+     * Checks whether the circle contains the provided line when both shapes are projected to x-y
+     * plane
+     */
+    def contains2D(line: Line): Boolean = contains2D(line.start) && contains2D(line.end)
+    
+    /**
+     * Checks whether the circle contains the provided rectangle when both shapes are projected 
+     * to x-y plane
+     */
+    def contains2D(rectangle: Rectangle): Boolean = rectangle.edges2D.forall { contains2D(_) }
     
     /**
      * Checks whether the other circle is contained within this circle's area

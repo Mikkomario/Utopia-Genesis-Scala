@@ -8,6 +8,7 @@ import java.awt.Color
 import java.awt.BasicStroke
 import java.awt.Stroke
 import java.awt.Shape
+import java.awt.Paint
 
 object Drawer
 {
@@ -30,16 +31,18 @@ object Drawer
  */
 class Drawer(val graphics: Graphics2D)
 {
+    // TODO: Add clipping
+    
     // ATTRIBUTES    -----------------
     
     /**
      * The color used when drawing shape edges
      */
-    var edgeColor = Color.BLACK
+    var edgeColor: Paint = Color.BLACK
     /**
      * The color used when filling a shape
      */
-    var fillColor = Color.WHITE
+    var fillColor: Paint = Color.WHITE
     
     private var _alpha = 1.0
     /**
@@ -95,9 +98,9 @@ class Drawer(val graphics: Graphics2D)
      */
     def draw(shape: Shape) = 
     {
-        graphics.setColor(fillColor)
+        graphics.setPaint(fillColor)
         graphics.fill(shape)
-        graphics.setColor(edgeColor)
+        graphics.setPaint(edgeColor)
         graphics.draw(shape)
     }
     
