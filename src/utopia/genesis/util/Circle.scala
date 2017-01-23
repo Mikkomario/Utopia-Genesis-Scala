@@ -1,15 +1,18 @@
 package utopia.genesis.util
 
 import utopia.genesis.util.Extensions._
+import java.awt.geom.Ellipse2D
 
 /**
  * Circles are shapes that are formed by an origin and a radius
  * @author Mikko Hilpinen
  * @since 1.1.2017
  */
-case class Circle(val origin: Vector3D, radius: Double)
+case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
 {
     // COMPUTED PROPERTIES    ---------
+    
+    override def toShape = new Ellipse2D.Double(origin.x - radius, origin.y - radius, radius * 2, radius * 2)
     
     def diameter = radius * 2
     

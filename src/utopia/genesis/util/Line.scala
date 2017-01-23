@@ -1,6 +1,7 @@
 package utopia.genesis.util
 
 import utopia.genesis.util.Extensions._
+import java.awt.geom.Line2D
 
 object Line
 {
@@ -18,7 +19,7 @@ object Line
  * @author Mikko Hilpinen
  * @since 13.12.2016
  */
-case class Line(val start: Vector3D, val end: Vector3D)
+case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
 {
     // ATTRIBUTES    -------------------
     
@@ -29,6 +30,8 @@ case class Line(val start: Vector3D, val end: Vector3D)
     
     
     // COMPUTED PROPERTIES    ----------
+    
+    override def toShape = new Line2D.Double(start.x, start.y, end.x, end.y)
     
     /**
      * This line with inverted direction

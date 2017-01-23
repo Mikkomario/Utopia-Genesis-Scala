@@ -7,6 +7,7 @@ import scala.collection.mutable.Stack
 import java.awt.Color
 import java.awt.BasicStroke
 import java.awt.Stroke
+import java.awt.Shape
 
 object Drawer
 {
@@ -77,6 +78,7 @@ class Drawer(val graphics: Graphics2D)
     /**
      * Draws a circle
      */
+    /*
     def draw(circle: Circle) = 
     {
         val x = (circle.origin.x - circle.radius).toInt
@@ -86,7 +88,23 @@ class Drawer(val graphics: Graphics2D)
         graphics.fillOval(x, y, circle.diameter.toInt, circle.diameter.toInt)
         graphics.setColor(edgeColor)
         graphics.drawOval(x, y, circle.diameter.toInt, circle.diameter.toInt)
+    }*/
+    
+    /**
+     * Draws and fills a shape
+     */
+    def draw(shape: Shape) = 
+    {
+        graphics.setColor(fillColor)
+        graphics.fill(shape)
+        graphics.setColor(edgeColor)
+        graphics.draw(shape)
     }
+    
+    /**
+     * Draws a shape convertible instance as this drawer would draw a shape
+     */
+    def draw(shape: ShapeConvertible): Unit = draw(shape.toShape)
     
     def setStroke(stroke: Stroke) = graphics.setStroke(stroke)
 }
