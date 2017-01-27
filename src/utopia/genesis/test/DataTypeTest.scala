@@ -14,6 +14,8 @@ import utopia.genesis.generic.CircleType
 import utopia.flow.datastructure.immutable.Model
 import utopia.genesis.util.Transformation
 import utopia.genesis.generic.TransformationType
+import utopia.genesis.util.Rectangle
+import utopia.genesis.generic.RectangleType
 
 /**
  * This is a unit test for the new data type implementations
@@ -28,12 +30,14 @@ object DataTypeTest extends App
     val vector2 = Vector3D(3)
     val line = Line(vector1, vector2)
     val circle = Circle(vector2, 12.25)
+    val rectangle = Rectangle(vector2, vector1)
     val transformation = Transformation(vector2, vector2, math.Pi, vector1)
     
     val v1 = GenesisValue of vector1
     val v2 = GenesisValue of vector2
     val l = GenesisValue of line 
     val c = GenesisValue of circle
+    val r = GenesisValue of rectangle
     val t = GenesisValue of transformation
     
     assert(v1.vectorOr().size == 3)
@@ -55,6 +59,10 @@ object DataTypeTest extends App
     assert(c("origin") == v2)
     assert(c("radius").doubleOr() == 12.25)
     
+    assert(r("position") == v2)
+    assert(r("size") == v1)
+    assert(r.vector3DOr() ~== v1.vector3DOr())
+    
     assert(t("position") == v2)
     assert(t("scaling") == v2)
     assert(t("rotation").doubleOr() == math.Pi)
@@ -68,9 +76,13 @@ object DataTypeTest extends App
     
     assert(c.castTo(ModelType).get.castTo(CircleType).get == c)
     
+    assert(r.castTo(LineType).get.castTo(RectangleType).get == r)
+    assert(r.castTo(ModelType).get.castTo(RectangleType).get == r)
+    
     assert(t.castTo(ModelType).get.castTo(TransformationType).get == t)
     
-    val model = Model(Vector(("vector", v1), ("line", l), ("circle", c), ("transformation", t)))
+    val model = Model(Vector(("vector", v1), ("line", l), ("circle", c), ("rectangle", r), 
+            ("transformation", t)));
     println(model.toJSON)
     
     println("Success")

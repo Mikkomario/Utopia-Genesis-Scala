@@ -15,6 +15,11 @@ object Rectangle
         
         Rectangle(min, max - min)
     }
+    
+    /**
+     * Creates a rectangle around line so that the line becomes one of the rectangle's diagonals
+     */
+    def aroundDiagonal(diagonal: Line) = between(diagonal.start, diagonal.end)
 }
 
 /**
@@ -59,6 +64,12 @@ case class Rectangle(val position: Vector3D, val size: Vector3D) extends ShapeCo
      * The volume inside this 3D cube in cubic pixels
      */
     def volume = width * height * depth
+    
+    /**
+     * The diagonal line for this rectangle. Starts at the position coordinates and goes all the 
+     * way to the opposite corner.
+     */
+    def diagonal = Line(position, position + size)
     
     /**
      * The four corners of the x-y side of the rectangle, in clockwise order starting from the
