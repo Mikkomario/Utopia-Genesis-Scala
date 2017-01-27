@@ -1,14 +1,18 @@
 package utopia.genesis.util
 
+import java.awt.geom.RoundRectangle2D
+
 /**
  * A rectangle limits a certain rectangular area of space. The rectangle is defined by two points 
  * and the edges go along x, y and z axes.
  * @author Mikko Hilpinen
  * @since 13.1.2017
  */
-case class Rectangle(val position: Vector3D, val size: Vector3D)
+case class Rectangle(val position: Vector3D, val size: Vector3D) extends ShapeConvertible
 {
     // COMPUTED PROPERTIES    ------------
+    
+    override def toShape = new java.awt.Rectangle(position.x.toInt, position.y.toInt, width.toInt, height.toInt)
     
     /**
      * The width of the rectangle / cube
@@ -59,6 +63,18 @@ case class Rectangle(val position: Vector3D, val size: Vector3D)
     
     
     // OTHER METHODS    ----------------
+    
+    /**
+     * Creates a rounded rectangle based on this rectangle shape.
+     * @param ruondingFactor How much the corners are rounded. 0 Means that the corners are not
+     * rounded at all, 1 means that the corners are rounded as much as possible, so that the ends of
+     * the shape become ellipsoid. Default value is 0.25
+     */
+    def toRoundedRectangle(roundingFactor: Double = 0.25) =
+    {
+        val rounding = math.min(width, height) * roundingFactor / 2
+        new RoundRectangle2D.Double(position.x, position.y, width, height, rounding, rounding)
+    }
     
     /**
      * Finds the intersection points between the edges of this rectangle and the provided circle.
