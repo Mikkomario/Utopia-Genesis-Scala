@@ -257,6 +257,26 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     def /(n: Double): Vector3D = this / Vector3D(n, n, n)
     
     /**
+     * Checks whether this vector is smaller than another vector on all coordinate axes
+     */
+    def <(other: Vector3D) = Vector3D.forall(this, other, { _ < _ })
+    
+    /**
+     * Checks whether this vector is larger than another vector on all coordinate axes
+     */
+    def >(other: Vector3D) = Vector3D.forall(this, other, { _ > _ })
+    
+    /**
+     * Checks whether this vector is smaller or equal than another vector on all coordinate axes
+     */
+    def <=(other: Vector3D) = Vector3D.forall(this, other, { _ <= _ })
+    
+    /**
+     * Checks whether this vector is larger or equal than another vector on all coordinate axes
+     */
+    def >=(other: Vector3D) = Vector3D.forall(this, other, { _ >= _ })
+    
+    /**
      * Checks whether two vectors are approximately equal
      */
     def ~==(other: Vector3D) = Vector3D.forall(this, other, { _ ~== _ })
