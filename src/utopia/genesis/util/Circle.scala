@@ -81,7 +81,7 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
      * Checks whether the circle contains the provided rectangle when both shapes are projected 
      * to x-y plane
      */
-    def contains2D(rectangle: Rectangle): Boolean = rectangle.edges2D.forall { contains2D(_) }
+    def contains2D(rectangle: Bounds): Boolean = rectangle.edges2D.forall { contains2D(_) }
     
     /**
      * Checks whether the other circle is contained within this circle's area

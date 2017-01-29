@@ -14,8 +14,8 @@ import utopia.genesis.generic.CircleType
 import utopia.flow.datastructure.immutable.Model
 import utopia.genesis.util.Transformation
 import utopia.genesis.generic.TransformationType
-import utopia.genesis.util.Rectangle
-import utopia.genesis.generic.RectangleType
+import utopia.genesis.util.Bounds
+import utopia.genesis.generic.BoundsType
 
 /**
  * This is a unit test for the new data type implementations
@@ -30,7 +30,7 @@ object DataTypeTest extends App
     val vector2 = Vector3D(3)
     val line = Line(vector1, vector2)
     val circle = Circle(vector2, 12.25)
-    val rectangle = Rectangle(vector2, vector1)
+    val rectangle = Bounds(vector2, vector1)
     val transformation = Transformation(vector2, vector2, math.Pi, vector1)
     
     val v1 = GenesisValue of vector1
@@ -76,8 +76,8 @@ object DataTypeTest extends App
     
     assert(c.castTo(ModelType).get.castTo(CircleType).get == c)
     
-    assert(r.castTo(LineType).get.castTo(RectangleType).get == r)
-    assert(r.castTo(ModelType).get.castTo(RectangleType).get == r)
+    assert(r.castTo(LineType).get.castTo(BoundsType).get == r)
+    assert(r.castTo(ModelType).get.castTo(BoundsType).get == r)
     
     assert(t.castTo(ModelType).get.castTo(TransformationType).get == t)
     

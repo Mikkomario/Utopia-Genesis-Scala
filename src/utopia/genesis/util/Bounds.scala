@@ -2,7 +2,7 @@ package utopia.genesis.util
 
 import java.awt.geom.RoundRectangle2D
 
-object Rectangle
+object Bounds
 {
     /**
      * Creates a rectangle that contains the area between the two coordinates. The order 
@@ -13,7 +13,16 @@ object Rectangle
         val min = Vector3D.min(p1, p2)
         val max = Vector3D.max(p1, p2)
         
-        Rectangle(min, max - min)
+        Bounds(min, max - min)
+    }
+    
+    /**
+     * Creates a set of bounds around a circle so that the whole sphere is contained.
+     */
+    def around(circle: Circle) = 
+    {
+        val r = Vector3D(circle.radius, circle.radius, circle.radius)
+        Bounds(circle.origin - r, r * 2)
     }
     
     /**
@@ -23,12 +32,12 @@ object Rectangle
 }
 
 /**
- * A rectangle limits a certain rectangular area of space. The rectangle is defined by two points 
+ * Bounds limit a certain rectangular area of space. The rectangle is defined by two points 
  * and the edges go along x, y and z axes.
  * @author Mikko Hilpinen
  * @since 13.1.2017
  */
-case class Rectangle(val position: Vector3D, val size: Vector3D) extends ShapeConvertible
+case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConvertible
 {
     // COMPUTED PROPERTIES    ------------
     
@@ -92,7 +101,7 @@ case class Rectangle(val position: Vector3D, val size: Vector3D) extends ShapeCo
     /**
      * A version of this rectangle that lies completely on the x-y plane
      */
-    def in2D = Rectangle(position.in2D, size.in2D)
+    def in2D = Bounds(position.in2D, size.in2D)
     
     
     // OTHER METHODS    ----------------
@@ -120,6 +129,11 @@ case class Rectangle(val position: Vector3D, val size: Vector3D) extends ShapeCo
     def contains(line: Line): Boolean = contains(line.start) && contains(line.end)
     
     /**
+     * Checks whether a set of bounds is contained within this bounds' area
+     */
+    def contains(bounds: Bounds): Boolean = contains(bounds.position) && contains(bounds.position + bounds.size)
+    
+    /**
      * Checks whether a coordinate lies within this rectangle's area when z-axis is ignored
      */
     def contains2D(coordinate: Vector3D) = in2D.contains(coordinate.in2D)
@@ -136,6 +150,12 @@ case class Rectangle(val position: Vector3D, val size: Vector3D) extends ShapeCo
      */
     def contains2D(circle: Circle): Boolean = contains2D(circle.origin) && 
             circleIntersection2D(circle).isEmpty;
+    
+    /**
+     * Checks whether this set of bounds contains another bounds' area. Doesn't check the z-axis 
+     * values for containment.
+     */
+    def contains2D(bounds: Bounds) = in2D.contains(bounds.in2D)
     
     /**
      * Finds the intersection points between the edges of this rectangle and the provided circle.
