@@ -11,6 +11,7 @@ import java.awt.event.ComponentEvent
 import utopia.genesis.view.ScalingPolicy.CROP
 import utopia.genesis.util.WaitUtil
 import utopia.genesis.event.DrawableHandler
+import utopia.genesis.util.Drawer
 
 /**
  * A Game panel works like any Swing panel except it's able to draw drawable object contents with a
@@ -80,7 +81,7 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
         g2d.scale(scaling, scaling)
         
         g2d.setColor(Color.BLACK)
-        handler.draw(g2d)
+        handler.draw(new Drawer(g2d))
         
         g2d.setTransform(originalTransformation)
     }

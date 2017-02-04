@@ -56,6 +56,12 @@ class Drawer(val graphics: Graphics2D)
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha.toFloat))
     }
     
+    /**
+     * The drawing stroke used when drawing shapes
+     */
+    def stroke = graphics.getStroke
+    def stroke_=(stroke: Stroke) = graphics.setStroke(stroke)
+    
     private var transforms = Stack[AffineTransform]()
     
     
