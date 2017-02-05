@@ -28,7 +28,7 @@ object MouseTest extends App
         
         override def draw(drawer: Drawer) = 
         {
-            drawer.fillColor = if (mouseOver) Color.LIGHT_GRAY else Color.DARK_GRAY
+            drawer.fillColor = if (mouseOver) Color.CYAN else Color.LIGHT_GRAY
             drawer.draw(area)
         }
         

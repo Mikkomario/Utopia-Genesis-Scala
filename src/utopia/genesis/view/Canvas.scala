@@ -12,6 +12,8 @@ import utopia.genesis.view.ScalingPolicy.CROP
 import utopia.genesis.util.WaitUtil
 import utopia.genesis.event.DrawableHandler
 import utopia.genesis.util.Drawer
+import java.awt.event.HierarchyListener
+import java.awt.event.HierarchyEvent
 
 /**
  * A Game panel works like any Swing panel except it's able to draw drawable object contents with a
@@ -22,7 +24,7 @@ import utopia.genesis.util.Drawer
  */
 class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60, 
         val scalingPolicy: ScalingPolicy = PROJECT, var clearPrevious: Boolean = true) extends 
-        JPanel(null) with ComponentListener
+        JPanel(null) with HierarchyListener
 {
     // ATTRIBUTES    -----------------
     
@@ -52,7 +54,8 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
     
     setSize(originalGameWorldSize.toDimension)
     setBackground(Color.WHITE)
-    addComponentListener(this)
+    //addComponentListener(this)
+    addHierarchyListener(this)
     
     
     // COMPUTED PROPERTIES    --------
@@ -86,12 +89,38 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
         g2d.setTransform(originalTransformation)
     }
     
+    override def hierarchyChanged(event: HierarchyEvent) = 
+    {
+        if (isShowing())
+        {
+            // Starts refreshing the panel
+            if (refreshThread.isEmpty)
+            {
+                refreshThread = Some(new RefreshThread())
+                refreshThread.get.setDaemon(true)
+                refreshThread.get.start()
+            }
+        }
+        else
+        {
+            // Stops refreshing the panel
+            if (refreshThread.isDefined)
+            {
+                refreshThread.get.end()
+                refreshThread = None
+            }
+        }
+    }
+    
+    /*
     override def componentResized(event: ComponentEvent) = updateScaling()
     
     override def componentMoved(event: ComponentEvent) = Unit
     
     override def componentShown(event: ComponentEvent) = 
     {
+        println("Canvas shown")
+        
         // Starts refreshing the panel
         if (refreshThread.isEmpty)
         {
@@ -103,13 +132,15 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
     
     override def componentHidden(event: ComponentEvent) = 
     {
+        println("Canvas hidden")
+        
         // Stops refreshing the panel
         if (refreshThread.isDefined)
         {
             refreshThread.get.end()
             refreshThread = None
         }
-    }
+    }*/
     
     
     // OTHER METHODS    --------------
