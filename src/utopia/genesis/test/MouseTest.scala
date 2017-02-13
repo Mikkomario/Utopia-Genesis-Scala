@@ -12,6 +12,7 @@ import utopia.genesis.view.Canvas
 import utopia.genesis.view.GameFrame
 import utopia.genesis.view.CanvasMouseEventGenerator
 import utopia.inception.handling.HandlerRelay
+import utopia.genesis.util.Line
 
 /**
  * This is a visual test for mouse event features
@@ -24,16 +25,23 @@ object MouseTest extends App
     {
         override val depth = 0
         
+        private var lastMousePosition = Vector3D.zero
         private var mouseOver = false
         
         override def draw(drawer: Drawer) = 
         {
             drawer.fillColor = if (mouseOver) Color.CYAN else Color.LIGHT_GRAY
             drawer.draw(area)
+            
+            drawer.draw(Line(area.origin, lastMousePosition))
         }
         
         // TODO: Add area trait that has containment
-        override def onMouseMove(event: MouseMoveEvent) = mouseOver = event.isOverArea { area.contains(_) }
+        override def onMouseMove(event: MouseMoveEvent) = 
+        {
+            lastMousePosition = event.mousePosition
+            mouseOver = event.isOverArea { area.contains(_) }
+        }
     }
     
     // Creates the frame
