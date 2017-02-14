@@ -4,6 +4,7 @@ import utopia.inception.handling.Handler
 import utopia.inception.handling.HandlerType
 import utopia.genesis.util.DepthRange
 import java.awt.Graphics2D
+import utopia.genesis.util.Drawer
 
 case object DrawableHandlerType extends HandlerType(classOf[Drawable])
 
@@ -16,7 +17,7 @@ class DrawableHandler extends Handler[Drawable](DrawableHandlerType) with Drawab
     
     // IMPLEMENTED METHODS    -------------
     
-    def draw(g: Graphics2D) = 
+    override def draw(drawer: Drawer) = 
     {
         // Draws all the elements inside the handler. 
         // If the depth order was wrong, fixes it for the next iteration
@@ -25,7 +26,7 @@ class DrawableHandler extends Handler[Drawable](DrawableHandlerType) with Drawab
         
         foreach(true, drawable => 
         {
-            drawable.draw(g)
+            drawable.draw(drawer)
             if (drawable.depth > lastDepth)
             {
                 sortDepth = true

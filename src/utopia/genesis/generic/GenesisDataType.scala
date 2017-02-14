@@ -8,6 +8,7 @@ import utopia.flow.generic.AnyType
 import utopia.flow.generic.EnvironmentNotSetupException
 import utopia.flow.generic.ConversionHandler
 import utopia.genesis.util.Transformation
+import utopia.genesis.util.Bounds
 
 /**
  * Vectors are used for representing motion, force and coordinates
@@ -21,6 +22,10 @@ object LineType extends DataType("Line", classOf[Line]) with GenesisDataType
  * Circles are geometric shapes that have an origin and a radius
  */
 object CircleType extends DataType("Circle", classOf[Circle]) with GenesisDataType
+/**
+ * Rectangles are geometric shapes / areas that have both position and size
+ */
+object BoundsType extends DataType("Bounds", classOf[Bounds]) with GenesisDataType
 /**
  * Transformations are used for transforming object states like position and scale
  */

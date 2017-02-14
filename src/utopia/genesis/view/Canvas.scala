@@ -11,6 +11,9 @@ import java.awt.event.ComponentEvent
 import utopia.genesis.view.ScalingPolicy.CROP
 import utopia.genesis.util.WaitUtil
 import utopia.genesis.event.DrawableHandler
+import utopia.genesis.util.Drawer
+import java.awt.event.HierarchyListener
+import java.awt.event.HierarchyEvent
 
 /**
  * A Game panel works like any Swing panel except it's able to draw drawable object contents with a
@@ -21,7 +24,7 @@ import utopia.genesis.event.DrawableHandler
  */
 class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60, 
         val scalingPolicy: ScalingPolicy = PROJECT, var clearPrevious: Boolean = true) extends 
-        JPanel(null) with ComponentListener
+        JPanel(null) with HierarchyListener with ComponentListener
 {
     // ATTRIBUTES    -----------------
     
@@ -52,6 +55,7 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
     setSize(originalGameWorldSize.toDimension)
     setBackground(Color.WHITE)
     addComponentListener(this)
+    addHierarchyListener(this)
     
     
     // COMPUTED PROPERTIES    --------
@@ -80,35 +84,42 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
         g2d.scale(scaling, scaling)
         
         g2d.setColor(Color.BLACK)
-        handler.draw(g2d)
+        handler.draw(new Drawer(g2d))
         
         g2d.setTransform(originalTransformation)
     }
     
+    override def hierarchyChanged(event: HierarchyEvent) = 
+    {
+        if (isShowing())
+        {
+            // Starts refreshing the panel
+            if (refreshThread.isEmpty)
+            {
+                refreshThread = Some(new RefreshThread())
+                refreshThread.get.setDaemon(true)
+                refreshThread.get.start()
+            }
+        }
+        else
+        {
+            // Stops refreshing the panel
+            if (refreshThread.isDefined)
+            {
+                refreshThread.get.end()
+                refreshThread = None
+            }
+        }
+    }
+    
+    // Updates scaling whenever the component's size changes
     override def componentResized(event: ComponentEvent) = updateScaling()
     
     override def componentMoved(event: ComponentEvent) = Unit
     
-    override def componentShown(event: ComponentEvent) = 
-    {
-        // Starts refreshing the panel
-        if (refreshThread.isEmpty)
-        {
-            refreshThread = Some(new RefreshThread())
-            refreshThread.get.setDaemon(true)
-            refreshThread.get.start()
-        }
-    }
+    override def componentShown(event: ComponentEvent) = Unit
     
-    override def componentHidden(event: ComponentEvent) = 
-    {
-        // Stops refreshing the panel
-        if (refreshThread.isDefined)
-        {
-            refreshThread.get.end()
-            refreshThread = None
-        }
-    }
+    override def componentHidden(event: ComponentEvent) = Unit
     
     
     // OTHER METHODS    --------------

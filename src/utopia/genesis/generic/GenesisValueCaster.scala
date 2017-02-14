@@ -17,6 +17,7 @@ import utopia.genesis.util.Line
 import utopia.genesis.util.Circle
 import utopia.flow.generic.ConversionReliability._
 import utopia.genesis.util.Transformation
+import utopia.genesis.util.Bounds
 
 /**
  * This object handles casting of Genesis-specific data types
@@ -33,13 +34,17 @@ object GenesisValueCaster extends ValueCaster
             Conversion(Vector3DType, ModelType, PERFECT), 
             Conversion(LineType, ModelType, PERFECT), 
             Conversion(CircleType, ModelType, PERFECT), 
+            Conversion(BoundsType, ModelType, PERFECT), 
             Conversion(TransformationType, ModelType, PERFECT), 
             Conversion(VectorType, Vector3DType, MEANING_LOSS), 
             Conversion(ModelType, Vector3DType, MEANING_LOSS), 
             Conversion(LineType, Vector3DType, DATA_LOSS), 
+            Conversion(BoundsType, LineType, DATA_LOSS), 
             Conversion(VectorType, LineType, MEANING_LOSS), 
             Conversion(ModelType, LineType, MEANING_LOSS), 
             Conversion(ModelType, CircleType, MEANING_LOSS), 
+            Conversion(LineType, BoundsType, DATA_LOSS), 
+            Conversion(ModelType, BoundsType, MEANING_LOSS), 
             Conversion(ModelType, TransformationType, MEANING_LOSS))
     
     
@@ -54,6 +59,7 @@ object GenesisValueCaster extends ValueCaster
             case Vector3DType => vector3DOf(value)
             case LineType => lineOf(value)
             case CircleType => circleOf(value)
+            case BoundsType => boundsOf(value)
             case TransformationType => transformationOf(value)
             case _ => None
         }
@@ -105,6 +111,13 @@ object GenesisValueCaster extends ValueCaster
                         ("origin", GenesisValue of circle.origin), 
                         ("radius", Value of circle.radius))))
             }
+            case BoundsType => 
+            {
+                val rect = value.boundsOr()
+                Some(Model(Vector(
+                        ("position", GenesisValue of rect.position), 
+                        ("size", GenesisValue of rect.size))))
+            }
             case TransformationType => 
             {
                 val t = value.transformationOr()
@@ -133,6 +146,7 @@ object GenesisValueCaster extends ValueCaster
     {
         value.dataType match 
         {
+            case BoundsType => Some(value.boundsOr().diagonal)
             case VectorType => Some(Line(value(0).vector3DOr(), value(1).vector3DOr()))
             case ModelType => Some(Line(value("start").vector3DOr(), value("end").vector3DOr()))
             case _ => None
@@ -148,6 +162,16 @@ object GenesisValueCaster extends ValueCaster
         else
         {
             None
+        }
+    }
+    
+    private def boundsOf(value: Value): Option[Bounds] = 
+    {
+        value.dataType match 
+        {
+            case LineType => Some(Bounds.aroundDiagonal(value.lineOr()))
+            case ModelType => Some(Bounds(value("position").vector3DOr(), value("size").vector3DOr()))
+            case _ => None
         }
     }
     

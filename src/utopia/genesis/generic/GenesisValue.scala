@@ -5,6 +5,7 @@ import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.util.Line
 import utopia.genesis.util.Circle
 import utopia.genesis.util.Transformation
+import utopia.genesis.util.Bounds
 
 object GenesisValue
 {
@@ -20,6 +21,10 @@ object GenesisValue
      * Wraps a circle into a value
      */
     def of(circle: Circle) = new Value(Some(circle), CircleType)
+    /**
+     * Wraps a set of bounds into a value
+     */
+    def of(rect: Bounds) = new Value(Some(rect), BoundsType)
     /**
      * Wraps a transformation into a value
      */
@@ -42,6 +47,11 @@ object GenesisValue
          * A circle value of this value. None if the value couldn't be casted.
          */
         def circle = v.objectValue(CircleType).map { _.asInstanceOf[Circle] }
+        
+        /**
+         * A rectangle value of this value. None if the value couldn't be casted.
+         */
+        def bounds = v.objectValue(BoundsType).map { _.asInstanceOf[Bounds] }
         
         /**
          * A transformation value of this value. None if the value couldn't be casted.
@@ -69,6 +79,14 @@ object GenesisValue
          * radius.
          */
         def circleOr(default: Circle = Circle(Vector3D.zero, 0)) = circle.getOrElse(default)
+        
+        /**
+         * The rectangle value of this value, or the provided default value in case the value
+         * couldn't be cast.
+         * @param default the default rectangle value. Defaults to rectangle with zero position and
+         * size.
+         */
+        def boundsOr(default: Bounds = Bounds(Vector3D.zero, Vector3D.zero)) = bounds.getOrElse(default)
         
         /**
          * The transformation value of this value, or the provided default value in case the value

@@ -1,6 +1,8 @@
 package utopia.genesis.util
 
 import utopia.genesis.util.Extensions._
+import java.awt.geom.Line2D
+import scala.collection.mutable.ListBuffer
 
 object Line
 {
@@ -10,7 +12,36 @@ object Line
      * @param vector The vector portion of the line
      * @return A line with the provided position and vector part
      */
-    def ofVector(position: Vector3D, vector: Vector3D) = Line(position, position + vector)    
+    def ofVector(position: Vector3D, vector: Vector3D) = Line(position, position + vector)
+    
+    /**
+     * Creates a set of edges for the provided vertices. The vertices are iterated in order and an 
+     * edge is placed between them.
+     * @param vertices An ordered collection of vertices
+     * @param close Should the shape be closed by connecting the last and the first vertex. Defaults
+     * to true
+     * @return The edges that were formed between the vertices. Empty if there were less than 2
+     * vertices
+     */
+    def edgesForVertices(vertices: Seq[Vector3D], close: Boolean = true) = 
+    {
+        if (vertices.size < 2)
+        {
+            Vector()
+        }
+        else
+        {
+            var lastVertex = vertices.head
+            val buffer = ListBuffer[Line]()
+            vertices.foreach( vertex => { buffer += Line(lastVertex, vertex); lastVertex = vertex } )
+            if (close)
+            {
+                buffer += Line(lastVertex, vertices.head)
+            }
+            
+            buffer.toVector
+        }
+    }
 }
 
 /**
@@ -18,7 +49,7 @@ object Line
  * @author Mikko Hilpinen
  * @since 13.12.2016
  */
-case class Line(val start: Vector3D, val end: Vector3D)
+case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
 {
     // ATTRIBUTES    -------------------
     
@@ -30,10 +61,17 @@ case class Line(val start: Vector3D, val end: Vector3D)
     
     // COMPUTED PROPERTIES    ----------
     
+    override def toShape = new Line2D.Double(start.x, start.y, end.x, end.y)
+    
     /**
      * This line with inverted direction
      */
     def inverted = Line(end, start)
+    
+    /**
+     * A version of this line that lies completely on the x-y plane
+     */
+    def in2D = Line(start.in2D, end.in2D)
     
     
     // OPERATORS    --------------------

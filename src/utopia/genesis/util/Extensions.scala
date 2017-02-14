@@ -19,6 +19,7 @@ object Extensions
         def ~==(d2: Double) = (d -d2).abs < 0.00001
     }
     
+    @deprecated("Replaced with the new drawer class", "v0.3")
     implicit class ExtendedGraphics(val g: Graphics2D) extends AnyVal
     {
         /**

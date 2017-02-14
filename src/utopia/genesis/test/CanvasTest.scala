@@ -6,6 +6,8 @@ import utopia.genesis.util.Vector3D
 import java.awt.Color
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.GameFrame
+import utopia.genesis.util.Drawer
+import utopia.genesis.util.Circle
 
 /**
  * This test tests the basic canvas drawing
@@ -16,12 +18,10 @@ object CanvasTest extends App
 {
     private class TestDrawable(val position: Vector3D, val r: Int, val depth: Int) extends Drawable
     {
-        override def draw(g: Graphics2D) = 
+        override def draw(drawer: Drawer) = 
         {
-            g.setColor(Color.RED)
-            g.fillOval(position.x.toInt - r, position.y.toInt -r, r*2, r*2)
-            g.setColor(Color.BLACK)
-            g.drawOval(position.x.toInt - r, position.y.toInt -r, r*2, r*2)
+            drawer.fillColor = Color.RED
+            drawer.draw(Circle(position, r))
         }
     }
     
