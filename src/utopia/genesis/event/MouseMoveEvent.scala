@@ -1,12 +1,10 @@
 package utopia.genesis.event
 
 import utopia.genesis.util.Vector3D
-import utopia.inception.event.Event
 import utopia.flow.datastructure.immutable.Model
 import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.generic.GenesisValue
-import utopia.inception.event.ConditionEventFilter
-import utopia.inception.event.EventFilter
+import utopia.inception.util.Filter
 
 object MouseMoveEvent
 {
@@ -23,7 +21,7 @@ object MouseMoveEvent
      * @param containment a function that determines whether a position resides within a specific
      * area
      */
-    def overAreaFilter(containment: Vector3D => Boolean) = new EventFilter[MouseMoveEvent](
+    def overAreaFilter(containment: Vector3D => Boolean) = new Filter[MouseMoveEvent](
             { _.isOverArea(containment) });
     
     /**
@@ -32,7 +30,7 @@ object MouseMoveEvent
      * @param containment a function that determines whether a position resides within a specific
      * area
      */
-    def enterAreaFilter(containment: Vector3D => Boolean) = new EventFilter[MouseMoveEvent](
+    def enterAreaFilter(containment: Vector3D => Boolean) = new Filter[MouseMoveEvent](
             { _.enteredArea(containment)});
     
     /**
@@ -41,14 +39,14 @@ object MouseMoveEvent
      * @param containment a function that determines whether a position resides within a specific
      * area
      */
-    def exitedAreaFilter(containment: Vector3D => Boolean) = new EventFilter[MouseMoveEvent](
+    def exitedAreaFilter(containment: Vector3D => Boolean) = new Filter[MouseMoveEvent](
             { _.exitedArea(containment) });
     
     /**
      * Creates an event filter that only accepts events where the mouse cursor moved with enough
      * speed
      */
-    def minVelocityFilter(minVelocity: Double) = new EventFilter[MouseMoveEvent](
+    def minVelocityFilter(minVelocity: Double) = new Filter[MouseMoveEvent](
             { _.velocity.length > minVelocity });
 }
 
@@ -58,17 +56,10 @@ object MouseMoveEvent
  * @since 10.1.2017
  */
 class MouseMoveEvent(val mousePosition: Vector3D, val previousMousePosition: Vector3D, 
-        val durationMillis: Double) extends Event
+        val durationMillis: Double)
 {
     // TODO: You may wish to add mouse button state as contextual information since some 
     // instances are interested in mouse dragging, etc.
-    
-    // ATTRIBUTES    --------------------
-    
-    override lazy val identifiers = Model(Vector(
-            (MouseMoveEvent.previousPositionAttName, GenesisValue of previousMousePosition), 
-            (MouseMoveEvent.mousePositionAttName, GenesisValue of mousePosition)));
-    
     
     // COMPUTED PROPERTIES    -----------
     

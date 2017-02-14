@@ -1,12 +1,12 @@
 package utopia.genesis.event
 
-import utopia.inception.event.EventFilter
 import utopia.inception.handling.Handleable
-import utopia.inception.event.AnyEventFilter
+import utopia.inception.util.AnyFilter
+import utopia.inception.util.Filter
 
 object MouseMoveListener
 {
-    private val defaultEventFilter = new AnyEventFilter[MouseMoveEvent]()    
+    private val defaultEventFilter = new AnyFilter[MouseMoveEvent]()    
 }
 
 /**
@@ -21,7 +21,7 @@ trait MouseMoveListener extends Handleable
      * accepted by the filter are informed to the listener. The default implementation accepts 
      * all incoming events.
      */
-    def mouseMoveEventFilter: EventFilter[MouseMoveEvent] = MouseMoveListener.defaultEventFilter
+    def mouseMoveEventFilter: Filter[MouseMoveEvent] = MouseMoveListener.defaultEventFilter
     
     /**
      * This method is used for informing the listener of new mouse events. This method should 

@@ -24,7 +24,7 @@ import java.awt.event.HierarchyEvent
  */
 class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60, 
         val scalingPolicy: ScalingPolicy = PROJECT, var clearPrevious: Boolean = true) extends 
-        JPanel(null) with HierarchyListener
+        JPanel(null) with HierarchyListener with ComponentListener
 {
     // ATTRIBUTES    -----------------
     
@@ -54,7 +54,7 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
     
     setSize(originalGameWorldSize.toDimension)
     setBackground(Color.WHITE)
-    //addComponentListener(this)
+    addComponentListener(this)
     addHierarchyListener(this)
     
     
@@ -112,35 +112,14 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
         }
     }
     
-    /*
+    // Updates scaling whenever the component's size changes
     override def componentResized(event: ComponentEvent) = updateScaling()
     
     override def componentMoved(event: ComponentEvent) = Unit
     
-    override def componentShown(event: ComponentEvent) = 
-    {
-        println("Canvas shown")
-        
-        // Starts refreshing the panel
-        if (refreshThread.isEmpty)
-        {
-            refreshThread = Some(new RefreshThread())
-            refreshThread.get.setDaemon(true)
-            refreshThread.get.start()
-        }
-    }
+    override def componentShown(event: ComponentEvent) = Unit
     
-    override def componentHidden(event: ComponentEvent) = 
-    {
-        println("Canvas hidden")
-        
-        // Stops refreshing the panel
-        if (refreshThread.isDefined)
-        {
-            refreshThread.get.end()
-            refreshThread = None
-        }
-    }*/
+    override def componentHidden(event: ComponentEvent) = Unit
     
     
     // OTHER METHODS    --------------

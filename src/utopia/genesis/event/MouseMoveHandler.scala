@@ -2,7 +2,6 @@ package utopia.genesis.event
 
 import utopia.inception.handling.HandlerType
 import utopia.inception.handling.Handler
-import utopia.inception.event.AnyEventFilter
 
 case object MouseMoveHandlerType extends HandlerType(classOf[MouseMoveListener])
 
