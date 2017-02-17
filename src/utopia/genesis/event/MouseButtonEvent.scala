@@ -1,5 +1,7 @@
 package utopia.genesis.event
 
+import utopia.genesis.event.MouseButton._
+
 /**
  * Mouse button events are generated whenever a mouse button state changes
  * @author Mikko Hilpinen
@@ -20,18 +22,28 @@ class MouseButtonEvent(val buttonIndex: Int, val isDown: Boolean, val wasDown: B
      */
     def wasReleased = !isDown && wasDown
     
+    def button = 
+    
     /**
      * Whether this event concerns the left mouse button
      */
-    def isLeftMouseButton = buttonIndex == 1
+    def isLeftMouseButton = isMouseButton(Left)
     
     /**
      * Whether this event concerns the right mouse button
      */
-    def isRightMouseButton = buttonIndex == 3
+    def isRightMouseButton = isMouseButton(Right)
     
     /**
      * Whether this event concerns the middle mouse button
      */
-    def isMiddleMouseButton = buttonIndex == 2
+    def isMiddleMouseButton = isMouseButton(Middle)
+    
+    
+    // OTHER METHODS    ------------------
+    
+    /**
+     * Checks whether this mouse event concerns the specified mouse button
+     */
+    def isMouseButton(button: MouseButton) = buttonIndex == button.buttonIndex
 }
