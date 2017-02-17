@@ -22,7 +22,10 @@ class MouseButtonEvent(val buttonIndex: Int, val isDown: Boolean, val wasDown: B
      */
     def wasReleased = !isDown && wasDown
     
-    def button = 
+    /**
+     * The basic mouse button for this event or None if the event concerns a special button
+     */
+    def button = MouseButton.forIndex(buttonIndex)
     
     /**
      * Whether this event concerns the left mouse button
