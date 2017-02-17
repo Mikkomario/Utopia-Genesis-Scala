@@ -8,12 +8,6 @@ import utopia.inception.util.Filter
 
 object MouseMoveEvent
 {
-    // ATTRIBUTES    ----------------
-    
-    val previousPositionAttName = "position_previous"
-    val mousePositionAttName = "position"
-    
-    
     // OTHER METHODS    ------------
     
     /**
