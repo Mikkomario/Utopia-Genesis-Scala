@@ -11,6 +11,8 @@ import utopia.genesis.event.MouseMoveHandler
 import utopia.genesis.event.Actor
 import java.awt.Container
 import java.awt.MouseInfo
+import utopia.genesis.event.MouseButtonStateHandler
+import utopia.genesis.event.MouseButtonStateEvent
 
 /**
  * This class listens to mouse status inside a canvas and generates new mouse events. This 
@@ -27,6 +29,10 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
      * This handler informs mouse move listeners about the new mouse move events
      */
     val moveHandler = new MouseMoveHandler()
+    /**
+     * This handler informs mouse button listeners when a mouse button is pressed or released
+     */
+    val buttonStateHandler = new MouseButtonStateHandler()
     
     private var lastMousePosition = Vector3D.zero
     
@@ -59,16 +65,20 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
     }
     
     
-    /*
-    private class MouseEventReceiver extends MouseListener with MouseWheelListener
+    // NESTED CLASSES    ------------
+    
+    private class MouseEventReceiver extends MouseListener //with MouseWheelListener
     {
-        override def mousePressed(e: MouseEvent)= Unit
-        override def mouseReleased(e: MouseEvent) = Unit
-        override def mouseWheelMoved(e: MouseWheelEvent) = Unit
+        override def mousePressed(e: MouseEvent) = buttonStateHandler.onMouseButtonEvent(
+                new MouseButtonStateEvent(e.getButton, true));
+        
+        override def mouseReleased(e: MouseEvent) = buttonStateHandler.onMouseButtonEvent(
+                new MouseButtonStateEvent(e.getButton, false));
+        
+        // override def mouseWheelMoved(e: MouseWheelEvent) = Unit
         
         override def mouseClicked(e: MouseEvent) = Unit
         override def mouseEntered(e: MouseEvent) = Unit
         override def mouseExited(e: MouseEvent) = Unit
     }
-    */
 }
