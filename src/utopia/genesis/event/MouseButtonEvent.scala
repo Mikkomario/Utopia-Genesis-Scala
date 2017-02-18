@@ -1,9 +1,35 @@
 package utopia.genesis.event
 
 import utopia.genesis.event.MouseButton._
+import utopia.inception.util.Filter
+
+object MouseButtonEvent
+{
+    /**
+     * This filter only accepts button events where the mouse button was just pressed down
+     */
+    val wasPressedFilter = new Filter[MouseButtonEvent]({ _.wasPressed })
+    
+    /**
+     * This filter only accepts button events where the mouse button was just released from down
+     * state
+     */
+    val wasReleasedFilter = new Filter[MouseButtonEvent]({ _.wasReleased })
+    
+    /**
+     * This filter only accepts button events for the specific button index
+     */
+    def mouseButtonFilter(buttonIndex: Int) = new Filter[MouseButtonEvent](
+            { _.buttonIndex == buttonIndex });
+    
+    /**
+     * This filter only accepts button events for the specific mouse button
+     */
+    def mouseButtonFilter(button: MouseButton): Filter[MouseButtonEvent] = mouseButtonFilter(button.buttonIndex)
+}
 
 /**
- * Mouse button events are generated whenever a mouse button state changes
+ * Mouse button events are generated whenever a mouse button state changes (pressed and released)
  * @author Mikko Hilpinen
  * @since 17.2.2017
  */
