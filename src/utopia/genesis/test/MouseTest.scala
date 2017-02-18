@@ -13,6 +13,8 @@ import utopia.genesis.view.GameFrame
 import utopia.genesis.view.CanvasMouseEventGenerator
 import utopia.inception.handling.HandlerRelay
 import utopia.genesis.util.Line
+import utopia.genesis.event.MouseButtonStateListener
+import utopia.genesis.event.MouseButtonStateEvent
 
 /**
  * This is a visual test for mouse event features
@@ -21,16 +23,17 @@ import utopia.genesis.util.Line
  */
 object MouseTest extends App
 {
-    class TestObject(val area: Circle) extends Drawable with MouseMoveListener
+    class TestObject(val area: Circle) extends Drawable with MouseMoveListener with MouseButtonStateListener
     {
         override val depth = 0
         
         private var lastMousePosition = Vector3D.zero
         private var mouseOver = false
+        private var isOn = false
         
         override def draw(drawer: Drawer) = 
         {
-            drawer.fillColor = if (mouseOver) Color.CYAN else Color.LIGHT_GRAY
+            drawer.fillColor = if (isOn) Color.BLUE else if (mouseOver) Color.CYAN else Color.LIGHT_GRAY
             drawer.draw(area)
             
             drawer.draw(Line(area.origin, lastMousePosition))
@@ -42,6 +45,13 @@ object MouseTest extends App
             lastMousePosition = event.mousePosition
             mouseOver = event.isOverArea { area.contains(_) }
         }
+        
+        // Only accepts mouse press events
+        override def mouseButtonStateEventFilter = MouseButtonStateEvent.wasPressedFilter
+        
+        // Switches the state
+        override def onMouseButtonState(event: MouseButtonStateEvent) = 
+            if (area.contains(event.mousePosition)) isOn = !isOn;
     }
     
     // Creates the frame
@@ -56,7 +66,8 @@ object MouseTest extends App
     
     actorThread.handler += mouseEventGen
     
-    val handlers = new HandlerRelay(actorThread.handler, mouseEventGen.moveHandler, canvas.handler)
+    val handlers = new HandlerRelay(actorThread.handler, mouseEventGen.moveHandler, 
+            mouseEventGen.buttonStateHandler, canvas.handler);
     
     // Creates test objects
     val area1 = new TestObject(Circle(gameWorldSize / 2, 128))

@@ -25,7 +25,7 @@ trait MouseButtonStateListener extends Handleable
      * (a mouse button being pressed or released)
      * @param event The mouse event that occurred
      */
-    def onMouseButtonEvent(event: MouseButtonStateEvent)
+    def onMouseButtonState(event: MouseButtonStateEvent)
     
     /**
      * The filter applied to the incoming mouse button events. The listener will only be informed

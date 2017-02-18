@@ -13,11 +13,11 @@ case object MouseButtonStateHandlerType extends HandlerType(classOf[MouseButtonS
 class MouseButtonStateHandler extends Handler[MouseButtonStateListener](
         MouseButtonStateHandlerType) with MouseButtonStateListener
 {
-    override def onMouseButtonEvent(event: MouseButtonStateEvent) = foreach(true, listener => 
+    override def onMouseButtonState(event: MouseButtonStateEvent) = foreach(true, listener => 
     {
         if (listener.mouseButtonStateEventFilter(event))
         {
-            listener.onMouseButtonEvent(event)
+            listener.onMouseButtonState(event)
         }
         true
     });

@@ -37,6 +37,12 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
     private var lastMousePosition = Vector3D.zero
     
     
+    // INITIAL CODE    ---------------
+    
+    // Starts listening for mouse events inside the canvas
+    canvas.addMouseListener(new MouseEventReceiver())
+    
+    
     // IMPLEMENTED METHODS    --------
     
     override def act(durationMillis: Double) = 
@@ -69,11 +75,11 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
     
     private class MouseEventReceiver extends MouseListener //with MouseWheelListener
     {
-        override def mousePressed(e: MouseEvent) = buttonStateHandler.onMouseButtonEvent(
-                new MouseButtonStateEvent(e.getButton, true));
+        override def mousePressed(e: MouseEvent) = buttonStateHandler.onMouseButtonState(
+                new MouseButtonStateEvent(e.getButton, true, lastMousePosition));
         
-        override def mouseReleased(e: MouseEvent) = buttonStateHandler.onMouseButtonEvent(
-                new MouseButtonStateEvent(e.getButton, false));
+        override def mouseReleased(e: MouseEvent) = buttonStateHandler.onMouseButtonState(
+                new MouseButtonStateEvent(e.getButton, false, lastMousePosition));
         
         // override def mouseWheelMoved(e: MouseWheelEvent) = Unit
         
