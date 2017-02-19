@@ -77,11 +77,19 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
     
     private class MouseEventReceiver extends MouseListener //with MouseWheelListener
     {
-        override def mousePressed(e: MouseEvent) = buttonStateHandler.onMouseButtonState(
-                new MouseButtonStateEvent(e.getButton, true, lastMousePosition));
+        override def mousePressed(e: MouseEvent) = 
+        {
+            buttonStatus += e.getButton -> true
+            buttonStateHandler.onMouseButtonState(new MouseButtonStateEvent(e.getButton, true, 
+                    lastMousePosition, buttonStatus))
+        }
         
-        override def mouseReleased(e: MouseEvent) = buttonStateHandler.onMouseButtonState(
-                new MouseButtonStateEvent(e.getButton, false, lastMousePosition));
+        override def mouseReleased(e: MouseEvent) = 
+        {
+            buttonStatus += e.getButton -> false
+            buttonStateHandler.onMouseButtonState(new MouseButtonStateEvent(e.getButton, false, 
+                    lastMousePosition, buttonStatus))
+        }
         
         // override def mouseWheelMoved(e: MouseWheelEvent) = Unit
         

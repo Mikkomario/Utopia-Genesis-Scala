@@ -40,7 +40,6 @@ object MouseTest extends App
             drawer.draw(Line(area.origin, lastMousePosition))
         }
         
-        // TODO: Add area trait that has containment
         override def onMouseMove(event: MouseMoveEvent) = 
         {
             lastMousePosition = event.mousePosition

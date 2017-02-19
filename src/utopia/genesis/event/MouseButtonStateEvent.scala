@@ -35,7 +35,8 @@ object MouseButtonStateEvent
  * @author Mikko Hilpinen
  * @since 17.2.2017
  */
-class MouseButtonStateEvent(val buttonIndex: Int, val isDown: Boolean, val mousePosition: Vector3D)
+class MouseButtonStateEvent(val buttonIndex: Int, val isDown: Boolean, mousePosition: Vector3D, 
+        buttonStatus: MouseButtonStatus) extends MouseEvent(mousePosition, buttonStatus)
 {
     // COMPUTED PROPERTIES    ------------
     
