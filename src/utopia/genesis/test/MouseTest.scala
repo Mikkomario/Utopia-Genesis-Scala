@@ -15,6 +15,7 @@ import utopia.inception.handling.HandlerRelay
 import utopia.genesis.util.Line
 import utopia.genesis.event.MouseButtonStateListener
 import utopia.genesis.event.MouseButtonStateEvent
+import utopia.genesis.event.MouseEvent
 
 /**
  * This is a visual test for mouse event features
@@ -43,8 +44,11 @@ object MouseTest extends App
         override def onMouseMove(event: MouseMoveEvent) = 
         {
             lastMousePosition = event.mousePosition
-            mouseOver = event.isOverArea { area.contains(_) }
+            mouseOver = event.isOverArea(area)
         }
+        
+        // It is possible to use super type filters in event filters, nice!
+        override def mouseMoveEventFilter = MouseEvent.isLeftDownFilter
         
         // Only accepts mouse press events
         override def mouseButtonStateEventFilter = MouseButtonStateEvent.wasPressedFilter

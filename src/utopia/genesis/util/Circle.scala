@@ -8,7 +8,7 @@ import java.awt.geom.Ellipse2D
  * @author Mikko Hilpinen
  * @since 1.1.2017
  */
-case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
+case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible with Area
 {
     // COMPUTED PROPERTIES    ---------
     
@@ -53,23 +53,19 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
     def *(d: Double) = copy(radius = radius * d)
     
     
-    // OTHER METHODS    ---------------
+    // IMPLEMENTED METHODS    ---------
     
-    /**
-     * Checks whether the circle contains the provided point
-     */
-    def contains(point: Vector3D) = (point - origin).length <= radius
+    override def contains(point: Vector3D) = (point - origin).length <= radius
+   
+    override def contains2D(point: Vector3D) = contains(point.in2D)
+    
+    
+    // OTHER METHODS    ---------------
     
     /**
      * Checks whether the sphere fully contains the provided line
      */
     def contains(line: Line): Boolean = contains(line.start) && contains(line.end)
-    
-    /**
-     * Checks whether the circle contains the provided point when both shapes are projected to x-y
-     * axis
-     */
-    def contains2D(point: Vector3D) = contains(point.in2D)
     
     /**
      * Checks whether the circle contains the provided line when both shapes are projected to x-y

@@ -13,6 +13,7 @@ import java.awt.Container
 import java.awt.MouseInfo
 import utopia.genesis.event.MouseButtonStateHandler
 import utopia.genesis.event.MouseButtonStateEvent
+import utopia.genesis.event.MouseButtonStatus
 
 /**
  * This class listens to mouse status inside a canvas and generates new mouse events. This 
@@ -35,6 +36,7 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
     val buttonStateHandler = new MouseButtonStateHandler()
     
     private var lastMousePosition = Vector3D.zero
+    private var buttonStatus = new MouseButtonStatus()
     
     
     // INITIAL CODE    ---------------
@@ -53,7 +55,7 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
         
         if (mousePosition != lastMousePosition)
         {
-            val event = new MouseMoveEvent(mousePosition, lastMousePosition, durationMillis)
+            val event = new MouseMoveEvent(mousePosition, lastMousePosition, buttonStatus, durationMillis)
             lastMousePosition = mousePosition
             moveHandler.onMouseMove(event)
         }
