@@ -16,6 +16,9 @@ import utopia.genesis.util.Line
 import utopia.genesis.event.MouseButtonStateListener
 import utopia.genesis.event.MouseButtonStateEvent
 import utopia.genesis.event.MouseEvent
+import utopia.genesis.util.Transformation
+import utopia.genesis.event.MouseWheelListener
+import utopia.genesis.event.MouseWheelEvent
 
 /**
  * This is a visual test for mouse event features
@@ -24,26 +27,33 @@ import utopia.genesis.event.MouseEvent
  */
 object MouseTest extends App
 {
-    class TestObject(val area: Circle) extends Drawable with MouseMoveListener with MouseButtonStateListener
+    class TestObject(position: Vector3D, radius: Double) extends Drawable with 
+            MouseMoveListener with MouseButtonStateListener with MouseWheelListener
     {
         override val depth = 0
+        
+        private val area = Circle(Vector3D.zero, radius)
         
         private var lastMousePosition = Vector3D.zero
         private var mouseOver = false
         private var isOn = false
+        private var transformation = Transformation.translation(position)
         
         override def draw(drawer: Drawer) = 
         {
             drawer.fillColor = if (isOn) Color.BLUE else if (mouseOver) Color.CYAN else Color.LIGHT_GRAY
+            drawer.pushTransform(transformation)
             drawer.draw(area)
+            drawer.popTransformation()
             
-            drawer.draw(Line(area.origin, lastMousePosition))
+            drawer.draw(Line(transformation.position, lastMousePosition))
         }
         
         override def onMouseMove(event: MouseMoveEvent) = 
         {
             lastMousePosition = event.mousePosition
-            mouseOver = event.isOverArea(area)
+            // TODO: Rename these transformation methods to something like 'toRelative' and 'toAbsolute'
+            mouseOver = contains2D(event.mousePosition)
         }
         
         // It is possible to use super type filters in event filters, nice!
@@ -54,7 +64,12 @@ object MouseTest extends App
         
         // Switches the state
         override def onMouseButtonState(event: MouseButtonStateEvent) = 
-            if (area.contains(event.mousePosition)) isOn = !isOn;
+            if (contains2D(event.mousePosition)) isOn = !isOn;
+        
+        override def onMouseWheelRotated(event: MouseWheelEvent) = 
+                transformation = transformation.scaled(1 + event.wheelTurn * 0.2);
+        
+        private def contains2D(point: Vector3D) = area.contains2D(transformation.invert(point))
     }
     
     // Creates the frame
@@ -70,11 +85,11 @@ object MouseTest extends App
     actorThread.handler += mouseEventGen
     
     val handlers = new HandlerRelay(actorThread.handler, mouseEventGen.moveHandler, 
-            mouseEventGen.buttonStateHandler, canvas.handler);
+            mouseEventGen.buttonStateHandler, mouseEventGen.wheelHandler, canvas.handler);
     
     // Creates test objects
-    val area1 = new TestObject(Circle(gameWorldSize / 2, 128))
-    val area2 = new TestObject(Circle(gameWorldSize / 2 + Vector3D(128), 64))
+    val area1 = new TestObject(gameWorldSize / 2, 128)
+    val area2 = new TestObject(gameWorldSize / 2 + Vector3D(128), 64)
     
     handlers ++= (area1, area2)
     

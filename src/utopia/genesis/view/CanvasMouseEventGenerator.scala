@@ -3,7 +3,6 @@ package utopia.genesis.view
 import java.awt.event.MouseListener
 import java.awt.event.MouseWheelListener
 import java.awt.event.MouseEvent
-import java.awt.event.MouseWheelEvent
 import java.awt.event.MouseMotionListener
 import utopia.genesis.util.Vector3D
 import utopia.genesis.event.MouseMoveEvent
@@ -14,6 +13,8 @@ import java.awt.MouseInfo
 import utopia.genesis.event.MouseButtonStateHandler
 import utopia.genesis.event.MouseButtonStateEvent
 import utopia.genesis.event.MouseButtonStatus
+import utopia.genesis.event.MouseWheelHandler
+import utopia.genesis.event.MouseWheelEvent
 
 /**
  * This class listens to mouse status inside a canvas and generates new mouse events. This 
@@ -34,6 +35,10 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
      * This handler informs mouse button listeners when a mouse button is pressed or released
      */
     val buttonStateHandler = new MouseButtonStateHandler()
+    /**
+     * This handler informs mouse wheel listeners when the mouse wheel is rotated
+     */
+    val wheelHandler = new MouseWheelHandler()
     
     private var lastMousePosition = Vector3D.zero
     private var buttonStatus = new MouseButtonStatus()
@@ -43,6 +48,7 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
     
     // Starts listening for mouse events inside the canvas
     canvas.addMouseListener(new MouseEventReceiver())
+    canvas.addMouseWheelListener(new MouseWheelEventReceiver())
     
     
     // IMPLEMENTED METHODS    --------
@@ -75,7 +81,7 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
     
     // NESTED CLASSES    ------------
     
-    private class MouseEventReceiver extends MouseListener //with MouseWheelListener
+    private class MouseEventReceiver extends MouseListener
     {
         override def mousePressed(e: MouseEvent) = 
         {
@@ -91,10 +97,15 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
                     lastMousePosition, buttonStatus))
         }
         
-        // override def mouseWheelMoved(e: MouseWheelEvent) = Unit
-        
         override def mouseClicked(e: MouseEvent) = Unit
         override def mouseEntered(e: MouseEvent) = Unit
         override def mouseExited(e: MouseEvent) = Unit
+    }
+    
+    private class MouseWheelEventReceiver extends MouseWheelListener
+    {
+        override def mouseWheelMoved(e: java.awt.event.MouseWheelEvent) = 
+                wheelHandler.onMouseWheelRotated(new MouseWheelEvent(e.getWheelRotation, 
+                lastMousePosition, buttonStatus));
     }
 }
