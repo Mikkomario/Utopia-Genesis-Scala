@@ -51,8 +51,14 @@ class WindowKeyEventGenerator(window: Window)
         private def keyStateChanged(e: KeyEvent, newState: Boolean) = 
         {
             val location = KeyLocation.of(e.getKeyLocation).getOrElse(Standard)
-            keyStatus += (e.getExtendedKeyCode, location, newState)
-            keyStateHandler.onKeyState(new KeyStateEvent(e.getExtendedKeyCode, location, newState, keyStatus))
+            
+            // Only reacts to status changes
+            if (keyStatus(e.getExtendedKeyCode, location) != newState)
+            {
+                keyStatus += (e.getExtendedKeyCode, location, newState)
+                keyStateHandler.onKeyState(new KeyStateEvent(e.getExtendedKeyCode, location, 
+                        newState, keyStatus));
+            }
         }
     }
 }

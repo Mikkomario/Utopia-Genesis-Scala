@@ -78,10 +78,11 @@ object KeyTest extends App
         }
     }
     
+    /*
     class EventLogger extends KeyStateListener
     {
         override def onKeyState(event: KeyStateEvent) = println(s"${event.index} => ${event.isDown}")
-    }
+    }*/
     
     
     val gameWorldSize = Vector3D(800, 600)
@@ -94,9 +95,9 @@ object KeyTest extends App
     val handlers = new HandlerRelay(canvas.handler, keyEventGen.keyStateHandler)
     
     val testObj = new TestObject(Vector3D(3, 2))
-    val view = new View(testObj, gameWorldSize, 32)
+    val view = new View(testObj, gameWorldSize, 48)
     
-    handlers ++= (testObj, view, new EventLogger())
+    handlers ++= (testObj, view/*, new EventLogger()*/)
     
     frame.display()
 }
