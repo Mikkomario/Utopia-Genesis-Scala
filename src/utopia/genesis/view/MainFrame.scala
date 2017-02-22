@@ -18,7 +18,7 @@ import java.awt.Component
  * @author Mikko Hilpinen
  * @since 25.12.2016
  */
-class GameFrame(initialContent: Component, val originalSize: Vector3D, title: String, 
+class MainFrame(initialContent: Component, val originalSize: Vector3D, title: String, 
         borderless: Boolean = false, val usePadding: Boolean = true) extends JFrame with ComponentListener
 {
     // ATTRIBUTES    ------------

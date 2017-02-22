@@ -10,11 +10,6 @@ case object DrawableHandlerType extends HandlerType(classOf[Drawable])
 
 class DrawableHandler extends Handler[Drawable](DrawableHandlerType) with Drawable
 {
-    // ATTRIBUTES    ----------------------
-    
-    val depth = DepthRange.default
-    
-    
     // IMPLEMENTED METHODS    -------------
     
     override def draw(drawer: Drawer) = 

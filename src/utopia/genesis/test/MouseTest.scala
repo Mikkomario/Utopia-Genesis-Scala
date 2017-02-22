@@ -9,7 +9,7 @@ import utopia.genesis.event.MouseMoveEvent
 import utopia.genesis.event.ActorThread
 import utopia.genesis.util.Vector3D
 import utopia.genesis.view.Canvas
-import utopia.genesis.view.GameFrame
+import utopia.genesis.view.MainFrame
 import utopia.genesis.view.CanvasMouseEventGenerator
 import utopia.inception.handling.HandlerRelay
 import utopia.genesis.util.Line
@@ -21,7 +21,10 @@ import utopia.genesis.event.MouseWheelListener
 import utopia.genesis.event.MouseWheelEvent
 
 /**
- * This is a visual test for mouse event features
+ * This is a visual test for mouse event features. In the test, the two lines should point to the
+ * mouse cursor whenever any mouse button is down. The two circles should change colour when the
+ * mouse cursor hovers over the shapes. When the shapes are clicked, their colours should change.
+ * Rotating the mouse wheel should increase / decrease the circle radius.
  * @author Mikko Hilpinen
  * @since 4.2.2017
  */
@@ -76,7 +79,7 @@ object MouseTest extends App
     val gameWorldSize = Vector3D(800, 600)
     
     val canvas = new Canvas(gameWorldSize, 120)
-    val frame = new GameFrame(canvas, gameWorldSize, "Mouse Test")
+    val frame = new MainFrame(canvas, gameWorldSize, "Mouse Test")
     
     // Creates event generators
     val actorThread = new ActorThread(10, 120)

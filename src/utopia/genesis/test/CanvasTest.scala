@@ -5,7 +5,7 @@ import java.awt.Graphics2D
 import utopia.genesis.util.Vector3D
 import java.awt.Color
 import utopia.genesis.view.Canvas
-import utopia.genesis.view.GameFrame
+import utopia.genesis.view.MainFrame
 import utopia.genesis.util.Drawer
 import utopia.genesis.util.Circle
 
@@ -16,7 +16,8 @@ import utopia.genesis.util.Circle
  */
 object CanvasTest extends App
 {
-    private class TestDrawable(val position: Vector3D, val r: Int, val depth: Int) extends Drawable
+    private class TestDrawable(val position: Vector3D, val r: Int, 
+            override val depth: Int) extends Drawable
     {
         override def draw(drawer: Drawer) = 
         {
@@ -32,6 +33,6 @@ object CanvasTest extends App
     canvas.handler += new TestDrawable(gameWorldSize / 2, 16, -100)
     canvas.handler += new TestDrawable(Vector3D.zero, gameWorldSize.x.toInt, 100)
     
-    val frame = new GameFrame(canvas, gameWorldSize, "CanvastTest")
+    val frame = new MainFrame(canvas, gameWorldSize, "CanvastTest")
     frame.display()
 }

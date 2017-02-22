@@ -144,6 +144,16 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     }
     
     /**
+     * Converts an absolute coordinate into a relative one. Same as calling invert(Vector3D)
+     */
+    def toRelative(absolute: Vector3D) = invert(absolute)
+    
+    /**
+     * Converts a relative coordinate into an absolute one. Same as calling apply(Vector3D)
+     */
+    def toAbsolute(relative: Vector3D) = apply(relative)
+    
+    /**
      * Rotates the transformation around an absolute origin point
      * @param rotationRads the amount of radians the transformation is rotated
      * @param origin the point of origin around which the transformation is rotated
