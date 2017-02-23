@@ -13,6 +13,8 @@ import utopia.genesis.view.MainFrame
 import utopia.genesis.view.WindowKeyEventGenerator
 import utopia.inception.handling.HandlerRelay
 import java.awt.Color
+import utopia.genesis.event.KeyTypedListener
+import utopia.genesis.event.KeyTypedEvent
 
 /**
  * This is an interactive test for keyboard interactions
@@ -42,6 +44,7 @@ object KeyTest extends App
                 case KeyEvent.VK_RIGHT => _position += Vector3D(1)
                 case KeyEvent.VK_DOWN => _position += Vector3D(0, 1)
                 case KeyEvent.VK_LEFT => _position += Vector3D(-1)
+                case _ => 
             }
         }
     }
@@ -78,11 +81,10 @@ object KeyTest extends App
         }
     }
     
-    /*
-    class EventLogger extends KeyStateListener
+    class KeyTypePrinter extends KeyTypedListener
     {
-        override def onKeyState(event: KeyStateEvent) = println(s"${event.index} => ${event.isDown}")
-    }*/
+        override def onKeyTyped(event: KeyTypedEvent) = print(event.typedChar)
+    }
     
     
     val gameWorldSize = Vector3D(800, 600)
@@ -92,12 +94,13 @@ object KeyTest extends App
     
     val keyEventGen = new WindowKeyEventGenerator(frame)
     
-    val handlers = new HandlerRelay(canvas.handler, keyEventGen.keyStateHandler)
+    val handlers = new HandlerRelay(canvas.handler, keyEventGen.keyStateHandler, 
+            keyEventGen.keyTypedHandler);
     
     val testObj = new TestObject(Vector3D(3, 2))
     val view = new View(testObj, gameWorldSize, 48)
     
-    handlers ++= (testObj, view/*, new EventLogger()*/)
+    handlers ++= (testObj, view, new KeyTypePrinter())
     
     frame.display()
 }

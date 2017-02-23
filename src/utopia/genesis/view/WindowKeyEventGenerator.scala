@@ -8,6 +8,8 @@ import utopia.genesis.event.KeyLocation
 import utopia.genesis.event.KeyLocation.Standard
 import utopia.genesis.event.KeyStateHandler
 import utopia.genesis.event.KeyStateEvent
+import utopia.genesis.event.KeyTypedHandler
+import utopia.genesis.event.KeyTypedEvent
 
 /**
  * This class listens to key events within a specific window and generates keyboard events based on
@@ -23,6 +25,10 @@ class WindowKeyEventGenerator(window: Window)
      * The handler that informs objects about key state changes
      */
     val keyStateHandler = new KeyStateHandler()
+    /**
+     * The handler that informs objects about key typed events
+     */
+    val keyTypedHandler = new KeyTypedHandler()
     
     private var keyStatus = new KeyStatus()
     
@@ -43,7 +49,8 @@ class WindowKeyEventGenerator(window: Window)
         
         override def keyReleased(e: KeyEvent) = keyStateChanged(e, false)
         
-        override def keyTyped(e: KeyEvent) = Unit
+        override def keyTyped(e: KeyEvent) = keyTypedHandler.onKeyTyped(
+                new KeyTypedEvent(e.getKeyChar, keyStatus));
         
         
         // OTHER METHODS    --------------
