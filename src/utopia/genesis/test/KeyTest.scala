@@ -17,7 +17,9 @@ import utopia.genesis.event.KeyTypedListener
 import utopia.genesis.event.KeyTypedEvent
 
 /**
- * This is an interactive test for keyboard interactions
+ * This is an interactive test for keyboard interactions. The square character should move according
+ * to singular key presses (one square per press). Any characters typed on the keyboard should
+ * appear on the console.
  * @author Mikko Hilpinen
  * @since 22.2.2017
  */

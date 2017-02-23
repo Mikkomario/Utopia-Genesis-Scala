@@ -31,7 +31,13 @@ object Drawer
  */
 class Drawer(val graphics: Graphics2D)
 {
-    // TODO: Add clipping
+    // TODO: Or, make drawer completely immutable? Overkill? Having to dispose the 
+    // instances is a bit of a pain though -> what if they disposed themselves (like a tree where 
+    // the topmost instance would handle the disposing)?
+    // TODO: Add copy and dispose
+    // TODO: Add clipping (on a new graphics object)
+    // TODO: Apparently default stroke is much more efficient. Should probably only use a copy when 
+    // changing the stroke
     
     // ATTRIBUTES    -----------------
     
@@ -56,16 +62,25 @@ class Drawer(val graphics: Graphics2D)
         graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha.toFloat))
     }
     
-    /**
-     * The drawing stroke used when drawing shapes
-     */
-    def stroke = graphics.getStroke
-    def stroke_=(stroke: Stroke) = graphics.setStroke(stroke)
-    
     private var transforms = Stack[AffineTransform]()
     
     
     // OTHER METHODS    --------------
+    
+    /**
+     * Copies this drawer, creating another graphics context. Changing the other context doesn't
+     * affect this one. This should be used when a lot of drawing is done and the graphics context 
+     * should be returned to its original state. Remember to dispose the new context using the
+     * dispose() -method, however. The creator of the context always has the responsibility to
+     * dispose it also.
+     */
+    def copy() = new Drawer(graphics.create().asInstanceOf[Graphics2D])
+    
+    /**
+     * Disposes this graphics context. This should be called for all drawer instances created by
+     * copy() or similar methods.
+     */
+    def dispose() = graphics.dispose()
     
     /**
      * Applies a new transformation over this drawer. This can be reversed using the
@@ -85,21 +100,6 @@ class Drawer(val graphics: Graphics2D)
     def popTransformation() = if (!transforms.isEmpty) graphics.setTransform(transforms.pop())
     
     /**
-     * Draws a circle
-     */
-    /*
-    def draw(circle: Circle) = 
-    {
-        val x = (circle.origin.x - circle.radius).toInt
-        val y = (circle.origin.y - circle.radius).toInt
-        
-        graphics.setColor(fillColor)
-        graphics.fillOval(x, y, circle.diameter.toInt, circle.diameter.toInt)
-        graphics.setColor(edgeColor)
-        graphics.drawOval(x, y, circle.diameter.toInt, circle.diameter.toInt)
-    }*/
-    
-    /**
      * Draws and fills a shape
      */
     def draw(shape: Shape) = 
@@ -115,5 +115,33 @@ class Drawer(val graphics: Graphics2D)
      */
     def draw(shape: ShapeConvertible): Unit = draw(shape.toShape)
     
-    def setStroke(stroke: Stroke) = graphics.setStroke(stroke)
+    /**
+     * Copies this graphics context, changing the stroke style in the process. Remember to call
+     * dispose() after use.<br>
+     * This method copies the drawer instance because the use of default stroke is more optimised in
+     * java and therefore should be preserved in the original instance where possible.
+     */
+    def withStroke(stroke: Stroke) = 
+    {
+        val drawer = copy()
+        drawer.graphics.setStroke(stroke)
+        drawer
+    }
+    
+    /**
+     * Clips the drawable area to a specified shape. This creates a new drawer so that the clipping
+     * area can be reset by disposing the copied drawer and using the original.
+     */
+    def clippedTo(shape: Shape) = 
+    {
+        val drawer = copy()
+        drawer.graphics.clip(shape)
+        drawer
+    }
+    
+    /**
+     * Clips the drawable area to a specified shape. This creates a new drawer so that the clipping
+     * area can be reset by disposing the copied drawer and using the original.
+     */
+    def clippedTo(shape: ShapeConvertible): Drawer = clippedTo(shape)
 }
