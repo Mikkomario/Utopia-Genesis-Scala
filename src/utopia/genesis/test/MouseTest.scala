@@ -44,10 +44,9 @@ object MouseTest extends App
         
         override def draw(drawer: Drawer) = 
         {
-            drawer.fillColor = if (isOn) Color.BLUE else if (mouseOver) Color.CYAN else Color.LIGHT_GRAY
-            drawer.pushTransform(transformation)
-            drawer.draw(area)
-            drawer.popTransformation()
+            val copy = drawer.withColor(if (isOn) Color.BLUE else if (mouseOver) Color.CYAN 
+                    else Color.LIGHT_GRAY);
+            transformation(copy).draw(area)
             
             drawer.draw(Line(transformation.position, lastMousePosition))
         }

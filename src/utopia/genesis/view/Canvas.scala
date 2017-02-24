@@ -14,6 +14,7 @@ import utopia.genesis.event.DrawableHandler
 import utopia.genesis.util.Drawer
 import java.awt.event.HierarchyListener
 import java.awt.event.HierarchyEvent
+import utopia.genesis.util.Transformation
 
 /**
  * A Game panel works like any Swing panel except it's able to draw drawable object contents with a
@@ -68,25 +69,26 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
     override def paintComponent(g: Graphics)
     {
         super.paintComponent(g)
-        
-        val g2d = g.asInstanceOf[Graphics2D]
-        val originalTransformation = g2d.getTransform
+
+        val drawer = new Drawer(g.create().asInstanceOf[Graphics2D])
         
         // Clears the previous drawings
         if (clearPrevious)
         {
-            g2d.clearRect(0, 0, getWidth, getHeight)
-            g2d.setColor(getBackground)
-            g2d.fillRect(0, 0, getWidth, getHeight)
+            val copy = drawer.copy()
+            
+            copy.graphics.clearRect(0, 0, getWidth, getHeight)
+            copy.graphics.setColor(getBackground)
+            copy.graphics.fillRect(0, 0, getWidth, getHeight)
+            
+            copy.dispose()
         }
         
-        // Game world drawings are scaled
-        g2d.scale(scaling, scaling)
+        // Game world drawings are scaled, then drawn
+        handler.draw(drawer + Transformation.scaling(scaling))
         
-        g2d.setColor(Color.BLACK)
-        handler.draw(new Drawer(g2d))
-        
-        g2d.setTransform(originalTransformation)
+        // Disposes the created drawers afterwards
+        drawer.dispose()
     }
     
     override def hierarchyChanged(event: HierarchyEvent) = 

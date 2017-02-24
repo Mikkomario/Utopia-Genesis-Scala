@@ -69,17 +69,19 @@ object KeyTest extends App
             // Draws the grid first
             for (x <- 0 to gridSquares.x.toInt)
             {
-                drawer.draw(Line.ofVector(gridPosition + (Vector3D(squareSide) * x), gridSize.yProjection))
+                drawer.draw(Line.ofVector(gridPosition + (Vector3D(squareSide) * x), 
+                        gridSize.yProjection));
             }
             for (y <- 0 to gridSquares.y.toInt)
             {
-                drawer.draw(Line.ofVector(gridPosition + (Vector3D(0, squareSide) * y), gridSize.xProjection))
+                drawer.draw(Line.ofVector(gridPosition + (Vector3D(0, squareSide) * y), 
+                        gridSize.xProjection));
             }
             
             // Then draws the object
-            drawer.fillColor = Color.LIGHT_GRAY
-            drawer.draw(Bounds(gridPosition + testObj.position * squareSide + 
-                    (squareSize - avatarSize) / 2, avatarSize).toRoundedRectangle(0.2));
+            drawer.withColor(Color.LIGHT_GRAY, Color.DARK_GRAY).draw(
+                    Bounds(gridPosition + testObj.position * squareSide + 
+                    (squareSize - avatarSize) / 2, avatarSize).toRoundedRectangle(0.5));
         }
     }
     

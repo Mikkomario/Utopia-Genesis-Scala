@@ -12,6 +12,8 @@ class DrawableHandler extends Handler[Drawable](DrawableHandlerType) with Drawab
 {
     // IMPLEMENTED METHODS    -------------
     
+    // TODO: add possibility to customise graphics context before drawing
+    
     override def draw(drawer: Drawer) = 
     {
         // Draws all the elements inside the handler. 

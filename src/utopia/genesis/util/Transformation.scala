@@ -119,6 +119,11 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def apply(other: Transformation): Transformation = (this + other).withPosition(apply(
             other.position));
     
+    /**
+     * Creates a new drawer by transforming another. This is identical to calling drawer + this.
+     */
+    def apply(drawer: Drawer) = drawer + this
+    
     
     // OTHER METHODS    -------------
     

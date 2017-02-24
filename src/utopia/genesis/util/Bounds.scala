@@ -117,11 +117,11 @@ case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConve
      * Creates a rounded rectangle based on this rectangle shape.
      * @param ruondingFactor How much the corners are rounded. 0 Means that the corners are not
      * rounded at all, 1 means that the corners are rounded as much as possible, so that the ends of
-     * the shape become ellipsoid. Default value is 0.25
+     * the shape become ellipsoid. Default value is 0.5
      */
-    def toRoundedRectangle(roundingFactor: Double = 0.25) =
+    def toRoundedRectangle(roundingFactor: Double = 0.5) =
     {
-        val rounding = math.min(width, height) * roundingFactor / 2
+        val rounding = math.min(width, height) * roundingFactor
         new RoundRectangle2D.Double(position.x, position.y, width, height, rounding, rounding)
     }
     
