@@ -101,8 +101,9 @@ class Drawer(val graphics: Graphics2D, val fillColor: Paint = Color.WHITE,
     
     /**
      * Creates a new instance of this drawer with altered colours
-     * @param edgeColor the colour / paint used for the drawn edges
      * @param fillColor the colour / paint used for filling the area
+     * @param edgeColor the colour / paint used for the drawn edges. By default stays the same as it
+     * was in the original
      */
     def withColor(fillColor: Paint, edgeColor: Paint = this.edgeColor) =
     {
@@ -110,6 +111,11 @@ class Drawer(val graphics: Graphics2D, val fillColor: Paint = Color.WHITE,
         children :+= drawer
         drawer
     }
+    
+    /**
+     * Creates a new instance of this drawer with altered edge colour
+     */
+    def withEdgeColor(edgeColor: Paint) = withColor(fillColor, edgeColor)
             
     /**
      * Creates a copy of this context with altered alpha (opacity / transparency) value.
@@ -150,5 +156,5 @@ class Drawer(val graphics: Graphics2D, val fillColor: Paint = Color.WHITE,
      * Creates a new instance of this drawer that has a clipped drawing area. The operation cannot
      * be reversed but the original instance can still be used for drawing without clipping.
      */
-    def clippedTo(shape: ShapeConvertible): Drawer = clippedTo(shape)
+    def clippedTo(shape: ShapeConvertible): Drawer = clippedTo(shape.toShape)
 }
