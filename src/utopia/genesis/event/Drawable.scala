@@ -3,6 +3,7 @@ package utopia.genesis.event
 import utopia.inception.handling.Handleable
 import java.awt.Graphics2D
 import utopia.genesis.util.Drawer
+import utopia.genesis.util.DepthRange
 
 /**
  * Drawable instances can be drawn on a canvas using a graphics object and support depth sorting
@@ -20,7 +21,8 @@ trait Drawable extends Handleable
     
     /**
      * The drawing depth of the drawable instance. The higher the depth, the 'deeper' it will be 
-     * drawn. Instances with less depth are drawn atop of those with higher depth.
+     * drawn. Instances with less depth are drawn atop of those with higher depth. By default, all 
+     * objects are drawn to the 0 layer
      */
-    def depth: Int
+    def depth = DepthRange.default
 }

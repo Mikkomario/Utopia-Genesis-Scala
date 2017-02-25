@@ -37,7 +37,7 @@ object Bounds
  * @author Mikko Hilpinen
  * @since 13.1.2017
  */
-case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConvertible
+case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConvertible with Area
 {
     // COMPUTED PROPERTIES    ------------
     
@@ -104,24 +104,26 @@ case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConve
     def in2D = Bounds(position.in2D, size.in2D)
     
     
+    // IMPLEMENTED METHODS    ----------
+    
+    override def contains(coordinate: Vector3D) = coordinate >= position && coordinate <= position + size
+    
+    override def contains2D(coordinate: Vector3D) = in2D.contains(coordinate.in2D)
+    
+    
     // OTHER METHODS    ----------------
     
     /**
      * Creates a rounded rectangle based on this rectangle shape.
      * @param ruondingFactor How much the corners are rounded. 0 Means that the corners are not
      * rounded at all, 1 means that the corners are rounded as much as possible, so that the ends of
-     * the shape become ellipsoid. Default value is 0.25
+     * the shape become ellipsoid. Default value is 0.5
      */
-    def toRoundedRectangle(roundingFactor: Double = 0.25) =
+    def toRoundedRectangle(roundingFactor: Double = 0.5) =
     {
-        val rounding = math.min(width, height) * roundingFactor / 2
+        val rounding = math.min(width, height) * roundingFactor
         new RoundRectangle2D.Double(position.x, position.y, width, height, rounding, rounding)
     }
-    
-    /**
-     * Checks whether a coordinate lies within this rectangle's area
-     */
-    def contains(coordinate: Vector3D) = coordinate >= position && coordinate <= position + size
     
     /**
      * Checks whether the line completely lies within the rectangle bounds
@@ -132,11 +134,6 @@ case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConve
      * Checks whether a set of bounds is contained within this bounds' area
      */
     def contains(bounds: Bounds): Boolean = contains(bounds.position) && contains(bounds.position + bounds.size)
-    
-    /**
-     * Checks whether a coordinate lies within this rectangle's area when z-axis is ignored
-     */
-    def contains2D(coordinate: Vector3D) = in2D.contains(coordinate.in2D)
     
     /**
      * Checks whether a line completely lies within the rectangle's bounds when the z-axis is

@@ -3,7 +3,6 @@ package utopia.genesis.view
 import java.awt.event.MouseListener
 import java.awt.event.MouseWheelListener
 import java.awt.event.MouseEvent
-import java.awt.event.MouseWheelEvent
 import java.awt.event.MouseMotionListener
 import utopia.genesis.util.Vector3D
 import utopia.genesis.event.MouseMoveEvent
@@ -11,6 +10,11 @@ import utopia.genesis.event.MouseMoveHandler
 import utopia.genesis.event.Actor
 import java.awt.Container
 import java.awt.MouseInfo
+import utopia.genesis.event.MouseButtonStateHandler
+import utopia.genesis.event.MouseButtonStateEvent
+import utopia.genesis.event.MouseButtonStatus
+import utopia.genesis.event.MouseWheelHandler
+import utopia.genesis.event.MouseWheelEvent
 
 /**
  * This class listens to mouse status inside a canvas and generates new mouse events. This 
@@ -27,8 +31,24 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
      * This handler informs mouse move listeners about the new mouse move events
      */
     val moveHandler = new MouseMoveHandler()
+    /**
+     * This handler informs mouse button listeners when a mouse button is pressed or released
+     */
+    val buttonStateHandler = new MouseButtonStateHandler()
+    /**
+     * This handler informs mouse wheel listeners when the mouse wheel is rotated
+     */
+    val wheelHandler = new MouseWheelHandler()
     
     private var lastMousePosition = Vector3D.zero
+    private var buttonStatus = new MouseButtonStatus()
+    
+    
+    // INITIAL CODE    ---------------
+    
+    // Starts listening for mouse events inside the canvas
+    canvas.addMouseListener(new MouseEventReceiver())
+    canvas.addMouseWheelListener(new MouseWheelEventReceiver())
     
     
     // IMPLEMENTED METHODS    --------
@@ -41,7 +61,7 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
         
         if (mousePosition != lastMousePosition)
         {
-            val event = new MouseMoveEvent(mousePosition, lastMousePosition, durationMillis)
+            val event = new MouseMoveEvent(mousePosition, lastMousePosition, buttonStatus, durationMillis)
             lastMousePosition = mousePosition
             moveHandler.onMouseMove(event)
         }
@@ -59,16 +79,33 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
     }
     
     
-    /*
-    private class MouseEventReceiver extends MouseListener with MouseWheelListener
+    // NESTED CLASSES    ------------
+    
+    private class MouseEventReceiver extends MouseListener
     {
-        override def mousePressed(e: MouseEvent)= Unit
-        override def mouseReleased(e: MouseEvent) = Unit
-        override def mouseWheelMoved(e: MouseWheelEvent) = Unit
+        override def mousePressed(e: MouseEvent) = 
+        {
+            buttonStatus += e.getButton -> true
+            buttonStateHandler.onMouseButtonState(new MouseButtonStateEvent(e.getButton, true, 
+                    lastMousePosition, buttonStatus))
+        }
+        
+        override def mouseReleased(e: MouseEvent) = 
+        {
+            buttonStatus += e.getButton -> false
+            buttonStateHandler.onMouseButtonState(new MouseButtonStateEvent(e.getButton, false, 
+                    lastMousePosition, buttonStatus))
+        }
         
         override def mouseClicked(e: MouseEvent) = Unit
         override def mouseEntered(e: MouseEvent) = Unit
         override def mouseExited(e: MouseEvent) = Unit
     }
-    */
+    
+    private class MouseWheelEventReceiver extends MouseWheelListener
+    {
+        override def mouseWheelMoved(e: java.awt.event.MouseWheelEvent) = 
+                wheelHandler.onMouseWheelRotated(new MouseWheelEvent(e.getWheelRotation, 
+                lastMousePosition, buttonStatus));
+    }
 }

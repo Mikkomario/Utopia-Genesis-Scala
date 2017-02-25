@@ -145,6 +145,39 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     // COMPUTED PROPERTIES    ----------
     
     /**
+     * a copy of this vector where the coordinate values have been cut to integer numbers.
+     * This operation always rounds the numbers down, never up.
+     */
+    def floor = map(math.floor)
+    
+    /**
+     * a copy of this vector where the coordinate values have been increased to whole integer
+     * numbers. This operation always rounds the numbers up, never down.
+     */
+    def ceil = map(math.ceil)
+    
+    /**
+     * a copy of this vector where the coordinates have been rounded to nearest integer / long
+     * numbers.
+     */
+    def rounded = map { math.round(_) }
+    
+    /**
+     * A projection of this vector that only contains the x-component
+     */
+    def xProjection = Vector3D(x)
+    
+    /**
+     * A projection of this vector that only contains the y-component
+     */
+    def yProjection = Vector3D(0, y)
+    
+    /**
+     * A projection of this vector that only contains the z-component
+     */
+    def zProjection = Vector3D(0, 0, z)
+    
+    /**
      * This vector without the z component
      */
     def in2D = if (z == 0) this else Vector3D(x, y)

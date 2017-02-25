@@ -24,90 +24,78 @@ object Drawer
 }
 
 /**
- * A drawer instance uses a graphics instance to draw elements. Different transformations can be
- * applied to a drawer.
+ * A drawer instance uses a graphics instance to draw elements. Different transformations and
+ * settings can be applied to a drawer. The usual policy is to not modify the drawers directly but
+ * always make new copies instead. The underlying graphics object should therefore only be altered
+ * when this class doesn't provide a suitable interface to do that otherwise. Because a mutable
+ * graphics object instance is made visible, this class does not have value semantics and should be
+ * treated with care. It is usually better to pass on a copy of this object when its usage cannot be
+ * controlled.
  * @author Mikko Hilpinen
  * @since 22.1.2017
  */
-class Drawer(val graphics: Graphics2D)
+class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color.WHITE), 
+        val edgeColor: Option[Paint] = Some(Color.BLACK))
 {
-    // TODO: Add clipping
+    // TODO: Add rendering hints
     
-    // ATTRIBUTES    -----------------
+    // ATTRIBUTES    ----------------------
+    
+    private var children = Vector[Drawer]()
+    
+    
+    // OPERATORS    -----------------------
     
     /**
-     * The color used when drawing shape edges
+     * Creates a new drawer with the provided transformation applied. The transformation will be
+     * applied over existing transformations. This operation cannot be reversed but the original
+     * (unaltered) instance can still be used.
      */
-    var edgeColor: Paint = Color.BLACK
-    /**
-     * The color used when filling a shape
-     */
-    var fillColor: Paint = Color.WHITE
-    
-    private var _alpha = 1.0
-    /**
-     * The drawing alpha or opacity of the drawer. Value of 1 makes the drawer non-transparent.
-     * Value of 0 makes the drawer non-visible.
-     */
-    def alpha = _alpha
-    def alpha_=(alpha: Double) = 
+    def +(transform: Transformation) = 
     {
-        _alpha = alpha
-        graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha.toFloat))
+        val drawer = copy()
+        drawer.graphics.transform(transform.toAffineTransform)
+        drawer
     }
     
-    /**
-     * The drawing stroke used when drawing shapes
-     */
-    def stroke = graphics.getStroke
-    def stroke_=(stroke: Stroke) = graphics.setStroke(stroke)
-    
-    private var transforms = Stack[AffineTransform]()
     
     
-    // OTHER METHODS    --------------
+    // OTHER METHODS    -------------------
     
     /**
-     * Applies a new transformation over this drawer. This can be reversed using the
-     * popTransformation method.
-     * @param t The transformation applied over this drawer.
+     * Copies this drawer, creating another graphics context. Changing the other context doesn't
+     * affect this one. This should be used when a lot of drawing is done and the graphics context 
+     * should be returned to its original state.
      */
-    def pushTransform(t: Transformation) = 
+    def copy() = withColor(fillColor)
+    
+    /**
+     * Disposes this graphics context and every single drawer created from this drawer instance. The
+     * responsibility to dispose the drawer lies at the topmost user. Disposing drawers on lower
+     * levels is fully optional. The drawer or any drawer created from this drawer cannot be used
+     * after it has been disposed.
+     */
+    def dispose(): Unit = 
     {
-        transforms push graphics.getTransform
-        graphics.transform(t.toAffineTransform)
+        children.foreach { _.dispose() }
+        graphics.dispose()
     }
-    
-    /**
-     * Reverts the transformation state to that before the last call of the pushTransform method. If
-     * there were no transformations applied over this drawer, this method does nothing.
-     */
-    def popTransformation() = if (!transforms.isEmpty) graphics.setTransform(transforms.pop())
-    
-    /**
-     * Draws a circle
-     */
-    /*
-    def draw(circle: Circle) = 
-    {
-        val x = (circle.origin.x - circle.radius).toInt
-        val y = (circle.origin.y - circle.radius).toInt
-        
-        graphics.setColor(fillColor)
-        graphics.fillOval(x, y, circle.diameter.toInt, circle.diameter.toInt)
-        graphics.setColor(edgeColor)
-        graphics.drawOval(x, y, circle.diameter.toInt, circle.diameter.toInt)
-    }*/
     
     /**
      * Draws and fills a shape
      */
     def draw(shape: Shape) = 
     {
-        graphics.setPaint(fillColor)
-        graphics.fill(shape)
-        graphics.setPaint(edgeColor)
-        graphics.draw(shape)
+        if (fillColor.isDefined)
+        {
+            graphics.setPaint(fillColor.get)
+            graphics.fill(shape)
+        }
+        if (edgeColor.isDefined)
+        {
+            graphics.setPaint(edgeColor.get)
+            graphics.draw(shape)
+        }
     }
     
     /**
@@ -115,5 +103,62 @@ class Drawer(val graphics: Graphics2D)
      */
     def draw(shape: ShapeConvertible): Unit = draw(shape.toShape)
     
-    def setStroke(stroke: Stroke) = graphics.setStroke(stroke)
+    /**
+     * Creates a new instance of this drawer with altered colours
+     * @param fillColor the colour / paint used for filling the area
+     * @param edgeColor the colour / paint used for the drawn edges. By default stays the same as it
+     * was in the original
+     */
+    def withColor(fillColor: Option[Paint], edgeColor: Option[Paint] = this.edgeColor) =
+    {
+        val drawer = new Drawer(graphics.create().asInstanceOf[Graphics2D], fillColor, edgeColor)
+        children :+= drawer
+        drawer
+    }
+    
+    /**
+     * Creates a new instance of this drawer with altered edge colour
+     */
+    def withEdgeColor(edgeColor: Option[Paint]) = withColor(fillColor, edgeColor)
+            
+    /**
+     * Creates a copy of this context with altered alpha (opacity / transparency) value.
+     * @param alpha Between 0 and 1. 1 Means that the drawn elements are fully visible / not
+     * transparent while lower numbers increase the transparency.
+     */
+    def withAlpha(alpha: Double) = 
+    {
+        val drawer = copy()
+        drawer.graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha.toFloat))
+        drawer
+    }
+    
+    /**
+     * Copies this graphics context, changing the stroke style in the process. It is usually better
+     * to pass a drawer instance with unmodified stroke where that is possible, since it is better
+     * optimised in the lower level implementation.
+     */
+    def withStroke(stroke: Stroke) = 
+    {
+        val drawer = copy()
+        drawer.graphics.setStroke(stroke)
+        drawer
+    }
+    
+    /**
+     * Creates a new instance of this drawer that has a clipped drawing area. The operation cannot
+     * be reversed but the original instance can still be used for drawing without clipping.
+     */
+    def clippedTo(shape: Shape) = 
+    {
+        val drawer = copy()
+        drawer.graphics.clip(shape)
+        drawer
+    }
+    
+    /**
+     * Creates a new instance of this drawer that has a clipped drawing area. The operation cannot
+     * be reversed but the original instance can still be used for drawing without clipping.
+     */
+    def clippedTo(shape: ShapeConvertible): Drawer = clippedTo(shape.toShape)
 }

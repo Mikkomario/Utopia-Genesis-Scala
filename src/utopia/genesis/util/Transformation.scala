@@ -119,6 +119,11 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def apply(other: Transformation): Transformation = (this + other).withPosition(apply(
             other.position));
     
+    /**
+     * Creates a new drawer by transforming another. This is identical to calling drawer + this.
+     */
+    def apply(drawer: Drawer) = drawer + this
+    
     
     // OTHER METHODS    -------------
     
@@ -142,6 +147,16 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
             Transformation(-position)(absolute)
         }
     }
+    
+    /**
+     * Converts an absolute coordinate into a relative one. Same as calling invert(Vector3D)
+     */
+    def toRelative(absolute: Vector3D) = invert(absolute)
+    
+    /**
+     * Converts a relative coordinate into an absolute one. Same as calling apply(Vector3D)
+     */
+    def toAbsolute(relative: Vector3D) = apply(relative)
     
     /**
      * Rotates the transformation around an absolute origin point

@@ -5,36 +5,23 @@ import utopia.flow.datastructure.immutable.Model
 import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.generic.GenesisValue
 import utopia.inception.util.Filter
+import utopia.genesis.util.Area
 
 object MouseMoveEvent
 {
     // OTHER METHODS    ------------
     
     /**
-     * Creates an event filter that only accepts mouse events originating from the specified area
-     * @param containment a function that determines whether a position resides within a specific
-     * area
-     */
-    def overAreaFilter(containment: Vector3D => Boolean) = new Filter[MouseMoveEvent](
-            { _.isOverArea(containment) });
-    
-    /**
      * Creates an event filter that only accepts mouse events originating from the mouse entering 
      * the specified area
-     * @param containment a function that determines whether a position resides within a specific
-     * area
      */
-    def enterAreaFilter(containment: Vector3D => Boolean) = new Filter[MouseMoveEvent](
-            { _.enteredArea(containment)});
+    def enterAreaFilter(area: Area) = new Filter[MouseMoveEvent]({ _.enteredArea(area) });
     
     /**
      * Creates an event filter that only accepts mouse events originating from the mouse exiting the
      * specified area
-     * @param containment a function that determines whether a position resides within a specific
-     * area
      */
-    def exitedAreaFilter(containment: Vector3D => Boolean) = new Filter[MouseMoveEvent](
-            { _.exitedArea(containment) });
+    def exitedAreaFilter(area: Area) = new Filter[MouseMoveEvent]({ _.exitedArea(area) });
     
     /**
      * Creates an event filter that only accepts events where the mouse cursor moved with enough
@@ -49,12 +36,10 @@ object MouseMoveEvent
  * @author Mikko Hilpinen
  * @since 10.1.2017
  */
-class MouseMoveEvent(val mousePosition: Vector3D, val previousMousePosition: Vector3D, 
-        val durationMillis: Double)
+class MouseMoveEvent(mousePosition: Vector3D, val previousMousePosition: Vector3D, 
+        buttonStatus: MouseButtonStatus, val durationMillis: Double) extends MouseEvent(
+        mousePosition, buttonStatus)
 {
-    // TODO: You may wish to add mouse button state as contextual information since some 
-    // instances are interested in mouse dragging, etc.
-    
     // COMPUTED PROPERTIES    -----------
     
     /**
@@ -71,30 +56,17 @@ class MouseMoveEvent(val mousePosition: Vector3D, val previousMousePosition: Vec
     // OTHER METHODS    -----------------
     
     /**
-     * Checks whether the mouse position is currently over a specified area
-     * @param containment The function that defines whether a specific point is within an area or
-     * not
-     */
-    def isOverArea(containment: Vector3D => Boolean) = containment(mousePosition)
-    
-    /**
      * Checks whether the mouse position was previously over a specified area
-     * @param containment The function that defines whether a specific point is within an area or
-     * not
      */
-    def wasOverArea(containment: Vector3D => Boolean) = containment(previousMousePosition)
+    def wasOverArea(area: Area) = area.contains2D(previousMousePosition)
     
     /**
      * Checks whether the mouse cursor just entered a specified area
-     * @param containment The function that defines whether a specific point is within an area or
-     * not
      */
-    def enteredArea(containment: Vector3D => Boolean) = !wasOverArea(containment) && isOverArea(containment)
+    def enteredArea(area: Area) = !wasOverArea(area) && isOverArea(area)
     
     /**
      * Checks whether the mouse cursor just exited a specified area
-     * @param containment The function that defines whether a specific point is within an area or
-     * not
      */
-    def exitedArea(containment: Vector3D => Boolean) = wasOverArea(containment) && !isOverArea(containment)
+    def exitedArea(area: Area) = wasOverArea(area) && !isOverArea(area)
 }
