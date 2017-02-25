@@ -32,7 +32,7 @@ object ClippingTest extends App
         
         def draw(drawer: Drawer) = 
         {
-            val copy = drawer.withEdgeColor(Color.LIGHT_GRAY)
+            val copy = drawer.withEdgeColor(Some(Color.LIGHT_GRAY))
             
             for (x <- 0 to squareAmounts.x.toInt)
             {
@@ -48,14 +48,16 @@ object ClippingTest extends App
     class HiddenShapeDrawer(val shapes: Iterable[ShapeConvertible]) 
             extends Drawable with MouseMoveListener
     {
-        override val depth = DepthRange.behind
+        override val depth = DepthRange.foreground
         
         private val clipRadius = 64
         private var clip = Circle(Vector3D.zero, clipRadius)
         
         def draw(drawer: Drawer) = 
         {
-            val clipped = drawer.withColor(Color.RED)clippedTo(clip)
+            drawer.withEdgeColor(None).draw(clip)
+            
+            val clipped = drawer.withColor(Some(Color.RED)).clippedTo(clip)
             shapes.foreach(clipped.draw)
         }
         

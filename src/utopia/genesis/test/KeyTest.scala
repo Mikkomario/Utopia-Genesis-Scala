@@ -79,7 +79,7 @@ object KeyTest extends App
             }
             
             // Then draws the object
-            drawer.withColor(Color.LIGHT_GRAY, Color.DARK_GRAY).draw(
+            drawer.withColor(Some(Color.LIGHT_GRAY), Some(Color.DARK_GRAY)).draw(
                     Bounds(gridPosition + testObj.position * squareSide + 
                     (squareSize - avatarSize) / 2, avatarSize).toRoundedRectangle(0.5));
         }

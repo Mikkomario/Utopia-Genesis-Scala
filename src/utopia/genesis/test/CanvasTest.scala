@@ -20,7 +20,7 @@ object CanvasTest extends App
 {
     private class TestDrawable(val shape: ShapeConvertible, override val depth: Int) extends Drawable
     {
-        override def draw(drawer: Drawer) = drawer.withColor(Color.RED).draw(shape)
+        override def draw(drawer: Drawer) = drawer.withColor(Some(Color.RED)).draw(shape)
     }
     
     val gameWorldSize = Vector3D(800, 600)

@@ -34,12 +34,10 @@ object Drawer
  * @author Mikko Hilpinen
  * @since 22.1.2017
  */
-class Drawer(val graphics: Graphics2D, val fillColor: Paint = Color.WHITE, 
-        val edgeColor: Paint = Color.BLACK)
+class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color.WHITE), 
+        val edgeColor: Option[Paint] = Some(Color.BLACK))
 {
     // TODO: Add rendering hints
-    // TODO: Also make all of these variables values and use copy approach instead
-    // TODO: Just remember to add a private list of children so that the dispose can be done recursively
     
     // ATTRIBUTES    ----------------------
     
@@ -88,10 +86,16 @@ class Drawer(val graphics: Graphics2D, val fillColor: Paint = Color.WHITE,
      */
     def draw(shape: Shape) = 
     {
-        graphics.setPaint(fillColor)
-        graphics.fill(shape)
-        graphics.setPaint(edgeColor)
-        graphics.draw(shape)
+        if (fillColor.isDefined)
+        {
+            graphics.setPaint(fillColor.get)
+            graphics.fill(shape)
+        }
+        if (edgeColor.isDefined)
+        {
+            graphics.setPaint(edgeColor.get)
+            graphics.draw(shape)
+        }
     }
     
     /**
@@ -105,7 +109,7 @@ class Drawer(val graphics: Graphics2D, val fillColor: Paint = Color.WHITE,
      * @param edgeColor the colour / paint used for the drawn edges. By default stays the same as it
      * was in the original
      */
-    def withColor(fillColor: Paint, edgeColor: Paint = this.edgeColor) =
+    def withColor(fillColor: Option[Paint], edgeColor: Option[Paint] = this.edgeColor) =
     {
         val drawer = new Drawer(graphics.create().asInstanceOf[Graphics2D], fillColor, edgeColor)
         children :+= drawer
@@ -115,7 +119,7 @@ class Drawer(val graphics: Graphics2D, val fillColor: Paint = Color.WHITE,
     /**
      * Creates a new instance of this drawer with altered edge colour
      */
-    def withEdgeColor(edgeColor: Paint) = withColor(fillColor, edgeColor)
+    def withEdgeColor(edgeColor: Option[Paint]) = withColor(fillColor, edgeColor)
             
     /**
      * Creates a copy of this context with altered alpha (opacity / transparency) value.
