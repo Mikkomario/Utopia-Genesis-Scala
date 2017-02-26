@@ -9,6 +9,7 @@ import java.awt.BasicStroke
 import java.awt.Stroke
 import java.awt.Shape
 import java.awt.Paint
+import java.awt.Font
 
 object Drawer
 {
@@ -102,6 +103,20 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color
      * Draws a shape convertible instance as this drawer would draw a shape
      */
     def draw(shape: ShapeConvertible): Unit = draw(shape.toShape)
+    
+    /**
+     * Draws a piece of text so that it is centered in a set of bounds
+     */
+    def drawTextCentered(text: String, font: Font, bounds: Bounds)
+    {
+        graphics.setFont(font)
+        val metrics = graphics.getFontMetrics
+        
+        val x = bounds.position.x + (bounds.width - metrics.stringWidth(text)) / 2
+        val y = bounds.position.y + (bounds.height - metrics.getHeight) / 2 + metrics.getAscent
+        
+        graphics.drawString(text, x.toInt, y.toInt)
+    }
     
     /**
      * Creates a new instance of this drawer with altered colours

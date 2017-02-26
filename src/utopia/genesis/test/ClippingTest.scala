@@ -23,28 +23,7 @@ import utopia.genesis.util.DepthRange
  * @since 25.2.2017
  */
 object ClippingTest extends App
-{
-    class GridDrawer(worldSize: Vector3D, val squareSize: Vector3D) extends Drawable
-    {
-        private val squareAmounts = (worldSize / squareSize).floor
-        private val size = squareAmounts * squareSize
-        private val position = (worldSize - size) / 2
-        
-        def draw(drawer: Drawer) = 
-        {
-            val copy = drawer.withEdgeColor(Some(Color.LIGHT_GRAY))
-            
-            for (x <- 0 to squareAmounts.x.toInt)
-            {
-                copy.draw(Line.ofVector(position + squareSize.xProjection * x, size.yProjection))
-            }
-            for (y <- 0 to squareAmounts.y.toInt)
-            {
-                copy.draw(Line.ofVector(position + squareSize.yProjection * y, size.xProjection))
-            }
-        }
-    }
-    
+{   
     class HiddenShapeDrawer(val shapes: Iterable[ShapeConvertible]) 
             extends Drawable with MouseMoveListener
     {
@@ -76,8 +55,8 @@ object ClippingTest extends App
     
     handlers += new GridDrawer(worldSize, Vector3D(64, 64))
     handlers += new HiddenShapeDrawer(Vector(
-            Circle(worldSize / 2, 32), Circle(worldSize, 64), 
-            Circle(worldSize.xProjection + Vector3D(- 48, 48), 32)));
+            Circle(worldSize / 2, 32), Circle(worldSize * 0.7, 64), 
+            Circle(worldSize.xProjection + Vector3D(- 64, 64), 32)));
     
     actorThread.start()
     frame.display()

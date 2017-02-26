@@ -12,7 +12,7 @@ trait Camera
 {
     // ATTRIBUTES    ------------------------
     
-    val drawHandler = new DrawableHandler(Some(transformDrawer))
+    val drawHandler = new DrawableHandler(Some(customDrawer))
     
     
     // ABSTRACT METHODS    ------------------
@@ -45,5 +45,10 @@ trait Camera
     
     // OTHER METHODS    -------------------
     
-    private def transformDrawer(drawer: Drawer) = projectionTransformation((-viewTransformation)(drawer))
+    // Transforms and clips the drawer
+    private def customDrawer(drawer: Drawer) = 
+    {
+        projectionTransformation(((-viewTransformation)(drawer)).clippedTo(projectionArea))
+        //projectionTransformation((-viewTransformation)(drawer))
+    }
 }
