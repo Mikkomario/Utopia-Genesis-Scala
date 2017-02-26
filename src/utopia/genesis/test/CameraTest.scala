@@ -8,6 +8,8 @@ import java.awt.Font
 import utopia.genesis.event.Drawable
 import utopia.genesis.util.Drawer
 import utopia.genesis.util.Bounds
+import utopia.genesis.view.CanvasMouseEventGenerator
+import utopia.genesis.event.ActorThread
 
 object CameraTest extends App
 {
@@ -31,12 +33,19 @@ object CameraTest extends App
     val canvas = new Canvas(worldSize, 120)
     val frame = new MainFrame(canvas, worldSize, "Camera Test")
     
-    val handlers = new HandlerRelay(canvas.handler)
+    val actorThread = new ActorThread(20, 120)
+    val mouseEventGen = new CanvasMouseEventGenerator(canvas)
+    actorThread.handler += mouseEventGen
+    
+    val handlers = new HandlerRelay(canvas.handler, actorThread.handler, mouseEventGen.moveHandler)
     
     val grid = new GridDrawer(worldSize, Vector3D(80, 80))
+    val camera = new MagnifierCamera(64)
     
     handlers += grid
     handlers += new GridNumberDrawer(grid)
+    handlers += camera
     
+    actorThread.start()
     frame.display()
 }

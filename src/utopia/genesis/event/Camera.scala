@@ -12,7 +12,15 @@ trait Camera
 {
     // ATTRIBUTES    ------------------------
     
-    val drawHandler = new DrawableHandler(Some(customDrawer))
+    /**
+     * The drawing depth of the camera's contents. Immutable.
+     */
+    val depth: Int
+    
+    /**
+     * The handler for all the content that may be displayed in the camera's view
+     */
+    val drawHandler = new DrawableHandler(depth, Some(customDrawer))
     
     
     // ABSTRACT METHODS    ------------------

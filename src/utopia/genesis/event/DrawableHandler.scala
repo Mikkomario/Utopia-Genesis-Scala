@@ -8,7 +8,8 @@ import utopia.genesis.util.Drawer
 
 case object DrawableHandlerType extends HandlerType(classOf[Drawable])
 
-class DrawableHandler(val customize: Option[Drawer => Drawer] = None) extends 
+class DrawableHandler(override val depth: Int = DepthRange.default, 
+        val customize: Option[Drawer => Drawer] = None) extends 
         Handler[Drawable](DrawableHandlerType) with Drawable
 {
     // IMPLEMENTED METHODS    -------------
