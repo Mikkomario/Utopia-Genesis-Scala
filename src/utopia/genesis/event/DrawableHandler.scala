@@ -8,14 +8,16 @@ import utopia.genesis.util.Drawer
 
 case object DrawableHandlerType extends HandlerType(classOf[Drawable])
 
-class DrawableHandler extends Handler[Drawable](DrawableHandlerType) with Drawable
+class DrawableHandler(val customize: Option[Drawer => Drawer] = None) extends 
+        Handler[Drawable](DrawableHandlerType) with Drawable
 {
     // IMPLEMENTED METHODS    -------------
     
-    // TODO: add possibility to customise graphics context before drawing
-    
     override def draw(drawer: Drawer) = 
     {
+        // May customise the graphics context
+        val customGraphics = customize.map { _(drawer) }
+        
         // Draws all the elements inside the handler. 
         // If the depth order was wrong, fixes it for the next iteration
         var lastDepth = Int.MaxValue
@@ -23,7 +25,7 @@ class DrawableHandler extends Handler[Drawable](DrawableHandlerType) with Drawab
         
         foreach(true, drawable => 
         {
-            drawable.draw(drawer)
+            drawable.draw(customGraphics.getOrElse(drawer))
             if (drawable.depth > lastDepth)
             {
                 sortDepth = true
@@ -36,5 +38,8 @@ class DrawableHandler extends Handler[Drawable](DrawableHandlerType) with Drawab
         {
             sortWith({ _.depth >= _.depth })
         }
+        
+        // Clears the customised graphics context, if applicable
+        customGraphics.foreach { _.dispose() }
     }
 }
