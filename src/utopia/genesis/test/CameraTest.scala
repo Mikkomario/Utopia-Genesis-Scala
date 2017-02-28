@@ -22,7 +22,7 @@ object CameraTest extends App
             // Draws a number on each grid square
             for (x <- 0 until grid.squareAmounts.x.toInt; y <- 0 until grid.squareAmounts.y.toInt)
             {
-                drawer.drawTextCentered((x + y + 1) + "", font, 
+                drawer.drawTextCentered((y * grid.squareAmounts.x.toInt + x + 1) + "", font, 
                         Bounds(grid.squarePosition(x, y), grid.squareSize))
             }
         }
@@ -40,11 +40,16 @@ object CameraTest extends App
     val handlers = new HandlerRelay(canvas.handler, actorThread.handler, mouseEventGen.moveHandler)
     
     val grid = new GridDrawer(worldSize, Vector3D(80, 80))
+    val numbers = new GridNumberDrawer(grid)
     val camera = new MagnifierCamera(64)
     
     handlers += grid
-    handlers += new GridNumberDrawer(grid)
+    handlers += numbers
     handlers += camera
+    handlers += camera.drawHandler
+    
+    camera.drawHandler += grid
+    camera.drawHandler += numbers
     
     actorThread.start()
     frame.display()

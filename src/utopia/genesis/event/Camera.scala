@@ -3,6 +3,9 @@ package utopia.genesis.event
 import utopia.genesis.util.Transformation
 import java.awt.Shape
 import utopia.genesis.util.Drawer
+import utopia.genesis.util.Vector3D
+import utopia.genesis.util.Bounds
+import java.awt.Color
 
 /**
  * Cameras are used for viewing the game world from a different angle
@@ -54,9 +57,6 @@ trait Camera
     // OTHER METHODS    -------------------
     
     // Transforms and clips the drawer
-    private def customDrawer(drawer: Drawer) = 
-    {
-        projectionTransformation(((-viewTransformation)(drawer)).clippedTo(projectionArea))
-        //projectionTransformation((-viewTransformation)(drawer))
-    }
+    private def customDrawer(drawer: Drawer) = drawer.transformed(projectionTransformation).clippedTo(
+                projectionArea).transformed(-viewTransformation);
 }

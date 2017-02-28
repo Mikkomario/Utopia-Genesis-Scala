@@ -36,29 +36,14 @@ object Drawer
  * @since 22.1.2017
  */
 class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color.WHITE), 
-        val edgeColor: Option[Paint] = Some(Color.BLACK))
+        val edgeColor: Option[Paint] = Some(Color.BLACK)/*, 
+        private val transformContext: Vector[Transformation] = Vector()*/)
 {
     // TODO: Add rendering hints
     
     // ATTRIBUTES    ----------------------
     
     private var children = Vector[Drawer]()
-    
-    
-    // OPERATORS    -----------------------
-    
-    /**
-     * Creates a new drawer with the provided transformation applied. The transformation will be
-     * applied over existing transformations. This operation cannot be reversed but the original
-     * (unaltered) instance can still be used.
-     */
-    def +(transform: Transformation) = 
-    {
-        val drawer = copy()
-        drawer.graphics.transform(transform.toAffineTransform)
-        drawer
-    }
-    
     
     
     // OTHER METHODS    -------------------
@@ -68,7 +53,7 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color
      * affect this one. This should be used when a lot of drawing is done and the graphics context 
      * should be returned to its original state.
      */
-    def copy() = withColor(fillColor)
+    def copy(): Drawer = copy(fillColor, edgeColor)
     
     /**
      * Disposes this graphics context and every single drawer created from this drawer instance. The
@@ -119,17 +104,42 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color
     }
     
     /**
+     * Creates a transformed copy of this
+     * drawer so that it will use the provided transformation to draw relative 
+     * elements into absolute space
+     */
+    def transformed(transform: AffineTransform) = 
+    {
+        val drawer = copy()
+        drawer.graphics.transform(transform)
+        drawer
+    }
+    
+    /**
+     * Creates a transformed copy of this
+     * drawer so that it will use the provided transformation to draw relative 
+     * elements into absolute space
+     */
+    def transformed(transform: Transformation): Drawer = transformed(transform.toAffineTransform)
+    
+    /**
+     * Creates a transformed copy of this drawer so that it reads from absolute world space and 
+     * projects them differently on another absolute world space
+     * @param from The transformation with which the data is read
+     * @param to The transformation with which the data is projected (like in other transform
+     * methods)
+     */
+    //def transformed(from: Transformation, to: Transformation): Drawer = 
+    //        transformed(from.toInvertedAffineTransform).transformed(to);
+    
+    /**
      * Creates a new instance of this drawer with altered colours
      * @param fillColor the colour / paint used for filling the area
      * @param edgeColor the colour / paint used for the drawn edges. By default stays the same as it
      * was in the original
      */
-    def withColor(fillColor: Option[Paint], edgeColor: Option[Paint] = this.edgeColor) =
-    {
-        val drawer = new Drawer(graphics.create().asInstanceOf[Graphics2D], fillColor, edgeColor)
-        children :+= drawer
-        drawer
-    }
+    def withColor(fillColor: Option[Paint], edgeColor: Option[Paint] = this.edgeColor) = 
+            copy(fillColor, edgeColor);
     
     /**
      * Creates a new instance of this drawer with altered edge colour
@@ -176,4 +186,12 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color
      * be reversed but the original instance can still be used for drawing without clipping.
      */
     def clippedTo(shape: ShapeConvertible): Drawer = clippedTo(shape.toShape)
+    
+    private def copy(fillColor: Option[Paint], edgeColor: Option[Paint]) = 
+    {
+        val drawer = new Drawer(graphics.create().asInstanceOf[Graphics2D], fillColor, edgeColor)
+        children :+= drawer
+        
+        drawer
+    }
 }

@@ -46,7 +46,7 @@ object MouseTest extends App
         {
             val copy = drawer.withColor(Some(if (isOn) Color.BLUE else if (mouseOver) Color.CYAN 
                     else Color.LIGHT_GRAY)).withAlpha(0.75);
-            transformation(copy).draw(area)
+            copy.transformed(transformation).draw(area)
             
             drawer.draw(Line(transformation.position, lastMousePosition))
         }

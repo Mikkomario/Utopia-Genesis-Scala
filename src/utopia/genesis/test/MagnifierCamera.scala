@@ -22,8 +22,8 @@ class MagnifierCamera(radius: Double) extends Camera with Drawable with MouseMov
     override val depth = DepthRange.top
     override val projectionArea = Circle(Vector3D.zero, radius).toShape
     
-    private var absoluteTransform = Transformation.identity
-    private var viewTransform = Transformation.scaling(2)
+    private var absoluteTransform = Transformation.scaling(2)
+    private var viewTransform = Transformation.scaling(0.75)
     
     
     // IMPLEMENTED PROPERTIES    -----
@@ -35,7 +35,8 @@ class MagnifierCamera(radius: Double) extends Camera with Drawable with MouseMov
     // IMPLEMENTED METHODS    --------
     
     // Draws the edges of the projection area
-    override def draw(drawer: Drawer) = projectionTransformation(drawer.withColor(None)).draw(projectionArea)
+    override def draw(drawer: Drawer) = drawer.withColor(None).transformed(
+            projectionTransformation).draw(projectionArea)
     
     // Moves the camera 'lens' to the mouse position
     override def onMouseMove(event: MouseMoveEvent) = 
