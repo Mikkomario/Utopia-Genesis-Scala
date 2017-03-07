@@ -11,6 +11,7 @@ import utopia.genesis.util.Bounds
 import utopia.genesis.view.CanvasMouseEventGenerator
 import utopia.genesis.event.ActorThread
 
+
 object CameraTest extends App
 {
     class GridNumberDrawer(private val grid: GridDrawer) extends Drawable

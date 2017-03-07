@@ -91,7 +91,6 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      */
     def toInvertedAffineTransform = 
     {
-        // TODO: Refactor
         val t = toAffineTransform
         
         // If the transformation can't be inverted, simply inverts the position
@@ -105,6 +104,26 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
             Transformation(-position).toAffineTransform
         }
     }
+    
+    /**
+     * The translation component of this transformation
+     */
+    def translationTransformation = Transformation.translation(position)
+    
+    /**
+     * The scaling component of this transformation
+     */
+    def scalingTransformation = Transformation.scaling(scaling)
+    
+    /**
+     * The rotation component of this transformation
+     */
+    def rotationTransformation = Transformation.rotationRads(rotationRads)
+    
+    /**
+     * The shear component of this transformation
+     */
+    def shearTransformation = Transformation.shear(shear)
     
     
     // OPERATORS    -----------------
@@ -120,9 +139,8 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * scaling or rotation of this transformation. If you want the results of applying first this
      * transformation and then the second, use apply(Transformation) instead.
      */
-    // TODO: Handle reverse order cases
     def +(other: Transformation) = Transformation(position + other.position, 
-            scaling * other.scaling, rotationRads + other.rotationRads, shear + other.shear);
+            scaling * other.scaling, rotationRads + other.rotationRads, shear + other.shear, useReverseOrder);
     
     /**
      * Negates a transformation from this transformation
