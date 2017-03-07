@@ -85,7 +85,7 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
         }
         
         // Game world drawings are scaled, then drawn
-        handler.draw(drawer + Transformation.scaling(scaling))
+        handler.draw(drawer.transformed(Transformation.scaling(scaling)))
         
         // Disposes the created drawers afterwards
         drawer.dispose()

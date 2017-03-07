@@ -13,4 +13,6 @@ trait ShapeConvertible
      * Converts this instance to a shape
      */
     def toShape: Shape
+    
+    // Also add shape intersections and additions, etc.
 }

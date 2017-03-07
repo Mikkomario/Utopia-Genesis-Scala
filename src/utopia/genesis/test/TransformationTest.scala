@@ -20,9 +20,11 @@ object TransformationTest extends App
     assert((-scaling).scaling.x == 0.5)
     assert((-rotation).rotationDegs ~== -90)
     
+    /*
     assert(translation - translation == Transformation.identity)
     assert(scaling - scaling == Transformation.identity)
     assert(rotation - rotation == Transformation.identity)
+    */
     
     assert(scaling + Transformation.identity == scaling)
     
@@ -37,6 +39,8 @@ object TransformationTest extends App
     val combo = translation + rotation + scaling
     
     assert(combo.invert(combo(pos)) == pos)
+    assert(combo.invert(pos) == (-combo)(pos))
+    assert(-(-combo) == combo)
     
     val rotated = translation.absoluteRotatedDegs(90, Vector3D(20))
     assert(rotated.position ~== Vector3D(20, -10))

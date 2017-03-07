@@ -52,7 +52,7 @@ object Transformation
  */
 case class Transformation(val position: Vector3D = Vector3D.zero, 
         val scaling: Vector3D = Vector3D.identity, val rotationRads: Double = 0, 
-        val shear: Vector3D = Vector3D.zero)
+        val shear: Vector3D = Vector3D.zero, val useReverseOrder: Boolean = false)
 {
     // COMPUTED PROPERTIES    -------
     
@@ -67,12 +67,63 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def toAffineTransform = 
     {
         val t = new AffineTransform()
-        t.translate(position.x, position.y)
-        t.rotate(rotationRads)
-        t.scale(scaling.x, scaling.y)
-        t.shear(shear.x, shear.y)
+        
+        // Reverse transformations do the transforms in reverse order too
+        if (useReverseOrder)
+        {
+            t.shear(shear.x, shear.y)
+            t.scale(scaling.x, scaling.y)
+            t.rotate(rotationRads)
+            t.translate(position.x, position.y)
+        }
+        else
+        {
+            t.translate(position.x, position.y)
+            t.rotate(rotationRads)
+            t.scale(scaling.x, scaling.y)
+            t.shear(shear.x, shear.y)
+        }
         t
     }
+    
+    /**
+     * Converts this transform instance into an affine transform and inverts it
+     */
+    def toInvertedAffineTransform = 
+    {
+        val t = toAffineTransform
+        
+        // If the transformation can't be inverted, simply inverts the position
+        if (t.getDeterminant != 0)
+        {
+            t.invert()
+            t
+        }
+        else
+        {
+            Transformation(-position).toAffineTransform
+        }
+    }
+    
+    /**
+     * The translation component of this transformation
+     */
+    def translationTransformation = Transformation.translation(position)
+    
+    /**
+     * The scaling component of this transformation
+     */
+    def scalingTransformation = Transformation.scaling(scaling)
+    
+    /**
+     * The rotation component of this transformation
+     */
+    def rotationTransformation = Transformation.rotationRads(rotationRads)
+    
+    /**
+     * The shear component of this transformation
+     */
+    def shearTransformation = Transformation.shear(shear)
     
     
     // OPERATORS    -----------------
@@ -80,7 +131,8 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     /**
      * Inverts this transformation
      */
-    def unary_- = Transformation(-position, Vector3D.identity / scaling, -rotationRads, -shear)
+    def unary_- = Transformation(-position, Vector3D.identity / scaling, -rotationRads, -shear, 
+            !useReverseOrder);
     
     /**
      * Combines the two transformations together. The applied translation is not depended of the 
@@ -88,12 +140,12 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * transformation and then the second, use apply(Transformation) instead.
      */
     def +(other: Transformation) = Transformation(position + other.position, 
-            scaling * other.scaling, rotationRads + other.rotationRads, shear + other.shear);
+            scaling * other.scaling, rotationRads + other.rotationRads, shear + other.shear, useReverseOrder);
     
     /**
      * Negates a transformation from this transformation
      */
-    def -(other: Transformation) = this + (-other)
+    // def -(other: Transformation) = this + (-other)
     
     /**
      * Checks whether the two transformations are practically (approximately) identical with each
@@ -119,11 +171,6 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def apply(other: Transformation): Transformation = (this + other).withPosition(apply(
             other.position));
     
-    /**
-     * Creates a new drawer by transforming another. This is identical to calling drawer + this.
-     */
-    def apply(drawer: Drawer) = drawer + this
-    
     
     // OTHER METHODS    -------------
     
@@ -132,21 +179,8 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * @param absolute a vector in absolute world space
      * @return The absolute point in relative world space
      */
-    def invert(absolute: Vector3D) = 
-    {
-        val t = toAffineTransform
-        
-        if (t.getDeterminant != 0)
-        {
-            t.invert()
-            Vector3D of t.transform(absolute.toPoint2D, null)
-        }
-        // If the transformation can't be inverted, simply inverts the position
-        else
-        {
-            Transformation(-position)(absolute)
-        }
-    }
+    def invert(absolute: Vector3D) = Vector3D of toInvertedAffineTransform.transform(
+            absolute.toPoint2D, null);
     
     /**
      * Converts an absolute coordinate into a relative one. Same as calling invert(Vector3D)
