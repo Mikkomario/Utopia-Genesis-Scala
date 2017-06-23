@@ -1,6 +1,9 @@
 package utopia.genesis.util
 
 import java.awt.geom.RoundRectangle2D
+import utopia.flow.generic.ValueConvertible
+import utopia.flow.datastructure.immutable.Value
+import utopia.genesis.generic.BoundsType
 
 object Bounds
 {
@@ -37,12 +40,15 @@ object Bounds
  * @author Mikko Hilpinen
  * @since 13.1.2017
  */
-case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConvertible with Area
+case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConvertible with 
+        Area with ValueConvertible
 {
     // COMPUTED PROPERTIES    ------------
     
     override def toShape = new java.awt.Rectangle(position.x.toInt, position.y.toInt, width.toInt, 
             height.toInt);
+    
+    override def toValue = new Value(Some(this), BoundsType)
     
     /**
      * The width of the rectangle / cube

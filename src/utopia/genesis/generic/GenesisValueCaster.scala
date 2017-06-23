@@ -19,6 +19,8 @@ import utopia.flow.generic.ConversionReliability._
 import utopia.genesis.util.Transformation
 import utopia.genesis.util.Bounds
 
+import utopia.flow.generic.ValueConversions._
+
 /**
  * This object handles casting of Genesis-specific data types
  * @author Mikko Hilpinen
@@ -75,16 +77,17 @@ object GenesisValueCaster extends ValueCaster
         value.dataType match 
         {
             case Vector3DType => Some(value.vector3DOr().toVector.map { x => 
-                    if (x ~== 0) Value.of(0.0) else Value.of(x) });
+                    if (x ~== 0) 0.0.toValue else x.toValue });
             case LineType => 
             {
                 val line = value.lineOr()
-                Some(Vector(GenesisValue of line.start, GenesisValue of line.end))
+                Some(Vector(line.start, line.end))
             }
             case _ => None
         }
     }
     
+    // TODO: Create a modelConvertible trait for this kind of operations?
     private def modelOf(value: Value): Option[Model[Constant]] = 
     {
         value.dataType match 
@@ -93,39 +96,39 @@ object GenesisValueCaster extends ValueCaster
             {
                 val vector = value.vector3DOr()
                 Some(Model(Vector(
-                        ("x", Value of vector.x), 
-                        ("y", Value of vector.y), 
-                        ("z", Value of vector.z))))
+                        ("x", vector.x), 
+                        ("y", vector.y), 
+                        ("z", vector.z))))
             }
             case LineType => 
             {
                 val line = value.lineOr()
                 Some(Model(Vector(
-                        ("start", GenesisValue of line.start), 
-                        ("end", GenesisValue of line.end))))
+                        ("start", line.start), 
+                        ("end", line.end))))
             }
             case CircleType => 
             {
                 val circle = value.circleOr()
                 Some(Model(Vector(
-                        ("origin", GenesisValue of circle.origin), 
-                        ("radius", Value of circle.radius))))
+                        ("origin", circle.origin), 
+                        ("radius", circle.radius))))
             }
             case BoundsType => 
             {
                 val rect = value.boundsOr()
                 Some(Model(Vector(
-                        ("position", GenesisValue of rect.position), 
-                        ("size", GenesisValue of rect.size))))
+                        ("position", rect.position), 
+                        ("size", rect.size))))
             }
             case TransformationType => 
             {
                 val t = value.transformationOr()
                 Some(Model(Vector(
-                        ("position", GenesisValue of t.position), 
-                        ("scaling", GenesisValue of t.scaling), 
-                        ("rotation", Value of t.rotationRads), 
-                        ("shear", GenesisValue of t.shear))))
+                        ("position", t.position), 
+                        ("scaling", t.scaling), 
+                        ("rotation", t.rotationRads), 
+                        ("shear", t.shear))))
             }
             case _ => None
         }

@@ -2,6 +2,9 @@ package utopia.genesis.util
 
 import java.awt.geom.AffineTransform
 import utopia.genesis.util.Extensions._
+import utopia.flow.generic.ValueConvertible
+import utopia.flow.datastructure.immutable.Value
+import utopia.genesis.generic.TransformationType
 
 object Transformation
 {
@@ -52,9 +55,11 @@ object Transformation
  */
 case class Transformation(val position: Vector3D = Vector3D.zero, 
         val scaling: Vector3D = Vector3D.identity, val rotationRads: Double = 0, 
-        val shear: Vector3D = Vector3D.zero, val useReverseOrder: Boolean = false)
+        val shear: Vector3D = Vector3D.zero, val useReverseOrder: Boolean = false) extends ValueConvertible
 {
     // COMPUTED PROPERTIES    -------
+    
+    override def toValue = new Value(Some(this), TransformationType)
     
     /**
      * How much the target is rotated in degrees
