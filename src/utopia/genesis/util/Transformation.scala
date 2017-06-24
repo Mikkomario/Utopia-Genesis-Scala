@@ -5,13 +5,32 @@ import utopia.genesis.util.Extensions._
 import utopia.flow.generic.ValueConvertible
 import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.generic.TransformationType
+import utopia.flow.generic.ModelConvertible
+import utopia.flow.datastructure.immutable.Model
+import utopia.flow.generic.ValueConversions._
+import utopia.flow.generic.FromModelFactory
+import utopia.flow.datastructure.template
+import utopia.flow.datastructure.template.Property
+import utopia.genesis.generic.GenesisValue._
 
-object Transformation
+object Transformation extends FromModelFactory[Transformation]
 {
+    // ATTRIBUTES    -----------------
+    
     /**
      * This transformation preserves the state of the target without transforming it
      */
     val identity = Transformation()
+    
+    
+    // OPERATORS    -----------------
+    
+    override def apply(model: template.Model[Property]) = Some(Transformation(
+            model("position").vector3DOr(), model("scaling").vector3DOr(Vector3D.identity), 
+            model("rotation").doubleOr(), model("shear").vector3DOr()))
+    
+    
+    // OTHER METHODS    --------------
     
     /**
      * This transformation moves the coordinates of the target by the provided amount
@@ -55,11 +74,15 @@ object Transformation
  */
 case class Transformation(val position: Vector3D = Vector3D.zero, 
         val scaling: Vector3D = Vector3D.identity, val rotationRads: Double = 0, 
-        val shear: Vector3D = Vector3D.zero, val useReverseOrder: Boolean = false) extends ValueConvertible
+        val shear: Vector3D = Vector3D.zero, val useReverseOrder: Boolean = false) extends 
+        ValueConvertible with ModelConvertible
 {
     // COMPUTED PROPERTIES    -------
     
     override def toValue = new Value(Some(this), TransformationType)
+    
+    override def toModel = Model(Vector("position" -> position, "scaling" -> scaling, 
+            "rotation" -> rotationRads, "shear" -> shear))
     
     /**
      * How much the target is rotated in degrees

@@ -87,49 +87,15 @@ object GenesisValueCaster extends ValueCaster
         }
     }
     
-    // TODO: Create a modelConvertible trait for this kind of operations?
     private def modelOf(value: Value): Option[Model[Constant]] = 
     {
         value.dataType match 
         {
-            case Vector3DType => 
-            {
-                val vector = value.vector3DOr()
-                Some(Model(Vector(
-                        ("x", vector.x), 
-                        ("y", vector.y), 
-                        ("z", vector.z))))
-            }
-            case LineType => 
-            {
-                val line = value.lineOr()
-                Some(Model(Vector(
-                        ("start", line.start), 
-                        ("end", line.end))))
-            }
-            case CircleType => 
-            {
-                val circle = value.circleOr()
-                Some(Model(Vector(
-                        ("origin", circle.origin), 
-                        ("radius", circle.radius))))
-            }
-            case BoundsType => 
-            {
-                val rect = value.boundsOr()
-                Some(Model(Vector(
-                        ("position", rect.position), 
-                        ("size", rect.size))))
-            }
-            case TransformationType => 
-            {
-                val t = value.transformationOr()
-                Some(Model(Vector(
-                        ("position", t.position), 
-                        ("scaling", t.scaling), 
-                        ("rotation", t.rotationRads), 
-                        ("shear", t.shear))))
-            }
+            case Vector3DType => Some(value.vector3DOr().toModel)
+            case LineType => Some(value.lineOr().toModel)
+            case CircleType => Some(value.circleOr().toModel)
+            case BoundsType => Some(value.boundsOr().toModel)
+            case TransformationType => Some(value.transformationOr().toModel)
             case _ => None
         }
     }
@@ -139,7 +105,7 @@ object GenesisValueCaster extends ValueCaster
         value.dataType match 
         {
             case VectorType => Some(Vector3D(value(0).doubleOr(), value(1).doubleOr(), value(2).doubleOr()))
-            case ModelType => Some(Vector3D(value("x").doubleOr(), value("y").doubleOr(), value("z").doubleOr()))
+            case ModelType => Vector3D(value.modelOr())
             case LineType => Some(value.lineOr().vector)
             case _ => None
         }
@@ -151,21 +117,14 @@ object GenesisValueCaster extends ValueCaster
         {
             case BoundsType => Some(value.boundsOr().diagonal)
             case VectorType => Some(Line(value(0).vector3DOr(), value(1).vector3DOr()))
-            case ModelType => Some(Line(value("start").vector3DOr(), value("end").vector3DOr()))
+            case ModelType => Line(value.modelOr())
             case _ => None
         }
     }
     
     private def circleOf(value: Value): Option[Circle] = 
     {
-        if (value.dataType isOfType ModelType)
-        {
-            Some(Circle(value("origin").vector3DOr(), value("radius").doubleOr()))
-        }
-        else
-        {
-            None
-        }
+        if (value.dataType isOfType ModelType) Circle(value.modelOr()) else None
     }
     
     private def boundsOf(value: Value): Option[Bounds] = 
@@ -173,24 +132,13 @@ object GenesisValueCaster extends ValueCaster
         value.dataType match 
         {
             case LineType => Some(Bounds.aroundDiagonal(value.lineOr()))
-            case ModelType => Some(Bounds(value("position").vector3DOr(), value("size").vector3DOr()))
+            case ModelType => Bounds(value.modelOr())
             case _ => None
         }
     }
     
     private def transformationOf(value: Value): Option[Transformation] = 
     {
-        if (value.dataType isOfType ModelType)
-        {
-            Some(Transformation(
-                    value("position").vector3DOr(), 
-                    value("scaling").vector3DOr(Vector3D.identity), 
-                    value("rotation").doubleOr(), 
-                    value("shear").vector3DOr()))
-        }
-        else
-        {
-            None
-        }
+        if (value.dataType isOfType ModelType) Transformation(value.modelOr()) else None
     }
 }

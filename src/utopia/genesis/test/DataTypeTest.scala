@@ -16,6 +16,7 @@ import utopia.genesis.util.Transformation
 import utopia.genesis.generic.TransformationType
 import utopia.genesis.util.Bounds
 import utopia.genesis.generic.BoundsType
+import utopia.flow.parse.JSONReader
 
 /**
  * This is a unit test for the new data type implementations
@@ -84,6 +85,13 @@ object DataTypeTest extends App
     val model = Model(Vector(("vector", v1), ("line", l), ("circle", c), ("rectangle", r), 
             ("transformation", t)));
     println(model.toJSON)
+    
+    // Tests JSON parsing
+    assert(Vector3D.fromJSON(v1.vector3DOr().toJSON) == v1.vector3D)
+    assert(Line.fromJSON(l.lineOr().toJSON) == l.line)
+    assert(Circle.fromJSON(c.circleOr().toJSON) == c.circle)
+    assert(Bounds.fromJSON(r.boundsOr().toJSON) == r.bounds)
+    assert(Transformation.fromJSON(t.transformationOr().toJSON) == t.transformation)
     
     println("Success")
 }

@@ -6,9 +6,24 @@ import scala.collection.mutable.ListBuffer
 import utopia.flow.generic.ValueConvertible
 import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.generic.LineType
+import utopia.flow.generic.ModelConvertible
+import utopia.flow.datastructure.immutable.Model
+import utopia.flow.generic.ValueConversions._
+import utopia.flow.datastructure.template
+import utopia.flow.generic.FromModelFactory
+import utopia.flow.datastructure.template.Property
+import utopia.genesis.generic.GenesisValue._
 
-object Line
+object Line extends FromModelFactory[Line]
 {
+    // OPERATORS    -------------------------
+    
+    override def apply(model: template.Model[Property]) = Some(Line(model("start").vector3DOr(), 
+            model("end").vector3DOr()));
+    
+    
+    // OTHER METHODS    ---------------------
+    
     /**
      * Creates a new line from position and vector combo
      * @param position The starting position of the line
@@ -52,7 +67,8 @@ object Line
  * @author Mikko Hilpinen
  * @since 13.12.2016
  */
-case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible with ValueConvertible
+case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible with 
+        ValueConvertible with ModelConvertible
 {
     // ATTRIBUTES    -------------------
     
@@ -67,6 +83,8 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
     override def toShape = new Line2D.Double(start.x, start.y, end.x, end.y)
     
     override def toValue = new Value(Some(this), LineType)
+    
+    override def toModel = Model(Vector("start" -> start, "end" -> end))
     
     /**
      * This line with inverted direction
