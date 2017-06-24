@@ -9,6 +9,7 @@ import utopia.flow.generic.EnvironmentNotSetupException
 import utopia.flow.generic.ConversionHandler
 import utopia.genesis.util.Transformation
 import utopia.genesis.util.Bounds
+import utopia.flow.parse.JSONValueConverter
 
 /**
  * Vectors are used for representing motion, force and coordinates
@@ -51,6 +52,7 @@ object GenesisDataType
         DataType.setup()
         DataType.introduceTypes(Vector3DType, LineType, CircleType, TransformationType)
         ConversionHandler.addCaster(GenesisValueCaster)
+        JSONValueConverter.introduce(GenesisJSONValueConverter)
     }
 }
 

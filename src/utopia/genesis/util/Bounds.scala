@@ -4,9 +4,24 @@ import java.awt.geom.RoundRectangle2D
 import utopia.flow.generic.ValueConvertible
 import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.generic.BoundsType
+import utopia.flow.generic.ModelConvertible
+import utopia.flow.datastructure.immutable.Model
+import utopia.flow.generic.ValueConversions._
+import utopia.flow.datastructure.template
+import utopia.flow.generic.FromModelFactory
+import utopia.flow.datastructure.template.Property
+import utopia.genesis.generic.GenesisValue._
 
-object Bounds
+object Bounds extends FromModelFactory[Bounds]
 {
+    // OPERATORS    -----------------------
+    
+    override def apply(model: template.Model[Property]) = Some(
+            Bounds(model("position").vector3DOr(), model("size").vector3DOr()))
+    
+    
+    // OTHER METHODS    -------------------
+    
     /**
      * Creates a rectangle that contains the area between the two coordinates. The order 
      * of the coordinates does not matter.
@@ -41,7 +56,7 @@ object Bounds
  * @since 13.1.2017
  */
 case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConvertible with 
-        Area with ValueConvertible
+        Area with ValueConvertible with ModelConvertible
 {
     // COMPUTED PROPERTIES    ------------
     
@@ -49,6 +64,8 @@ case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConve
             height.toInt);
     
     override def toValue = new Value(Some(this), BoundsType)
+    
+    override def toModel = Model(Vector("position" -> position, "size" -> size))
     
     /**
      * The width of the rectangle / cube

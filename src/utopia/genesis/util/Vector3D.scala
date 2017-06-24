@@ -8,9 +8,19 @@ import utopia.genesis.util.Extensions._
 import utopia.flow.generic.ValueConvertible
 import utopia.genesis.generic.Vector3DType
 import utopia.flow.datastructure.immutable.Value
+import utopia.flow.generic.ModelConvertible
+import utopia.flow.datastructure.immutable.Model
+import utopia.flow.generic.ValueConversions._
+import utopia.flow.generic.FromModelFactory
+import utopia.flow.datastructure.template
+import utopia.flow.datastructure.template.Property
+import scala.collection.immutable.HashMap
 
-object Vector3D
+
+object Vector3D extends FromModelFactory[Vector3D]
 {
+    // ATTRIBUTES    --------------------
+    
     /**
      * The identity vector. Scaling or dividing with this vector will not affect other vectors.
      */
@@ -23,6 +33,15 @@ object Vector3D
      * A vector with the length of 1
      */
     val unit = Vector3D(1)
+    
+    
+    // OPERATORS    ---------------------
+    
+    override def apply(model: template.Model[Property]) = Some(Vector3D(
+            model("x").doubleOr(), model("y").doubleOr(), model("z").doubleOr()))
+    
+    
+    // OTHER METHODS    -----------------
     
     /**
      * Creates a new vector with certain length and direction using radian units
@@ -143,11 +162,14 @@ object Vector3D
  * @author Mikko Hilpinen
  * @since 24.12.2016
  */
-case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) extends ValueConvertible
+case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) extends ValueConvertible with ModelConvertible
 {
     // COMPUTED PROPERTIES    ----------
     
     override def toValue = new Value(Some(this), Vector3DType)
+    
+    override def toModel = Model.fromMap(HashMap("x" -> x, "y" -> y, "z" -> z).filterNot { 
+            case (_, value) => value ~== 0 });
     
     /**
      * a copy of this vector where the coordinate values have been cut to integer numbers.

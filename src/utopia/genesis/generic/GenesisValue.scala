@@ -68,14 +68,14 @@ object GenesisValue
          * be cast.
          * @param default The default vector value. Defaults to a zero vector.
          */
-        def vector3DOr(default: Vector3D = Vector3D.zero) = vector3D.getOrElse(default)
+        def vector3DOr(default: => Vector3D = Vector3D.zero) = vector3D.getOrElse(default)
         
         /**
          * The line value of this value, or the provided default value in case the value couldn't
          * be cast.
          * @param default The default line value. Defaults to a line from zero to zero.
          */
-        def lineOr(default: Line = Line(Vector3D.zero, Vector3D.zero)) = line.getOrElse(default)
+        def lineOr(default: => Line = Line(Vector3D.zero, Vector3D.zero)) = line.getOrElse(default)
         
         /**
          * The circle value of this value, or the provided default value in case the value couldn't
@@ -83,7 +83,7 @@ object GenesisValue
          * @param default The default circle value. Defaults to a circle at zero origin with zero
          * radius.
          */
-        def circleOr(default: Circle = Circle(Vector3D.zero, 0)) = circle.getOrElse(default)
+        def circleOr(default: => Circle = Circle(Vector3D.zero, 0)) = circle.getOrElse(default)
         
         /**
          * The rectangle value of this value, or the provided default value in case the value
@@ -91,7 +91,7 @@ object GenesisValue
          * @param default the default rectangle value. Defaults to rectangle with zero position and
          * size.
          */
-        def boundsOr(default: Bounds = Bounds(Vector3D.zero, Vector3D.zero)) = bounds.getOrElse(default)
+        def boundsOr(default: => Bounds = Bounds(Vector3D.zero, Vector3D.zero)) = bounds.getOrElse(default)
         
         /**
          * The transformation value of this value, or the provided default value in case the value
@@ -99,7 +99,7 @@ object GenesisValue
          * @param default The default transformation value. Defaults to identity transformation,
          * which doesn't modify an object's state
          */
-        def transformationOr(default: Transformation = Transformation.identity) = 
+        def transformationOr(default: => Transformation = Transformation.identity) = 
                 transformation.getOrElse(default)
     }
 }
