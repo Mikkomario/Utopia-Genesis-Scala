@@ -3,6 +3,9 @@ package utopia.genesis.util
 import utopia.genesis.util.Extensions._
 import java.awt.geom.Line2D
 import scala.collection.mutable.ListBuffer
+import utopia.flow.generic.ValueConvertible
+import utopia.flow.datastructure.immutable.Value
+import utopia.genesis.generic.LineType
 
 object Line
 {
@@ -49,7 +52,7 @@ object Line
  * @author Mikko Hilpinen
  * @since 13.12.2016
  */
-case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
+case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible with ValueConvertible
 {
     // ATTRIBUTES    -------------------
     
@@ -62,6 +65,8 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
     // COMPUTED PROPERTIES    ----------
     
     override def toShape = new Line2D.Double(start.x, start.y, end.x, end.y)
+    
+    override def toValue = new Value(Some(this), LineType)
     
     /**
      * This line with inverted direction

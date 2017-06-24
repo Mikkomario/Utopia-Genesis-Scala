@@ -5,6 +5,9 @@ import java.awt.geom.Point2D
 import java.awt.Dimension
 
 import utopia.genesis.util.Extensions._
+import utopia.flow.generic.ValueConvertible
+import utopia.genesis.generic.Vector3DType
+import utopia.flow.datastructure.immutable.Value
 
 object Vector3D
 {
@@ -140,9 +143,11 @@ object Vector3D
  * @author Mikko Hilpinen
  * @since 24.12.2016
  */
-case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0)
+case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) extends ValueConvertible
 {
     // COMPUTED PROPERTIES    ----------
+    
+    override def toValue = new Value(Some(this), Vector3DType)
     
     /**
      * a copy of this vector where the coordinate values have been cut to integer numbers.

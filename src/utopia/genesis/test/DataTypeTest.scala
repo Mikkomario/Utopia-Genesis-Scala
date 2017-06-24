@@ -33,12 +33,12 @@ object DataTypeTest extends App
     val rectangle = Bounds(vector2, vector1)
     val transformation = Transformation(vector2, vector2, math.Pi, vector1)
     
-    val v1 = GenesisValue of vector1
-    val v2 = GenesisValue of vector2
-    val l = GenesisValue of line 
-    val c = GenesisValue of circle
-    val r = GenesisValue of rectangle
-    val t = GenesisValue of transformation
+    val v1 = vector1.toValue
+    val v2 = vector2.toValue
+    val l = line.toValue
+    val c = circle.toValue
+    val r = rectangle.toValue
+    val t = transformation.toValue
     
     assert(v1.vectorOr().size == 3)
     assert(v1(0).doubleOr() == 1)
