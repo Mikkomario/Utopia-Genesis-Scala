@@ -50,13 +50,13 @@ object Transformation extends FromModelFactory[Transformation]
     
     /**
      * This transformation rotates the target around the zero origin by the provided amount of
-     * radians
+     * radians. Rotation is made in clockwise direction.
      */
     def rotationRads(amountRads: Double) = Transformation(rotationRads = amountRads)
     
     /**
      * This transformation rotates the target around the zero origin by the provided amount of
-     * degrees
+     * degrees. Rotation is made in clockwise direction.
      */
     def rotationDegs(amountDegs: Double) = rotationRads(amountDegs.toRadians)
     
@@ -85,7 +85,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
             "rotation" -> rotationRads, "shear" -> shear))
     
     /**
-     * How much the target is rotated in degrees
+     * How much the target is rotated in degrees (clockwise)
      */
     def rotationDegs = rotationRads.toDegrees
     
@@ -144,7 +144,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def scalingTransformation = Transformation.scaling(scaling)
     
     /**
-     * The rotation component of this transformation
+     * The rotation component of this transformation (clockwise)
      */
     def rotationTransformation = Transformation.rotationRads(rotationRads)
     
@@ -222,7 +222,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     
     /**
      * Rotates the transformation around an absolute origin point
-     * @param rotationRads the amount of radians the transformation is rotated
+     * @param rotationRads the amount of radians the transformation is rotated (clockwise)
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
@@ -231,7 +231,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     
     /**
      * Rotates the transformation around a relative origin point
-     * @param rotationRads the amount of radians the transformation is rotated
+     * @param rotationRads the amount of radians the transformation is rotated (clockwise)
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
@@ -240,7 +240,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     
     /**
      * Rotates the transformation around an absolute origin point
-     * @param rotationRads the amount of degrees the transformation is rotated
+     * @param rotationRads the amount of degrees the transformation is rotated (clockwise)
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
@@ -249,7 +249,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     
     /**
      * Rotates the transformation around an relative origin point
-     * @param rotationRads the amount of degrees the transformation is rotated
+     * @param rotationRads the amount of degrees the transformation is rotated (clockwise)
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
@@ -272,12 +272,12 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def withScaling(scaling: Double): Transformation = withScaling(Vector3D(scaling, scaling, scaling))
     
     /**
-     * Copies this transformation, giving it a new rotation
+     * Copies this transformation, giving it a new rotation (clockwise)
      */
     def withRotationRads(rotationRads: Double) = copy(rotationRads = rotationRads)
     
     /**
-     * Copies this transformation, giving it a new rotation
+     * Copies this transformation, giving it a new rotation (clockwise)
      */
     def withRotationDegs(rotationDegs: Double) = withRotationRads(rotationDegs.toRadians)
     
@@ -302,12 +302,12 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def scaled(scaling: Double) = withScaling(this.scaling * scaling)
     
     /**
-     * Copies this transformation, changing the rotation by the provided amount
+     * Copies this transformation, changing the rotation by the provided amount (clockwise)
      */
     def rotatedRads(rotationRads: Double) = withRotationRads(this.rotationRads + rotationRads)
     
     /**
-     * Copies this transformation, changing the rotation by the provided amount
+     * Copies this transformation, changing the rotation by the provided amount (clockwise)
      */
     def rotatedDegs(rotationDegs: Double) = rotatedRads(rotationDegs.toRadians)
     
