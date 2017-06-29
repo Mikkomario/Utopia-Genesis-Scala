@@ -6,6 +6,7 @@ import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.generic.Vector3DType
 import utopia.genesis.generic.LineType
 import utopia.genesis.generic.CircleType
+import scala.collection.mutable.ListBuffer
 
 /**
  * This object contains some implicit extensions introduced in Genesis
@@ -17,6 +18,16 @@ object Extensions
     implicit class DoubleWithAlmostEquals(val d: Double) extends AnyVal
     {
         def ~==(d2: Double) = (d -d2).abs < 0.00001
+    }
+    
+    implicit class SeqWithDistinctMap[T](val s: Seq[T]) extends AnyVal
+    {
+        def withDistinct(compare: (T, T) => Boolean) = 
+        {
+            val buffer = ListBuffer[T]()
+            s.foreach { element => if (!buffer.exists { compare(_, element) }) buffer += element }
+            buffer.toVector
+        }
     }
     
     @deprecated("Replaced with the new drawer class", "v0.3")

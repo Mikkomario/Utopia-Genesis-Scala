@@ -3,9 +3,12 @@ package utopia.genesis.test
 import utopia.genesis.util.Vector3D
 
 import utopia.genesis.util.Extensions._
+import utopia.genesis.generic.GenesisDataType
 
 object VectorTest extends App
 {
+    GenesisDataType.setup()
+    
     val v1 = Vector3D(1, 1)
     
     assert(v1 == Vector3D(1, 1))
@@ -34,7 +37,6 @@ object VectorTest extends App
     
     assert(v2.rotatedDegs(90) ~== Vector3D(0, 1))
     
-    
     assert(v1.angleDifferenceRads(Vector3D(1)).toDegrees ~== 45)
     assert((Vector3D(1) angleDifferenceRads Vector3D(0, 1)).toDegrees ~== 90)
     
@@ -47,6 +49,14 @@ object VectorTest extends App
     // (10, 0, 0) x (10, 0, -2) = (0, 20, 0)
     println(Vector3D(10, 0, 0) cross Vector3D(10, 0, -2))
     assert(Vector3D(10, 0, 0) cross Vector3D(10, 0, -2) ~== Vector3D(0, 20, 0))
+    
+    // Tests normals
+    assert(v1.normal2D isPerpendicularTo v1)
+    assert(v1.normal isPerpendicularTo v1)
+    
+    val v3 = Vector3D(1, 1, 1)
+    
+    assert(v3.normal isPerpendicularTo v3)
     
     println("Success")
 }

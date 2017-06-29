@@ -153,7 +153,7 @@ object Vector3D extends FromModelFactory[Vector3D]
      * @return True if the condition returned true for every two coordinates, false otherwise
      */
     def forall(first: Vector3D, second: Vector3D, condition: (Double, Double) => Boolean) = 
-            !exists(first, second, { !condition(_, _) })
+            !exists(first, second, { !condition(_, _) });
 }
 
 /**
