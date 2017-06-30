@@ -135,7 +135,7 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
         else
         {
             // a = |right| / |left|, negative if they have opposite directions
-            val a = if (leftVector.directionRads ~== rightVector.directionRads) 
+            val a = if (leftVector.direction ~== rightVector.direction) 
                 rightVector.length / leftVector.length else -rightVector.length / leftVector.length;
             
             val intersectionPoint = apply(a)

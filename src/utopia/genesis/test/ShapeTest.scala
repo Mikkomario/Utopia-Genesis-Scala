@@ -3,12 +3,15 @@ package utopia.genesis.test
 import utopia.genesis.util.Line
 import utopia.genesis.util.Vector3D
 import utopia.genesis.util.Circle
+import utopia.genesis.generic.GenesisDataType
 
 /**
  * This test is for some intersection methods and other shape (line, circle) specific methods
  */
 object ShapeTest extends App
 {
+    GenesisDataType.setup()
+    
     val line1 = Line(Vector3D.zero, Vector3D(10))
     val line2 = Line(Vector3D(0, 1), Vector3D(2, -1))
     val line3 = Line(Vector3D(0, 0, 1), Vector3D(10, 0, 1))

@@ -5,6 +5,31 @@ import utopia.genesis.util.Extensions._
 
 object Angle
 {
+    // ATTRIBUTES    -----------------------------
+    
+    /**
+     * Angle that points to the left (180 degrees)
+     */
+    val left = ofRadians(math.Pi)
+    
+    /**
+     * Angle that points to the right (0 degrees)
+     */
+    val right = ofRadians(0)
+    
+    /**
+     * Angle that points up (270 degrees)
+     */
+    val up = ofRadians(3 * math.Pi / 2)
+    
+    /**
+     * Angle that points down (90 degrees)
+     */
+    val down = ofRadians(math.Pi / 2)
+    
+    
+    // FACTORIES    ------------------------------
+    
     /**
      * Converts a radian angle to an angle instance
      */

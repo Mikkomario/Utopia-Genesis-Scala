@@ -4,6 +4,7 @@ import utopia.genesis.util.Vector3D
 
 import utopia.genesis.util.Extensions._
 import utopia.genesis.generic.GenesisDataType
+import utopia.genesis.util.Angle
 
 object VectorTest extends App
 {
@@ -29,9 +30,9 @@ object VectorTest extends App
     
     assert(v1 == Vector3D(1) + Vector3D(0, 1))
     
-    assert(Vector3D.lenDirRads(1, 0) == Vector3D(1))
-    assert(Vector3D.lenDirDegs(1, 90) ~== Vector3D(0, 1))
-    assert(Vector3D.lenDirDegs(1, 180) ~== Vector3D(-1))
+    assert(Vector3D.lenDir(1, Angle.right) == Vector3D(1))
+    assert(Vector3D.lenDir(1, Angle.down) ~== Vector3D(0, 1))
+    assert(Vector3D.lenDir(1, Angle.left) ~== Vector3D(-1))
     
     val v2 = Vector3D(1)
     
