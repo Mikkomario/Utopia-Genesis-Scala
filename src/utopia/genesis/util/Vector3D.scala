@@ -384,7 +384,8 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     def isPerpendicularTo(other: Vector3D) = dot(other) ~== 0
     
     /**
-     * Calculates the directional difference between the two vectors in radians
+     * Calculates the directional difference between the two vectors in radians. The difference is 
+     * absolute (always positive) and doesn't specify the direction of the difference.
      */
     def angleDifferenceRads(other: Vector3D) = 
     {
