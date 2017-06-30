@@ -1,5 +1,8 @@
 package utopia.genesis.util
 
+import utopia.flow.util.Equatable
+import utopia.genesis.util.Extensions._
+
 object Angle
 {
     /**
@@ -21,7 +24,7 @@ object Angle
  * @author Mikko Hilpinen
  * @since 30.6.2017
  */
-class Angle(rawRadians: Double)
+class Angle(rawRadians: Double) extends Equatable
 {
     // ATTRIBUTES    ------------------
     
@@ -38,6 +41,10 @@ class Angle(rawRadians: Double)
      * This angle in degrees. between 0 and 360
      */
     val toDegrees = toRadians.toDegrees
+    
+    override def properties = Vector(toRadians)
+    
+    override def toString = f"$toDegrees%1.2f degrees"
     
     
     // OPERATORS    ------------------
@@ -72,4 +79,9 @@ class Angle(rawRadians: Double)
      * Applies a rotation (radians) to this angle in counter-clockwise direction
      */
     def -(rotationRads: Double) = this + (-rotationRads)
+    
+    /**
+     * Compares two angles without the requirement of being exactly equal
+     */
+    def ~==(other: Angle) = toRadians ~== other.toRadians
 }

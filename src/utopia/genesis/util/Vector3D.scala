@@ -38,10 +38,16 @@ object Vector3D extends FromModelFactory[Vector3D]
     // OPERATORS    ---------------------
     
     override def apply(model: template.Model[Property]) = Some(Vector3D(
-            model("x").doubleOr(), model("y").doubleOr(), model("z").doubleOr()))
+            model("x").doubleOr(), model("y").doubleOr(), model("z").doubleOr()));
     
     
     // OTHER METHODS    -----------------
+    
+    /**
+     * Creates a new vector with specified length and direction
+     */
+    def lenDir(length: Double, direction: Angle) = Vector3D(
+            math.cos(direction.toRadians) * length, math.sin(direction.toRadians) * length);
     
     /**
      * Creates a new vector with certain length and direction using radian units
@@ -49,6 +55,7 @@ object Vector3D extends FromModelFactory[Vector3D]
      * @param directionRads The direction of the new vector in radians
      * @return A vector with provided direction and length
      */
+    @deprecated("Replaced with the new Angle class and lenDir method", "v1.2")
     def lenDirRads(length: Double, directionRads: Double) = Vector3D(
             math.cos(directionRads) * length, math.sin(directionRads) * length)
     /**
@@ -57,6 +64,7 @@ object Vector3D extends FromModelFactory[Vector3D]
      * @param directionRads The direction of the new vector in degrees
      * @return A vector with provided direction and length
      */
+    @deprecated("Replaced with the new Angle class and lenDir method", "v1.2")
     def lenDirDegs(length: Double, directionDegs: Double) = lenDirRads(length, directionDegs.toRadians)
     
     /**
@@ -236,33 +244,54 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     
     
     /**
+     * This vector's direction on the x-y plane
+     */
+    def direction = Angle ofRadians calculateDirection(x, y)
+    
+    /**
+     * This vector's direction on the z-y plane
+     */
+    def xDirection = Angle ofRadians calculateDirection(z, y)
+    
+    /**
+     * This vector's direction on the x-z plane
+     */
+    def yDirection = Angle ofRadians calculateDirection(x, z)
+    
+    /**
      * This vector's direction on the x-y plane in radians
      */
+    @deprecated("Replaced with the new Angle class and direction property", "v1.2")
     def directionRads = calculateDirection(x, y)
     
     /**
      * This vector's direction on the x-y plane in degrees
      */
+    @deprecated("Replaced with the new Angle class and direction property", "v1.2")
     def directionDegs = directionRads.toDegrees
     
     /**
      * This vector's direction on the z-y plane in radians
      */
+    @deprecated("Replaced with the new Angle class and direction property", "v1.2")
     def xDirectionRads = calculateDirection(z, y)
     
     /**
      * This vector's direction on the z-y plane in degrees
      */
+    @deprecated("Replaced with the new Angle class and direction property", "v1.2")
     def xDirectionDegs = xDirectionRads.toDegrees
     
     /**
      * This vector's direction on the x-z plane in radians
      */
+    @deprecated("Replaced with the new Angle class and direction property", "v1.2")
     def yDirectionRads = calculateDirection(x, z)
     
     /**
      * This vector's direction on the x-z plane in degrees
      */
+    @deprecated("Replaced with the new Angle class and direction property", "v1.2")
     def yDirectionDegs = yDirectionRads.toDegrees
     
     
@@ -412,21 +441,40 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     def withLength(length: Double) = toUnit * length
     
     /**
+     * Creates a new vector with the same length as this vector
+     * @param direction The direction of the new vector
+     */
+    def withDirection(direction: Angle) = Vector3D.lenDir(length, direction)
+    
+    /**
      * Creates a new vector with the same length with this vector
      * @param directionRads The vector's new direction on the x-y plane, in radians
      */
+    @deprecated("Replaced with the new Angle class and withDirection method", "v1.2")
     def withDirectionRads(directionRads: Double) = Vector3D.lenDirRads(length, directionRads)
     
     /**
      * Creates a new vector with the same length with this vector
      * @param directionRads The vector's new direction on the x-y plane, in degrees
      */
+    @deprecated("Replaced with the new Angle class and withDirection method", "v1.2")
     def withDirectionDegs(directionDegs: Double) = Vector3D.lenDirDegs(length, directionDegs)
+    
+    /**
+     * Creates a new vector with the same length as this vector
+     * @param the new direction of the vector on the x-z plane
+     */
+    def withYDirection(direction: Angle) = 
+    {
+        val zRotated = in2D.withDirection(direction)
+        Vector3D(zRotated.x, y, zRotated.y)
+    }
     
     /**
      * Creates a new vector with the same length with this vector
      * @param directionRads The vector's new direction on the x-z plane, in radians
      */
+    @deprecated("Replaced with the new Angle class and withYDirection method", "v1.2")
     def withYDirectionRads(directionRads: Double) = 
     {
         val zRotated = in2D.withDirectionRads(directionRads)
@@ -437,6 +485,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      * Creates a new vector with the same length with this vector
      * @param directionRads The vector's new direction on the x-z plane, in degrees
      */
+    @deprecated("Replaced with the new Angle class and withYDirection method", "v1.2")
     def withYDirectionDegs(directionDegs: Double) = withYDirectionRads(directionDegs.toRadians)
     
     /**
@@ -448,9 +497,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     def rotatedRads(rotationRads: Double, origin: Vector3D = Vector3D.zero) = 
     {
         val separator = this - origin
-        
-        origin + Vector3D.lenDirRads(separator.length, 
-                separator.directionRads + rotationRads).copy(z = z)
+        origin + Vector3D.lenDir(separator.length, separator.direction + rotationRads).copy(z = z)
     }
     
     /**
