@@ -46,5 +46,12 @@ object ShapeTest extends App
     assert(!circle2.contains(circle1))
     assert(!circle1.contains(Circle(Vector3D(5), 1)))
     
+    
+    // Tests line clipping
+    assert(line1.clipped(Vector3D(5), Vector3D(1)).get == Line(Vector3D(5), Vector3D(10)))
+    assert(line1.clipped(Vector3D(5, 2), Vector3D(-1)).get == Line(Vector3D(0), Vector3D(5)))
+    assert(line1.clipped(Vector3D(-2, -2), Vector3D(-1)) == None)
+    assert(line1.clipped(Vector3D(1, 1), Vector3D(1, 1)).get == Line(Vector3D(2), Vector3D(10)))
+    
     println("Success")
 }

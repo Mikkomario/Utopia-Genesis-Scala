@@ -232,6 +232,41 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
         }
     }
     
+    /**
+     * Clips the line along a certain axis
+     * @param clippingPlanePoint a point on the clipping axis / plane
+     * @param clippingPlaneNormal A normal vector for the clipping plane. The normal is perpendicular 
+     * to the clipping plane itself. The positive direction of the normal is the portion / side 
+     * that will be preserved of the line
+     * @return The clipped line. None if the lien is completely clipped off
+     */
+    def clipped(clippingPlanePoint: Vector3D, clippingPlaneNormal: Vector3D) = 
+    {
+        val origin = clippingPlanePoint dot clippingPlaneNormal
+        val startDistance = start.dot(clippingPlaneNormal) - origin
+        val endDistance = end.dot(clippingPlaneNormal) - origin
+        
+        if (startDistance < 0 && endDistance < 0)
+        {
+            // If both start and end were clipped off, there's no line left
+            None
+        }
+        else if (startDistance >= 0 && endDistance >= 0)
+        {
+            // If neither were clipped, the line is preserved
+            Some(this)
+        }
+        else
+        {
+            // Calculates the point where the clipping happens
+            val t = startDistance / (startDistance - endDistance)
+            val clippingPoint = start + vector * t
+            
+            if (startDistance > endDistance) Some(Line(start, clippingPoint)) else 
+                    Some(Line(clippingPoint, end));
+        }
+    }
+    
     /*
      * Finds the intersection points between this line and a circle. Only works in 2D.
      * @param circle a circle
