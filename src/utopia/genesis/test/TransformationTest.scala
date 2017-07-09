@@ -4,6 +4,7 @@ import utopia.genesis.util.Transformation
 import utopia.genesis.util.Vector3D
 
 import utopia.genesis.util.Extensions._
+import utopia.genesis.util.Line
 
 /**
  * This test tests the basic transformation class features
@@ -45,6 +46,13 @@ object TransformationTest extends App
     val rotated = translation.absoluteRotatedDegs(90, Vector3D(20))
     assert(rotated.position ~== Vector3D(20, -10))
     assert(rotated.rotationDegs ~== 90)
+    
+    val pos2 = Vector3D(19, -23)
+    val line = Line(pos, pos2)
+    val transformedLine = combo(line)
+    
+    assert(transformedLine == Line(combo(pos), combo(pos2)))
+    assert(combo.invert(transformedLine) == line)
     
     println("Success")
 }

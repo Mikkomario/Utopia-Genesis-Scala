@@ -82,7 +82,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     override def toValue = new Value(Some(this), TransformationType)
     
     override def toModel = Model(Vector("position" -> position, "scaling" -> scaling, 
-            "rotation" -> rotationRads, "shear" -> shear))
+            "rotation" -> rotationRads, "shear" -> shear));
     
     /**
      * How much the target is rotated in degrees (clockwise)
@@ -90,7 +90,8 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def rotationDegs = rotationRads.toDegrees
     
     /**
-     * Converts this transform instance into an affine transform instance
+     * This transformation represented as an affine transform instance. A new instance is generated 
+     * on each call since it is mutable while transformation is not
      */
     def toAffineTransform = 
     {
@@ -183,10 +184,15 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
             (rotationRads ~== other.rotationRads) && (shear ~== other.shear)
     
     /**
-     * Transforms a <b>relative</b> vector <b>into absolute</b> vector
+     * Transforms a <b>relative</b> vector <b>into an absolute</b> vector
      * @param relative a relative vector that will be transformed
      */
     def apply(relative: Vector3D) = Vector3D of toAffineTransform.transform(relative.toPoint2D, null)
+    
+    /**
+     * Transforms a shape <b>from relative space to absolute space</b>
+     */
+    def apply[B](relative: TransformableShape[B]) = relative.transformedWith(this)
     
     /**
      * Combines the two transformations together. The end result is effectively same as transforming 
@@ -211,14 +217,29 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
             absolute.toPoint2D, null);
     
     /**
+     * Transforms a shape <b>from absolute space to relative space</b>
+     */
+    def invert[B](absolute: TransformableShape[B]) = absolute.transformedWith(-this)
+    
+    /**
      * Converts an absolute coordinate into a relative one. Same as calling invert(Vector3D)
      */
     def toRelative(absolute: Vector3D) = invert(absolute)
     
     /**
+     * Converts an absolute shape to a relative one. Same as calling invert(...)
+     */
+    def toRelative[B](absolute: TransformableShape[B]) = invert(absolute)
+    
+    /**
      * Converts a relative coordinate into an absolute one. Same as calling apply(Vector3D)
      */
     def toAbsolute(relative: Vector3D) = apply(relative)
+    
+    /**
+     * Converts a relative shape to an absolute one. Same as calling apply(...)
+     */
+    def toAbsolute[B](relative: TransformableShape[B]) = apply(relative)
     
     /**
      * Rotates the transformation around an absolute origin point

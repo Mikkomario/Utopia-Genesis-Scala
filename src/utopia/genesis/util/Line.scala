@@ -68,7 +68,7 @@ object Line extends FromModelFactory[Line]
  * @since 13.12.2016
  */
 case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible with 
-        ValueConvertible with ModelConvertible
+        ValueConvertible with ModelConvertible with TransformableShape[Line]
 {
     // ATTRIBUTES    -------------------
     
@@ -111,6 +111,12 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
      * @return a point along the line
      */
     def apply(t: Double) = start + vector * t
+    
+    
+    // OTHER METHODS    ----------------
+    
+    override def transformedWith(transformation: Transformation) = Line(transformation(start), 
+            transformation(end))
     
     /**
      * Calculates the intersection point between this and another line
