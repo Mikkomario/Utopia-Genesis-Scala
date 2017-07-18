@@ -25,7 +25,7 @@ object Circle extends FromModelFactory[Circle]
  * @since 1.1.2017
  */
 case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible with Area with 
-        ValueConvertible with ModelConvertible
+        ValueConvertible with ModelConvertible with Projectable
 {
     // COMPUTED PROPERTIES    ---------
     
@@ -80,6 +80,9 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
    
     override def contains2D(point: Vector3D) = contains(point.in2D)
     
+    override def projectedOver(axis: Vector3D) = Line(origin- axis.withLength(radius), 
+            origin + axis.withLength(radius));
+    
     
     // OTHER METHODS    ---------------
     
@@ -109,12 +112,6 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
      * Checks whether the two circles intersect with each other
      */
     def intersectsWith(other: Circle) = (origin - other.origin).length <= radius + other.radius
-    
-    /**
-     * Projects the circle over a certain axis
-     */
-    def projectedOver(axis: Vector3D) = Line(origin- axis.withLength(radius), 
-            origin + axis.withLength(radius));
     
     // check sphere intersection 
     // http://stackoverflow.com/questions/5048701/finding-points-of-intersection-when-two-spheres-intersect
