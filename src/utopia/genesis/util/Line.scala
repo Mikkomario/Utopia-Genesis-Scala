@@ -87,9 +87,9 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
     override def toModel = Model(Vector("start" -> start, "end" -> end))
     
     /**
-     * This line with inverted direction
+     * This line with inverted / reversed direction
      */
-    def inverted = Line(end, start)
+    def reverse = Line(end, start)
     
     /**
      * A version of this line that lies completely on the x-y plane

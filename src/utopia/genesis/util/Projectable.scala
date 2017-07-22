@@ -27,8 +27,8 @@ trait Projectable
     */
     def projectionOverlapWith(other: Projectable, axis: Vector3D) = 
     {
-        val projection = projectedOver(axis)
-        val otherProjection = other.projectedOver(axis)
+        val projection = orderedProjectionOver(axis)
+        val otherProjection = other.orderedProjectionOver(axis)
         
         if (projection.end <= otherProjection.start || projection.start >= otherProjection.end)
         {
@@ -65,5 +65,11 @@ trait Projectable
         {
             None
         }
+    }
+    
+    private def orderedProjectionOver(axis: Vector3D) = 
+    {
+        val projection = projectedOver(axis)
+        if (projection.start <= projection.end) projection else projection.reverse
     }
 }

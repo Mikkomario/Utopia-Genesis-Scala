@@ -204,12 +204,13 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
      * minimum translation must be <b>towards the center of the circle</b> from the collision area
      * @return the collision points in a collision with the specified minimum translation vector
      */
+    // TODO: Does not work quite as easily
     def collisionPoints(mtv: Vector3D) = 
     {
         // The collision points form a line that cuts the circle in two pieces
         // First finds out the vector from circle origin to where collision point line and the 
         // translation vector / line intersect
-        val separatorLength = radius - mtv.length
+        val separatorLength = radius - mtv.length / 2
         
         if (separatorLength == 0)
         {

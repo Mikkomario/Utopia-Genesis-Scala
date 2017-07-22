@@ -34,6 +34,26 @@ object CollisionTest extends App
     println(collisionPoints1)
     
     assert(collisionPoints1.forall { _.x == 1.5 })
+    assert(point1.y < 0)
+    assert(point1.y > -3)
+    assert(point2.y > 0)
+    assert(point2.y < 3)
+    
+    val line1 = Line(Vector3D(1.5, -3), Vector3D(1.5, 3))
+    
+    assert(line1.projectedOver(Vector3D(0, 1)) == Line(Vector3D(0, -3), Vector3D(0, 3)))
+    assert(line1.projectedOver(Vector3D(1)) == Line(Vector3D(1.5), Vector3D(1.5)))
+    assert(line1.collisionAxes.size == 2)
+    assert(line1.collisionAxes.exists { _ isParallelWith Vector3D(1) })
+    
+    val mtv2 = circle1.collisionMtvWith(line1, line1.collisionAxes)
+    
+    assert(mtv2.isDefined)
+    assert(mtv2.get == Vector3D(-0.5))
+    
+    val collisionPoints2 = circle1.collisionPoints(mtv2.get).sortBy { _.y }
+    
+    assert(collisionPoints2 == collisionPoints1)
     
     println("Success!")
 }
