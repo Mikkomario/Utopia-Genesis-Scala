@@ -68,7 +68,7 @@ object Line extends FromModelFactory[Line]
  * @since 13.12.2016
  */
 case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible with 
-        ValueConvertible with ModelConvertible with TransformableShape[Line]
+        ValueConvertible with ModelConvertible with TransformableShape[Line] with Projectable
 {
     // ATTRIBUTES    -------------------
     
@@ -96,6 +96,11 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
      */
     def in2D = Line(start.in2D, end.in2D)
     
+    /**
+     * The axes that are necessary to include when checking collisions for this line
+     */
+    def collisionAxes = Vector(vector, vector.normal2D)
+    
     
     // OPERATORS    --------------------
     
@@ -111,6 +116,11 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
      * @return a point along the line
      */
     def apply(t: Double) = start + vector * t
+    
+    
+    // IMPLEMENTED METHODS    ----------
+    
+    override def projectedOver(axis: Vector3D) = Line(start.projectedOver(axis), end.projectedOver(axis))
     
     
     // OTHER METHODS    ----------------
