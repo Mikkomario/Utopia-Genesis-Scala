@@ -192,6 +192,13 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
     }
     
     /**
+     * Checks collision between two circles
+     * @return if there is collision, the minimum translation vector that gets this circle out 
+     * of the collision. None otherwise.
+     */
+    def collisionMtvWith(other: Circle): Option[Vector3D] = collisionMtvWith(other, Vector(other.origin - origin))
+    
+    /**
      * Finds the intersection points for the circle when a minimum translation vector is known
      * @param mtv the minimum translation vector for the circle in a collision situation. The 
      * minimum translation must be <b>towards the center of the circle</b> from the collision area
