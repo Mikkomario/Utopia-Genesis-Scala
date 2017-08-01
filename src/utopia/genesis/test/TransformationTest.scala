@@ -19,7 +19,7 @@ object TransformationTest extends App
     
     assert((-translation).position.x == -10)
     assert((-scaling).scaling.x == 0.5)
-    assert((-rotation).rotationDegs ~== -90)
+    assert((-rotation).rotationDegs ~== -90.0)
     
     /*
     assert(translation - translation == Transformation.identity)
@@ -45,7 +45,7 @@ object TransformationTest extends App
     
     val rotated = translation.absoluteRotatedDegs(90, Vector3D(20))
     assert(rotated.position ~== Vector3D(20, -10))
-    assert(rotated.rotationDegs ~== 90)
+    assert(rotated.rotationDegs ~== 90.0)
     
     val pos2 = Vector3D(19, -23)
     val line = Line(pos, pos2)

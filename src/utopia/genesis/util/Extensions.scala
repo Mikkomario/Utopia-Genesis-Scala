@@ -15,9 +15,35 @@ import scala.collection.mutable.ListBuffer
  */
 object Extensions
 {
-    implicit class DoubleWithAlmostEquals(val d: Double) extends AnyVal
+    implicit class DoubleWithAlmostEquals[C](val d: C)(implicit f: C => Double) extends ApproximatelyEquatable[C]
     {
-        def ~==(d2: Double) = (d -d2).abs < 0.00001
+        /**
+         * Checks if the two double numbers are approximately equal using 0.00001 precision
+         */
+        def ~==[B <: C](d2: B) = (d -d2).abs < 0.00001
+    }
+    
+    implicit class seqWithAlmostEquals[B, C](val s: Seq[C])(implicit f: C => ApproximatelyEquatable[B]) extends ApproximatelyEquatable[Seq[B]]
+    {
+        def ~==[D <: Seq[B]](s2: D): Boolean = 
+        {
+            if (s.size == s2.size)
+            {
+                for { i <- 0 until s.size }
+                {
+                    if (s(i) !~== s2(i))
+                    {
+                        return false
+                    }
+                }
+                
+                true
+            }
+            else
+            {
+                false
+            }
+        }
     }
     
     implicit class SeqWithDistinctMap[T](val s: Seq[T]) extends AnyVal

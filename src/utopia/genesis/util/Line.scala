@@ -205,7 +205,7 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
         // The discriminant portion of the equation determines the amount of intersection points (0 - 2)
         // d = b^2 - 4 * a * c
         val discriminant = math.pow(b, 2) - 4 * a * c
-        println(discriminant)
+        //println(discriminant)
         
         if (discriminant < 0)
         {
@@ -215,29 +215,29 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
         {
             var intersectionPoints = Vector[Vector3D]()
             
+            //println(s"a = $a")
+            //println(s"b = $b")
+            //println(s"discriminant = $discriminant -> (${math.sqrt(discriminant)})")
+            
             // t = (-b +- sqrt(d)) / 2a
             val tEnter = (-b - math.sqrt(discriminant)) / (2 * a)
-            println(tEnter)
+            //println(tEnter)
             if (!onlyPointsInSegment || (tEnter >= 0 && tEnter <= 1))
             {
                 intersectionPoints :+= apply(tEnter)
             }
             
-            if (discriminant ~== 0)
+            if (!(discriminant ~== 0.0))
             {
-                Vector(tEnter)
-            }
-            else
-            {
-                val tExit = (-b + math.sqrt(discriminant) / (2 * a))
-                println(tExit)
+                val tExit = (-b + math.sqrt(discriminant)) / (2 * a)
+                //println(tExit)
                 if (!onlyPointsInSegment || (tExit >= 0 && tExit <= 1))
                 {
                     intersectionPoints :+= apply(tExit)
                 }
             }
             
-            println(intersectionPoints)
+            //println(intersectionPoints)
             intersectionPoints
         }
     }

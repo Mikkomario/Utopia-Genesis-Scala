@@ -174,7 +174,7 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
             val P2 = origin + distanceVector.withLength(a)
             
             // If may be that there is only a single collision point on the distance vector
-            if (h ~== 0)
+            if (h ~== 0.0)
             {
                 Vector(P2)
             }
@@ -198,13 +198,14 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
      */
     def collisionMtvWith(other: Circle): Option[Vector3D] = collisionMtvWith(other, Vector(other.origin - origin))
     
-    /**
+    /*
      * Finds the intersection points for the circle when a minimum translation vector is known
      * @param mtv the minimum translation vector for the circle in a collision situation. The 
      * minimum translation must be <b>towards the center of the circle</b> from the collision area
      * @return the collision points in a collision with the specified minimum translation vector
      */
-    // TODO: Does not work quite as easily
+    // Doesn't work as it is. Maybe possible to fix?
+    /*
     def collisionPoints(mtv: Vector3D) = 
     {
         // The collision points form a line that cuts the circle in two pieces
@@ -229,5 +230,5 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
             
             Vector(origin + separator + separatorNormal, origin + separator - separatorNormal)
         }
-    }
+    }*/
 }

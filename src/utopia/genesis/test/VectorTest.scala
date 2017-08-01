@@ -19,7 +19,7 @@ object VectorTest extends App
     assert(v1 / Vector3D.identity == v1)
     assert(v1.length > 1)
     assert(v1 - v1 == Vector3D.zero)
-    assert(v1.toUnit.length ~== 1)
+    assert(v1.toUnit.length ~== 1.0)
     
     assert(v1.scalarProjection(Vector3D(1)) == 1)
     assert(v1.projectedOver(Vector3D(1)) == Vector3D(1))
@@ -38,8 +38,8 @@ object VectorTest extends App
     
     assert(v2.rotatedDegs(90) ~== Vector3D(0, 1))
     
-    assert(v1.angleDifferenceRads(Vector3D(1)).toDegrees ~== 45)
-    assert((Vector3D(1) angleDifferenceRads Vector3D(0, 1)).toDegrees ~== 90)
+    assert(v1.angleDifferenceRads(Vector3D(1)).toDegrees ~== 45.0)
+    assert((Vector3D(1) angleDifferenceRads Vector3D(0, 1)).toDegrees ~== 90.0)
     
     // (-1, 7, 0) x (-5, 8, 0) = (0, 0, 27)
     println(Vector3D(-1, 7) cross Vector3D(-5, 8))

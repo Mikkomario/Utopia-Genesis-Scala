@@ -170,14 +170,15 @@ object Vector3D extends FromModelFactory[Vector3D]
  * @author Mikko Hilpinen
  * @since 24.12.2016
  */
-case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) extends ValueConvertible with ModelConvertible
+case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) extends 
+        ValueConvertible with ModelConvertible with ApproximatelyEquatable[Vector3D]
 {
     // COMPUTED PROPERTIES    ----------
     
     override def toValue = new Value(Some(this), Vector3DType)
     
     override def toModel = Model.fromMap(HashMap("x" -> x, "y" -> y, "z" -> z).filterNot { 
-            case (_, value) => value ~== 0 });
+            case (_, value) => value ~== 0.0 });
     
     /**
      * a copy of this vector where the coordinate values have been cut to integer numbers.
@@ -370,7 +371,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     /**
      * Checks whether two vectors are approximately equal
      */
-    def ~==(other: Vector3D) = Vector3D.forall(this, other, { _ ~== _ })
+    override def ~==[B <: Vector3D](other: B) = Vector3D.forall(this, other, { _ ~== _ })
     
     
     // OTHER METHODS    ----------------
@@ -407,12 +408,12 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     /**
      * Checks whether this vector is parallel with another vector (has same or opposite direction)
      */
-    def isParallelWith(other: Vector3D) = crossProductLength(other) ~== 0
+    def isParallelWith(other: Vector3D) = crossProductLength(other) ~== 0.0
     
     /**
      * Checks whether this vector is perpendicular to another vector (ie. (1, 0) vs. (0, 1))
      */
-    def isPerpendicularTo(other: Vector3D) = dot(other) ~== 0
+    def isPerpendicularTo(other: Vector3D) = dot(other) ~== 0.0
     
     /**
      * Calculates the directional difference between the two vectors in radians. The difference is 

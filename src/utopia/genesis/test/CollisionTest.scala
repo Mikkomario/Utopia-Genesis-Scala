@@ -4,6 +4,7 @@ import utopia.genesis.generic.GenesisDataType
 import utopia.genesis.util.Vector3D
 import utopia.genesis.util.Circle
 import utopia.genesis.util.Line
+import utopia.genesis.util.Extensions._
 
 /**
  * This test makes sure circle and line class projection and collision algorithms are working 
@@ -24,7 +25,7 @@ object CollisionTest extends App
     assert(mtv1.isDefined)
     assert(mtv1.get == Vector3D(-1))
     
-    val collisionPoints1 = circle1.collisionPoints(mtv1.get).sortBy { _.y }
+    val collisionPoints1 = circle1.circleIntersection(circle2).sortBy { _.y }
     
     assert(collisionPoints1.size == 2)
     
@@ -51,9 +52,10 @@ object CollisionTest extends App
     assert(mtv2.isDefined)
     assert(mtv2.get == Vector3D(-0.5))
     
-    val collisionPoints2 = circle1.collisionPoints(mtv2.get).sortBy { _.y }
+    val collisionPoints2 = line1.circleIntersection(circle1, true).sortBy { _.y }
     
-    assert(collisionPoints2 == collisionPoints1)
+    println(collisionPoints2)
+    assert(collisionPoints2 ~== collisionPoints1)
     
     println("Success!")
 }
