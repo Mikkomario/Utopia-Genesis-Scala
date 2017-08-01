@@ -111,9 +111,21 @@ object Vector3D extends FromModelFactory[Vector3D]
     def min(first: Vector3D, second: Vector3D) = combine(first, second, (a, b) => if (a <= b) a else b)
     
     /**
+     * Creates a vector that has the smalles available value on each axis from all the candidates. 
+     * None if the provided collection is empty
+     */
+    def min(vectors: Traversable[Vector3D]): Option[Vector3D] = if (vectors.isEmpty) None else Some(vectors.reduce(min))
+    
+    /**
      * Creates a vector that has the largest available value on each axis from the two candidates
      */
     def max(first: Vector3D, second: Vector3D) = combine(first, second, (a, b) => if (a >= b) a else b)
+    
+    /**
+     * Creates a vector that has the largest available value on each axis from all the candidates. 
+     * None if the provided collection is empty.
+     */
+    def max(vectors: Traversable[Vector3D]): Option[Vector3D] = if (vectors.isEmpty) None else Some(vectors.reduce(max))
     
     /**
      * Combines two vectors into a third vector using a binary operator

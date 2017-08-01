@@ -44,6 +44,18 @@ object Bounds extends FromModelFactory[Bounds]
     }
     
     /**
+     * Creates a set of bounds that contains all of the provided bounds. Returns none if the provided 
+     * collection is empty.
+     */
+    def around(bounds: Traversable[Bounds]) =
+    {
+        val min = Vector3D.min(bounds.map{ _.min })
+        val max = Vector3D.max(bounds.map { _.max })
+        
+        if (min.isEmpty || max.isEmpty) None else Some(between(min.get, max.get))
+    }
+    
+    /**
      * Creates a rectangle around line so that the line becomes one of the rectangle's diagonals
      */
     def aroundDiagonal(diagonal: Line) = between(diagonal.start, diagonal.end)
@@ -81,6 +93,16 @@ case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConve
      * The depth (dimension along z-axis) of the cube
      */
     def depth = size.z
+    
+    /**
+     * The smallest (on all axes) coordinate that is contained within these bounds
+     */
+    def min = Vector3D.min(position, position + size)
+    
+    /**
+     * The largest (on all axes) coordinate that is contained within these bounds
+     */
+    def max = Vector3D.max(position, position + size)
     
     /**
      * The area of the x-y side of this rectangle in square pixels
