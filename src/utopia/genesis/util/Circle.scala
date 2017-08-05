@@ -80,8 +80,11 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
    
     override def contains2D(point: Vector3D) = contains(point.in2D)
     
-    override def projectedOver(axis: Vector3D) = Line(origin- axis.withLength(radius), 
-            origin + axis.withLength(radius));
+    override def projectedOver(axis: Vector3D) =
+    {
+        val projectedOrigin = origin.projectedOver(axis)
+        Line(projectedOrigin - axis.withLength(radius), projectedOrigin + axis.withLength(radius))
+    }
     
     
     // OTHER METHODS    ---------------

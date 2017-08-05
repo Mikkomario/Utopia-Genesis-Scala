@@ -23,6 +23,9 @@ object VectorTest extends App
     
     assert(v1.scalarProjection(Vector3D(1)) == 1)
     assert(v1.projectedOver(Vector3D(1)) == Vector3D(1))
+    assert(v1.projectedOver(Vector3D(0, 1)) == Vector3D(0, 1))
+    assert(v1.projectedOver(v1) == v1)
+    assert(v1.projectedOver(-v1) == v1)
     
     assert(v1 isParallelWith Vector3D(2, 2))
     assert(v1 isParallelWith Vector3D(-1, -1))
