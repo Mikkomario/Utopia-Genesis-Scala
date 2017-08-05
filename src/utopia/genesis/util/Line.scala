@@ -101,6 +101,11 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
      */
     def collisionAxes = Vector(vector, vector.normal2D)
     
+    /**
+     * The center of the line segment
+     */
+    def center = (start + end) / 2
+    
     
     // OPERATORS    --------------------
     
