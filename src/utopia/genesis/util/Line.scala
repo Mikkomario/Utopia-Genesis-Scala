@@ -163,7 +163,7 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
             
             if (onlyPointsInSegment)
             {
-                if (a >= 0 && a <= 1 && intersectionPoint.isBetween(other.start, other.end)) 
+                if (a >= 0 && a <= 1 && Bounds.between(other.start, other.end).contains(intersectionPoint)) 
                     Some(intersectionPoint) else None
             }
             else

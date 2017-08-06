@@ -106,26 +106,50 @@ object Vector3D extends FromModelFactory[Vector3D]
     def average(vectors: Traversable[Vector3D]) = vectors.reduceLeft { _ + _ } / vectors.size
     
     /**
-     * Creates a vector that has the smallest available value on each axis from the two candidates
+     * Returns the smaller of the two vectors
      */
-    def min(first: Vector3D, second: Vector3D) = combine(first, second, (a, b) => if (a <= b) a else b)
+    def min(v1: Vector3D, v2: Vector3D) = if (v2 < v1) v2 else v1
     
     /**
-     * Creates a vector that has the smalles available value on each axis from all the candidates. 
+     * Returns the smallest of the provided vectors or None if no vectors were provided
+     */
+    def min(vectors: Traversable[Vector3D]): Option[Vector3D] = vectors.reduceOption(min)
+    
+    /**
+     * Returns the larger of the two vectors
+     */
+    def max(v1: Vector3D, v2: Vector3D) = if (v2 > v1) v2 else v1
+    
+    /**
+     * Returns the largest of the provided vectors or None if no vectors were provided
+     */
+    def max(vectors: Traversable[Vector3D]): Option[Vector3D] = vectors.reduceOption(max)
+    
+    /**
+     * The top left corner of a bounds between the two vertices. In other words, 
+     * creates a vector that has the smallest available value on each axis from the two candidates
+     */
+    def topLeft(first: Vector3D, second: Vector3D) = combine(first, second, (a, b) => if (a <= b) a else b)
+    
+    /**
+     * The top left corner of a bounds around the vertices. In other words, 
+     * creates a vector that has the smallest available value on each axis from all the candidates. 
      * None if the provided collection is empty
      */
-    def min(vectors: Traversable[Vector3D]): Option[Vector3D] = if (vectors.isEmpty) None else Some(vectors.reduce(min))
+    def topLeft(vectors: Traversable[Vector3D]): Option[Vector3D] = vectors.reduceOption(topLeft)
     
     /**
-     * Creates a vector that has the largest available value on each axis from the two candidates
+     * The bottom right corner of a bounds between the two vertices. In other words, 
+     * creates a vector that has the largest available value on each axis from the two candidates
      */
-    def max(first: Vector3D, second: Vector3D) = combine(first, second, (a, b) => if (a >= b) a else b)
+    def bottomRight(first: Vector3D, second: Vector3D) = combine(first, second, (a, b) => if (a >= b) a else b)
     
     /**
-     * Creates a vector that has the largest available value on each axis from all the candidates. 
-     * None if the provided collection is empty.
+     * The bottom right corner of a bounds around the vertices. In other words, 
+     * creates a vector that has the largest available value on each axis from all the candidates. 
+     * None if the provided collection is empty
      */
-    def max(vectors: Traversable[Vector3D]): Option[Vector3D] = if (vectors.isEmpty) None else Some(vectors.reduce(max))
+    def bottomRight(vectors: Traversable[Vector3D]): Option[Vector3D] = vectors.reduceOption(bottomRight)
     
     /**
      * Combines two vectors into a third vector using a binary operator
@@ -359,26 +383,45 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
     def /(n: Double): Vector3D = this / Vector3D(n, n, n)
     
     /**
-     * Checks whether this vector is smaller than another vector on all coordinate axes 
-     * (two of the axes / values may be equal)
+     * Compares the two vectors and determines whether this one is smaller. Checks the axes in 
+     * following order: x > y > z
      */
-    def <(other: Vector3D) = this <= other && this != other
+    def <(other: Vector3D) = 
+    {
+        if (x == other.x)
+        {
+            if (y == other.y)
+            {
+                z < other.z
+            }
+            else
+            {
+                y < other.y
+            }
+        }
+        else 
+        {
+            x < other.x
+        }
+    }
     
     /**
-     * Checks whether this vector is larger than another vector on all coordinate axes 
-     * (two of the axes / values may be equal)
+     * Compares the two vectors and determines whether this one is larger. Checks the axes in 
+     * following order: x > y > z
      */
-    def >(other: Vector3D) = this >= other && this != other
+    def >(other: Vector3D) = !(this <= other)
     
     /**
-     * Checks whether this vector is smaller or equal than another vector on all coordinate axes
+     * Compares the two vectors and determines whether this one is smaller or equal. Checks the axes in 
+     * following order: x > y > z
      */
-    def <=(other: Vector3D) = Vector3D.forall(this, other, { _ <= _ })
+    def <=(other: Vector3D) = this == other || this < other
     
     /**
-     * Checks whether this vector is larger or equal than another vector on all coordinate axes
+     * Compares the two vectors and determines whether this one is larger or equal. Checks the axes in 
+     * following order: x > y > z
      */
-    def >=(other: Vector3D) = Vector3D.forall(this, other, { _ >= _ })
+    def >=(other: Vector3D) = !(this < other)
     
     /**
      * Checks whether two vectors are approximately equal
@@ -441,13 +484,13 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
         math.atan2(y.length, x.length).abs
     }
     
-    /**
+    /*
      * Checks whether this vector is between the two vector values in every coordinate axis
      * (inclusive)
      * @return Whether the coordinates of this vector are in the area formed by the two coordinates
      */
-    def isBetween(a: Vector3D, b: Vector3D) = Vector3D.forall(this, Vector3D.min(a, b), { _ >= _ }) && 
-            Vector3D.forall(this, Vector3D.max(a, b), { _ <= _ });
+    // def isBetween(a: Vector3D, b: Vector3D) = Vector3D.forall(this, Vector3D.min(a, b), { _ >= _ }) && 
+    //        Vector3D.forall(this, Vector3D.max(a, b), { _ <= _ });
     
     /**
      * Creates a new vector with the same direction with this vector

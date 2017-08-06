@@ -28,10 +28,10 @@ object Bounds extends FromModelFactory[Bounds]
      */
     def between(p1: Vector3D, p2: Vector3D) = 
     {
-        val min = Vector3D.min(p1, p2)
-        val max = Vector3D.max(p1, p2)
+        val topLeft = Vector3D.topLeft(p1, p2)
+        val bottomRight = Vector3D.bottomRight(p1, p2)
         
-        Bounds(min, max - min)
+        Bounds(topLeft, bottomRight - topLeft)
     }
     
     /**
@@ -49,10 +49,10 @@ object Bounds extends FromModelFactory[Bounds]
      */
     def around(bounds: Traversable[Bounds]) =
     {
-        val min = Vector3D.min(bounds.map{ _.min })
-        val max = Vector3D.max(bounds.map { _.max })
+        val topLeft = Vector3D.topLeft(bounds.map{ _.topLeft })
+        val bottomRight = Vector3D.bottomRight(bounds.map { _.bottomRight })
         
-        if (min.isEmpty || max.isEmpty) None else Some(between(min.get, max.get))
+        if (topLeft.isEmpty || bottomRight.isEmpty) None else Some(between(topLeft.get, bottomRight.get))
     }
     
     /**
@@ -97,12 +97,12 @@ case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConve
     /**
      * The smallest (on all axes) coordinate that is contained within these bounds
      */
-    def min = Vector3D.min(position, position + size)
+    def topLeft = Vector3D.topLeft(position, position + size)
     
     /**
      * The largest (on all axes) coordinate that is contained within these bounds
      */
-    def max = Vector3D.max(position, position + size)
+    def bottomRight = Vector3D.bottomRight(position, position + size)
     
     /**
      * The area of the x-y side of this rectangle in square pixels
@@ -151,7 +151,8 @@ case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConve
     
     // IMPLEMENTED METHODS    ----------
     
-    override def contains(coordinate: Vector3D) = coordinate >= position && coordinate <= position + size
+    override def contains(coordinate: Vector3D) = Vector3D.forall(coordinate, topLeft, { _ >= _ }) && 
+            Vector3D.forall(coordinate, bottomRight, { _ <= _ })
     
     override def contains2D(coordinate: Vector3D) = in2D.contains(coordinate.in2D)
     
