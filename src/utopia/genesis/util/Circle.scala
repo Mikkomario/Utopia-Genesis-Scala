@@ -201,6 +201,17 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
      */
     def collisionMtvWith(other: Circle): Option[Vector3D] = collisionMtvWith(other, Vector(other.origin - origin))
     
+    /**
+     * Calculates two collision points using a very simple algorithm. The collision points will be 
+     * along the minimum translation vector and one of them is at the edge of this circle.
+     * @param mtv The circle's minimum translation vector in the collision
+     */
+    def simpleCollisionPoints(mtv: Vector3D) = 
+    {
+        val firstPoint = origin - mtv.withLength(radius)
+        Vector(firstPoint, firstPoint + mtv)
+    }
+    
     /*
      * Finds the intersection points for the circle when a minimum translation vector is known
      * @param mtv the minimum translation vector for the circle in a collision situation. The 
