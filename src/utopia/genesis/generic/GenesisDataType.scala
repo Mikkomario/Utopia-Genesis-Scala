@@ -10,6 +10,8 @@ import utopia.flow.generic.ConversionHandler
 import utopia.genesis.util.Transformation
 import utopia.genesis.util.Bounds
 import utopia.flow.parse.JSONValueConverter
+import utopia.genesis.util.Point
+import utopia.genesis.util.Size
 
 /**
  * Vectors are used for representing motion, force and coordinates
@@ -23,6 +25,14 @@ object LineType extends DataType("Line", classOf[Line]) with GenesisDataType
  * Circles are geometric shapes that have an origin and a radius
  */
 object CircleType extends DataType("Circle", classOf[Circle]) with GenesisDataType
+/**
+ * Points represent 2 dimensional coordinates
+ */
+object PointType extends DataType("Point", classOf[Point]) with GenesisDataType
+/**
+ * Size represents 2 dimensional widht + height
+ */
+object SizeType extends DataType("Size", classOf[Size]) with GenesisDataType
 /**
  * Rectangles are geometric shapes / areas that have both position and size
  */

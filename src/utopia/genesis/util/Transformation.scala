@@ -72,6 +72,7 @@ object Transformation extends FromModelFactory[Transformation]
  * @author Mikko Hilpinen
  * @since 29.12.2016
  */
+// TODO: Rename position to translation
 case class Transformation(val position: Vector3D = Vector3D.zero, 
         val scaling: Vector3D = Vector3D.identity, val rotationRads: Double = 0, 
         val shear: Vector3D = Vector3D.zero, val useReverseOrder: Boolean = false) extends 
@@ -184,10 +185,10 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
             (rotationRads ~== other.rotationRads) && (shear ~== other.shear)
     
     /**
-     * Transforms a <b>relative</b> vector <b>into an absolute</b> vector
-     * @param relative a relative vector that will be transformed
+     * Transforms a <b>relative</b> point <b>into an absolute</b> point
+     * @param relative a relative point that will be transformed
      */
-    def apply(relative: Vector3D) = Vector3D of toAffineTransform.transform(relative.toPoint2D, null)
+    def apply(relative: Point) = Point of toAffineTransform.transform(relative.toAwtPoint2D, null)
     
     /**
      * Transforms a shape <b>from relative space to absolute space</b>
@@ -203,7 +204,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * scaling 2
      */
     def apply(other: Transformation): Transformation = (this + other).withPosition(apply(
-            other.position));
+            other.position.toPoint));
     
     
     // OTHER METHODS    -------------
@@ -232,9 +233,9 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def toRelative[B](absolute: TransformableShape[B]) = invert(absolute)
     
     /**
-     * Converts a relative coordinate into an absolute one. Same as calling apply(Vector3D)
+     * Converts a relative coordinate into an absolute one. Same as calling apply(Point)
      */
-    def toAbsolute(relative: Vector3D) = apply(relative)
+    def toAbsolute(relative: Point) = apply(relative)
     
     /**
      * Converts a relative shape to an absolute one. Same as calling apply(...)
@@ -247,8 +248,8 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
-    def absoluteRotatedRads(rotationRads: Double, origin: Vector3D) = 
-            withPosition(position.rotatedRads(rotationRads, origin)).rotatedRads(rotationRads);
+    def absoluteRotatedRads(rotationRads: Double, origin: Point) = 
+            withPosition(position.rotatedRads(rotationRads, origin.toVector).toPoint).rotatedRads(rotationRads);
     
     /**
      * Rotates the transformation around a relative origin point
@@ -256,7 +257,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
-    def relativeRotatedRads(rotationRads: Double, origin: Vector3D) = absoluteRotatedRads(
+    def relativeRotatedRads(rotationRads: Double, origin: Point) = absoluteRotatedRads(
             rotationRads, apply(origin));
     
     /**
@@ -265,7 +266,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
-    def absoluteRotatedDegs(rotationDegs: Double, origin: Vector3D) = absoluteRotatedRads(
+    def absoluteRotatedDegs(rotationDegs: Double, origin: Point) = absoluteRotatedRads(
             rotationDegs.toRadians, origin);
     
     /**
@@ -274,13 +275,13 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
-    def relativeRotatedDegs(rotationDegs: Double, origin: Vector3D) = relativeRotatedRads(
+    def relativeRotatedDegs(rotationDegs: Double, origin: Point) = relativeRotatedRads(
             rotationDegs.toRadians, origin);
     
     /**
      * Copies this transformation, giving it a new position
      */
-    def withPosition(position: Vector3D) = copy(position = position)
+    def withPosition(position: Point) = copy(position = position.toVector)
     
     /**
      * Copies this transformation, giving it a new scaling
@@ -310,7 +311,8 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     /**
      * Copies this transformation, changing the translation by the provided amount
      */
-    def translated(translation: Vector3D) = withPosition(position + translation)
+    // TODO: Add withTranslation and use it in cases like these
+    def translated(translation: Vector3D) = withPosition(position.toPoint + translation)
     
     /**
      * Copies this transformation, changing the scaling by the provided amount

@@ -6,6 +6,8 @@ import utopia.genesis.util.Line
 import utopia.genesis.util.Circle
 import utopia.genesis.util.Transformation
 import utopia.genesis.util.Bounds
+import utopia.genesis.util.Point
+import utopia.genesis.util.Size
 
 object GenesisValue
 {
@@ -44,9 +46,19 @@ object GenesisValue
         def vector3D = v.objectValue(Vector3DType).map { _.asInstanceOf[Vector3D] }
         
         /**
+         * A 2D point value of this value. None if this value couldn't be casted
+         */
+        def point = v.objectValue(PointType).map { _.asInstanceOf[Point] }
+        
+        /**
          * A line value of this value. None if the value couldn't be casted.
          */
         def line = v.objectValue(LineType).map { _.asInstanceOf[Line] }
+        
+        /**
+         * A size value of this value. None if this value couldn't be casted
+         */
+        def size = v.objectValue(SizeType).map { _.asInstanceOf[Size] }
         
         /**
          * A circle value of this value. None if the value couldn't be casted.
@@ -71,11 +83,21 @@ object GenesisValue
         def vector3DOr(default: => Vector3D = Vector3D.zero) = vector3D.getOrElse(default)
         
         /**
+         * The point value of this value, or the provided default value in case casting failed
+         */
+        def pointOr(default: => Point = Point.origin) = point.getOrElse(default)
+        
+        /**
          * The line value of this value, or the provided default value in case the value couldn't
          * be cast.
          * @param default The default line value. Defaults to a line from zero to zero.
          */
-        def lineOr(default: => Line = Line(Vector3D.zero, Vector3D.zero)) = line.getOrElse(default)
+        def lineOr(default: => Line = Line(Point.origin, Point.origin)) = line.getOrElse(default)
+        
+        /**
+         * The size value of this value, or the provided default value if casting failed
+         */
+        def sizeOr(default: => Size = Size.zero) = size.getOrElse(default)
         
         /**
          * The circle value of this value, or the provided default value in case the value couldn't
@@ -83,7 +105,7 @@ object GenesisValue
          * @param default The default circle value. Defaults to a circle at zero origin with zero
          * radius.
          */
-        def circleOr(default: => Circle = Circle(Vector3D.zero, 0)) = circle.getOrElse(default)
+        def circleOr(default: => Circle = Circle(Point.origin, 0)) = circle.getOrElse(default)
         
         /**
          * The rectangle value of this value, or the provided default value in case the value
@@ -91,7 +113,7 @@ object GenesisValue
          * @param default the default rectangle value. Defaults to rectangle with zero position and
          * size.
          */
-        def boundsOr(default: => Bounds = Bounds(Vector3D.zero, Vector3D.zero)) = bounds.getOrElse(default)
+        def boundsOr(default: => Bounds = Bounds.zero) = bounds.getOrElse(default)
         
         /**
          * The transformation value of this value, or the provided default value in case the value

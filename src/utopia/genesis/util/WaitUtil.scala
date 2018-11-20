@@ -5,6 +5,7 @@ package utopia.genesis.util
  * @author Mikko Hilpinen
  * @since 23.12.2016
  */
+@deprecated("Please start using the waitUtils from Utopia Flow instead", "v1.1.2")
 object WaitUtil
 {
     /**

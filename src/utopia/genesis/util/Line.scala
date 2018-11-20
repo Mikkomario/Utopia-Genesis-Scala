@@ -18,8 +18,8 @@ object Line extends FromModelFactory[Line]
 {
     // OPERATORS    -------------------------
     
-    override def apply(model: template.Model[Property]) = Some(Line(model("start").vector3DOr(), 
-            model("end").vector3DOr()));
+    override def apply(model: template.Model[Property]) = Some(Line(model("start").pointOr(), 
+            model("end").pointOr()));
     
     
     // OTHER METHODS    ---------------------
@@ -30,7 +30,7 @@ object Line extends FromModelFactory[Line]
      * @param vector The vector portion of the line
      * @return A line with the provided position and vector part
      */
-    def ofVector(position: Vector3D, vector: Vector3D) = Line(position, position + vector)
+    def ofVector(position: Point, vector: Vector3D) = Line(position, position + vector)
     
     /**
      * Creates a set of edges for the provided vertices. The vertices are iterated in order and an 
@@ -41,7 +41,8 @@ object Line extends FromModelFactory[Line]
      * @return The edges that were formed between the vertices. Empty if there were less than 2
      * vertices
      */
-    def edgesForVertices(vertices: Seq[Vector3D], close: Boolean = true) = 
+    // TODO: Add a 3D version separately
+    def edgesForVertices(vertices: Seq[Point], close: Boolean = true) = 
     {
         if (vertices.size < 2)
         {
@@ -51,6 +52,7 @@ object Line extends FromModelFactory[Line]
         {
             var lastVertex = vertices.head
             val buffer = ListBuffer[Line]()
+            // TODO: Add 3D support for 3D version of this class
             vertices.foreach( vertex => { buffer += Line(lastVertex, vertex); lastVertex = vertex } )
             if (close)
             {
@@ -67,7 +69,7 @@ object Line extends FromModelFactory[Line]
  * @author Mikko Hilpinen
  * @since 13.12.2016
  */
-case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible with 
+case class Line(val start: Point, val end: Point) extends ShapeConvertible with 
         ValueConvertible with ModelConvertible with TransformableShape[Line] with Projectable
 {
     // ATTRIBUTES    -------------------
@@ -92,11 +94,6 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
     def reverse = Line(end, start)
     
     /**
-     * A version of this line that lies completely on the x-y plane
-     */
-    def in2D = Line(start.in2D, end.in2D)
-    
-    /**
      * The axes that are necessary to include when checking collisions for this line
      */
     def collisionAxes = Vector(vector, vector.normal2D)
@@ -104,7 +101,7 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
     /**
      * The center of the line segment
      */
-    def center = (start + end) / 2
+    def center = ((start.toVector + end.toVector) / 2).toPoint
     
     
     // OPERATORS    --------------------
@@ -125,7 +122,8 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
     
     // IMPLEMENTED METHODS    ----------
     
-    override def projectedOver(axis: Vector3D) = Line(start.projectedOver(axis), end.projectedOver(axis))
+    override def projectedOver(axis: Vector3D) = Line(start.toVector.projectedOver(axis).toPoint, 
+            end.toVector.projectedOver(axis).toPoint)
     
     
     // OTHER METHODS    ----------------
@@ -229,7 +227,7 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
             //println(tEnter)
             if (!onlyPointsInSegment || (tEnter >= 0 && tEnter <= 1))
             {
-                intersectionPoints :+= apply(tEnter)
+                intersectionPoints :+= apply(tEnter).toVector
             }
             
             if (!(discriminant ~== 0.0))
@@ -238,7 +236,7 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
                 //println(tExit)
                 if (!onlyPointsInSegment || (tExit >= 0 && tExit <= 1))
                 {
-                    intersectionPoints :+= apply(tExit)
+                    intersectionPoints :+= apply(tExit).toVector
                 }
             }
             
@@ -258,8 +256,8 @@ case class Line(val start: Vector3D, val end: Vector3D) extends ShapeConvertible
     def clipped(clippingPlanePoint: Vector3D, clippingPlaneNormal: Vector3D) = 
     {
         val origin = clippingPlanePoint dot clippingPlaneNormal
-        val startDistance = start.dot(clippingPlaneNormal) - origin
-        val endDistance = end.dot(clippingPlaneNormal) - origin
+        val startDistance = start.toVector.dot(clippingPlaneNormal) - origin
+        val endDistance = end.toVector.dot(clippingPlaneNormal) - origin
         
         if (startDistance < 0 && endDistance < 0)
         {

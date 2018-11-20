@@ -16,6 +16,11 @@ trait Projectable
      */
     def projectedOver(axis: Vector3D): Line
     
+    /**
+     * Projects this shape, creating a line parallel to the provided axis
+     */
+    def projectedOver(axis: Axis): Line = projectedOver(axis.toUnitVector)
+    
     
     // OTHER METHODS    -----------------------
     
@@ -30,7 +35,8 @@ trait Projectable
         val projection = orderedProjectionOver(axis)
         val otherProjection = other.orderedProjectionOver(axis)
         
-        if (projection.end <= otherProjection.start || projection.start >= otherProjection.end)
+        if (comparePoints(projection.end, otherProjection.start) <= 0 || 
+                comparePoints(projection.start, otherProjection.end) >= 0)
         {
             None
         }
@@ -70,6 +76,18 @@ trait Projectable
     private def orderedProjectionOver(axis: Vector3D) = 
     {
         val projection = projectedOver(axis)
-        if (projection.start <= projection.end) projection else projection.reverse
+        if (comparePoints(projection.start, projection.end) <= 0) projection else projection.reverse
+    }
+    
+    private def comparePoints(v1: Point, v2: Point) = 
+    {
+        if (v1.x < v2.x) { -1 }
+        else if (v1.x > v2.x) { 1 }
+        else
+        {
+            if (v1.y < v2.y) { -1 }
+            else if (v1.y > v2.y) { 1 }
+            else 0
+        }
     }
 }

@@ -3,6 +3,7 @@ package utopia.genesis.util
 import utopia.flow.util.Equatable
 import utopia.genesis.util.Extensions._
 
+// TODO: Also add class for rotation
 object Angle
 {
     // ATTRIBUTES    -----------------------------
@@ -49,7 +50,7 @@ object Angle
  * @author Mikko Hilpinen
  * @since 30.6.2017
  */
-class Angle(rawRadians: Double) extends Equatable
+class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[Angle]
 {
     // ATTRIBUTES    ------------------
     
@@ -108,5 +109,5 @@ class Angle(rawRadians: Double) extends Equatable
     /**
      * Compares two angles without the requirement of being exactly equal
      */
-    def ~==(other: Angle) = toRadians ~== other.toRadians
+    def ~==[B <: Angle](other: B) = toRadians ~== other.toRadians
 }

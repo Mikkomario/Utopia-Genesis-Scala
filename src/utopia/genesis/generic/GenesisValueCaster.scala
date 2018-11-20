@@ -116,7 +116,7 @@ object GenesisValueCaster extends ValueCaster
         value.dataType match 
         {
             case BoundsType => Some(value.boundsOr().diagonal)
-            case VectorType => Some(Line(value(0).vector3DOr(), value(1).vector3DOr()))
+            case VectorType => Some(Line(value(0).pointOr(), value(1).pointOr()))
             case ModelType => Line(value.modelOr())
             case _ => None
         }

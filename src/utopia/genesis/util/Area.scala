@@ -5,6 +5,7 @@ package utopia.genesis.util
  * @author Mikko Hilpinen
  * @since 19.2.2017
  */
+// TODO: Replace with 2D and 3D variations
 trait Area
 {
     /**

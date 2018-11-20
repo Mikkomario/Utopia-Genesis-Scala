@@ -15,7 +15,7 @@ import utopia.flow.datastructure.template.Property
 
 object Circle extends FromModelFactory[Circle]
 {
-    override def apply(model: template.Model[Property]) = Some(Circle(model("origin").vector3DOr(), 
+    override def apply(model: template.Model[Property]) = Some(Circle(model("origin").pointOr(), 
             model("radius").doubleOr()))
 }
 
@@ -24,7 +24,8 @@ object Circle extends FromModelFactory[Circle]
  * @author Mikko Hilpinen
  * @since 1.1.2017
  */
-case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible with Area with 
+// TODO: Separate into 2D and 3D shapes (circle and sphere)
+case class Circle(val origin: Point, radius: Double) extends ShapeConvertible with Area with 
         ValueConvertible with ModelConvertible with Projectable
 {
     // COMPUTED PROPERTIES    ---------
@@ -36,34 +37,19 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
     override def toModel = Model(Vector("origin" -> origin, "radius" -> radius))
     
     /**
-     * The diameter of the circle, from one side to another
+     * The diameter of this circle, from one side to another
      */
     def diameter = radius * 2
     
     /**
-     * The perimeter of the 2D circle
+     * The perimeter of this circle
      */
     def perimeter = 2 * math.Pi * radius
-    
-    /**
-     * A version of this circle where the origin lies on the x-y plane
-     */
-    def in2D = Circle(origin.in2D, radius)
     
     /**
      * The area of the circle in square pixels
      */
     def area = math.Pi * radius * radius
-    
-    /**
-     * The surface area of this 3D sphere
-     */
-    def surfaceArea = 4 * math.Pi * radius * radius
-    
-    /**
-     * The volume inside this 3D sphere
-     */
-    def volume = 4 * math.Pi * math.pow(radius, 3) / 3
     
     
     // OPERATORS    -------------------
@@ -76,13 +62,15 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
     
     // IMPLEMENTED METHODS    ---------
     
-    override def contains(point: Vector3D) = (point - origin).length <= radius
+    // TODO: Again, refactor for 2D and 3D shapes separately
+    override def contains(point: Vector3D) = (point - origin.toVector).length <= radius
    
     override def contains2D(point: Vector3D) = contains(point.in2D)
     
     override def projectedOver(axis: Vector3D) =
     {
-        val projectedOrigin = origin.projectedOver(axis)
+        // TODO: Again, 2D and 3D separately
+        val projectedOrigin = origin.toVector.projectedOver(axis).toPoint
         Line(projectedOrigin - axis.withLength(radius), projectedOrigin + axis.withLength(radius))
     }
     
@@ -90,21 +78,19 @@ case class Circle(val origin: Vector3D, radius: Double) extends ShapeConvertible
     // OTHER METHODS    ---------------
     
     /**
+     * Checks whether this circle contains the specified point
+     */
+    def contains(point: Point): Boolean = contains(point.toVector)
+    
+    /**
      * Checks whether the sphere fully contains the provided line
      */
     def contains(line: Line): Boolean = contains(line.start) && contains(line.end)
     
     /**
-     * Checks whether the circle contains the provided line when both shapes are projected to x-y
-     * plane
+     * Checks whether the circle contains the provided rectangle
      */
-    def contains2D(line: Line): Boolean = contains2D(line.start) && contains2D(line.end)
-    
-    /**
-     * Checks whether the circle contains the provided rectangle when both shapes are projected 
-     * to x-y plane
-     */
-    def contains2D(rectangle: Bounds): Boolean = rectangle.edges2D.forall { contains2D(_) }
+    def contains(rectangle: Bounds): Boolean = rectangle.edges.forall { contains(_) }
     
     /**
      * Checks whether the other circle is contained within this circle's area

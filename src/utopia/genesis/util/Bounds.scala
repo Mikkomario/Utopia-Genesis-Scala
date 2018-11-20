@@ -14,10 +14,18 @@ import utopia.genesis.generic.GenesisValue._
 
 object Bounds extends FromModelFactory[Bounds]
 {
+    // ATTRIBUTES    ----------------------
+    
+    /**
+     * A zero bounds
+     */
+    val zero = Bounds(Point.origin, Size.zero)
+    
+    
     // OPERATORS    -----------------------
     
     override def apply(model: template.Model[Property]) = Some(
-            Bounds(model("position").vector3DOr(), model("size").vector3DOr()))
+            Bounds(model("position").pointOr(), model("size").sizeOr()))
     
     
     // OTHER METHODS    -------------------
@@ -26,12 +34,12 @@ object Bounds extends FromModelFactory[Bounds]
      * Creates a rectangle that contains the area between the two coordinates. The order 
      * of the coordinates does not matter.
      */
-    def between(p1: Vector3D, p2: Vector3D) = 
+    def between(p1: Point, p2: Point) = 
     {
-        val topLeft = Vector3D.topLeft(p1, p2)
-        val bottomRight = Vector3D.bottomRight(p1, p2)
+        val topLeft = Point.topLeft(p1, p2)
+        val bottomRight = Point.bottomRight(p1, p2)
         
-        Bounds(topLeft, bottomRight - topLeft)
+        Bounds(topLeft, (bottomRight - topLeft).toSize)
     }
     
     /**
@@ -40,19 +48,25 @@ object Bounds extends FromModelFactory[Bounds]
     def around(circle: Circle) = 
     {
         val r = Vector3D(circle.radius, circle.radius, circle.radius)
-        Bounds(circle.origin - r, r * 2)
+        Bounds(circle.origin - r, (r * 2).toSize)
     }
     
     /**
      * Creates a set of bounds that contains all of the provided bounds. Returns none if the provided 
      * collection is empty.
      */
+    // TODO: Add an optional version separately
     def around(bounds: Traversable[Bounds]) =
     {
-        val topLeft = Vector3D.topLeft(bounds.map{ _.topLeft })
-        val bottomRight = Vector3D.bottomRight(bounds.map { _.bottomRight })
-        
-        if (topLeft.isEmpty || bottomRight.isEmpty) None else Some(between(topLeft.get, bottomRight.get))
+        if (bounds.isEmpty)
+            None
+        else
+        {
+            val topLeft = Point.topLeft(bounds.map{ _.topLeft })
+            val bottomRight = Point.bottomRight(bounds.map { _.bottomRight })
+            
+            Some(between(topLeft, bottomRight))
+        }
     }
     
     /**
@@ -63,17 +77,18 @@ object Bounds extends FromModelFactory[Bounds]
 
 /**
  * Bounds limit a certain rectangular area of space. The rectangle is defined by two points 
- * and the edges go along x, y and z axes.
+ * and the edges go along x and y axes.
  * @author Mikko Hilpinen
  * @since 13.1.2017
  */
-case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConvertible with 
+// TODO: Separate into 2D and 3D shapes (rectangle and box)
+case class Bounds(val position: Point, val size: Size) extends ShapeConvertible with 
         Area with ValueConvertible with ModelConvertible
 {
     // COMPUTED PROPERTIES    ------------
     
-    override def toShape = new java.awt.Rectangle(position.x.toInt, position.y.toInt, width.toInt, 
-            height.toInt);
+    override def toShape = new java.awt.Rectangle(position.x.toInt, position.y.toInt, 
+            width.toInt, height.toInt);
     
     override def toValue = new Value(Some(this), BoundsType)
     
@@ -82,79 +97,71 @@ case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConve
     /**
      * The width of the rectangle / cube
      */
-    def width = size.x
+    def width = size.width
     
     /**
      * The height of the rectangle / cube
      */
-    def height = size.y
-    
-    /**
-     * The depth (dimension along z-axis) of the cube
-     */
-    def depth = size.z
+    def height = size.height
     
     /**
      * The smallest (on all axes) coordinate that is contained within these bounds
      */
-    def topLeft = Vector3D.topLeft(position, position + size)
+    def topLeft = position
     
     /**
      * The largest (on all axes) coordinate that is contained within these bounds
      */
-    def bottomRight = Vector3D.bottomRight(position, position + size)
+    def bottomRight = position + size.toVector
+    
+    /**
+     * The top right corner of this rectangle
+     */
+    def topRight = position + size.toVector.projectedOver(X)
+    
+    /**
+     * The bottom left corner of this rectangle
+     */
+    def bottomLeft = position + size.toVector.projectedOver(Y)
     
     /**
      * The area of the x-y side of this rectangle in square pixels
      */
-    def area = width * height
-    
-    /**
-     * The area of the whole surface of this 3D cube in square pixels
-     */
-    def surfaceArea = 2 * width * height + 2 * height * depth + 2 * width * depth
-    
-    /**
-     * The volume inside this 3D cube in cubic pixels
-     */
-    def volume = width * height * depth
+    def area = size.area
     
     /**
      * The diagonal line for this rectangle. Starts at the position coordinates and goes all the 
      * way to the opposite corner.
      */
-    def diagonal = Line(position, position + size)
+    def diagonal = Line(topLeft, bottomRight)
+    
+    /**
+     * The four corners of the this rectangle, in clockwise order starting from the
+     * rectangle's position.
+     */
+    def corners = Vector(topLeft, topRight, bottomRight, bottomLeft)
     
     /**
      * The four corners of the x-y side of the rectangle, in clockwise order starting from the
      * rectangle's position. All of the corners are projected to the x-y -plane.
      */
-    def corners2D = 
-    {
-        val position2D = position.in2D
-        val size2D = size.in2D
-        Vector(position2D, position2D + size2D.copy(y = 0), position2D + size2D, 
-                position2D + size2D.copy(x = 0))
-    }
+    @deprecated("Please use corners instead", "v1.1.2")
+    def corners2D = corners
     
     /**
      * The four edges of the x-y side of the rectangle, in clockwise order starting from the x-wise edge.
      * All of the edges are projected to the x-y -plane
      */
-    def edges2D = Line.edgesForVertices(corners2D)
-    
-    /**
-     * A version of this rectangle that lies completely on the x-y plane
-     */
-    def in2D = Bounds(position.in2D, size.in2D)
+    def edges = Line.edgesForVertices(corners)
     
     
     // IMPLEMENTED METHODS    ----------
     
-    override def contains(coordinate: Vector3D) = Vector3D.forall(coordinate, topLeft, { _ >= _ }) && 
-            Vector3D.forall(coordinate, bottomRight, { _ <= _ })
+    // TODO: FIX for 2D
+    override def contains(coordinate: Vector3D) = Vector3D.forall(coordinate, topLeft.toVector, { _ >= _ }) && 
+            Vector3D.forall(coordinate, bottomRight.toVector, { _ <= _ })
     
-    override def contains2D(coordinate: Vector3D) = in2D.contains(coordinate.in2D)
+    override def contains2D(coordinate: Vector3D) = contains(coordinate.in2D)
     
     
     // OTHER METHODS    ----------------
@@ -172,6 +179,11 @@ case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConve
     }
     
     /**
+     * Checks whether the specified point is inside this rectangle
+     */
+    def contains(point: Point): Boolean = contains(point.toVector)
+    
+    /**
      * Checks whether the line completely lies within the rectangle bounds
      */
     def contains(line: Line): Boolean = contains(line.start) && contains(line.end)
@@ -179,44 +191,23 @@ case class Bounds(val position: Vector3D, val size: Vector3D) extends ShapeConve
     /**
      * Checks whether a set of bounds is contained within this bounds' area
      */
-    def contains(bounds: Bounds): Boolean = contains(bounds.position) && contains(bounds.position + bounds.size)
-    
-    /**
-     * Checks whether a line completely lies within the rectangle's bounds when the z-axis is
-     * ignored
-     */
-    def contains2D(line: Line) = in2D.contains(line.in2D)
+    def contains(bounds: Bounds): Boolean = contains(bounds.topLeft) && contains(bounds.bottomRight)
     
     /**
      * Checks whether a circle completely lies within the rectangle's bounds when the z-axis is 
      * ignored
      */
-    def contains2D(circle: Circle): Boolean = contains2D(circle.origin) && 
-            circleIntersection2D(circle).isEmpty;
+    def contains(circle: Circle): Boolean = contains(circle.origin) && 
+            circleIntersection(circle).isEmpty;
     
     /**
-     * Checks whether this set of bounds contains another bounds' area. Doesn't check the z-axis 
-     * values for containment.
+     * Finds the intersection points between the edges of this rectangle and the provided circle
      */
-    def contains2D(bounds: Bounds) = in2D.contains(bounds.in2D)
-    
-    /**
-     * Finds the intersection points between the edges of this rectangle and the provided circle.
-     * Both shapes are projected to the x-y plane before the check.
-     */
-    def circleIntersection2D(circle: Circle) = 
-    {
-        val circle2D = circle.in2D
-        edges2D.flatMap { _.circleIntersection(circle2D) }
-    }
+    def circleIntersection(circle: Circle) = edges.flatMap { _.circleIntersection(circle) }
     
     /**
      * Finds the intersection points between the edges of this rectangle and the provided line. 
      * Both shapes are projected to the x-y plane before the check.
      */
-    def lineIntersection2D(line: Line) = 
-    {
-        val line2D = line.in2D
-        edges2D.flatMap { _.intersection(line2D) }
-    }
+    def lineIntersection(line: Line) = edges.flatMap { _.intersection(line) }
 }
