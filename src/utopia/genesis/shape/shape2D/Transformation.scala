@@ -216,8 +216,8 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * @param absolute a vector in absolute world space
      * @return The absolute point in relative world space
      */
-    def invert(absolute: Vector3D) = Vector3D of toInvertedAffineTransform.transform(
-            absolute.toPoint2D, null);
+    def invert(absolute: Point) = Point of toInvertedAffineTransform.transform(
+            absolute.toAwtPoint2D, null);
     
     /**
      * Transforms a shape <b>from absolute space to relative space</b>
@@ -227,7 +227,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     /**
      * Converts an absolute coordinate into a relative one. Same as calling invert(Vector3D)
      */
-    def toRelative(absolute: Vector3D) = invert(absolute)
+    def toRelative(absolute: Point) = invert(absolute)
     
     /**
      * Converts an absolute shape to a relative one. Same as calling invert(...)
