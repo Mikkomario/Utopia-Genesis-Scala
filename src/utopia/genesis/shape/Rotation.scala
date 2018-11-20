@@ -9,6 +9,11 @@ import utopia.genesis.shape.RotationDirection.Clockwise
 object Rotation
 {
     /**
+     * A zero rotation
+     */
+    val zero = Rotation(0)
+    
+    /**
      * Converts a radian amount to a rotation
      */
     def ofRadians(rads: Double, direction: RotationDirection = Clockwise) = Rotation(rads, direction)

@@ -4,8 +4,9 @@ import utopia.flow.util.Equatable
 import utopia.genesis.util.Extensions._
 import scala.Vector
 import utopia.genesis.util.ApproximatelyEquatable
+import utopia.genesis.shape.RotationDirection.Counterclockwise
+import utopia.genesis.shape.RotationDirection.Clockwise
 
-// TODO: Also add class for rotation
 object Angle
 {
     // ATTRIBUTES    -----------------------------
@@ -48,7 +49,7 @@ object Angle
 /**
  * This class is used for storing a double value representing an angle (0 to 2*Pi radians). This 
  * class makes sure the angle stays in bounds and can be operated properly. Please note that 
- * Angle does NOT represent rotation. Rotation should be represented in radians instead.
+ * Angle does NOT represent rotation.
  * @author Mikko Hilpinen
  * @since 30.6.2017
  */
@@ -74,11 +75,13 @@ class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[An
     
     override def toString = f"$toDegrees%1.2f degrees"
     
+    def toRotation = Rotation(toRadians)
+    
     
     // OPERATORS    ------------------
     
     /**
-     * The necessary rotation from this angle to the other angle, in radians. Returns the shortest 
+     * The necessary rotation from the other angle to the this angle. Returns the shortest 
      * route, which means that the value is always between -Pi and Pi
      */
     def -(other: Angle) = 
@@ -86,15 +89,21 @@ class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[An
         val rawValue = toRadians - other.toRadians
         if (rawValue > math.Pi)
         {
-            rawValue - 2 * math.Pi
+            // > 180 degrees positive -> < 180 degrees negative
+            Rotation(2 * math.Pi - rawValue, Counterclockwise)
         }
         else if (rawValue < -math.Pi)
         {
-            rawValue + 2 * math.Pi
+            // > 180 degrees negative -> < 180 degrees positive
+            Rotation(rawValue + 2 * math.Pi, Clockwise)
         }
         else
         {
-            rawValue
+            // Negative values are returned as positive counter-clockwise rotation
+            if (rawValue < 0)
+                Rotation(-rawValue, Counterclockwise)
+            else
+                Rotation(rawValue, Clockwise)
         }
     }
     
@@ -104,9 +113,19 @@ class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[An
     def +(rotationRads: Double) = Angle.ofRadians(toRadians + rotationRads)
     
     /**
+     * Applies a rotation to this angle
+     */
+    def +(rotation: Rotation) = +(rotation.toDouble)
+    
+    /**
      * Applies a rotation (radians) to this angle in counter-clockwise direction
      */
     def -(rotationRads: Double) = this + (-rotationRads)
+    
+    /**
+     * Applies a negative rotation to this angle
+     */
+    def -(rotation: Rotation) = -(rotation.toDouble)
     
     /**
      * Compares two angles without the requirement of being exactly equal
