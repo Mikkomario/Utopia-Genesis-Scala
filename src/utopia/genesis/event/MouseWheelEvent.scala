@@ -1,6 +1,6 @@
 package utopia.genesis.event
 
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 
 /**
  * These mouse events are generated whenever the mouse wheel turns

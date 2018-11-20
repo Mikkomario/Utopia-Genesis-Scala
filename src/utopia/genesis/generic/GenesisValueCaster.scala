@@ -10,16 +10,16 @@ import utopia.genesis.util.Extensions._
 import utopia.genesis.generic.GenesisValue._
 import utopia.flow.datastructure.immutable.Model
 import utopia.flow.datastructure.immutable.Constant
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import utopia.flow.generic.VectorType
 import utopia.flow.generic.ModelType
-import utopia.genesis.util.Line
-import utopia.genesis.util.Circle
+import utopia.genesis.shape.shape2D.Line
+import utopia.genesis.shape.shape2D.Circle
 import utopia.flow.generic.ConversionReliability._
-import utopia.genesis.util.Transformation
-import utopia.genesis.util.Bounds
 
 import utopia.flow.generic.ValueConversions._
+import utopia.genesis.shape.shape2D.Transformation
+import utopia.genesis.shape.shape2D.Bounds
 
 /**
  * This object handles casting of Genesis-specific data types

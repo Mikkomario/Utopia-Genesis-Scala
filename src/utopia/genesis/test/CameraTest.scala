@@ -1,19 +1,20 @@
 package utopia.genesis.test
 
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import utopia.inception.handling.HandlerRelay
 import java.awt.Font
 import utopia.genesis.event.Drawable
 import utopia.genesis.util.Drawer
-import utopia.genesis.util.Bounds
+import utopia.genesis.shape.shape2D.Bounds
 import utopia.genesis.view.CanvasMouseEventGenerator
 import utopia.genesis.event.ActorThread
 
 
 object CameraTest extends App
 {
+    /* TODO: Return and fix code after refactoring is done
     class GridNumberDrawer(private val grid: GridDrawer) extends Drawable
     {
         private val font = new Font("Arial", 0, 14)
@@ -53,5 +54,5 @@ object CameraTest extends App
     camera.drawHandler += numbers
     
     actorThread.start()
-    frame.display()
+    frame.display()*/
 }

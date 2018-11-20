@@ -1,4 +1,4 @@
-package utopia.genesis.util
+package utopia.genesis.shape.shape2D
 
 /**
  * Transformations can be applied to transformable shapes / elements

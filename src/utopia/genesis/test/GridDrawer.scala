@@ -1,10 +1,10 @@
 package utopia.genesis.test
 
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import utopia.genesis.event.Drawable
 import utopia.genesis.util.Drawer
 import java.awt.Color
-import utopia.genesis.util.Line
+import utopia.genesis.shape.shape2D.Line
 
 /**
  * This object simply draws a gird to the center of the game world
@@ -33,6 +33,7 @@ class GridDrawer(worldSize: Vector3D, val squareSize: Vector3D) extends Drawable
     
     def draw(drawer: Drawer) = 
     {
+        /* TODO: Return and fix code after refactoring is done
         val copy = drawer.withEdgeColor(Some(Color.LIGHT_GRAY))
         
         for (x <- 0 to squareAmounts.x.toInt)
@@ -42,7 +43,7 @@ class GridDrawer(worldSize: Vector3D, val squareSize: Vector3D) extends Drawable
         for (y <- 0 to squareAmounts.y.toInt)
         {
             copy.draw(Line.ofVector(squarePosition(0, y), size.xProjection))
-        }
+        }*/
     }
     
     

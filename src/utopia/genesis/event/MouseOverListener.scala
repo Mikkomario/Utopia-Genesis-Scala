@@ -1,6 +1,6 @@
 package utopia.genesis.event
 
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 
 /**
  * This mouse event listener is interested to continually receive events while the mouse cursor is

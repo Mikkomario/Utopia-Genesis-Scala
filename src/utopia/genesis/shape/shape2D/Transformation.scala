@@ -1,4 +1,4 @@
-package utopia.genesis.util
+package utopia.genesis.shape.shape2D
 
 import java.awt.geom.AffineTransform
 import utopia.genesis.util.Extensions._
@@ -12,6 +12,8 @@ import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
+import scala.Vector
+import utopia.genesis.shape.Vector3D
 
 object Transformation extends FromModelFactory[Transformation]
 {

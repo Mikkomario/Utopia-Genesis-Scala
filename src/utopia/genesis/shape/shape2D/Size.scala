@@ -1,8 +1,7 @@
-package utopia.genesis.util
+package utopia.genesis.shape.shape2D
 
 import utopia.genesis.util.Extensions._
 import utopia.flow.generic.ValueConversions._
-
 import java.awt.Dimension
 import utopia.flow.generic.ValueConvertible
 import utopia.flow.datastructure.immutable.Value
@@ -12,6 +11,11 @@ import utopia.flow.datastructure.immutable.Model
 import scala.collection.immutable.HashMap
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
+import utopia.genesis.util.ApproximatelyEquatable
+import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.Axis2D
+import utopia.genesis.shape.X
+import utopia.genesis.shape.Y
 
 object Size extends FromModelFactory[Size]
 {

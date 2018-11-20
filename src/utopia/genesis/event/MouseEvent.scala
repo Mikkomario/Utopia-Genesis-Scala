@@ -1,7 +1,7 @@
 package utopia.genesis.event
 
-import utopia.genesis.util.Vector3D
-import utopia.genesis.util.Area
+import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.template.Area
 import utopia.inception.util.Filter
 import utopia.genesis.event.MouseButton._
 

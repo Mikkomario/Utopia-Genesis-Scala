@@ -1,10 +1,9 @@
 package utopia.genesis.event
 
-import utopia.genesis.util.Transformation
+import utopia.genesis.shape.shape2D.Transformation
 import java.awt.Shape
 import utopia.genesis.util.Drawer
-import utopia.genesis.util.Vector3D
-import utopia.genesis.util.Bounds
+import utopia.genesis.shape.Vector3D
 import java.awt.Color
 
 /**

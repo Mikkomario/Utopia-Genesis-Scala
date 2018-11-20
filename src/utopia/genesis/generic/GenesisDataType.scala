@@ -1,17 +1,17 @@
 package utopia.genesis.generic
 
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import utopia.flow.generic.DataType
-import utopia.genesis.util.Line
-import utopia.genesis.util.Circle
+import utopia.genesis.shape.shape2D.Line
+import utopia.genesis.shape.shape2D.Circle
 import utopia.flow.generic.AnyType
 import utopia.flow.generic.EnvironmentNotSetupException
 import utopia.flow.generic.ConversionHandler
-import utopia.genesis.util.Transformation
-import utopia.genesis.util.Bounds
 import utopia.flow.parse.JSONValueConverter
-import utopia.genesis.util.Point
-import utopia.genesis.util.Size
+import utopia.genesis.shape.shape2D.Size
+import utopia.genesis.shape.shape2D.Point
+import utopia.genesis.shape.shape2D.Bounds
+import utopia.genesis.shape.shape2D.Transformation
 
 /**
  * Vectors are used for representing motion, force and coordinates

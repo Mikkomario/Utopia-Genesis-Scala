@@ -1,11 +1,10 @@
-package utopia.genesis.util
+package utopia.genesis.shape.shape2D
 
 import utopia.genesis.util.Extensions._
 import java.awt.geom.Line2D
 import scala.collection.mutable.ListBuffer
 import utopia.flow.generic.ValueConvertible
 import utopia.flow.datastructure.immutable.Value
-import utopia.genesis.generic.LineType
 import utopia.flow.generic.ModelConvertible
 import utopia.flow.datastructure.immutable.Model
 import utopia.flow.generic.ValueConversions._
@@ -13,6 +12,10 @@ import utopia.flow.datastructure.template
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
+import scala.Vector
+import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.template.Projectable
+import utopia.genesis.generic.LineType
 
 object Line extends FromModelFactory[Line]
 {

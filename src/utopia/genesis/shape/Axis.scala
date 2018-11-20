@@ -1,4 +1,6 @@
-package utopia.genesis.util
+package utopia.genesis.shape
+
+import scala.Vector
 
 object Axis2D
 {

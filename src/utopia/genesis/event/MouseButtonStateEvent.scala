@@ -2,7 +2,7 @@ package utopia.genesis.event
 
 import utopia.genesis.event.MouseButton._
 import utopia.inception.util.Filter
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 
 object MouseButtonStateEvent
 {

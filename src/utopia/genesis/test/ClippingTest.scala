@@ -2,9 +2,9 @@ package utopia.genesis.test
 
 import utopia.genesis.event.Drawable
 import utopia.genesis.util.Drawer
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import java.awt.Color
-import utopia.genesis.util.Line
+import utopia.genesis.shape.shape2D.Line
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import utopia.genesis.view.CanvasMouseEventGenerator
@@ -12,10 +12,9 @@ import utopia.inception.handling.HandlerRelay
 import utopia.genesis.event.ActorThread
 import utopia.genesis.event.MouseMoveListener
 import utopia.genesis.event.MouseMoveEvent
-import utopia.genesis.util.ShapeConvertible
-import utopia.genesis.util.Circle
-import utopia.genesis.util.Bounds
+import utopia.genesis.shape.shape2D.Circle
 import utopia.genesis.util.DepthRange
+import utopia.genesis.shape.shape2D.ShapeConvertible
 
 /**
  * This test tests the drawer's clipping functionality
@@ -24,6 +23,7 @@ import utopia.genesis.util.DepthRange
  */
 object ClippingTest extends App
 {   
+    /* TODO: Return and fix code after refactoring is done
     class HiddenShapeDrawer(val shapes: Iterable[ShapeConvertible]) 
             extends Drawable with MouseMoveListener
     {
@@ -60,4 +60,5 @@ object ClippingTest extends App
     
     actorThread.start()
     frame.display()
+    * */
 }

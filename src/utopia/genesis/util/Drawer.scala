@@ -10,6 +10,9 @@ import java.awt.Stroke
 import java.awt.Shape
 import java.awt.Paint
 import java.awt.Font
+import utopia.genesis.shape.shape2D.ShapeConvertible
+import utopia.genesis.shape.shape2D.Bounds
+import utopia.genesis.shape.shape2D.Transformation
 
 object Drawer
 {

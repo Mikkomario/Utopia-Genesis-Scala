@@ -1,24 +1,24 @@
 package utopia.genesis.test
 
-import utopia.genesis.util.Circle
+import utopia.genesis.shape.shape2D.Circle
 import utopia.genesis.event.Drawable
 import utopia.genesis.util.Drawer
 import java.awt.Color
 import utopia.genesis.event.MouseMoveListener
 import utopia.genesis.event.MouseMoveEvent
 import utopia.genesis.event.ActorThread
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import utopia.genesis.view.CanvasMouseEventGenerator
 import utopia.inception.handling.HandlerRelay
-import utopia.genesis.util.Line
 import utopia.genesis.event.MouseButtonStateListener
 import utopia.genesis.event.MouseButtonStateEvent
 import utopia.genesis.event.MouseEvent
-import utopia.genesis.util.Transformation
 import utopia.genesis.event.MouseWheelListener
 import utopia.genesis.event.MouseWheelEvent
+import utopia.genesis.shape.shape2D.Transformation
+import utopia.genesis.shape.shape2D.Line
 
 /**
  * This is a visual test for mouse event features. In the test, the two lines should point to the
@@ -30,6 +30,7 @@ import utopia.genesis.event.MouseWheelEvent
  */
 object MouseTest extends App
 {
+    /* TODO: Return and fix code after refactoring is done
     class TestObject(position: Vector3D, radius: Double) extends Drawable with 
             MouseMoveListener with MouseButtonStateListener with MouseWheelListener
     {
@@ -97,5 +98,5 @@ object MouseTest extends App
     
     // Displays the frame
     frame.display()
-    actorThread.start()
+    actorThread.start()*/
 }

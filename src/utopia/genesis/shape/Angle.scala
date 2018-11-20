@@ -1,7 +1,9 @@
-package utopia.genesis.util
+package utopia.genesis.shape
 
 import utopia.flow.util.Equatable
 import utopia.genesis.util.Extensions._
+import scala.Vector
+import utopia.genesis.util.ApproximatelyEquatable
 
 // TODO: Also add class for rotation
 object Angle

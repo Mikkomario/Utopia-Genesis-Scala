@@ -1,9 +1,9 @@
 package utopia.genesis.test
 
 import utopia.genesis.generic.GenesisValue._
-import utopia.genesis.util.Vector3D
-import utopia.genesis.util.Line
-import utopia.genesis.util.Circle
+import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.shape2D.Line
+import utopia.genesis.shape.shape2D.Circle
 import utopia.genesis.generic.GenesisDataType
 import utopia.genesis.generic.GenesisValue
 import utopia.flow.generic.VectorType
@@ -12,9 +12,7 @@ import utopia.flow.generic.ModelType
 import utopia.genesis.generic.LineType
 import utopia.genesis.generic.CircleType
 import utopia.flow.datastructure.immutable.Model
-import utopia.genesis.util.Transformation
 import utopia.genesis.generic.TransformationType
-import utopia.genesis.util.Bounds
 import utopia.genesis.generic.BoundsType
 import utopia.flow.parse.JSONReader
 
@@ -25,6 +23,7 @@ import utopia.flow.parse.JSONReader
  */
 object DataTypeTest extends App
 {
+    /* TODO: Return and fix code after refactoring is done
     GenesisDataType.setup()
     
     val vector1 = Vector3D(1, 1, 1)
@@ -93,5 +92,5 @@ object DataTypeTest extends App
     assert(Bounds.fromJSON(r.boundsOr().toJSON) == r.bounds)
     assert(Transformation.fromJSON(t.transformationOr().toJSON) == t.transformation)
     
-    println("Success")
+    println("Success")*/
 }

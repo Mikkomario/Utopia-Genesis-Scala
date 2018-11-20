@@ -1,6 +1,10 @@
-package utopia.genesis.util
+package utopia.genesis.shape.template
 
 import utopia.genesis.util.Extensions._
+import utopia.genesis.shape.Axis
+import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.shape2D.Line
+import utopia.genesis.shape.shape2D.Point
 
 /**
  * This trait is extended by shapes that can be projected over a specified axis

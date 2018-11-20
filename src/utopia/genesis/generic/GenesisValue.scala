@@ -1,13 +1,13 @@
 package utopia.genesis.generic
 
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import utopia.flow.datastructure.immutable.Value
-import utopia.genesis.util.Line
-import utopia.genesis.util.Circle
-import utopia.genesis.util.Transformation
-import utopia.genesis.util.Bounds
-import utopia.genesis.util.Point
-import utopia.genesis.util.Size
+import utopia.genesis.shape.shape2D.Line
+import utopia.genesis.shape.shape2D.Circle
+import utopia.genesis.shape.shape2D.Size
+import utopia.genesis.shape.shape2D.Bounds
+import utopia.genesis.shape.shape2D.Transformation
+import utopia.genesis.shape.shape2D.Point
 
 object GenesisValue
 {

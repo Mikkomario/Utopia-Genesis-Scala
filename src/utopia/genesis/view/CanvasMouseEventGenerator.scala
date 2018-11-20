@@ -4,7 +4,7 @@ import java.awt.event.MouseListener
 import java.awt.event.MouseWheelListener
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionListener
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import utopia.genesis.event.MouseMoveEvent
 import utopia.genesis.event.MouseMoveHandler
 import utopia.genesis.event.Actor

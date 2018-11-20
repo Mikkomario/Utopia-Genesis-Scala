@@ -1,8 +1,9 @@
-package utopia.genesis.util
+package utopia.genesis.shape
+
+import utopia.flow.datastructure
 
 import java.awt.geom.Point2D
 import java.awt.Dimension
-
 import utopia.genesis.util.Extensions._
 import utopia.flow.generic.ValueConvertible
 import utopia.genesis.generic.Vector3DType
@@ -11,9 +12,12 @@ import utopia.flow.generic.ModelConvertible
 import utopia.flow.datastructure.immutable.Model
 import utopia.flow.generic.ValueConversions._
 import utopia.flow.generic.FromModelFactory
-import utopia.flow.datastructure.template
 import utopia.flow.datastructure.template.Property
 import scala.collection.immutable.HashMap
+import scala.Vector
+import utopia.genesis.util.ApproximatelyEquatable
+import utopia.genesis.shape.shape2D.Point
+import utopia.genesis.shape.shape2D.Size
 
 object Vector3D extends FromModelFactory[Vector3D]
 {
@@ -35,7 +39,7 @@ object Vector3D extends FromModelFactory[Vector3D]
     
     // OPERATORS    ---------------------
     
-    override def apply(model: template.Model[Property]) = Some(Vector3D(
+    override def apply(model: datastructure.template.Model[Property]) = Some(Vector3D(
             model("x").doubleOr(), model("y").doubleOr(), model("z").doubleOr()));
     
     

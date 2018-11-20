@@ -2,14 +2,14 @@ package utopia.genesis.test
 
 import utopia.genesis.event.Drawable
 import java.awt.Graphics2D
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import java.awt.Color
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import utopia.genesis.util.Drawer
-import utopia.genesis.util.Circle
-import utopia.genesis.util.ShapeConvertible
-import utopia.genesis.util.Bounds
+import utopia.genesis.shape.shape2D.Circle
+import utopia.genesis.shape.shape2D.ShapeConvertible
+import utopia.genesis.shape.shape2D.Bounds
 
 /**
  * This test tests the basic canvas drawing
@@ -18,6 +18,7 @@ import utopia.genesis.util.Bounds
  */
 object CanvasTest extends App
 {
+    /* TODO: Return and fix code after refactoring is done
     private class TestDrawable(val shape: ShapeConvertible, override val depth: Int) extends Drawable
     {
         override def draw(drawer: Drawer) = drawer.withColor(Some(Color.RED)).draw(shape)
@@ -32,5 +33,5 @@ object CanvasTest extends App
     canvas.handler += new TestDrawable(Bounds(gameWorldSize * 0.2, gameWorldSize * 0.6), 50)
     
     val frame = new MainFrame(canvas, gameWorldSize, "CanvastTest")
-    frame.display()
+    frame.display()*/
 }

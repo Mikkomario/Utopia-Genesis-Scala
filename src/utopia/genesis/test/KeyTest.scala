@@ -1,13 +1,13 @@
 package utopia.genesis.test
 
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import utopia.genesis.event.KeyStateListener
 import utopia.genesis.event.KeyStateEvent
 import java.awt.event.KeyEvent
 import utopia.genesis.event.Drawable
 import utopia.genesis.util.Drawer
-import utopia.genesis.util.Line
-import utopia.genesis.util.Bounds
+import utopia.genesis.shape.shape2D.Line
+import utopia.genesis.shape.shape2D.Bounds
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import utopia.genesis.view.WindowKeyEventGenerator
@@ -25,6 +25,7 @@ import utopia.genesis.event.KeyTypedEvent
  */
 object KeyTest extends App
 {
+    /* TODO: Return and fix code after refactoring is done
     class TestObject(startPosition: Vector3D) extends KeyStateListener
     {
         // ATTRIBUTES    -----------------
@@ -106,5 +107,5 @@ object KeyTest extends App
     
     handlers ++= (testObj, view, new KeyTypePrinter())
     
-    frame.display()
+    frame.display()*/
 }

@@ -1,7 +1,7 @@
 package utopia.genesis.test
 
 import utopia.genesis.view.MainFrame
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import javax.swing.JPanel
 
 object ViewTest extends App

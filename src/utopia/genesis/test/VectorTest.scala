@@ -1,10 +1,10 @@
 package utopia.genesis.test
 
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 
 import utopia.genesis.util.Extensions._
 import utopia.genesis.generic.GenesisDataType
-import utopia.genesis.util.Angle
+import utopia.genesis.shape.Angle
 
 object VectorTest extends App
 {

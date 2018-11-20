@@ -2,7 +2,7 @@ package utopia.genesis.view
 
 import javax.swing.JFrame
 import javax.swing.JPanel
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Toolkit

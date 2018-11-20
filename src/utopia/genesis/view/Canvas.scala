@@ -1,7 +1,7 @@
 package utopia.genesis.view
 
 import javax.swing.JPanel
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import utopia.genesis.view.ScalingPolicy.PROJECT
 import java.awt.Color
 import java.awt.Graphics
@@ -14,7 +14,7 @@ import utopia.genesis.event.DrawableHandler
 import utopia.genesis.util.Drawer
 import java.awt.event.HierarchyListener
 import java.awt.event.HierarchyEvent
-import utopia.genesis.util.Transformation
+import utopia.genesis.shape.shape2D.Transformation
 
 /**
  * A Game panel works like any Swing panel except it's able to draw drawable object contents with a

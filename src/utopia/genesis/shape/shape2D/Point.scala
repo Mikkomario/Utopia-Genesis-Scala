@@ -1,4 +1,4 @@
-package utopia.genesis.util
+package utopia.genesis.shape.shape2D
 
 import utopia.genesis.util.Extensions._
 import utopia.flow.generic.ValueConversions._
@@ -12,6 +12,12 @@ import utopia.flow.generic.ModelConvertible
 import utopia.flow.datastructure.immutable.Model
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
+import utopia.genesis.util.ApproximatelyEquatable
+import utopia.genesis.shape.Axis
+import utopia.genesis.shape.X
+import utopia.genesis.shape.Y
+import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.Axis2D
 
 object Point extends FromModelFactory[Point]
 {

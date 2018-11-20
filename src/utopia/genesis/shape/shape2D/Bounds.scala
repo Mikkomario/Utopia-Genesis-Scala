@@ -1,4 +1,4 @@
-package utopia.genesis.util
+package utopia.genesis.shape.shape2D
 
 import java.awt.geom.RoundRectangle2D
 import utopia.flow.generic.ValueConvertible
@@ -11,6 +11,11 @@ import utopia.flow.datastructure.template
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
+import scala.Vector
+import utopia.genesis.shape.template.Area
+import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.X
+import utopia.genesis.shape.Y
 
 object Bounds extends FromModelFactory[Bounds]
 {
