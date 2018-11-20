@@ -68,7 +68,7 @@ class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[An
     /**
      * This angle in degrees. between 0 and 360
      */
-    val toDegrees = toRadians.toDegrees
+    lazy val toDegrees = toRadians.toDegrees
     
     override def properties = Vector(toRadians)
     
