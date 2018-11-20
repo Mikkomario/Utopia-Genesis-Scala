@@ -14,7 +14,6 @@ import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
 import scala.Vector
 import utopia.genesis.shape.Vector3D
-import utopia.genesis.shape.template.Projectable
 import utopia.genesis.generic.LineType
 
 object Line extends FromModelFactory[Line]

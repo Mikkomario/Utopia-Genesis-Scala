@@ -1,7 +1,6 @@
 package utopia.genesis.shape.shape2D
 
 import utopia.genesis.util.Extensions._
-
 import java.awt.geom.Ellipse2D
 import utopia.flow.generic.ValueConvertible
 import utopia.genesis.generic.CircleType
@@ -15,7 +14,6 @@ import utopia.flow.datastructure.template
 import utopia.flow.datastructure.template.Property
 import scala.Vector
 import utopia.genesis.shape.template.Area
-import utopia.genesis.shape.template.Projectable
 import utopia.genesis.shape.Vector3D
 
 object Circle extends FromModelFactory[Circle]

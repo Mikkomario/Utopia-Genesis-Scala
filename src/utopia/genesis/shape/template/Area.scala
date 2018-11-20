@@ -7,7 +7,7 @@ import utopia.genesis.shape.Vector3D
  * @author Mikko Hilpinen
  * @since 19.2.2017
  */
-// TODO: Replace with 2D and 3D variations
+@deprecated("(Will be) replaced with separate 2D and 3D implementations", "v1.1.2")
 trait Area
 {
     /**
