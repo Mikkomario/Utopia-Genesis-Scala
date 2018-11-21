@@ -640,11 +640,19 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      * @param origin The point this vector is rotated around (defaults to zero)
      * @return The rotated vector
      */
-    def rotatedRads(rotationRads: Double, origin: Vector3D = Vector3D.zero) = 
+    def rotated(rotation: Rotation, origin: Vector3D = Vector3D.zero) = 
     {
         val separator = this - origin
-        origin + Vector3D.lenDir(separator.length, separator.direction + rotationRads).copy(z = z)
+        origin + Vector3D.lenDir(separator.length, separator.direction + rotation.toDouble).copy(z = z)
     }
+    
+    /**
+     * Rotates the vector around a certain origin point
+     * @rotationRads The amount of rotation in radians
+     * @param origin The point this vector is rotated around (defaults to zero)
+     * @return The rotated vector
+     */
+    def rotatedRads(rotationRads: Double, origin: Vector3D = Vector3D.zero) = rotated(Rotation ofRadians rotationRads)
     
     /**
      * Rotates the vector around a certain origin point
@@ -652,8 +660,7 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      * @param origin The point this vector is rotated around (default to zero)
      * @return The rotated vector
      */
-    def rotatedDegs(rotationDegs: Double, origin: Vector3D = Vector3D.zero) = 
-            rotatedRads(rotationDegs.toRadians, origin)
+    def rotatedDegs(rotationDegs: Double, origin: Vector3D = Vector3D.zero) = rotated(Rotation ofDegrees rotationDegs)
     
     /**
      * Transforms the coordinates of this vector and returns the transformed vector
@@ -661,6 +668,22 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      * @return A vector with the mapped coordinates
      */
     def map(f: Double => Double) = Vector3D(f(x), f(y), f(z))
+    
+    /**
+     * Transforms a coordinate of this vector and returns the transformed vector
+     * @param f The map function that maps a current coordinate into a new coordinate
+     * @param along the axis that specifies the mapped coordinate
+     * @return A vector with the mapped coordinate
+     */
+    def map(f: Double => Double, along: Axis) = 
+    {
+        along match 
+        {
+            case X => Vector3D(f(x), y, z)
+            case Y => Vector3D(x, f(y), z)
+            case Z => Vector3D(x, y, f(z))
+        }
+    }
     
     private def calculateDirection(x: Double, y: Double) = math.atan2(y, x)
     

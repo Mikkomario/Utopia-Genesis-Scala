@@ -14,6 +14,7 @@ import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
 import scala.Vector
 import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.Rotation
 
 object Transformation extends FromModelFactory[Transformation]
 {
@@ -28,8 +29,8 @@ object Transformation extends FromModelFactory[Transformation]
     // OPERATORS    -----------------
     
     override def apply(model: template.Model[Property]) = Some(Transformation(
-            model("position").vector3DOr(), model("scaling").vector3DOr(Vector3D.identity), 
-            model("rotation").doubleOr(), model("shear").vector3DOr()))
+            model("translation").vector3DOr(), model("scaling").vector3DOr(Vector3D.identity), 
+            Rotation(model("rotation").doubleOr()), model("shear").vector3DOr()))
     
     
     // OTHER METHODS    --------------
@@ -37,7 +38,7 @@ object Transformation extends FromModelFactory[Transformation]
     /**
      * This transformation moves the coordinates of the target by the provided amount
      */
-    def translation(amount: Vector3D) = Transformation(position = amount)
+    def translation(amount: Vector3D) = Transformation(translation = amount)
     
     /**
      * This transformation scales the target by the provided amount
@@ -51,16 +52,21 @@ object Transformation extends FromModelFactory[Transformation]
     def scaling(amount: Double) = Transformation(scaling = Vector3D(amount, amount, amount))
     
     /**
+     * This transformation rotates the target around the zero origin (z-axis) by the provided amount
+     */
+    def rotation(amount: Rotation) = Transformation(rotation = amount)
+    
+    /**
      * This transformation rotates the target around the zero origin by the provided amount of
      * radians. Rotation is made in clockwise direction.
      */
-    def rotationRads(amountRads: Double) = Transformation(rotationRads = amountRads)
+    def rotationRads(amountRads: Double) = rotation(Rotation ofRadians amountRads)
     
     /**
      * This transformation rotates the target around the zero origin by the provided amount of
      * degrees. Rotation is made in clockwise direction.
      */
-    def rotationDegs(amountDegs: Double) = rotationRads(amountDegs.toRadians)
+    def rotationDegs(amountDegs: Double) = rotation(Rotation ofDegrees amountDegs)
     
     /**
      * This transformation shears the target by the provided amount
@@ -75,8 +81,8 @@ object Transformation extends FromModelFactory[Transformation]
  * @since 29.12.2016
  */
 // TODO: Rename position to translation
-case class Transformation(val position: Vector3D = Vector3D.zero, 
-        val scaling: Vector3D = Vector3D.identity, val rotationRads: Double = 0, 
+case class Transformation(val translation: Vector3D = Vector3D.zero, 
+        val scaling: Vector3D = Vector3D.identity, val rotation: Rotation = Rotation.zero, 
         val shear: Vector3D = Vector3D.zero, val useReverseOrder: Boolean = false) extends 
         ValueConvertible with ModelConvertible
 {
@@ -84,8 +90,24 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     
     override def toValue = new Value(Some(this), TransformationType)
     
-    override def toModel = Model(Vector("position" -> position, "scaling" -> scaling, 
-            "rotation" -> rotationRads, "shear" -> shear));
+    // TODO: Handle rotation data type
+    override def toModel = Model(Vector("translation" -> translation, "scaling" -> scaling, 
+            "rotation" -> rotation.toDouble, "shear" -> shear));
+    
+    /**
+     * The translation component of this transformation as a point
+     */
+    def position = translation.toPoint
+    
+    /**
+     * The rotation component of this transformation as an angle
+     */
+    def angle = rotation.toAngle
+    
+    /**
+     * How much the target is rotated clockwise in radians
+     */
+    def rotationRads = rotation.toDouble
     
     /**
      * How much the target is rotated in degrees (clockwise)
@@ -106,11 +128,11 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
             t.shear(shear.x, shear.y)
             t.scale(scaling.x, scaling.y)
             t.rotate(rotationRads)
-            t.translate(position.x, position.y)
+            t.translate(translation.x, translation.y)
         }
         else
         {
-            t.translate(position.x, position.y)
+            t.translate(translation.x, translation.y)
             t.rotate(rotationRads)
             t.scale(scaling.x, scaling.y)
             t.shear(shear.x, shear.y)
@@ -133,14 +155,14 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
         }
         else
         {
-            Transformation(-position).toAffineTransform
+            Transformation(-translation).toAffineTransform
         }
     }
     
     /**
      * The translation component of this transformation
      */
-    def translationTransformation = Transformation.translation(position)
+    def translationTransformation = Transformation.translation(translation)
     
     /**
      * The scaling component of this transformation
@@ -148,9 +170,9 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def scalingTransformation = Transformation.scaling(scaling)
     
     /**
-     * The rotation component of this transformation (clockwise)
+     * The rotation component of this transformation
      */
-    def rotationTransformation = Transformation.rotationRads(rotationRads)
+    def rotationTransformation = Transformation.rotation(rotation)
     
     /**
      * The shear component of this transformation
@@ -163,7 +185,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     /**
      * Inverts this transformation
      */
-    def unary_- = Transformation(-position, Vector3D.identity / scaling, -rotationRads, -shear, 
+    def unary_- = Transformation(-translation, Vector3D.identity / scaling, -rotation, -shear, 
             !useReverseOrder);
     
     /**
@@ -171,10 +193,10 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * scaling or rotation of this transformation. If you want the results of applying first this
      * transformation and then the second, use apply(Transformation) instead.
      */
-    def +(other: Transformation) = Transformation(position + other.position, 
-            scaling * other.scaling, rotationRads + other.rotationRads, shear + other.shear, useReverseOrder);
+    def +(other: Transformation) = Transformation(translation + other.translation, 
+            scaling * other.scaling, rotation + other.rotation, shear + other.shear, useReverseOrder);
     
-    /**
+    /*
      * Negates a transformation from this transformation
      */
     // def -(other: Transformation) = this + (-other)
@@ -183,14 +205,20 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * Checks whether the two transformations are practically (approximately) identical with each
      * other
      */
-    def ~==(other: Transformation) = (position ~== other.position) && (scaling ~== other.scaling) && 
-            (rotationRads ~== other.rotationRads) && (shear ~== other.shear)
+    def ~==(other: Transformation) = (translation ~== other.translation) && (scaling ~== other.scaling) && 
+            (rotation ~== other.rotation) && (shear ~== other.shear)
     
     /**
      * Transforms a <b>relative</b> point <b>into an absolute</b> point
      * @param relative a relative point that will be transformed
      */
     def apply(relative: Point) = Point of toAffineTransform.transform(relative.toAwtPoint2D, null)
+    
+    /**
+     * Transforms a <b>relative</b> point <b>into an absolute</b> point
+     * @param relative a relative point that will be transformed
+     */
+    def apply(relative: Vector3D): Vector3D = apply(relative.toPoint).toVector
     
     /**
      * Transforms a shape <b>from relative space to absolute space</b>
@@ -205,8 +233,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * zero position and scaling of 2 will create a transformation with (2, 0, 0) position and
      * scaling 2
      */
-    def apply(other: Transformation): Transformation = (this + other).withPosition(apply(
-            other.position.toPoint));
+    def apply(other: Transformation): Transformation = (this + other).withTranslation(apply(other.translation));
     
     
     // OTHER METHODS    -------------
@@ -216,8 +243,14 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * @param absolute a vector in absolute world space
      * @return The absolute point in relative world space
      */
-    def invert(absolute: Point) = Point of toInvertedAffineTransform.transform(
-            absolute.toAwtPoint2D, null);
+    def invert(absolute: Point) = Point of toInvertedAffineTransform.transform(absolute.toAwtPoint2D, null);
+    
+    /**
+     * Inverse transforms an <b>absolute</b> coordinate point <b>into relative</b> space
+     * @param absolute a vector in absolute world space
+     * @return The absolute point in relative world space
+     */
+    def invert(absolute: Vector3D): Vector3D = invert(absolute.toPoint).toVector
     
     /**
      * Transforms a shape <b>from absolute space to relative space</b>
@@ -230,6 +263,11 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def toRelative(absolute: Point) = invert(absolute)
     
     /**
+     * Converts an absolute coordinate into a relative one. Same as calling invert(Vector3D)
+     */
+    def toRelative(absolute: Vector3D) = invert(absolute)
+    
+    /**
      * Converts an absolute shape to a relative one. Same as calling invert(...)
      */
     def toRelative[B](absolute: TransformableShape[B]) = invert(absolute)
@@ -240,9 +278,23 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def toAbsolute(relative: Point) = apply(relative)
     
     /**
+     * Converts a relative coordinate into an absolute one. Same as calling apply(Point)
+     */
+    def toAbsolute(relative: Vector3D) = apply(relative)
+    
+    /**
      * Converts a relative shape to an absolute one. Same as calling apply(...)
      */
     def toAbsolute[B](relative: TransformableShape[B]) = apply(relative)
+    
+    /**
+     * Rotates the transformation around an absolute origin point
+     * @param rotationRads the amount of rotation applied to this transformation
+     * @param origin the point of origin around which the transformation is rotated
+     * @return the rotated transformation
+     */
+    def absoluteRotated(rotation: Rotation, origin: Point) = 
+            withTranslation(translation.rotated(rotation, origin.toVector)).rotated(rotation);
     
     /**
      * Rotates the transformation around an absolute origin point
@@ -250,8 +302,26 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
-    def absoluteRotatedRads(rotationRads: Double, origin: Point) = 
-            withPosition(position.rotatedRads(rotationRads, origin.toVector).toPoint).rotatedRads(rotationRads);
+    @deprecated("Please start using absoluteRotated instead", "v1.1.2")
+    def absoluteRotatedRads(rotationRads: Double, origin: Point) = absoluteRotated(Rotation ofRadians rotationRads, origin)
+    
+    /**
+     * Rotates the transformation around an absolute origin point
+     * @param rotationRads the amount of degrees the transformation is rotated (clockwise)
+     * @param origin the point of origin around which the transformation is rotated
+     * @return the rotated transformation
+     */
+    @deprecated("Please start using absoluteRotated instead", "v1.1.2")
+    def absoluteRotatedDegs(rotationDegs: Double, origin: Point) = absoluteRotated(
+            Rotation ofDegrees rotationDegs, origin);
+    
+    /**
+     * Rotates the transformation around a relative origin point
+     * @param rotationRads the amount of rotation applied to this transformation
+     * @param origin the point of origin around which the transformation is rotated
+     * @return the rotated transformation
+     */
+    def relativeRotated(rotation: Rotation, origin: Point) = absoluteRotated(rotation, apply(origin))
     
     /**
      * Rotates the transformation around a relative origin point
@@ -259,17 +329,8 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
-    def relativeRotatedRads(rotationRads: Double, origin: Point) = absoluteRotatedRads(
-            rotationRads, apply(origin));
-    
-    /**
-     * Rotates the transformation around an absolute origin point
-     * @param rotationRads the amount of degrees the transformation is rotated (clockwise)
-     * @param origin the point of origin around which the transformation is rotated
-     * @return the rotated transformation
-     */
-    def absoluteRotatedDegs(rotationDegs: Double, origin: Point) = absoluteRotatedRads(
-            rotationDegs.toRadians, origin);
+    @deprecated("Please start using relativeRotated instead", "v1.1.2")
+    def relativeRotatedRads(rotationRads: Double, origin: Point) = relativeRotated(Rotation ofRadians rotationRads, origin)
     
     /**
      * Rotates the transformation around an relative origin point
@@ -277,13 +338,18 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
-    def relativeRotatedDegs(rotationDegs: Double, origin: Point) = relativeRotatedRads(
-            rotationDegs.toRadians, origin);
+    @deprecated("Please start using relativeRotated instead", "v1.1.2")
+    def relativeRotatedDegs(rotationDegs: Double, origin: Point) = relativeRotated(Rotation ofDegrees rotationDegs, origin)
+    
+    /**
+     * Copies this transformation, giving it a new translation vector
+     */
+    def withTranslation(translation: Vector3D) = copy(translation = translation)
     
     /**
      * Copies this transformation, giving it a new position
      */
-    def withPosition(position: Point) = copy(position = position.toVector)
+    def withPosition(position: Point) = withTranslation(position.toVector)
     
     /**
      * Copies this transformation, giving it a new scaling
@@ -296,14 +362,21 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def withScaling(scaling: Double): Transformation = withScaling(Vector3D(scaling, scaling, scaling))
     
     /**
-     * Copies this transformation, giving it a new rotation (clockwise)
+     * Copies this transformation, using a different rotation
      */
-    def withRotationRads(rotationRads: Double) = copy(rotationRads = rotationRads)
+    def withRotation(rotation: Rotation) = copy(rotation = rotation)
     
     /**
      * Copies this transformation, giving it a new rotation (clockwise)
      */
-    def withRotationDegs(rotationDegs: Double) = withRotationRads(rotationDegs.toRadians)
+    @deprecated("Please use withRotation instead", "v1.1.2")
+    def withRotationRads(rotationRads: Double) = withRotation(Rotation ofRadians rotationRads)
+    
+    /**
+     * Copies this transformation, giving it a new rotation (clockwise)
+     */
+    @deprecated("Please use withRotation instead", "v1.1.2")
+    def withRotationDegs(rotationDegs: Double) = withRotation(Rotation ofDegrees rotationDegs)
     
     /**
      * Copies this transformation, giving it a new shearing
@@ -313,8 +386,7 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     /**
      * Copies this transformation, changing the translation by the provided amount
      */
-    // TODO: Add withTranslation and use it in cases like these
-    def translated(translation: Vector3D) = withPosition(position.toPoint + translation)
+    def translated(translation: Vector3D) = withTranslation(this.translation + translation)
     
     /**
      * Copies this transformation, changing the scaling by the provided amount
@@ -327,14 +399,21 @@ case class Transformation(val position: Vector3D = Vector3D.zero,
     def scaled(scaling: Double) = withScaling(this.scaling * scaling)
     
     /**
-     * Copies this transformation, changing the rotation by the provided amount (clockwise)
+     * Copies this transformation, changing rotation by specified amount
      */
-    def rotatedRads(rotationRads: Double) = withRotationRads(this.rotationRads + rotationRads)
+    def rotated(rotation: Rotation) = withRotation(this.rotation + rotation)
     
     /**
      * Copies this transformation, changing the rotation by the provided amount (clockwise)
      */
-    def rotatedDegs(rotationDegs: Double) = rotatedRads(rotationDegs.toRadians)
+    @deprecated("Please use rotated instead", "v1.1.2")
+    def rotatedRads(rotationRads: Double) = rotated(Rotation ofRadians rotationRads)
+    
+    /**
+     * Copies this transformation, changing the rotation by the provided amount (clockwise)
+     */
+    @deprecated("Please use rotated instead", "v1.1.2")
+    def rotatedDegs(rotationDegs: Double) = rotated(Rotation ofDegrees rotationDegs)
     
     /**
      * Copies this transformation, changing the shearing by the provided amount
