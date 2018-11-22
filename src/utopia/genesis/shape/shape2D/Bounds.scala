@@ -60,8 +60,7 @@ object Bounds extends FromModelFactory[Bounds]
      * Creates a set of bounds that contains all of the provided bounds. Returns none if the provided 
      * collection is empty.
      */
-    // TODO: Add an optional version separately
-    def around(bounds: Traversable[Bounds]) =
+    def aroundOption(bounds: Traversable[Bounds]) = 
     {
         if (bounds.isEmpty)
             None
@@ -75,6 +74,11 @@ object Bounds extends FromModelFactory[Bounds]
     }
     
     /**
+     * Creates a bounds instance that contains all specified bounds. Will throw on empty collection
+     */
+    def around(bounds: Traversable[Bounds]) = aroundOption(bounds).get
+    
+    /**
      * Creates a rectangle around line so that the line becomes one of the rectangle's diagonals
      */
     def aroundDiagonal(diagonal: Line) = between(diagonal.start, diagonal.end)
@@ -86,9 +90,8 @@ object Bounds extends FromModelFactory[Bounds]
  * @author Mikko Hilpinen
  * @since 13.1.2017
  */
-// TODO: Separate into 2D and 3D shapes (rectangle and box)
 case class Bounds(val position: Point, val size: Size) extends ShapeConvertible with 
-        Area with ValueConvertible with ModelConvertible
+        Area2D with ValueConvertible with ModelConvertible
 {
     // COMPUTED PROPERTIES    ------------
     
@@ -162,11 +165,8 @@ case class Bounds(val position: Point, val size: Size) extends ShapeConvertible 
     
     // IMPLEMENTED METHODS    ----------
     
-    // TODO: FIX for 2D
-    override def contains(coordinate: Vector3D) = Vector3D.forall(coordinate, topLeft.toVector, { _ >= _ }) && 
-            Vector3D.forall(coordinate, bottomRight.toVector, { _ <= _ })
-    
-    override def contains2D(coordinate: Vector3D) = contains(coordinate.in2D)
+    override def contains(point: Point) = point.x >= topLeft.x && point.y >= topLeft.y && 
+            point.x <= bottomRight.x && point.y <= bottomRight.y;
     
     
     // OTHER METHODS    ----------------
@@ -182,11 +182,6 @@ case class Bounds(val position: Point, val size: Size) extends ShapeConvertible 
         val rounding = math.min(width, height) * roundingFactor
         new RoundRectangle2D.Double(position.x, position.y, width, height, rounding, rounding)
     }
-    
-    /**
-     * Checks whether the specified point is inside this rectangle
-     */
-    def contains(point: Point): Boolean = contains(point.toVector)
     
     /**
      * Checks whether the line completely lies within the rectangle bounds

@@ -27,8 +27,7 @@ object Circle extends FromModelFactory[Circle]
  * @author Mikko Hilpinen
  * @since 1.1.2017
  */
-// TODO: Separate into 2D and 3D shapes (circle and sphere)
-case class Circle(val origin: Point, radius: Double) extends ShapeConvertible with Area with 
+case class Circle(val origin: Point, radius: Double) extends ShapeConvertible with Area2D with 
         ValueConvertible with ModelConvertible with Projectable
 {
     // COMPUTED PROPERTIES    ---------
@@ -65,25 +64,16 @@ case class Circle(val origin: Point, radius: Double) extends ShapeConvertible wi
     
     // IMPLEMENTED METHODS    ---------
     
-    // TODO: Again, refactor for 2D and 3D shapes separately
-    override def contains(point: Vector3D) = (point - origin.toVector).length <= radius
-   
-    override def contains2D(point: Vector3D) = contains(point.in2D)
+    override def contains(point: Point) = (point - origin).length <= radius
     
     override def projectedOver(axis: Vector3D) =
     {
-        // TODO: Again, 2D and 3D separately
         val projectedOrigin = origin.toVector.projectedOver(axis).toPoint
         Line(projectedOrigin - axis.withLength(radius), projectedOrigin + axis.withLength(radius))
     }
     
     
     // OTHER METHODS    ---------------
-    
-    /**
-     * Checks whether this circle contains the specified point
-     */
-    def contains(point: Point): Boolean = contains(point.toVector)
     
     /**
      * Checks whether the sphere fully contains the provided line
