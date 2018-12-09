@@ -3,6 +3,7 @@ package utopia.genesis.event
 import utopia.genesis.event.MouseButton._
 import utopia.inception.util.Filter
 import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.shape2D.Point
 
 object MouseButtonStateEvent
 {
@@ -35,7 +36,7 @@ object MouseButtonStateEvent
  * @author Mikko Hilpinen
  * @since 17.2.2017
  */
-class MouseButtonStateEvent(val buttonIndex: Int, val isDown: Boolean, mousePosition: Vector3D, 
+class MouseButtonStateEvent(val buttonIndex: Int, val isDown: Boolean, mousePosition: Point, 
         buttonStatus: MouseButtonStatus) extends MouseEvent(mousePosition, buttonStatus)
 {
     // COMPUTED PROPERTIES    ------------

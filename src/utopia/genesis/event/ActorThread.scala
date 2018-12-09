@@ -42,6 +42,7 @@ class ActorThread(val minAPS: Int, val maxAPS: Int) extends Thread
         while (!ended)
         {
             val thisActNanos = System.nanoTime()
+            
             val nextActNanos = thisActNanos + WaitUtil.nanosOf(minIntervalMillis)
             
             val millisPassed = WaitUtil.millisOf(thisActNanos - lastActNanos) min maxIntervalMillis

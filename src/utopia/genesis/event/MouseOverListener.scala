@@ -1,6 +1,7 @@
 package utopia.genesis.event
 
 import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.shape2D.Point
 
 /**
  * This mouse event listener is interested to continually receive events while the mouse cursor is
@@ -11,7 +12,7 @@ trait MouseOverListener extends MouseMoveListener with Actor
 {
     // ATTRIBUTES    -----------
     
-    private var _mousePosition = Vector3D.zero
+    private var _mousePosition = Point.origin
     /**
      * The last mouse coordinates recorded by this listener
      */
@@ -31,7 +32,7 @@ trait MouseOverListener extends MouseMoveListener with Actor
      * 'over' this instance.
      * @position a position that is tested
      */
-    def contains(position: Vector3D): Boolean
+    def contains(position: Point): Boolean
     
     
     // IMPLEMENTED METHODS    -

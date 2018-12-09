@@ -6,6 +6,9 @@ import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.generic.GenesisValue
 import utopia.inception.util.Filter
 import utopia.genesis.shape.template.Area
+import utopia.genesis.shape.shape2D.Point
+import java.time.Duration
+import utopia.genesis.shape.shape2D.Area2D
 
 object MouseMoveEvent
 {
@@ -15,13 +18,13 @@ object MouseMoveEvent
      * Creates an event filter that only accepts mouse events originating from the mouse entering 
      * the specified area
      */
-    def enterAreaFilter(area: Area) = new Filter[MouseMoveEvent]({ _.enteredArea(area) });
+    def enterAreaFilter(area: Area2D) = new Filter[MouseMoveEvent]({ _.enteredArea(area) });
     
     /**
      * Creates an event filter that only accepts mouse events originating from the mouse exiting the
      * specified area
      */
-    def exitedAreaFilter(area: Area) = new Filter[MouseMoveEvent]({ _.exitedArea(area) });
+    def exitedAreaFilter(area: Area2D) = new Filter[MouseMoveEvent]({ _.exitedArea(area) });
     
     /**
      * Creates an event filter that only accepts events where the mouse cursor moved with enough
@@ -36,7 +39,7 @@ object MouseMoveEvent
  * @author Mikko Hilpinen
  * @since 10.1.2017
  */
-class MouseMoveEvent(mousePosition: Vector3D, val previousMousePosition: Vector3D, 
+class MouseMoveEvent(mousePosition: Point, val previousMousePosition: Point, 
         buttonStatus: MouseButtonStatus, val durationMillis: Double) extends MouseEvent(
         mousePosition, buttonStatus)
 {
@@ -52,21 +55,26 @@ class MouseMoveEvent(mousePosition: Vector3D, val previousMousePosition: Vector3
      */
     def velocity = transition / durationMillis
     
+    /**
+     * The duration of this event in duration format
+     */
+    def duration = Duration.ofNanos((durationMillis * 1000000).toLong)
+    
     
     // OTHER METHODS    -----------------
     
     /**
      * Checks whether the mouse position was previously over a specified area
      */
-    def wasOverArea(area: Area) = area.contains2D(previousMousePosition)
+    def wasOverArea(area: Area2D) = area.contains(previousMousePosition)
     
     /**
      * Checks whether the mouse cursor just entered a specified area
      */
-    def enteredArea(area: Area) = !wasOverArea(area) && isOverArea(area)
+    def enteredArea(area: Area2D) = !wasOverArea(area) && isOverArea(area)
     
     /**
      * Checks whether the mouse cursor just exited a specified area
      */
-    def exitedArea(area: Area) = wasOverArea(area) && !isOverArea(area)
+    def exitedArea(area: Area2D) = wasOverArea(area) && !isOverArea(area)
 }

@@ -4,6 +4,8 @@ import utopia.genesis.shape.Vector3D
 import utopia.genesis.shape.template.Area
 import utopia.inception.util.Filter
 import utopia.genesis.event.MouseButton._
+import utopia.genesis.shape.shape2D.Area2D
+import utopia.genesis.shape.shape2D.Point
 
 object MouseEvent
 {
@@ -25,7 +27,7 @@ object MouseEvent
     /**
      * This filter only accepts mouse events where the mouse cursor is over the specified area
      */
-    def isOverAreaFilter(area: Area) = new Filter[MouseEvent]({ _.isOverArea(area) })
+    def isOverAreaFilter(area: Area2D) = new Filter[MouseEvent]({ _.isOverArea(area) })
     
     /**
      * This filter only accepts events where a mouse button with the specified index has the
@@ -49,12 +51,12 @@ object MouseEvent
  * @author Mikko Hilpinen
  * @since 19.2.2017
  */
-class MouseEvent(val mousePosition: Vector3D, val buttonStatus: MouseButtonStatus)
+class MouseEvent(val mousePosition: Point, val buttonStatus: MouseButtonStatus)
 {
     // OTHER METHODS    -----------------
     
     /**
      * Checks whether the mouse cursor is currently over the specified area
      */
-    def isOverArea(area: Area) = area.contains2D(mousePosition)
+    def isOverArea(area: Area2D) = area.contains(mousePosition)
 }
