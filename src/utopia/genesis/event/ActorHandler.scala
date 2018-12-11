@@ -1,6 +1,7 @@
 package utopia.genesis.event
 
 import utopia.inception.handling.Handler
+import java.time.Duration
 
 /**
  * ActorHandlers are used for calling act method of numerous Actors in succession. The handler also
@@ -12,5 +13,5 @@ class ActorHandler extends Handler[Actor](ActorHandlerType) with Actor
 {
     // IMPLEMENTED METHODS    --------
     
-    def act(durationMillis: Double) = foreach(true, actor => { actor.act(durationMillis); true })
+    def act(duration: Duration) = foreach(true, actor => { actor.act(duration); true })
 }

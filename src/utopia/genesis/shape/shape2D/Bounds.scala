@@ -95,12 +95,16 @@ case class Bounds(val position: Point, val size: Size) extends ShapeConvertible 
 {
     // COMPUTED PROPERTIES    ------------
     
-    override def toShape = new java.awt.Rectangle(position.x.toInt, position.y.toInt, 
-            width.toInt, height.toInt);
+    override def toShape = toAwt
     
     override def toValue = new Value(Some(this), BoundsType)
     
     override def toModel = Model(Vector("position" -> position, "size" -> size))
+    
+    /**
+     * An awt counterpart of these bounds
+     */
+    def toAwt = new java.awt.Rectangle(position.x.toInt, position.y.toInt, width.toInt, height.toInt)
     
     /**
      * The width of the rectangle / cube

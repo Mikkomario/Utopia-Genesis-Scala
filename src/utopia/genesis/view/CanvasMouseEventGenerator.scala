@@ -16,6 +16,7 @@ import utopia.genesis.event.MouseButtonStatus
 import utopia.genesis.event.MouseWheelHandler
 import utopia.genesis.event.MouseWheelEvent
 import utopia.genesis.shape.shape2D.Point
+import java.time.Duration
 
 /**
  * This class listens to mouse status inside a canvas and generates new mouse events. This 
@@ -54,7 +55,7 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
     
     // IMPLEMENTED METHODS    --------
     
-    override def act(durationMillis: Double) = 
+    override def act(duration: Duration) = 
     {
         // Checks for mouse movement
         val mousePosition = (pointInPanel(Point of MouseInfo.getPointerInfo.getLocation, 
@@ -62,7 +63,7 @@ class CanvasMouseEventGenerator(val canvas: Canvas) extends Actor
         
         if (mousePosition != lastMousePosition)
         {
-            val event = new MouseMoveEvent(mousePosition, lastMousePosition, buttonStatus, durationMillis)
+            val event = new MouseMoveEvent(mousePosition, lastMousePosition, buttonStatus, duration)
             lastMousePosition = mousePosition
             moveHandler.onMouseMove(event)
         }

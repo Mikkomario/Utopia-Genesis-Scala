@@ -29,6 +29,11 @@ sealed trait Axis
      * An unit vector along this axis
      */
     def toUnitVector: Vector3D
+    
+    /**
+     * A vector along this axis with the specified length
+     */
+    def apply(length: Double) = toUnitVector * length
 }
 
 /**

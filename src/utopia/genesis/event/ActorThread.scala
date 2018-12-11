@@ -1,6 +1,12 @@
 package utopia.genesis.event
 
+import utopia.flow.util.TimeExtensions._
+
 import utopia.genesis.util.WaitUtil
+import java.time.Duration
+import java.time.Instant
+import utopia.flow.util.RichComparable
+import utopia.flow.util.WaitUtils
 
 /**
  * All actor related functions are called in a separate logic thread. This class offers a tool 
@@ -25,37 +31,36 @@ class ActorThread(val minAPS: Int, val maxAPS: Int) extends Thread
     /**
      * The minimum amount of milliseconds between each act method call
      */
-    private val minIntervalMillis = if (maxAPS <= 0.0) 0 else 1000.0 / maxAPS
+    private val minInterval = if (maxAPS > 0.0) Some(Duration.ofMillis((1000.0 / maxAPS).toLong)) else None
     
     /**
      * The maximum amount of milliseconds passed into the act method
      */
-    private val maxIntervalMillis = if (minAPS <= 0.0) Double.MaxValue else 1000.0 / minAPS
+    private val maxInterval = if (minAPS > 0.0) Some(Duration.ofMillis((1000.0 / minAPS).toLong)) else None
     
     
     // IMPLEMENTED METHODS    ---------------
     
     override def run()
     {
-        var lastActNanos = System.nanoTime()
+        var lastAct = Instant.now()
         
         while (!ended)
         {
-            val thisActNanos = System.nanoTime()
+            val thisAct = Instant.now()
+            val nextAct = minInterval.map(thisAct + _)
             
-            val nextActNanos = thisActNanos + WaitUtil.nanosOf(minIntervalMillis)
-            
-            val millisPassed = WaitUtil.millisOf(thisActNanos - lastActNanos) min maxIntervalMillis
-            lastActNanos = thisActNanos
+            val lastActDuration = maxInterval.map(RichComparable.min(thisAct - lastAct, _)).getOrElse(thisAct - lastAct)
+            lastAct = thisAct
             
             // Informs the instances in the handler
             if (handler.handlingState)
             {
-                handler.act(millisPassed)
+                handler.act(lastActDuration)
             }
             
             // Waits until the next act call
-            WaitUtil.waitUntil(nextActNanos, this)
+            nextAct.foreach(WaitUtils.waitUntil(_, this))
         }
     }
 }

@@ -1,5 +1,7 @@
 package utopia.genesis.view
 
+import utopia.flow.util.TimeExtensions._
+
 import javax.swing.JPanel
 import utopia.genesis.shape.Vector3D
 import utopia.genesis.view.ScalingPolicy.PROJECT
@@ -15,6 +17,10 @@ import utopia.genesis.util.Drawer
 import java.awt.event.HierarchyListener
 import java.awt.event.HierarchyEvent
 import utopia.genesis.shape.shape2D.Transformation
+import utopia.genesis.shape.shape2D.Size
+import java.time.Duration
+import java.time.Instant
+import utopia.flow.util.WaitUtils
 
 /**
  * A Game panel works like any Swing panel except it's able to draw drawable object contents with a
@@ -23,7 +29,7 @@ import utopia.genesis.shape.shape2D.Transformation
  * @author Mikko Hilpinen
  * @since 28.12.2016
  */
-class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60, 
+class Canvas(originalGameWorldSize: Size, val maxFPS: Int = 60, 
         val scalingPolicy: ScalingPolicy = PROJECT, var clearPrevious: Boolean = true) extends 
         JPanel(null) with HierarchyListener with ComponentListener
 {
@@ -39,7 +45,7 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
     
     private var _prefferedGameWorldSize = originalGameWorldSize
     def prefferedGameWorldSize = _prefferedGameWorldSize
-    def prefferedGameWorldSize_=(newSize: Vector3D) = 
+    def prefferedGameWorldSize_=(newSize: Size) = 
     {
         _prefferedGameWorldSize = newSize
         updateScaling()
@@ -61,7 +67,7 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
     
     // COMPUTED PROPERTIES    --------
     
-    private def refreshIntervalMillis = if (maxFPS <= 0) 0 else 1000.0 / maxFPS
+    private def refreshInterval = if (maxFPS > 0) Some(Duration.ofMillis((1000.0 / maxFPS).toLong)) else None
     
     
     // IMPLEMENTED METHODS    --------
@@ -128,27 +134,27 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
     
     def updateScaling()
     {
-        val size = Vector3D of getSize()
+        val size = Size of getSize()
         
         if (scalingPolicy == PROJECT)
         {
-            _gameWorldSize = prefferedGameWorldSize projectedOver size
+            _gameWorldSize = (prefferedGameWorldSize.toVector projectedOver size.toVector).toSize
         }
         else
         {
-            val prefferedXYRatio = prefferedGameWorldSize.x / prefferedGameWorldSize.y
-            val newXYRatio = size.x / size.y
+            val prefferedXYRatio = prefferedGameWorldSize.width / prefferedGameWorldSize.height
+            val newXYRatio = size.width / size.height
             
             val preserveX = if (scalingPolicy == CROP) prefferedXYRatio <= newXYRatio else 
                                                        prefferedXYRatio > newXYRatio;
             
             if (preserveX)
             {
-                _gameWorldSize = prefferedGameWorldSize * Vector3D(1, size.y / size.x, 1)
+                _gameWorldSize = prefferedGameWorldSize * Vector3D(1, size.height / size.width, 1)
             }
             else
             {
-                _gameWorldSize = prefferedGameWorldSize * Vector3D(size.x / size.y, 1, 1)
+                _gameWorldSize = prefferedGameWorldSize * Vector3D(size.width / size.height, 1, 1)
             }
         }
         
@@ -172,9 +178,9 @@ class Canvas(originalGameWorldSize: Vector3D, val maxFPS: Int = 60,
         {
             while (!ended)
             {
-                val nextDrawNanos = System.nanoTime() + WaitUtil.nanosOf(refreshIntervalMillis)
+                val nextDrawTime = refreshInterval.map(Instant.now() + _)
                 repaint()
-                WaitUtil.waitUntil(nextDrawNanos, this)
+                nextDrawTime.foreach(WaitUtils.waitUntil(_, this))
             }
         }
         

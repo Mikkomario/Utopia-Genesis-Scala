@@ -1,5 +1,7 @@
 package utopia.genesis.event
 
+import utopia.flow.util.TimeExtensions._
+
 import utopia.genesis.shape.Vector3D
 import utopia.flow.datastructure.immutable.Model
 import utopia.flow.datastructure.immutable.Value
@@ -40,7 +42,7 @@ object MouseMoveEvent
  * @since 10.1.2017
  */
 class MouseMoveEvent(mousePosition: Point, val previousMousePosition: Point, 
-        buttonStatus: MouseButtonStatus, val durationMillis: Double) extends MouseEvent(
+        buttonStatus: MouseButtonStatus, val duration: Duration) extends MouseEvent(
         mousePosition, buttonStatus)
 {
     // COMPUTED PROPERTIES    -----------
@@ -58,7 +60,7 @@ class MouseMoveEvent(mousePosition: Point, val previousMousePosition: Point,
     /**
      * The duration of this event in duration format
      */
-    def duration = Duration.ofNanos((durationMillis * 1000000).toLong)
+    def durationMillis = duration.toPreciseMillis
     
     
     // OTHER METHODS    -----------------

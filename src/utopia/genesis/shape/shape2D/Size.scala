@@ -16,6 +16,7 @@ import utopia.genesis.shape.Vector3D
 import utopia.genesis.shape.Axis2D
 import utopia.genesis.shape.X
 import utopia.genesis.shape.Y
+import java.awt.Insets
 
 object Size extends FromModelFactory[Size]
 {
@@ -30,7 +31,12 @@ object Size extends FromModelFactory[Size]
     /**
      * Converts an awt dimension into size
      */
-    def of(dimension: Dimension) = Size(dimension.width, dimension.height)    
+    def of(dimension: Dimension) = Size(dimension.width, dimension.height)
+    
+    /**
+     * Converts awt insets into a size
+     */
+    def of(insets: Insets) = Size(insets.left + insets.right, insets.top + insets.bottom)
 }
 
 /**
@@ -64,6 +70,51 @@ case class Size(width: Double, height: Double) extends ApproximatelyEquatable[Si
      * A non-negative version of this size
      */
     def positive = if (width >= 0 && height >= 0) this else Size(Math.max(width, 0), Math.max(height, 0))
+    
+    /**
+     * A increased version of this size
+     */
+    def +(vector: Vector3D) = (toVector + vector).toSize
+    
+    /**
+     * An increased version of this size
+     */
+    def +(other: Size): Size = this + other.toVector
+    
+    /**
+     * A decreased version of this size
+     */
+    def -(vector: Vector3D) = this + (-vector)
+    
+    /**
+     * A decreased version of this size
+     */
+    def -(other: Size): Size = this - other.toVector
+    
+    /**
+     * A multiplied version of this size
+     */
+    def *(vector: Vector3D) = (toVector * vector).toSize
+    
+    /**
+     * A multiplied version of this size
+     */
+    def *(modifier: Double) = Size(width * modifier, height * modifier)
+    
+    /**
+     * A divided version of this size
+     */
+    def /(vector: Vector3D) = (toVector / vector).toSize
+    
+    /**
+     * A divided version of this size
+     */
+    def /(modifier: Double) = Size(width / modifier, height / modifier)
+    
+    /**
+     * A scaling modifier from the second size to this size
+     */
+    def /(other: Size) = toVector / other.toVector
     
     def ~==[B <: Size](other: B) = (width ~== other.width) && (height ~== other.height)
     
