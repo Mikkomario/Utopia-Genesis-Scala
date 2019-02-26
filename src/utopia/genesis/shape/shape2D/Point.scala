@@ -80,9 +80,34 @@ object Point extends FromModelFactory[Point]
 case class Point(x: Double, y: Double) extends ApproximatelyEquatable[Point] with 
         ValueConvertible with ModelConvertible
 {
+    // IMPLEMENTED    -----------------
+    
     def toValue = new Value(Some(this), PointType)
     
     def toModel = Model.fromMap(HashMap("x" -> x, "y" -> y))
+    
+    def ~==[B <: Point](other: B) = (x ~== other.x) && (y ~== other.y)
+    
+    
+    // OPERATORS    -------------------
+    
+    /**
+	 * A translated position
+	 */
+	def +(vector: Vector3D) = Point(x + vector.x, y + vector.y)
+	
+	/**
+	 * A translated position
+	 */
+	def -(vector: Vector3D) = this.+(-vector)
+	
+	/**
+	 * A vector between these points
+	 */
+	def -(other: Point) = toVector - other.toVector
+    
+    
+    // OTHER    -----------------------
     
     /**
      * A map of this point's coordinates
@@ -104,23 +129,6 @@ case class Point(x: Double, y: Double) extends ApproximatelyEquatable[Point] wit
 	 */
 	def toAwtPoint2D = new Point2D.Double(x, y)
 	
-	def ~==[B <: Point](other: B) = (x ~== other.x) && (y ~== other.y)
-	
-	/**
-	 * A translated position
-	 */
-	def +(vector: Vector3D) = Point(x + vector.x, y + vector.y)
-	
-	/**
-	 * A translated position
-	 */
-	def -(vector: Vector3D) = this.+(-vector)
-	
-	/**
-	 * A vector between these points
-	 */
-	def -(other: Point) = toVector - other.toVector
-	
 	/**
 	 * Connects this point with another, forming a line
 	 */
@@ -137,4 +145,23 @@ case class Point(x: Double, y: Double) extends ApproximatelyEquatable[Point] wit
             case Y => y
         }
 	}
+    
+    /**
+     * A copy of this point with specified x
+     */
+    def withX(x: Double) = Point(x, y)
+    
+    /**
+     * A copy of this point with specified y
+     */
+    def withY(y: Double) = Point(x, y)
+    
+    /**
+     * A copy of this point with specified coordinate
+     */
+    def withCoordinate(c: Double, axis: Axis2D) = axis match 
+    {
+        case X => withX(c)
+        case Y => withY(c)
+    }
 }

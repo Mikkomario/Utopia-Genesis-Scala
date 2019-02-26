@@ -47,29 +47,14 @@ object Size extends FromModelFactory[Size]
 case class Size(width: Double, height: Double) extends ApproximatelyEquatable[Size] 
         with ValueConvertible with ModelConvertible
 {
-    /**
-     * The area of this size (width * height)
-     */
-    def area = width * height
+    // IMPLEMENTED    -----------------------
     
     def toValue = new Value(Some(this), SizeType)
     
     def toModel = Model.fromMap(HashMap("width" -> width, "height" -> height))
     
-    /**
-     * A vector representation of this size
-     */
-    def toVector = Vector3D(width, height)
     
-    /**
-     * An awt representation of this size
-     */
-	def toDimension = new Dimension(width.toInt, height.toInt)
-    
-    /**
-     * A non-negative version of this size
-     */
-    def positive = if (width >= 0 && height >= 0) this else Size(Math.max(width, 0), Math.max(height, 0))
+    // OPERATORS    -------------------------
     
     /**
      * A increased version of this size
@@ -118,6 +103,29 @@ case class Size(width: Double, height: Double) extends ApproximatelyEquatable[Si
     
     def ~==[B <: Size](other: B) = (width ~== other.width) && (height ~== other.height)
     
+    
+    // OTHER    -----------------------------
+    
+    /**
+     * The area of this size (width * height)
+     */
+    def area = width * height
+    
+    /**
+     * A vector representation of this size
+     */
+    def toVector = Vector3D(width, height)
+    
+    /**
+     * An awt representation of this size
+     */
+	def toDimension = new Dimension(width.toInt, height.toInt)
+    
+    /**
+     * A non-negative version of this size
+     */
+    def positive = if (width >= 0 && height >= 0) this else Size(Math.max(width, 0), Math.max(height, 0))
+    
     /**
      * The length of a side of this size along the specified axis
      */
@@ -128,5 +136,24 @@ case class Size(width: Double, height: Double) extends ApproximatelyEquatable[Si
             case X => width
             case Y => height
         }
+    }
+    
+    /**
+     * A copy of this size with specified width
+     */
+    def withWidth(w: Double) = Size(w, height)
+    
+    /**
+     * A copy of this size with specified height
+     */
+    def withHeight(h: Double) = Size(width, h)
+    
+    /**
+     * A copy of this size with specified length along the target axis
+     */
+    def withLength(l: Double, axis: Axis2D) = axis match 
+    {
+        case X => withWidth(l)
+        case Y => withHeight(l)
     }
 }
