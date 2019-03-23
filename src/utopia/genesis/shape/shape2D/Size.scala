@@ -129,14 +129,22 @@ case class Size(width: Double, height: Double) extends ApproximatelyEquatable[Si
     /**
      * The length of a side of this size along the specified axis
      */
-    def lengthAlong(axis: Axis2D) = 
+    @deprecated("Please use along(Axis2D) instead", "v1.1.2")
+    def lengthAlong(axis: Axis2D) = along(axis)
+    
+    /**
+     * The length of a side of this size along the specified axis
+     */
+    def along(axis: Axis2D) = axis match 
     {
-        axis match 
-        {
-            case X => width
-            case Y => height
-        }
+        case X => width
+        case Y => height
     }
+    
+    /**
+     * The length of a side of this size perpendicular to the specified axis
+     */
+    def perpendicularTo(axis: Axis2D) = along(axis.perpendicular)
     
     /**
      * A copy of this size with specified width
