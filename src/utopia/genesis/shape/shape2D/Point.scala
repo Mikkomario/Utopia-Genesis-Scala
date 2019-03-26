@@ -80,6 +80,14 @@ object Point extends FromModelFactory[Point]
 case class Point(x: Double, y: Double) extends ApproximatelyEquatable[Point] with 
         ValueConvertible with ModelConvertible
 {
+    // COMPUTED    --------------------
+    
+    /**
+     * A copy of this point with at least 0 x and y
+     */
+    def positive = Point(x max 0, y max 0)
+    
+    
     // IMPLEMENTED    -----------------
     
     def toValue = new Value(Some(this), PointType)
@@ -91,10 +99,21 @@ case class Point(x: Double, y: Double) extends ApproximatelyEquatable[Point] wit
     
     // OPERATORS    -------------------
     
+    def unary_- = Point(-x, -y)
+    
     /**
 	 * A translated position
 	 */
 	def +(vector: Vector3D) = Point(x + vector.x, y + vector.y)
+	
+	/**
+	 * Translated position over certain axis
+	 */
+	def +(increase: Double, axis: Axis2D) = axis match 
+	{
+        case X => plusX(increase)
+        case Y => plusY(increase)
+    }
 	
 	/**
 	 * A translated position
@@ -105,6 +124,11 @@ case class Point(x: Double, y: Double) extends ApproximatelyEquatable[Point] wit
 	 * A vector between these points
 	 */
 	def -(other: Point) = toVector - other.toVector
+	
+	/**
+	 * Translated position over certain axis
+	 */
+	def -(decrease: Double, axis: Axis2D) = this.+(-decrease, axis)
     
     
     // OTHER    -----------------------
@@ -164,4 +188,24 @@ case class Point(x: Double, y: Double) extends ApproximatelyEquatable[Point] wit
         case X => withX(c)
         case Y => withY(c)
     }
+    
+    /**
+     * Point translated over X axis
+     */
+    def plusX(increase: Double) = Point(x + increase, y)
+    
+    /**
+     * Point translated over Y axis
+     */
+    def plusY(increase: Double) = Point(x, y + increase)
+    
+    /**
+     * The top left corner of the area between these two points
+     */
+    def topLeft(other: Point) = Point(x min other.x, y min other.y)
+    
+    /**
+     * The bottom left corner of the area between these two points
+     */
+    def bottomRight(other: Point) = Point(x max other.x, y max other.y)
 }

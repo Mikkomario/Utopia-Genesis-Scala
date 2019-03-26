@@ -424,6 +424,11 @@ case class Vector3D(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.
      */
     def normal2D = Vector3D(-y, x).toUnit
     
+    /**
+     * A version of this vector where all values are at least 0
+     */
+    def positive = Vector3D(x max 0, y max 0, z max 0)
+    
     
     // OPERATORS    --------------------
     

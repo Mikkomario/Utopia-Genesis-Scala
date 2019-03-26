@@ -47,6 +47,29 @@ object Size extends FromModelFactory[Size]
 case class Size(width: Double, height: Double) extends ApproximatelyEquatable[Size] 
         with ValueConvertible with ModelConvertible
 {
+    // COMPUTED    --------------------------
+    
+    /**
+     * A copy of this size with at least 0 widht and height
+     */
+    def positive = Size(width max 0, height max 0)
+    
+    /**
+     * The area of this size (width * height)
+     */
+    def area = width * height
+    
+    /**
+     * A vector representation of this size
+     */
+    def toVector = Vector3D(width, height)
+    
+    /**
+     * An awt representation of this size
+     */
+	def toDimension = new Dimension(width.toInt, height.toInt)
+    
+    
     // IMPLEMENTED    -----------------------
     
     def toValue = new Value(Some(this), SizeType)
@@ -55,6 +78,8 @@ case class Size(width: Double, height: Double) extends ApproximatelyEquatable[Si
     
     
     // OPERATORS    -------------------------
+    
+    def unary_- = Size(-width, -height)
     
     /**
      * A increased version of this size
@@ -105,26 +130,6 @@ case class Size(width: Double, height: Double) extends ApproximatelyEquatable[Si
     
     
     // OTHER    -----------------------------
-    
-    /**
-     * The area of this size (width * height)
-     */
-    def area = width * height
-    
-    /**
-     * A vector representation of this size
-     */
-    def toVector = Vector3D(width, height)
-    
-    /**
-     * An awt representation of this size
-     */
-	def toDimension = new Dimension(width.toInt, height.toInt)
-    
-    /**
-     * A non-negative version of this size
-     */
-    def positive = if (width >= 0 && height >= 0) this else Size(Math.max(width, 0), Math.max(height, 0))
     
     /**
      * The length of a side of this size along the specified axis
