@@ -24,9 +24,19 @@ object KeyStatus
  * @author Mikko Hilpinen
  * @since 21.2.2017
  */
-class KeyStatus private(private val status: Map[Int, Vector[KeyLocation]])
+case class KeyStatus private(private val status: Map[Int, Vector[KeyLocation]])
 {
     // COMPUTED PROPERTIES    -------
+    
+    /**
+      * @return Whether this key status has all keys in a released state
+      */
+    def isEmpty = status.isEmpty
+    
+    /**
+      * @return The keys that are currently pressed in any location
+      */
+    def keysDown = status.keySet
     
     /**
      * Whether the left arrow key is down
@@ -171,4 +181,21 @@ class KeyStatus private(private val status: Map[Int, Vector[KeyLocation]])
       * @return A copy of this key status with specified key released / up
       */
     def withKeyReleased(index: Int, location: KeyLocation = KeyLocation.Standard) = withStatus(index, location, false)
+    
+    /**
+      * @param previous Previous key status
+      * @return A key status that only contains keys that were pressed down since the last status
+      */
+    def keyPressesSince(previous: KeyStatus) =
+    {
+        val newStatus = status.map { case (index, locations) => index -> locations.filterNot { previous(index, _) } }
+            .filterNot { _._2.isEmpty }
+        new KeyStatus(newStatus)
+    }
+    
+    /**
+      * @param previous The previous key status
+      * @return A map of key index -> key locations of the keys that were released since the last status
+      */
+    def keyReleasesSince(previous: KeyStatus) = previous.keyPressesSince(this).status
 }

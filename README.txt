@@ -29,3 +29,5 @@ ActorThread replaced with ActorLoop
 WaitUtil removed (was already deprecated)
 
 KeyStatus class refactored. The constructor is now private.
+
+KeyStateEvent filter methods renamed

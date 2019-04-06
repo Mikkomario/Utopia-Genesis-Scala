@@ -1,7 +1,6 @@
 package utopia.genesis.test
 
 import utopia.genesis.shape.Vector3D
-import utopia.genesis.event.KeyStateListener
 import utopia.genesis.event.KeyStateEvent
 import java.awt.event.KeyEvent
 
@@ -16,7 +15,7 @@ import java.awt.Color
 
 import utopia.genesis.event.KeyTypedListener
 import utopia.genesis.event.KeyTypedEvent
-import utopia.genesis.handling.Drawable
+import utopia.genesis.handling.{Drawable, KeyStateListener}
 
 /**
  * This is an interactive test for keyboard interactions. The square character should move according

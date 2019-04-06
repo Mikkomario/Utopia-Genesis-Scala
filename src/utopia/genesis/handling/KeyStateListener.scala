@@ -1,8 +1,8 @@
-package utopia.genesis.event
+package utopia.genesis.handling
 
-import utopia.inception.util.Filter
-import utopia.inception.util.AnyFilter
+import utopia.genesis.event.KeyStateEvent
 import utopia.inception.handling.Handleable
+import utopia.inception.util.{AnyFilter, Filter}
 
 /**
  * These listeners are interested in receiving events whenever the keyboard state changes
