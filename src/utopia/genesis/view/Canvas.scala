@@ -14,7 +14,7 @@ import utopia.genesis.shape.shape2D.Transformation
 import utopia.genesis.shape.shape2D.Size
 import utopia.genesis.handling.DrawableHandler
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
  * A Canvas works like any Swing panel except it's able to draw drawable object contents with a
@@ -110,7 +110,7 @@ class Canvas(val drawHandler: DrawableHandler, originalGameWorldSize: Size, val 
       * @param maxFPS The maximum frames (draws) per second
       * @param context Asynchronous execution context
       */
-    def startAutoRefresh(maxFPS: Int)(implicit context: ExecutionContext) =
+    def startAutoRefresh(maxFPS: Int = 60)(implicit context: ExecutionContext) =
     {
         if (refreshLoop.isEmpty)
         {
@@ -123,7 +123,7 @@ class Canvas(val drawHandler: DrawableHandler, originalGameWorldSize: Size, val 
     /**
       * Stops any automatic refresh on this canvas
       */
-    def stopAutoRefresh() = refreshLoop.foreach { _.stop() }
+    def stopAutoRefresh() = refreshLoop.map { _.stop() } getOrElse Future.successful(Unit)
     
     private def updateScaling()
     {

@@ -57,6 +57,6 @@ trait Camera[H <: DrawableHandler]
     // OTHER METHODS    -------------------
     
     // Transforms and clips the drawer
-    private def customDrawer(drawer: Drawer) = drawer.transformed(projectionTransformation).clippedTo(
-                projectionArea).transformed(-viewTransformation)
+    private def customDrawer(drawer: Drawer) = drawer.transformed(projectionTransformation)
+        .clippedTo(projectionArea).transformed(-viewTransformation)
 }

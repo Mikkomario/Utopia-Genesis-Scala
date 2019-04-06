@@ -27,7 +27,7 @@ object Circle extends FromModelFactory[Circle]
  * @author Mikko Hilpinen
  * @since 1.1.2017
  */
-case class Circle(val origin: Point, radius: Double) extends ShapeConvertible with Area2D with 
+case class Circle(origin: Point, radius: Double) extends ShapeConvertible with Area2D with
         ValueConvertible with ModelConvertible with Projectable
 {
     // COMPUTED PROPERTIES    ---------

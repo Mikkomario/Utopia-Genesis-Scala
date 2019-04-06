@@ -65,6 +65,11 @@ case class Size(width: Double, height: Double) extends ApproximatelyEquatable[Si
     def toVector = Vector3D(width, height)
     
     /**
+      * A point representation of this size
+      */
+    def toPoint = Point(width, height)
+    
+    /**
      * An awt representation of this size
      */
 	def toDimension = new Dimension(width.toInt, height.toInt)

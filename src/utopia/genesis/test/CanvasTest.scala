@@ -1,17 +1,19 @@
 package utopia.genesis.test
 
-import java.awt.Graphics2D
-
-import utopia.genesis.shape.Vector3D
 import java.awt.Color
 
+import utopia.flow.async.AsyncExtensions._
+
+import utopia.flow.async.ThreadPool
 import utopia.genesis.handling.Drawable
+import utopia.genesis.handling.immutable.DrawableHandler
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import utopia.genesis.util.Drawer
-import utopia.genesis.shape.shape2D.Circle
-import utopia.genesis.shape.shape2D.ShapeConvertible
-import utopia.genesis.shape.shape2D.Bounds
+import utopia.genesis.shape.shape2D.{Bounds, Circle, Point, ShapeConvertible, Size}
+import utopia.inception.handling.HandlerType
+
+import scala.concurrent.ExecutionContext
 
 /**
  * This test tests the basic canvas drawing
@@ -20,20 +22,37 @@ import utopia.genesis.shape.shape2D.Bounds
  */
 object CanvasTest extends App
 {
-    /* TODO: Return and fix code after refactoring is done
-    private class TestDrawable(val shape: ShapeConvertible, override val depth: Int) extends Drawable
+    private class TestDrawable(val shape: ShapeConvertible, override val drawDepth: Int) extends Drawable
     {
-        override def draw(drawer: Drawer) = drawer.withColor(Some(Color.RED)).draw(shape)
+		override def parent = None
+	
+		override def allowsHandlingFrom(handlerType: HandlerType) = true
+	
+		override def draw(drawer: Drawer) = drawer.withEdgeColor(Color.RED).draw(shape)
     }
-    
-    val gameWorldSize = Vector3D(800, 600)
-    val canvas = new Canvas(gameWorldSize)
-    
-    canvas.handler += new TestDrawable(Circle(gameWorldSize / 2, 96), 0)
-    canvas.handler += new TestDrawable(Circle(gameWorldSize / 2, 16), -100)
-    canvas.handler += new TestDrawable(Circle(Vector3D.zero, gameWorldSize.x), 100)
-    canvas.handler += new TestDrawable(Bounds(gameWorldSize * 0.2, gameWorldSize * 0.6), 50)
-    
-    val frame = new MainFrame(canvas, gameWorldSize, "CanvastTest")
-    frame.display()*/
+	
+	val gameWorldSize = Size(800, 600)
+	
+    private val drawables = Vector(new TestDrawable(Circle((gameWorldSize / 2).toPoint, 96), 0),
+		new TestDrawable(Circle((gameWorldSize / 2).toPoint, 96), 0),
+		new TestDrawable(Circle((gameWorldSize / 2).toPoint, 16), -100),
+		new TestDrawable(Circle(Point.origin, gameWorldSize.width), 100),
+		new TestDrawable(Bounds((gameWorldSize * 0.2).toPoint, gameWorldSize * 0.6), 50)
+	)
+	
+	val handler = DrawableHandler(drawables)
+	
+	val canvas = new Canvas(handler, gameWorldSize)
+	val frame = new MainFrame(canvas, gameWorldSize, "CanvastTest")
+	
+	implicit val context: ExecutionContext = new ThreadPool("Test").executionContext
+	
+	canvas.startAutoRefresh()
+    frame.display()
+	
+	println("Frame closing")
+	
+	canvas.stopAutoRefresh().waitFor()
+	
+	println("Closed succesfully")
 }
