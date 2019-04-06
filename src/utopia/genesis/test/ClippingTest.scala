@@ -1,9 +1,9 @@
 package utopia.genesis.test
 
-import utopia.genesis.event.Drawable
 import utopia.genesis.util.Drawer
 import utopia.genesis.shape.Vector3D
 import java.awt.Color
+
 import utopia.genesis.shape.shape2D.Line
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
@@ -12,6 +12,7 @@ import utopia.inception.handling.HandlerRelay
 import utopia.genesis.event.ActorThread
 import utopia.genesis.event.MouseMoveListener
 import utopia.genesis.event.MouseMoveEvent
+import utopia.genesis.handling.Drawable
 import utopia.genesis.shape.shape2D.Circle
 import utopia.genesis.util.DepthRange
 import utopia.genesis.shape.shape2D.ShapeConvertible

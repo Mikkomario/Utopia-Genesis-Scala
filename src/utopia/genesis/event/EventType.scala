@@ -8,6 +8,7 @@ import utopia.flow.util.Equatable
  * @author Mikko Hilpinen
  * @since 10.1.2017
  */
+// TODO: Consider removing this trait?
 trait EventType extends Equatable
 {
     def rawValue: Int

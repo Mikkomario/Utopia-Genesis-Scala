@@ -1,9 +1,9 @@
 package utopia.genesis.test
 
 import utopia.genesis.shape.shape2D.Circle
-import utopia.genesis.event.Drawable
 import utopia.genesis.util.Drawer
 import java.awt.Color
+
 import utopia.genesis.event.MouseMoveListener
 import utopia.genesis.event.MouseMoveEvent
 import utopia.genesis.event.ActorThread
@@ -17,6 +17,7 @@ import utopia.genesis.event.MouseButtonStateEvent
 import utopia.genesis.event.MouseEvent
 import utopia.genesis.event.MouseWheelListener
 import utopia.genesis.event.MouseWheelEvent
+import utopia.genesis.handling.Drawable
 import utopia.genesis.shape.shape2D.Transformation
 import utopia.genesis.shape.shape2D.Line
 

@@ -1,12 +1,8 @@
 package utopia.genesis.test
 
-import utopia.flow.util.TimeExtensions._
-
-import utopia.genesis.event.Actor
 import utopia.genesis.event.ActorThread
-import utopia.genesis.event.ActorHandlerType
-import java.time.Duration
-import utopia.flow.util.WaitUtils
+import utopia.genesis.handling.{Actor, ActorHandlerType}
+import utopia.genesis.util.WaitUtil
 
 object ActorTest extends App
 {
@@ -14,7 +10,7 @@ object ActorTest extends App
     {
         var millisCounted = 0.0
         
-        override def act(duration: Duration) = millisCounted += duration.toPreciseMillis
+        override def act(durationMillis: Double) = millisCounted += durationMillis
     }
     
     val actor1 = new TestActor()
@@ -27,7 +23,7 @@ object ActorTest extends App
     assert(actor2.millisCounted == 0)
     
     thread.start()
-    WaitUtils.wait(Duration.ofSeconds(1), this)
+    WaitUtil.waitMillis(1000, this)
     
     actor2.specifyHandlingState(ActorHandlerType, false)
     
@@ -39,7 +35,7 @@ object ActorTest extends App
     assert(millis2 > 500)
     assert(millis2 < 1500)
     
-    WaitUtils.wait(Duration.ofSeconds(1), this)
+    WaitUtil.waitMillis(1000, this)
     
     assert(actor1.millisCounted > millis1 + 500)
     assert(actor2.millisCounted < millis2 + 500)

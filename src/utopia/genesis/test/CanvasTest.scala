@@ -1,9 +1,11 @@
 package utopia.genesis.test
 
-import utopia.genesis.event.Drawable
 import java.awt.Graphics2D
+
 import utopia.genesis.shape.Vector3D
 import java.awt.Color
+
+import utopia.genesis.handling.Drawable
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import utopia.genesis.util.Drawer

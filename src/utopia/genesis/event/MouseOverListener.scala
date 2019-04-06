@@ -4,6 +4,8 @@ import utopia.genesis.shape.Vector3D
 import utopia.genesis.shape.shape2D.Point
 import java.time.Duration
 
+import utopia.genesis.handling.Actor
+
 /**
  * This mouse event listener is interested to continually receive events while the mouse cursor is
  * hovering over the instance. In order to work, the listener needs to receive both mouse movement

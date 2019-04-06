@@ -4,12 +4,13 @@ import java.awt.event.MouseListener
 import java.awt.event.MouseWheelListener
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionListener
+
 import utopia.genesis.shape.Vector3D
 import utopia.genesis.event.MouseMoveEvent
 import utopia.genesis.event.MouseMoveHandler
-import utopia.genesis.event.Actor
 import java.awt.Container
 import java.awt.MouseInfo
+
 import utopia.genesis.event.MouseButtonStateHandler
 import utopia.genesis.event.MouseButtonStateEvent
 import utopia.genesis.event.MouseButtonStatus
@@ -17,6 +18,8 @@ import utopia.genesis.event.MouseWheelHandler
 import utopia.genesis.event.MouseWheelEvent
 import utopia.genesis.shape.shape2D.Point
 import java.time.Duration
+
+import utopia.genesis.handling.Actor
 
 /**
  * This class listens to mouse status inside a canvas and generates new mouse events. This 

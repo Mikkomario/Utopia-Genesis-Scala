@@ -4,7 +4,7 @@ import utopia.genesis.shape.Vector3D
 import utopia.genesis.event.KeyStateListener
 import utopia.genesis.event.KeyStateEvent
 import java.awt.event.KeyEvent
-import utopia.genesis.event.Drawable
+
 import utopia.genesis.util.Drawer
 import utopia.genesis.shape.shape2D.Line
 import utopia.genesis.shape.shape2D.Bounds
@@ -13,8 +13,10 @@ import utopia.genesis.view.MainFrame
 import utopia.genesis.view.WindowKeyEventGenerator
 import utopia.inception.handling.HandlerRelay
 import java.awt.Color
+
 import utopia.genesis.event.KeyTypedListener
 import utopia.genesis.event.KeyTypedEvent
+import utopia.genesis.handling.Drawable
 
 /**
  * This is an interactive test for keyboard interactions. The square character should move according
