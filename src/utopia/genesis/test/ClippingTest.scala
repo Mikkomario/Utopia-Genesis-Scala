@@ -8,8 +8,6 @@ import utopia.genesis.shape.shape2D.Line
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import utopia.genesis.view.CanvasMouseEventGenerator
-import utopia.inception.handling.HandlerRelay
-import utopia.genesis.event.ActorThread
 import utopia.genesis.event.MouseMoveEvent
 import utopia.genesis.handling.{Drawable, MouseMoveListener}
 import utopia.genesis.shape.shape2D.Circle

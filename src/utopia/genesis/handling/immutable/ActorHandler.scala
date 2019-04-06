@@ -21,10 +21,9 @@ object ActorHandler
 	
 	/**
 	  * @param actor A single actor
-	  * @param parent Parent handleable (default = None)
 	  * @return A new Handler containing specified 'actor', dependent from 'parent'
 	  */
-	def apply(actor: Actor, parent: Option[Handleable] = None) = new ActorHandler(Vector(actor), parent)
+	def apply(actor: Actor) = new ActorHandler(Vector(actor), None)
 	
 	/**
 	  * @return A new handler with all specified actors

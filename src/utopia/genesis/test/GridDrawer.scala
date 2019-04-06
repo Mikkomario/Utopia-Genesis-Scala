@@ -1,18 +1,19 @@
 package utopia.genesis.test
 
-import utopia.genesis.shape.Vector3D
-import utopia.genesis.util.Drawer
 import java.awt.Color
 
+import utopia.genesis.shape.Vector3D
+import utopia.genesis.util.Drawer
 import utopia.genesis.handling.Drawable
-import utopia.genesis.shape.shape2D.Line
+import utopia.genesis.shape.shape2D.{Line, Size}
+import utopia.inception.handling.mutable.Handleable
 
 /**
  * This object simply draws a gird to the center of the game world
  * @author Mikko Hilpinen
  * @since 25.2.2017
  */
-class GridDrawer(worldSize: Vector3D, val squareSize: Vector3D) extends Drawable
+class GridDrawer(worldSize: Size, val squareSize: Size) extends Drawable with Handleable
 {
     // ATTRIBUTES    -----------------
     
@@ -23,7 +24,7 @@ class GridDrawer(worldSize: Vector3D, val squareSize: Vector3D) extends Drawable
     /**
      * The size of the grid
      */
-    private val size = squareAmounts * squareSize
+    private val size =  squareSize * squareAmounts
     /**
      * The position of the top left corner of the grid
      */
@@ -34,17 +35,18 @@ class GridDrawer(worldSize: Vector3D, val squareSize: Vector3D) extends Drawable
     
     def draw(drawer: Drawer) = 
     {
-        /* TODO: Return and fix code after refactoring is done
-        val copy = drawer.withEdgeColor(Some(Color.LIGHT_GRAY))
-        
-        for (x <- 0 to squareAmounts.x.toInt)
+        drawer.withEdgeColor(Some(Color.LIGHT_GRAY)).disposeAfter
         {
-            copy.draw(Line.ofVector(squarePosition(x, 0), size.yProjection))
+            d =>
+                for (x <- 0 to squareAmounts.x.toInt)
+                {
+                    d.draw(Line.ofVector(squarePosition(x, 0).toVector.toPoint, size.toVector.yProjection))
+                }
+                for (y <- 0 to squareAmounts.y.toInt)
+                {
+                    d.draw(Line.ofVector(squarePosition(0, y).toVector.toPoint, size.toVector.xProjection))
+                }
         }
-        for (y <- 0 to squareAmounts.y.toInt)
-        {
-            copy.draw(Line.ofVector(squarePosition(0, y), size.xProjection))
-        }*/
     }
     
     

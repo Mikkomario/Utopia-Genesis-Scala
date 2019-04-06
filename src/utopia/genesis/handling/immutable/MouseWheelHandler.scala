@@ -21,10 +21,9 @@ object MouseWheelHandler
 	
 	/**
 	  * @param element an element for this handler
-	  * @param parent Handleable this handler is dependent from (default = None = independent)
 	  * @return A new handler
 	  */
-	def apply(element: MouseWheelListener, parent: Option[Handleable] = None) = new MouseWheelHandler(Vector(element), parent)
+	def apply(element: MouseWheelListener) = new MouseWheelHandler(Vector(element), None)
 	
 	/**
 	  * @return A handler with all of the provided elements

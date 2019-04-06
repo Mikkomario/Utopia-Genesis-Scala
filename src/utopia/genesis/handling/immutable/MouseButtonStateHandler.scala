@@ -22,10 +22,9 @@ object MouseButtonStateHandler
 	
 	/**
 	  * @param element an element for this handler
-	  * @param parent Handleable this handler is dependent from (default = None = independent)
 	  * @return A new handler
 	  */
-	def apply(element: MouseButtonStateListener, parent: Option[Handleable] = None) = new MouseButtonStateHandler(Vector(element), parent)
+	def apply(element: MouseButtonStateListener) = new MouseButtonStateHandler(Vector(element), None)
 	
 	/**
 	  * @return A handler with all of the provided elements

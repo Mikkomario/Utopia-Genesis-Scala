@@ -31,7 +31,7 @@ object MouseEvent
      * This filter only accepts events where a mouse button with the specified index has the
      * specified status (down (true) or up (false))
      */
-    def buttonStatusFilter(buttonIndex: Int, requiredStatus: Boolean = true): Filter[MouseEvent] =
+    def buttonStatusFilter(buttonIndex: Int, requiredStatus: Boolean): Filter[MouseEvent] =
         e => e.buttonStatus(buttonIndex) == requiredStatus
     
     /**

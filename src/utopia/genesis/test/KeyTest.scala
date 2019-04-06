@@ -9,8 +9,6 @@ import utopia.genesis.shape.shape2D.Line
 import utopia.genesis.shape.shape2D.Bounds
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
-import utopia.genesis.view.WindowKeyEventGenerator
-import utopia.inception.handling.HandlerRelay
 import java.awt.Color
 
 import utopia.genesis.event.KeyTypedEvent

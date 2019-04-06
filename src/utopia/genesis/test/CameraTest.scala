@@ -3,13 +3,11 @@ package utopia.genesis.test
 import utopia.genesis.shape.Vector3D
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
-import utopia.inception.handling.HandlerRelay
 import java.awt.Font
 
 import utopia.genesis.util.Drawer
 import utopia.genesis.shape.shape2D.Bounds
 import utopia.genesis.view.CanvasMouseEventGenerator
-import utopia.genesis.event.ActorThread
 import utopia.genesis.handling.Drawable
 
 

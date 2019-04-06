@@ -3,6 +3,14 @@ package utopia.genesis.handling
 import utopia.genesis.util.{DepthRange, Drawer}
 import utopia.inception.handling.Handleable
 
+object Drawable
+{
+    implicit class MutableDrawable(val d: Drawable with utopia.inception.handling.mutable.Handleable) extends AnyVal
+    {
+        def isVisible_=(newState: Boolean) = d.specifyHandlingState(DrawableHandlerType, newState)
+    }
+}
+
 /**
  * Drawable instances can be drawn on a canvas using a graphics object and support depth sorting
  * @author Mikko Hilpinen
@@ -10,6 +18,11 @@ import utopia.inception.handling.Handleable
  */
 trait Drawable extends Handleable
 {
+    /**
+      * @return Whether this drawable is visible (allowing drawing)
+      */
+    def isVisible = allowsHandlingFrom(DrawableHandlerType)
+    
     /**
      * Draws the drawable instance using a specific graphics object. The graphics transformations
      * should always be set back to original after drawing

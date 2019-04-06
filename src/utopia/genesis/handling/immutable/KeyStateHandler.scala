@@ -21,10 +21,9 @@ object KeyStateHandler
 	
 	/**
 	  * @param element an element for this handler
-	  * @param parent Handleable this handler is dependent from (default = None = independent)
 	  * @return A new handler
 	  */
-	def apply(element: KeyStateListener, parent: Option[Handleable] = None) = new KeyStateHandler(Vector(element), parent)
+	def apply(element: KeyStateListener) = new KeyStateHandler(Vector(element), None)
 	
 	/**
 	  * @return A handler with all of the provided elements

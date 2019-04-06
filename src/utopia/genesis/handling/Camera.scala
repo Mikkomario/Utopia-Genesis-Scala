@@ -9,14 +9,9 @@ import utopia.genesis.util.Drawer
  * Cameras are used for viewing the game world from a different angle
  * (relative view) and projecting that view to a certain shape in the 'absolute' super view.
  */
-trait Camera
+trait Camera[H <: DrawableHandler]
 {
     // ATTRIBUTES    ------------------------
-    
-    /**
-     * The drawing depth of the camera's contents. Immutable.
-     */
-    val depth: Int
     
     /**
      * The handler for all the content that may be displayed in the camera's view
@@ -31,7 +26,7 @@ trait Camera
       * @param customizer A function that produces a custom drawer
       * @return A new Drawable handler
       */
-    protected def makeDrawableHandler(customizer: Drawer => Drawer): DrawableHandler
+    protected def makeDrawableHandler(customizer: Drawer => Drawer): H
     
     /**
      * This transformation determines the camera's transformation in the 'view world'. For example,
@@ -63,5 +58,5 @@ trait Camera
     
     // Transforms and clips the drawer
     private def customDrawer(drawer: Drawer) = drawer.transformed(projectionTransformation).clippedTo(
-                projectionArea).transformed(-viewTransformation);
+                projectionArea).transformed(-viewTransformation)
 }

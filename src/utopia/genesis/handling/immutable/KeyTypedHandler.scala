@@ -11,7 +11,7 @@ object KeyTypedHandler
 	
 	def apply(elements: TraversableOnce[KeyTypedListener], parent: Option[Handleable] = None) = new KeyTypedHandler(elements, parent)
 	
-	def apply(element: KeyTypedListener, parent: Option[Handleable] = None) = new KeyTypedHandler(Vector(element), parent)
+	def apply(element: KeyTypedListener) = new KeyTypedHandler(Vector(element), None)
 	
 	def apply(first: KeyTypedListener, second: KeyTypedListener, more: KeyTypedListener*) = new KeyTypedHandler(Vector(first, second) ++ more, None)
 }

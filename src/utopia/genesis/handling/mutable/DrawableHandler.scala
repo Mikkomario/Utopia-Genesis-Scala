@@ -18,12 +18,9 @@ object DrawableHandler
 	
 	/**
 	  * @param element A drawable element
-	  * @param drawDepth The draw depth of this handler (default = 0)
-	  * @param customizer A function that customizes drawers used by this handler (default = None = no customization)
 	  * @return a new handler with a single drawable element
 	  */
-	def apply(element: Drawable, drawDepth: Int = DepthRange.default, customizer: Option[Drawer => Drawer] = None) =
-		new DrawableHandler(Vector(element), drawDepth, customizer)
+	def apply(element: Drawable): DrawableHandler = apply(Vector(element))
 	
 	/**
 	  * @return A new handler with all specified drawables

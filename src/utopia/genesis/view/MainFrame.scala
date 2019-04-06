@@ -2,15 +2,15 @@ package utopia.genesis.view
 
 import javax.swing.JFrame
 import javax.swing.JPanel
-import utopia.genesis.shape.Vector3D
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Toolkit
 import java.awt.Dimension
+
 import scala.collection.immutable.HashMap
-import java.awt.event.ComponentListener
-import java.awt.event.ComponentEvent
+import java.awt.event.{ComponentAdapter, ComponentEvent}
 import java.awt.Component
+
 import utopia.genesis.shape.shape2D.Size
 import utopia.genesis.shape.shape2D.Point
 import utopia.genesis.shape.shape2D.Bounds
@@ -22,11 +22,15 @@ import utopia.genesis.shape.shape2D.Bounds
  * @since 25.12.2016
  */
 class MainFrame(initialContent: Component, val originalSize: Size, title: String, 
-        borderless: Boolean = false, val usePadding: Boolean = true) extends JFrame with ComponentListener
+        borderless: Boolean = false, val usePadding: Boolean = true) extends JFrame
 {
     // ATTRIBUTES    ------------
     
     private var _content = initialContent
+    
+    /**
+      * @return The current content displayed in this frame
+      */
     def content = _content
     def content_=(newContent: Component) = 
     {
@@ -41,40 +45,29 @@ class MainFrame(initialContent: Component, val originalSize: Size, title: String
     
     // INITIAL CODE    ----------
     
-    { // Sets up the frame
-        if (borderless) { setUndecorated(true) }
+    // Sets up the frame
+    {
+        if (borderless) setUndecorated(true)
         
         setTitle(title)
         setLayout(new BorderLayout())
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
         
-        getContentPane().setBackground(Color.BLACK)
+        getContentPane.setBackground(Color.BLACK)
         setVisible(true)
         
-        val insets = getInsets()
-        setSize(originalSize.width.toInt + insets.left + insets.right, 
-                originalSize.height.toInt + insets.top + insets.bottom);
+        val insets = getInsets
+        setSize(originalSize.width.toInt + insets.left + insets.right,
+                originalSize.height.toInt + insets.top + insets.bottom)
                 
         setVisible(false)
         add(initialContent, BorderLayout.CENTER)
         
-        addComponentListener(this)
-    }
-    
-    
-    // IMPLEMENTED METHODS    ---
-    
-    override def componentResized(event: ComponentEvent) = 
-    {
-        if (event.getComponent == this)
+        addComponentListener(new ComponentAdapter
         {
-            updateContentSize()
-        }
+            override def componentResized(e: ComponentEvent) = updateContentSize()
+        })
     }
-    
-    override def componentMoved(event: ComponentEvent) = Unit
-    override def componentShown(event: ComponentEvent) = Unit
-    override def componentHidden(event: ComponentEvent) = Unit
     
     
     // OTHER METHODS    ---------
@@ -132,7 +125,7 @@ class MainFrame(initialContent: Component, val originalSize: Size, title: String
             else
             {
                 content.setSize((originalSize * scaling).toDimension)
-                if (!paddings.isEmpty) { paddings = HashMap() }
+                if (paddings.nonEmpty) { paddings = HashMap() }
             }
         }
         else
