@@ -1,7 +1,7 @@
 package utopia.genesis.handling.mutable
 
 import utopia.genesis.handling
-import utopia.genesis.handling.{Actor, ActorHandlerType}
+import utopia.genesis.handling.Actor
 import utopia.inception.handling.mutable.DeepHandler
 
 object ActorHandler
@@ -30,5 +30,4 @@ object ActorHandler
  * @author Mikko Hilpinen
  * @since 23.12.2016
  */
-class ActorHandler(initialElements: TraversableOnce[Actor]) extends DeepHandler[Actor](ActorHandlerType, initialElements)
-    with handling.ActorHandler
+class ActorHandler(initialElements: TraversableOnce[Actor]) extends DeepHandler[Actor](initialElements) with handling.ActorHandler

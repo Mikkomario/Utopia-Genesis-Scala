@@ -1,8 +1,8 @@
-package utopia.genesis.event
+package utopia.genesis.handling
 
+import utopia.genesis.event.MouseWheelEvent
 import utopia.inception.handling.Handleable
-import utopia.inception.util.Filter
-import utopia.inception.util.AnyFilter
+import utopia.inception.util.{AnyFilter, Filter}
 
 /**
  * This trait is implemented by classes which are interested in being notified when the mouse wheel

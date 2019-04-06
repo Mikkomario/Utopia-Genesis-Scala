@@ -20,30 +20,32 @@ object MouseMoveEvent
      * Creates an event filter that only accepts mouse events originating from the mouse entering 
      * the specified area
      */
-    def enterAreaFilter(area: Area2D) = new Filter[MouseMoveEvent]({ _.enteredArea(area) });
+    def enterAreaFilter(area: Area2D): Filter[MouseMoveEvent] = e => e.enteredArea(area)
     
     /**
      * Creates an event filter that only accepts mouse events originating from the mouse exiting the
      * specified area
      */
-    def exitedAreaFilter(area: Area2D) = new Filter[MouseMoveEvent]({ _.exitedArea(area) });
+    def exitedAreaFilter(area: Area2D): Filter[MouseMoveEvent] = e => e.exitedArea(area)
     
     /**
      * Creates an event filter that only accepts events where the mouse cursor moved with enough
      * speed
      */
-    def minVelocityFilter(minVelocity: Double) = new Filter[MouseMoveEvent](
-            { _.velocity.length > minVelocity });
+    def minVelocityFilter(minVelocity: Double): Filter[MouseMoveEvent] = e => e.velocity.length >= minVelocity
 }
 
 /**
  * These events are generated when the mouse cursor moves
+  * @param mousePosition The current mouse position
+  * @param previousMousePosition The previous mouse position
+  * @param buttonStatus Current mouse button status
+  * @param duration The duration of the event (similar to act(...))
  * @author Mikko Hilpinen
  * @since 10.1.2017
  */
-class MouseMoveEvent(mousePosition: Point, val previousMousePosition: Point, 
-        buttonStatus: MouseButtonStatus, val duration: Duration) extends MouseEvent(
-        mousePosition, buttonStatus)
+case class MouseMoveEvent(mousePosition: Point, previousMousePosition: Point, buttonStatus: MouseButtonStatus,
+                          duration: Duration) extends MouseEvent
 {
     // COMPUTED PROPERTIES    -----------
     

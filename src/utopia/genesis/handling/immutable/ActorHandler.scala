@@ -1,7 +1,7 @@
 package utopia.genesis.handling.immutable
 
 import utopia.genesis.handling
-import utopia.genesis.handling.{Actor, ActorHandlerType}
+import utopia.genesis.handling.Actor
 import utopia.inception.handling.{Handleable, HandlerType}
 import utopia.inception.handling.immutable.Handler
 
@@ -40,7 +40,7 @@ object ActorHandler
   * @since 6.4.2019, v2+
   */
 class ActorHandler(initialElements: TraversableOnce[Actor], val parent: Option[Handleable]) extends
-	Handler[Actor](ActorHandlerType, initialElements) with handling.ActorHandler
+	Handler[Actor](initialElements) with handling.ActorHandler
 {
 	override def allowsHandlingFrom(handlerType: HandlerType) = handlerType == this.handlerType
 }

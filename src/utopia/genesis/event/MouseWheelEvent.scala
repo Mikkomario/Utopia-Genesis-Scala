@@ -1,6 +1,5 @@
 package utopia.genesis.event
 
-import utopia.genesis.shape.Vector3D
 import utopia.genesis.shape.shape2D.Point
 
 /**
@@ -9,6 +8,7 @@ import utopia.genesis.shape.shape2D.Point
  * @since 19.2.2017
  * @param wheelTurn The amount of mouse wheel 'notches' since the last event. A positive number
  * indicates a wheel turn towards the user. A negative number indicates a roll away from the user.
+  * @param mousePosition Current mouse position.
+  * @param buttonStatus Current mouse button status
  */
-class MouseWheelEvent(val wheelTurn: Double, mousePosition: Point, buttonStatus: MouseButtonStatus) 
-        extends MouseEvent(mousePosition, buttonStatus)
+case class MouseWheelEvent(wheelTurn: Double, mousePosition: Point, buttonStatus: MouseButtonStatus) extends MouseEvent

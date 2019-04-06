@@ -10,36 +10,43 @@ object MouseButtonStateEvent
     /**
      * This filter only accepts button events where the mouse button was just pressed down
      */
-    val wasPressedFilter = new Filter[MouseButtonStateEvent]({ _.wasPressed })
+    val wasPressedFilter: Filter[MouseButtonStateEvent] = e => e.wasPressed
     
     /**
      * This filter only accepts button events where the mouse button was just released from down
      * state
      */
-    val wasReleasedFilter = new Filter[MouseButtonStateEvent]({ _.wasReleased })
+    val wasReleasedFilter: Filter[MouseButtonStateEvent] = e => e.wasReleased
     
     /**
      * This filter only accepts button events for the specific button index
      */
-    def buttonFilter(buttonIndex: Int) = new Filter[MouseButtonStateEvent](
-            { _.buttonIndex == buttonIndex });
+    def buttonFilter(buttonIndex: Int): Filter[MouseButtonStateEvent] = e => e.buttonIndex == buttonIndex
     
     /**
      * This filter only accepts button events for the specific mouse button
      */
-    def buttonFilter(button: MouseButton): Filter[MouseButtonStateEvent] = 
-            buttonFilter(button.buttonIndex);
+    def buttonFilter(button: MouseButton): Filter[MouseButtonStateEvent] = buttonFilter(button.buttonIndex);
 }
 
 /**
  * Mouse button events are generated whenever a mouse button state changes (pressed and released)
+  * @param buttonIndex Target button index
+  * @param isDown Whether target button is down
+  * @param mousePosition Current mouse position
+  * @param buttonStatus Current mouse button status
  * @author Mikko Hilpinen
  * @since 17.2.2017
  */
-class MouseButtonStateEvent(val buttonIndex: Int, val isDown: Boolean, mousePosition: Point, 
-        buttonStatus: MouseButtonStatus) extends MouseEvent(mousePosition, buttonStatus)
+case class MouseButtonStateEvent(buttonIndex: Int, isDown: Boolean, mousePosition: Point,
+                                 buttonStatus: MouseButtonStatus) extends MouseEvent
 {
     // COMPUTED PROPERTIES    ------------
+    
+    /**
+      * @return Whether target mouse button is currently released / up
+      */
+    def isUp = !isDown
     
     /**
      * Whether the mouse button was just pressed down

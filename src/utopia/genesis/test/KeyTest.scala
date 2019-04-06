@@ -13,9 +13,8 @@ import utopia.genesis.view.WindowKeyEventGenerator
 import utopia.inception.handling.HandlerRelay
 import java.awt.Color
 
-import utopia.genesis.event.KeyTypedListener
 import utopia.genesis.event.KeyTypedEvent
-import utopia.genesis.handling.{Drawable, KeyStateListener}
+import utopia.genesis.handling.{Drawable, KeyStateListener, KeyTypedListener}
 
 /**
  * This is an interactive test for keyboard interactions. The square character should move according

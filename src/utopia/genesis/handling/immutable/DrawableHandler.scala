@@ -1,7 +1,7 @@
 package utopia.genesis.handling.immutable
 
 import utopia.genesis.handling
-import utopia.genesis.handling.{Drawable, DrawableHandlerType}
+import utopia.genesis.handling.Drawable
 import utopia.genesis.util.{DepthRange, Drawer}
 import utopia.inception.handling.{Handleable, HandlerType}
 import utopia.inception.handling.immutable.Handler
@@ -48,7 +48,7 @@ object DrawableHandler
   */
 class DrawableHandler(initialElements: Seq[Drawable], drawDepth: Int, val customizer: Option[Drawer => Drawer],
 					  val parent: Option[Handleable])
-	extends Handler[Drawable](DrawableHandlerType, initialElements.sortWith { _.drawDepth > _.drawDepth })
+	extends Handler[Drawable](initialElements.sortWith { _.drawDepth > _.drawDepth })
 		with handling.DrawableHandler
 {
 	/**

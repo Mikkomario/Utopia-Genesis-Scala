@@ -1,7 +1,6 @@
 package utopia.genesis.handling.mutable
 
 import utopia.genesis.handling
-import utopia.genesis.event.DrawableHandlerType
 import utopia.genesis.handling.Drawable
 import utopia.genesis.util.{DepthRange, Drawer}
 import utopia.inception.handling.mutable.DeepHandler
@@ -40,7 +39,7 @@ object DrawableHandler
   */
 class DrawableHandler(initialElements: TraversableOnce[Drawable], override val drawDepth: Int,
 					  val customizer: Option[Drawer => Drawer])
-	extends DeepHandler[Drawable](DrawableHandlerType, initialElements) with handling.DrawableHandler
+	extends DeepHandler[Drawable](initialElements) with handling.DrawableHandler
 {
 	/**
 	  * Draws the drawable instance using a specific graphics object. The graphics transformations

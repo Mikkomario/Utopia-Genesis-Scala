@@ -1,5 +1,6 @@
-package utopia.genesis.event
+package utopia.genesis.handling
 
+import utopia.genesis.event.KeyTypedEvent
 import utopia.inception.handling.Handleable
 
 /**
@@ -11,6 +12,7 @@ trait KeyTypedListener extends Handleable
 {
     /**
      * This method will be called in order to inform the instance of new key typed events
+      * @param event the newly occurred key typed event
      */
     def onKeyTyped(event: KeyTypedEvent)
 }

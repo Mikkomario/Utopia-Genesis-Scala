@@ -1,5 +1,6 @@
 package utopia.genesis.event
 
+import utopia.genesis.handling.MouseWheelListener
 import utopia.inception.handling.Handler
 import utopia.inception.handling.HandlerType
 

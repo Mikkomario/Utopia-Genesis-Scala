@@ -4,7 +4,6 @@ import utopia.genesis.shape.shape2D.Circle
 import utopia.genesis.util.Drawer
 import java.awt.Color
 
-import utopia.genesis.event.MouseMoveListener
 import utopia.genesis.event.MouseMoveEvent
 import utopia.genesis.event.ActorThread
 import utopia.genesis.shape.Vector3D
@@ -12,12 +11,10 @@ import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import utopia.genesis.view.CanvasMouseEventGenerator
 import utopia.inception.handling.HandlerRelay
-import utopia.genesis.event.MouseButtonStateListener
 import utopia.genesis.event.MouseButtonStateEvent
 import utopia.genesis.event.MouseEvent
-import utopia.genesis.event.MouseWheelListener
 import utopia.genesis.event.MouseWheelEvent
-import utopia.genesis.handling.Drawable
+import utopia.genesis.handling.{Drawable, MouseButtonStateListener, MouseMoveListener, MouseWheelListener}
 import utopia.genesis.shape.shape2D.Transformation
 import utopia.genesis.shape.shape2D.Line
 

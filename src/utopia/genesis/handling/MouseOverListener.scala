@@ -1,10 +1,9 @@
-package utopia.genesis.event
+package utopia.genesis.handling
 
-import utopia.genesis.shape.Vector3D
-import utopia.genesis.shape.shape2D.Point
 import java.time.Duration
 
-import utopia.genesis.handling.Actor
+import utopia.genesis.event.MouseMoveEvent
+import utopia.genesis.shape.shape2D.Point
 
 /**
  * This mouse event listener is interested to continually receive events while the mouse cursor is
@@ -22,23 +21,23 @@ trait MouseOverListener extends MouseMoveListener with Actor
     protected def mousePosition = _mousePosition
     
     
-    // ABSTRACT METHODS    ----
+    // ABSTRACT ------------------
     
     /**
-     * This method will be constantly called while the mouse cursor remains over a specified area
+     * This method will be repeatedly called while the mouse cursor remains over a specified area
      * @param duration The duration since the last update
      */
     def onMouseOver(duration: Duration)
     
     /**
-     * This method is used for determining whether a specified coordinate is considered to be 
+     * This method is used for determining whether a specified coordinate is considered to be
      * 'over' this instance.
-     * @position a position that is tested
+     * @param position a position that is tested
      */
     def contains(position: Point): Boolean
     
     
-    // IMPLEMENTED METHODS    -
+    // IMPLEMENTED  ---------------
     
     override def onMouseMove(event: MouseMoveEvent) = _mousePosition = event.mousePosition
     

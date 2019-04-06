@@ -1,8 +1,8 @@
-package utopia.genesis.event
+package utopia.genesis.handling
 
+import utopia.genesis.event.MouseButtonStateEvent
 import utopia.inception.handling.Handleable
-import utopia.inception.util.AnyFilter
-import utopia.inception.util.Filter
+import utopia.inception.util.{AnyFilter, Filter}
 
 /**
  * This trait is extended by classes which are interested in changes in mouse button statuses
@@ -12,7 +12,7 @@ import utopia.inception.util.Filter
 trait MouseButtonStateListener extends Handleable
 {
     /**
-     * This method will be called in order to inform the listener about a new mouse button event 
+     * This method will be called in order to inform the listener about a new mouse button event
      * (a mouse button being pressed or released)
      * @param event The mouse event that occurred
      */

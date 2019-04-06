@@ -15,7 +15,7 @@ object KeyStatus
       * @param location Specific key location (default = standard)
       * @return A new key status with this single key down
       */
-    def keyDown(index: Int, location: KeyLocation = KeyLocation.Standard) = new KeyStatus(HashMap(index -> Vector(location)))
+    def keyDown(index: Int, location: KeyLocation = KeyLocation.Standard) = new KeyStatus(HashMap(index -> Set(location)))
 }
 
 /**
@@ -24,7 +24,7 @@ object KeyStatus
  * @author Mikko Hilpinen
  * @since 21.2.2017
  */
-case class KeyStatus private(private val status: Map[Int, Vector[KeyLocation]])
+case class KeyStatus private(private val status: Map[Int, Set[KeyLocation]])
 {
     // COMPUTED PROPERTIES    -------
     
@@ -110,18 +110,12 @@ case class KeyStatus private(private val status: Map[Int, Vector[KeyLocation]])
         other.status.keys.filterNot(status.contains).foreach(otherIndicesBuilder.+=)
         
         // Builds the final result from three types of sources
-        val buffer = new VectorBuilder[(Int, Vector[KeyLocation])]()
+        val buffer = new VectorBuilder[(Int, Set[KeyLocation])]()
         
         myIndicesBuilder.result().foreach { index => buffer += (index -> status(index)) }
         otherIndicesBuilder.result().foreach { index => buffer += (index -> other.status(index)) }
         
-        commonIndicesBuilder.result().foreach
-        {
-            index =>
-                val myLocations = status(index)
-                val newLocations = other.status(index).filterNot(myLocations.contains)
-                buffer += (index -> (myLocations ++ newLocations))
-        }
+        commonIndicesBuilder.result().foreach { index => buffer += (index -> (status(index) ++ other.status(index))) }
         
         new KeyStatus(buffer.result().toMap)
     }
@@ -155,7 +149,7 @@ case class KeyStatus private(private val status: Map[Int, Vector[KeyLocation]])
             this
         // If a new key is being added, simply updates the locations
         else if (newStatus)
-            new KeyStatus(status + (index -> (status(index) :+ location)))
+            new KeyStatus(status + (index -> (status(index) + location)))
         else
         {
             // If a key is being removed, either removes list altogether or shortens it
