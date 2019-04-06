@@ -1,49 +1,50 @@
 package utopia.genesis.view
 
-import utopia.flow.util.TimeExtensions._
-
 import javax.swing.JPanel
 import utopia.genesis.shape.Vector3D
-import utopia.genesis.view.ScalingPolicy.PROJECT
+import utopia.genesis.view.ScalingPolicy.Project
 import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
-import java.awt.event.ComponentListener
-import java.awt.event.ComponentEvent
-import utopia.genesis.view.ScalingPolicy.CROP
-import utopia.genesis.util.WaitUtil
-import utopia.genesis.event.DrawableHandler
+import java.awt.event.{ComponentAdapter, ComponentEvent}
+
+import utopia.genesis.view.ScalingPolicy.Crop
 import utopia.genesis.util.Drawer
-import java.awt.event.HierarchyListener
-import java.awt.event.HierarchyEvent
 import utopia.genesis.shape.shape2D.Transformation
 import utopia.genesis.shape.shape2D.Size
-import java.time.Duration
-import java.time.Instant
-import utopia.flow.util.WaitUtils
+import utopia.genesis.handling.DrawableHandler
+
+import scala.concurrent.ExecutionContext
 
 /**
- * A Game panel works like any Swing panel except it's able to draw drawable object contents with a
+ * A Canvas works like any Swing panel except it's able to draw drawable object contents with a
  * certain framerate. The panel also rescales itself when the size changes to display only the 
  * specified game world area.
  * @author Mikko Hilpinen
  * @since 28.12.2016
+  * @param drawHandler The handler used for drawing this canvas
+  * @param originalGameWorldSize The original size of the "game world" displayed in this canvas (in pixels)
+  * @param scalingPolicy How this panel handles scaling
+  * @param clearPrevious Whether the results of previous draws should be cleared before the next redraw
  */
-class Canvas(originalGameWorldSize: Size, val maxFPS: Int = 60, 
-        val scalingPolicy: ScalingPolicy = PROJECT, var clearPrevious: Boolean = true) extends 
-        JPanel(null) with HierarchyListener with ComponentListener
+// TODO: Separate this class to multiple different classes. Most importantly a simple panel with overrided drawing
+class Canvas(val drawHandler: DrawableHandler, originalGameWorldSize: Size, val scalingPolicy: ScalingPolicy = Project,
+             var clearPrevious: Boolean = true) extends JPanel(null)
 {
     // ATTRIBUTES    -----------------
     
-    /**
-     * The handler that keeps track of all the elements drawn by this panel
-     */
-    val handler = new DrawableHandler()
-    
     private var _gameWorldSize = originalGameWorldSize
+    
+    /**
+      * @return The current size of the area displayed in this canvas (pixels)
+      */
     def gameWorldSize = _gameWorldSize
     
     private var _prefferedGameWorldSize = originalGameWorldSize
+    
+    /**
+      * @return The preferred game world size of this canvas
+      */
     def prefferedGameWorldSize = _prefferedGameWorldSize
     def prefferedGameWorldSize_=(newSize: Size) = 
     {
@@ -52,22 +53,26 @@ class Canvas(originalGameWorldSize: Size, val maxFPS: Int = 60,
     }
     
     private var _scaling = 1.0
+    
+    /**
+      * @return The current scaling used by this canvas. 1 retains measurements while > 1 enlargens them
+      *         and < 1 shrinks them. 0 Doesn't draw at all.
+      */
     def scaling = _scaling
     
-    private var refreshThread: Option[RefreshThread] = None
+    private var refreshLoop: Option[RepaintLoop] = None
     
     
     // INITIAL CODE    ---------------
     
     setSize(originalGameWorldSize.toDimension)
     setBackground(Color.WHITE)
-    addComponentListener(this)
-    addHierarchyListener(this)
     
-    
-    // COMPUTED PROPERTIES    --------
-    
-    private def refreshInterval = if (maxFPS > 0) Some(Duration.ofMillis((1000.0 / maxFPS).toLong)) else None
+    // Adds a component adapter that updates scaling whenever this panel is resized
+    addComponentListener(new ComponentAdapter
+    {
+        override def componentResized(e: ComponentEvent) = updateScaling()
+    })
     
     
     // IMPLEMENTED METHODS    --------
@@ -81,62 +86,50 @@ class Canvas(originalGameWorldSize: Size, val maxFPS: Int = 60,
         // Clears the previous drawings
         if (clearPrevious)
         {
-            val copy = drawer.copy()
-            
-            copy.graphics.clearRect(0, 0, getWidth, getHeight)
-            copy.graphics.setColor(getBackground)
-            copy.graphics.fillRect(0, 0, getWidth, getHeight)
-            
-            copy.dispose()
+            drawer.withCopy
+            {
+                d =>
+                    d.graphics.clearRect(0, 0, getWidth, getHeight)
+                    d.graphics.setColor(getBackground)
+                    d.graphics.fillRect(0, 0, getWidth, getHeight)
+            }
         }
         
         // Game world drawings are scaled, then drawn
-        handler.draw(drawer.transformed(Transformation.scaling(scaling)))
+        drawHandler.draw(drawer.transformed(Transformation.scaling(scaling)))
         
         // Disposes the created drawers afterwards
         drawer.dispose()
     }
     
-    override def hierarchyChanged(event: HierarchyEvent) = 
-    {
-        if (isShowing())
-        {
-            // Starts refreshing the panel
-            if (refreshThread.isEmpty)
-            {
-                refreshThread = Some(new RefreshThread())
-                refreshThread.get.setDaemon(true)
-                refreshThread.get.start()
-            }
-        }
-        else
-        {
-            // Stops refreshing the panel
-            if (refreshThread.isDefined)
-            {
-                refreshThread.get.end()
-                refreshThread = None
-            }
-        }
-    }
-    
-    // Updates scaling whenever the component's size changes
-    override def componentResized(event: ComponentEvent) = updateScaling()
-    
-    override def componentMoved(event: ComponentEvent) = Unit
-    
-    override def componentShown(event: ComponentEvent) = Unit
-    
-    override def componentHidden(event: ComponentEvent) = Unit
-    
     
     // OTHER METHODS    --------------
     
-    def updateScaling()
+    /**
+      * Starts asynchronously refreshing this canvas with static intervals
+      * @param maxFPS The maximum frames (draws) per second
+      * @param context Asynchronous execution context
+      */
+    def startAutoRefresh(maxFPS: Int)(implicit context: ExecutionContext) =
+    {
+        if (refreshLoop.isEmpty)
+        {
+            val loop = new RepaintLoop(this, maxFPS)
+            loop.startAsync()
+            refreshLoop = Some(loop)
+        }
+    }
+    
+    /**
+      * Stops any automatic refresh on this canvas
+      */
+    def stopAutoRefresh() = refreshLoop.foreach { _.stop() }
+    
+    private def updateScaling()
     {
         val size = Size of getSize()
         
-        if (scalingPolicy == PROJECT)
+        if (scalingPolicy == Project)
         {
             _gameWorldSize = (prefferedGameWorldSize.toVector projectedOver size.toVector).toSize
         }
@@ -145,7 +138,7 @@ class Canvas(originalGameWorldSize: Size, val maxFPS: Int = 60,
             val prefferedXYRatio = prefferedGameWorldSize.width / prefferedGameWorldSize.height
             val newXYRatio = size.width / size.height
             
-            val preserveX = if (scalingPolicy == CROP) prefferedXYRatio <= newXYRatio else 
+            val preserveX = if (scalingPolicy == Crop) prefferedXYRatio <= newXYRatio else
                                                        prefferedXYRatio > newXYRatio;
             
             if (preserveX)
@@ -159,34 +152,5 @@ class Canvas(originalGameWorldSize: Size, val maxFPS: Int = 60,
         }
         
         _scaling = (size / gameWorldSize).x
-    }
-    
-    
-    // NESTED CLASSES    ------------
-    
-    private class RefreshThread extends Thread
-    {
-        // ATTRIBUTES    ------------
-        
-        private var _ended = false
-        def ended = _ended
-        
-        
-        // IMPLEMENTED METHODS    ---
-        
-        override def run()
-        {
-            while (!ended)
-            {
-                val nextDrawTime = refreshInterval.map(Instant.now() + _)
-                repaint()
-                nextDrawTime.foreach(WaitUtils.waitUntil(_, this))
-            }
-        }
-        
-        
-        // OTHER METHODS    --------
-        
-        def end() = _ended = true
     }
 }

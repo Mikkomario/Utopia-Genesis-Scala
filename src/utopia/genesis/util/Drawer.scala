@@ -64,6 +64,24 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color
     // OTHER METHODS    -------------------
     
     /**
+      * Performs an operation, then disposes this drawer
+      * @param operation An operation
+      * @tparam U Arbitary result type
+      */
+    def disposeAfter[U](operation: Drawer => U) =
+    {
+        operation(this)
+        dispose()
+    }
+    
+    /**
+      * Creates a temporary copy of this drawer and performs an operation with it, after which it's disposed
+      * @param operation Operation performed with the drawer
+      * @tparam U Arbitary result type
+      */
+    def withCopy[U](operation: Drawer => U) = copy().disposeAfter(operation)
+    
+    /**
      * Copies this drawer, creating another graphics context. Changing the other context doesn't
      * affect this one. This should be used when a lot of drawing is done and the graphics context 
      * should be returned to its original state.

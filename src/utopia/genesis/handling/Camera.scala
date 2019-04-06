@@ -1,10 +1,9 @@
-package utopia.genesis.event
+package utopia.genesis.handling
+
+import java.awt.Shape
 
 import utopia.genesis.shape.shape2D.Transformation
-import java.awt.Shape
 import utopia.genesis.util.Drawer
-import utopia.genesis.shape.Vector3D
-import java.awt.Color
 
 /**
  * Cameras are used for viewing the game world from a different angle
@@ -22,10 +21,17 @@ trait Camera
     /**
      * The handler for all the content that may be displayed in the camera's view
      */
-    val drawHandler = new DrawableHandler(depth, Some(customDrawer))
+    lazy val drawHandler = makeDrawableHandler(customDrawer)
     
     
     // ABSTRACT METHODS    ------------------
+    
+    /**
+      * Creates a new drawableHandler with the specified customized drawer
+      * @param customizer A function that produces a custom drawer
+      * @return A new Drawable handler
+      */
+    protected def makeDrawableHandler(customizer: Drawer => Drawer): DrawableHandler
     
     /**
      * This transformation determines the camera's transformation in the 'view world'. For example,
@@ -47,7 +53,7 @@ trait Camera
      * area by using a circle and a rectangular area by using a rectangle, etc. The shape's center
      * should always be at the (0, 0) coordinates since that's what the camera is rotated and scaled
      * around.
-     * <br> You can instead move both the projected and viewed area by using the projection- and 
+     * <br> You can instead move both the projected and viewed area by using the projection- and
      * view transformations respectively.
      */
     def projectionArea: Shape

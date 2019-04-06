@@ -36,3 +36,7 @@ KeyStateEvent filter methods renamed
 MouseButtonStatus class refactored. The constructor is now private.
 
 Mouse Event class changed to trait
+
+WindowKeyEventGenerator replaced with ConvertingKeyListener
+
+Canvas asynchronous refreshing separated to a new loop class (RepaintLoop)

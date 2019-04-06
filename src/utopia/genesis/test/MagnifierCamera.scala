@@ -1,12 +1,11 @@
 package utopia.genesis.test
 
-import utopia.genesis.event.Camera
 import utopia.genesis.shape.Vector3D
 import utopia.genesis.shape.shape2D.Circle
 import utopia.genesis.util.DepthRange
 import utopia.genesis.util.Drawer
 import utopia.genesis.event.MouseMoveEvent
-import utopia.genesis.handling.{Drawable, MouseMoveListener}
+import utopia.genesis.handling.{Camera, Drawable, MouseMoveListener}
 import utopia.genesis.shape.shape2D.Transformation
 import utopia.genesis.shape.shape2D.Point
 
