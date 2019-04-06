@@ -31,6 +31,8 @@ object ActorTest extends App
     val handler = ActorHandler(actor1, actor2)
     val actorLoop = new ActorLoop(handler, 20 to 60)
     
+    println(s"Interval: ${actorLoop.minInterval.toMillis} - ${actorLoop.maxInterval.toMillis}")
+    
     assert(actor1.millisCounted == 0)
     assert(actor2.millisCounted == 0)
     

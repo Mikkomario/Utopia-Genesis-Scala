@@ -13,12 +13,12 @@ class ActorLoop(private val handler: ActorHandler, val apsRange: Range) extends 
 	/**
 	  * @return The minimum interval between act calls
 	  */
-	def minInterval = apsToDuration(apsRange.start)
+	def minInterval = apsToDuration(apsRange.end)
 	
 	/**
 	  * @return The maximum interval passed to act calls (actual interval may be longer)
 	  */
-	def maxInterval = apsToDuration(apsRange.end)
+	def maxInterval = apsToDuration(apsRange.start)
 	
 	private var lastActStarted = Instant.now()
 	
