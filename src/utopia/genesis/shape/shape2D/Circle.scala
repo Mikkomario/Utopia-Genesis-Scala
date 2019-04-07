@@ -12,8 +12,6 @@ import utopia.flow.generic.FromModelFactory
 import utopia.genesis.generic.GenesisValue._
 import utopia.flow.datastructure.template
 import utopia.flow.datastructure.template.Property
-import scala.Vector
-import utopia.genesis.shape.template.Area
 import utopia.genesis.shape.Vector3D
 
 object Circle extends FromModelFactory[Circle]
@@ -64,7 +62,7 @@ case class Circle(origin: Point, radius: Double) extends ShapeConvertible with A
     
     // IMPLEMENTED METHODS    ---------
     
-    override def contains(point: Point) = (point - origin).length <= radius
+    override def contains(point: Point) = point.distanceFrom(origin) <= radius
     
     override def projectedOver(axis: Vector3D) =
     {
@@ -83,17 +81,17 @@ case class Circle(origin: Point, radius: Double) extends ShapeConvertible with A
     /**
      * Checks whether the circle contains the provided rectangle
      */
-    def contains(rectangle: Bounds): Boolean = rectangle.edges.forall { contains(_) }
+    def contains(rectangle: Bounds): Boolean = rectangle.edges.forall(contains)
     
     /**
      * Checks whether the other circle is contained within this circle's area
      */
-    def contains(other: Circle) = (origin - other.origin).length <= radius - other.radius
+    def contains(other: Circle) = origin.distanceFrom(other.origin) <= radius - other.radius
     
     /**
      * Checks whether the two circles intersect with each other
      */
-    def intersectsWith(other: Circle) = (origin - other.origin).length <= radius + other.radius
+    def intersectsWith(other: Circle) = origin.distanceFrom(other.origin) <= radius + other.radius
     
     // check sphere intersection 
     // http://stackoverflow.com/questions/5048701/finding-points-of-intersection-when-two-spheres-intersect
@@ -107,7 +105,7 @@ case class Circle(origin: Point, radius: Double) extends ShapeConvertible with A
     {
         // References: http://paulbourke.net/geometry/circlesphere/
         // Distance vector D with length of d
-        val distanceVector = other.origin - this.origin
+        val distanceVector = (other.origin - this.origin).toVector
         val distance = distanceVector.length
         
         // If there is containment (d < |r0 - r1|), there are no collision points
@@ -115,7 +113,7 @@ case class Circle(origin: Point, radius: Double) extends ShapeConvertible with A
 		// points (they cannot be calculated)
         if (distance > radius + other.radius || distance < (radius - other.radius).abs || this == other)
         {
-            Vector[Vector3D]()
+            Vector[Point]()
         }
         else
         {
@@ -140,8 +138,7 @@ case class Circle(origin: Point, radius: Double) extends ShapeConvertible with A
 			 * From these we get
 			 * a = (r0^2 - r1^2 + d^2) / (2*d)
 			 */
-            val a = (math.pow(radius, 2) - math.pow(other.radius, 2) + math.pow(distance, 2)) / 
-                    (2 * distance);
+            val a = (math.pow(radius, 2) - math.pow(other.radius, 2) + math.pow(distance, 2)) / (2 * distance)
             /*
 			 * From this we can solve h (|P3 - P2|) with
 			 * 		h^2 = r0^2 - a^2 
@@ -178,7 +175,7 @@ case class Circle(origin: Point, radius: Double) extends ShapeConvertible with A
      * @return if there is collision, the minimum translation vector that gets this circle out 
      * of the collision. None otherwise.
      */
-    def collisionMtvWith(other: Circle): Option[Vector3D] = collisionMtvWith(other, Vector(other.origin - origin))
+    def collisionMtvWith(other: Circle): Option[Vector3D] = collisionMtvWith(other, Vector((other.origin - origin).toVector))
     
     /**
      * Calculates two collision points using a very simple algorithm. The collision points will be 

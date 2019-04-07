@@ -79,10 +79,8 @@ object GenesisValueCaster extends ValueCaster
             case Vector3DType => Some(value.vector3DOr().toVector.map { x => 
                     if (x ~== 0.0) 0.0.toValue else x.toValue });
             case LineType => 
-            {
                 val line = value.lineOr()
                 Some(Vector(line.start, line.end))
-            }
             case _ => None
         }
     }

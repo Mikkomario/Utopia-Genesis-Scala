@@ -149,7 +149,12 @@ case class KeyStatus private(private val status: Map[Int, Set[KeyLocation]])
             this
         // If a new key is being added, simply updates the locations
         else if (newStatus)
-            new KeyStatus(status + (index -> (status(index) + location)))
+        {
+            if (status.contains(index))
+                new KeyStatus(status + (index -> (status(index) + location)))
+            else
+                new KeyStatus(status + (index -> Set(location)))
+        }
         else
         {
             // If a key is being removed, either removes list altogether or shortens it

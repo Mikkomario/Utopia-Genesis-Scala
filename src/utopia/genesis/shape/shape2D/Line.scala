@@ -12,7 +12,6 @@ import utopia.flow.datastructure.template
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
-import scala.Vector
 import utopia.genesis.shape.Vector3D
 import utopia.genesis.generic.LineType
 
@@ -20,8 +19,7 @@ object Line extends FromModelFactory[Line]
 {
     // OPERATORS    -------------------------
     
-    override def apply(model: template.Model[Property]) = Some(Line(model("start").pointOr(), 
-            model("end").pointOr()));
+    override def apply(model: template.Model[Property]) = Some(Line(model("start").pointOr(), model("end").pointOr()))
     
     
     // OTHER METHODS    ---------------------
@@ -71,7 +69,7 @@ object Line extends FromModelFactory[Line]
  * @author Mikko Hilpinen
  * @since 13.12.2016
  */
-case class Line(val start: Point, val end: Point) extends ShapeConvertible with 
+case class Line(start: Point, end: Point) extends ShapeConvertible with
         ValueConvertible with ModelConvertible with TransformableShape[Line] with Projectable
 {
     // ATTRIBUTES    -------------------
@@ -79,7 +77,7 @@ case class Line(val start: Point, val end: Point) extends ShapeConvertible with
     /**
      * The vector portion of this line (position information not included)
      */
-    lazy val vector = end - start
+    lazy val vector = (end - start).toVector
     
     
     // COMPUTED PROPERTIES    ----------
@@ -103,7 +101,7 @@ case class Line(val start: Point, val end: Point) extends ShapeConvertible with
     /**
      * The center of the line segment
      */
-    def center = ((start.toVector + end.toVector) / 2).toPoint
+    def center = (start + end) / 2
     
     
     // OPERATORS    --------------------
@@ -145,7 +143,7 @@ case class Line(val start: Point, val end: Point) extends ShapeConvertible with
         // a (V1 x V2) = (P2 - P1) x V2
         // Where P is the start point and Vs are the vector parts
         val leftVector = vector cross other.vector
-        val rightVector = (other.start - start) cross other.vector
+        val rightVector = (other.start - start).toVector cross other.vector
         
         // If the left hand side vector is a zero vector, there is no collision
         // The two vectors must also be parallel
@@ -157,7 +155,7 @@ case class Line(val start: Point, val end: Point) extends ShapeConvertible with
         {
             // a = |right| / |left|, negative if they have opposite directions
             val a = if (leftVector.direction ~== rightVector.direction) 
-                rightVector.length / leftVector.length else -rightVector.length / leftVector.length;
+                rightVector.length / leftVector.length else -rightVector.length / leftVector.length
             
             val intersectionPoint = apply(a)
             
@@ -202,7 +200,7 @@ case class Line(val start: Point, val end: Point) extends ShapeConvertible with
          * b = 2(v . L)
          * c = L . L - r^2
          */
-        val distanceVector = start - circle.origin
+        val distanceVector = (start - circle.origin).toVector
         val a = vector dot vector
         val b = 2 * (vector dot distanceVector)
         val c = (distanceVector dot distanceVector) - math.pow(circle.radius, 2)
@@ -214,11 +212,11 @@ case class Line(val start: Point, val end: Point) extends ShapeConvertible with
         
         if (discriminant < 0)
         {
-            Vector[Vector3D]()
+            Vector[Point]()
         }
         else
         {
-            var intersectionPoints = Vector[Vector3D]()
+            var intersectionPoints = Vector[Point]()
             
             //println(s"a = $a")
             //println(s"b = $b")
@@ -229,7 +227,7 @@ case class Line(val start: Point, val end: Point) extends ShapeConvertible with
             //println(tEnter)
             if (!onlyPointsInSegment || (tEnter >= 0 && tEnter <= 1))
             {
-                intersectionPoints :+= apply(tEnter).toVector
+                intersectionPoints :+= apply(tEnter)
             }
             
             if (!(discriminant ~== 0.0))
@@ -238,7 +236,7 @@ case class Line(val start: Point, val end: Point) extends ShapeConvertible with
                 //println(tExit)
                 if (!onlyPointsInSegment || (tExit >= 0 && tExit <= 1))
                 {
-                    intersectionPoints :+= apply(tExit).toVector
+                    intersectionPoints :+= apply(tExit)
                 }
             }
             
@@ -277,8 +275,7 @@ case class Line(val start: Point, val end: Point) extends ShapeConvertible with
             val t = startDistance / (startDistance - endDistance)
             val clippingPoint = start + vector * t
             
-            if (startDistance > endDistance) Some(Line(start, clippingPoint)) else 
-                    Some(Line(clippingPoint, end));
+            if (startDistance > endDistance) Some(Line(start, clippingPoint)) else Some(Line(clippingPoint, end))
         }
     }
     

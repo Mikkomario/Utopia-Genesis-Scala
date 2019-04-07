@@ -11,6 +11,11 @@ New classes for 2D shapes
     - Point
     - Axis & Axis2D
 
+VectorLike trait for Vector3D, Point and Size
+
+Immutable Handler versions
+
+
 Updates & Changes
 -----------------
 
@@ -40,3 +45,5 @@ Mouse Event class changed to trait
 WindowKeyEventGenerator replaced with ConvertingKeyListener
 
 Canvas asynchronous refreshing separated to a new loop class (RepaintLoop)
+
+Deprecated methods removed from Vector3D. Some new deprecations.

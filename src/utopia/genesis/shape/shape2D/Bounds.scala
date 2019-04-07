@@ -11,8 +11,6 @@ import utopia.flow.datastructure.template
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
-import scala.Vector
-import utopia.genesis.shape.template.Area
 import utopia.genesis.shape.Vector3D
 import utopia.genesis.shape.X
 import utopia.genesis.shape.Y
@@ -41,8 +39,8 @@ object Bounds extends FromModelFactory[Bounds]
      */
     def between(p1: Point, p2: Point) = 
     {
-        val topLeft = Point.topLeft(p1, p2)
-        val bottomRight = Point.bottomRight(p1, p2)
+        val topLeft = p1 topLeft p2
+        val bottomRight = p1 bottomRight p2
         
         Bounds(topLeft, (bottomRight - topLeft).toSize)
     }
@@ -90,8 +88,7 @@ object Bounds extends FromModelFactory[Bounds]
  * @author Mikko Hilpinen
  * @since 13.1.2017
  */
-case class Bounds(val position: Point, val size: Size) extends ShapeConvertible with 
-        Area2D with ValueConvertible with ModelConvertible
+case class Bounds(position: Point, size: Size) extends ShapeConvertible with Area2D with ValueConvertible with ModelConvertible
 {
     // COMPUTED PROPERTIES    ------------
     
@@ -170,14 +167,14 @@ case class Bounds(val position: Point, val size: Size) extends ShapeConvertible 
     // IMPLEMENTED METHODS    ----------
     
     override def contains(point: Point) = point.x >= topLeft.x && point.y >= topLeft.y && 
-            point.x <= bottomRight.x && point.y <= bottomRight.y;
+            point.x <= bottomRight.x && point.y <= bottomRight.y
     
     
     // OTHER METHODS    ----------------
     
     /**
      * Creates a rounded rectangle based on this rectangle shape.
-     * @param ruondingFactor How much the corners are rounded. 0 Means that the corners are not
+     * @param roundingFactor How much the corners are rounded. 0 Means that the corners are not
      * rounded at all, 1 means that the corners are rounded as much as possible, so that the ends of
      * the shape become ellipsoid. Default value is 0.5
      */
@@ -201,8 +198,7 @@ case class Bounds(val position: Point, val size: Size) extends ShapeConvertible 
      * Checks whether a circle completely lies within the rectangle's bounds when the z-axis is 
      * ignored
      */
-    def contains(circle: Circle): Boolean = contains(circle.origin) && 
-            circleIntersection(circle).isEmpty;
+    def contains(circle: Circle): Boolean = contains(circle.origin) && circleIntersection(circle).isEmpty
     
     /**
      * Finds the intersection points between the edges of this rectangle and the provided circle

@@ -2,12 +2,7 @@ package utopia.genesis.event
 
 import utopia.flow.util.TimeExtensions._
 
-import utopia.genesis.shape.Vector3D
-import utopia.flow.datastructure.immutable.Model
-import utopia.flow.datastructure.immutable.Value
-import utopia.genesis.generic.GenesisValue
 import utopia.inception.util.Filter
-import utopia.genesis.shape.template.Area
 import utopia.genesis.shape.shape2D.Point
 import java.time.Duration
 import utopia.genesis.shape.shape2D.Area2D
@@ -57,7 +52,7 @@ case class MouseMoveEvent(mousePosition: Point, previousMousePosition: Point, bu
     /**
      * The velocity vector of the mouse cursor, in pixels per millisecond
      */
-    def velocity = transition / durationMillis
+    def velocity = (transition / durationMillis).toVector
     
     /**
      * The duration of this event in duration format

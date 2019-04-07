@@ -3,19 +3,18 @@ package utopia.genesis.shape.shape2D
 import utopia.genesis.util.Extensions._
 import utopia.flow.generic.ValueConversions._
 import java.awt.Dimension
+
 import utopia.flow.generic.ValueConvertible
 import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.generic.SizeType
 import utopia.flow.generic.ModelConvertible
 import utopia.flow.datastructure.immutable.Model
+
 import scala.collection.immutable.HashMap
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.util.ApproximatelyEquatable
-import utopia.genesis.shape.Vector3D
-import utopia.genesis.shape.Axis2D
-import utopia.genesis.shape.X
-import utopia.genesis.shape.Y
+import utopia.genesis.shape.{Axis2D, Vector3D, VectorLike, X, Y}
 import java.awt.Insets
 
 object Size extends FromModelFactory[Size]
@@ -26,7 +25,7 @@ object Size extends FromModelFactory[Size]
     val zero = Size(0, 0)
     
     def apply(model: utopia.flow.datastructure.template.Model[Property]) = Some(
-            Size(model("width").doubleOr(), model("height").doubleOr()));
+            Size(model("width").doubleOr(), model("height").doubleOr()))
     
     /**
      * Converts an awt dimension into size
@@ -44,15 +43,10 @@ object Size extends FromModelFactory[Size]
 * @author Mikko Hilpinen
 * @since 20.11.2018
 **/
-case class Size(width: Double, height: Double) extends ApproximatelyEquatable[Size] 
+case class Size(width: Double, height: Double) extends VectorLike[Size] with ApproximatelyEquatable[Size]
         with ValueConvertible with ModelConvertible
 {
     // COMPUTED    --------------------------
-    
-    /**
-     * A copy of this size with at least 0 widht and height
-     */
-    def positive = Size(width max 0, height max 0)
     
     /**
      * The area of this size (width * height)
@@ -77,59 +71,21 @@ case class Size(width: Double, height: Double) extends ApproximatelyEquatable[Si
     
     // IMPLEMENTED    -----------------------
     
+    lazy val dimensions = Vector(width, height)
+    
+    override def buildCopy(dimensions: Vector[Double]) =
+    {
+        if (dimensions.size >= 2)
+            Size(dimensions(0), dimensions(1))
+        else if (dimensions.isEmpty)
+            Size.zero
+        else
+            Size(dimensions(0), 0)
+    }
+    
     def toValue = new Value(Some(this), SizeType)
     
     def toModel = Model.fromMap(HashMap("width" -> width, "height" -> height))
-    
-    
-    // OPERATORS    -------------------------
-    
-    def unary_- = Size(-width, -height)
-    
-    /**
-     * A increased version of this size
-     */
-    def +(vector: Vector3D) = (toVector + vector).toSize
-    
-    /**
-     * An increased version of this size
-     */
-    def +(other: Size): Size = this + other.toVector
-    
-    /**
-     * A decreased version of this size
-     */
-    def -(vector: Vector3D) = this + (-vector)
-    
-    /**
-     * A decreased version of this size
-     */
-    def -(other: Size): Size = this - other.toVector
-    
-    /**
-     * A multiplied version of this size
-     */
-    def *(vector: Vector3D) = (toVector * vector).toSize
-    
-    /**
-     * A multiplied version of this size
-     */
-    def *(modifier: Double) = Size(width * modifier, height * modifier)
-    
-    /**
-     * A divided version of this size
-     */
-    def /(vector: Vector3D) = (toVector / vector).toSize
-    
-    /**
-     * A divided version of this size
-     */
-    def /(modifier: Double) = Size(width / modifier, height / modifier)
-    
-    /**
-     * A scaling modifier from the second size to this size
-     */
-    def /(other: Size) = toVector / other.toVector
     
     def ~==[B <: Size](other: B) = (width ~== other.width) && (height ~== other.height)
     
@@ -141,20 +97,6 @@ case class Size(width: Double, height: Double) extends ApproximatelyEquatable[Si
      */
     @deprecated("Please use along(Axis2D) instead", "v1.1.2")
     def lengthAlong(axis: Axis2D) = along(axis)
-    
-    /**
-     * The length of a side of this size along the specified axis
-     */
-    def along(axis: Axis2D) = axis match 
-    {
-        case X => width
-        case Y => height
-    }
-    
-    /**
-     * The length of a side of this size perpendicular to the specified axis
-     */
-    def perpendicularTo(axis: Axis2D) = along(axis.perpendicular)
     
     /**
      * A copy of this size with specified width

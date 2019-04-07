@@ -44,8 +44,8 @@ trait Projectable
         }
         else 
         {
-            val forwardsMtv = otherProjection.end - projection.start
-            val backwardsMtv = otherProjection.start - projection.end
+            val forwardsMtv = (otherProjection.end - projection.start).toVector
+            val backwardsMtv = (otherProjection.start - projection.end).toVector
             
             if (forwardsMtv.length < backwardsMtv.length) Some(forwardsMtv) else Some(backwardsMtv)
         }
@@ -64,7 +64,7 @@ trait Projectable
         // If there is collision, there must be overlap on each axis
         val mtvs = axes.mapOrFail { projectionOverlapWith(other, _) }
         
-        if (mtvs.isDefined && !mtvs.get.isEmpty)
+        if (mtvs.exists { _.nonEmpty })
         {
             // Finds the smallest possible translation vector
             Some(mtvs.get.minBy { _.length })

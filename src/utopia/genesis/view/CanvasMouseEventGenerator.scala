@@ -4,7 +4,6 @@ import java.awt.event.MouseListener
 import java.awt.event.MouseWheelListener
 import java.awt.event.MouseEvent
 
-import utopia.genesis.shape.Vector3D
 import utopia.genesis.event.MouseMoveEvent
 import java.awt.Container
 import java.awt.MouseInfo
@@ -60,7 +59,7 @@ class CanvasMouseEventGenerator(c: Canvas, val moveHandler: MouseMoveHandler,
         {
             c =>
                 // Checks for mouse movement
-                val mousePosition = (pointInPanel(Point of MouseInfo.getPointerInfo.getLocation, c) / c.scaling).toPoint
+                val mousePosition = pointInPanel(Point of MouseInfo.getPointerInfo.getLocation, c) / c.scaling
                 
                 if (mousePosition != lastMousePosition)
                 {
@@ -74,12 +73,12 @@ class CanvasMouseEventGenerator(c: Canvas, val moveHandler: MouseMoveHandler,
     
     // OTHER METHODS    --------------
     
-    private def pointInPanel(point: Point, panel: Container): Vector3D = 
+    private def pointInPanel(point: Point, panel: Container): Point =
     {
         val relativePoint = point - (Point of panel.getLocation)
         val parent = panel.getParent
         
-        if (parent == null) relativePoint else pointInPanel(relativePoint.toPoint, parent)
+        if (parent == null) relativePoint else pointInPanel(relativePoint, parent)
     }
     
     

@@ -2,8 +2,8 @@ package utopia.genesis.shape.shape2D
 
 import utopia.genesis.util.Extensions._
 import utopia.flow.generic.ValueConversions._
-
 import java.awt.geom.Point2D
+
 import scala.collection.immutable.HashMap
 import utopia.flow.generic.ValueConvertible
 import utopia.flow.datastructure.immutable.Value
@@ -13,11 +13,7 @@ import utopia.flow.datastructure.immutable.Model
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.util.ApproximatelyEquatable
-import utopia.genesis.shape.Axis
-import utopia.genesis.shape.X
-import utopia.genesis.shape.Y
-import utopia.genesis.shape.Vector3D
-import utopia.genesis.shape.Axis2D
+import utopia.genesis.shape.{Axis, Axis2D, Vector3D, VectorLike, X, Y}
 
 object Point extends FromModelFactory[Point]
 {
@@ -39,17 +35,18 @@ object Point extends FromModelFactory[Point]
     /**
      * Converts a coordinate map into a point
      */
-    def of(map: Map[Axis, Double]) = Point(map.get(X).getOrElse(0), map.get(Y).getOrElse(0))
+    def of(map: Map[Axis, Double]) = Point(map.getOrElse(X, 0), map.getOrElse(Y, 0))
     
     /**
      * A combination of the points with minimum x and y coordinates
      */
+	@deprecated("Please call this method through the point instance", "v2")
     def topLeft(a: Point, b: Point) = Point(Math.min(a.x, b.x), Math.min(a.y, b.y))
     
     /**
      * A combination of the points with minimum x and y coordinates. None if collection is empty
      */
-    def topLeftOption(points: TraversableOnce[Point]) = points.reduceLeftOption(topLeft)
+    def topLeftOption(points: TraversableOnce[Point]) = points.reduceLeftOption { _ topLeft _ }
     
     /**
      * A combination of the points with minimum x and y coordinates
@@ -59,12 +56,13 @@ object Point extends FromModelFactory[Point]
     /**
      * A combination of the points with maximum x and y coordinates
      */
+	@deprecated("Please call this method through the point instance", "v2")
     def bottomRight(a: Point, b: Point) = Point(Math.max(a.x, b.x), Math.max(a.y, b.y))
     
     /**
      * A combination of the points with maximum x and y coordinates. None if collection is empty
      */
-    def bottomRightOption(points: TraversableOnce[Point]) = points.reduceLeftOption(bottomRight)
+    def bottomRightOption(points: TraversableOnce[Point]) = points.reduceLeftOption { _ bottomRight _ }
     
     /**
      * A combination of the points with maximum x and y coordinates
@@ -77,35 +75,56 @@ object Point extends FromModelFactory[Point]
 * @author Mikko Hilpinen
 * @since 20.11.2018
 **/
-case class Point(x: Double, y: Double) extends ApproximatelyEquatable[Point] with 
-        ValueConvertible with ModelConvertible
+case class Point(override val x: Double, override val y: Double) extends VectorLike[Point]
+	with ApproximatelyEquatable[Point] with ValueConvertible with ModelConvertible
 {
-    // COMPUTED    --------------------
-    
-    /**
-     * A copy of this point with at least 0 x and y
-     */
-    def positive = Point(x max 0, y max 0)
-    
-    
     // IMPLEMENTED    -----------------
-    
-    def toValue = new Value(Some(this), PointType)
+	
+	lazy val dimensions = Vector(x, y)
+	
+	override def buildCopy(dimensions: Vector[Double]) =
+	{
+		if (dimensions.size >= 2)
+			Point(dimensions(0), dimensions(1))
+		else if (dimensions.isEmpty)
+			Point.origin
+		else
+			Point(dimensions(0), 0)
+	}
+	
+	def toValue = new Value(Some(this), PointType)
     
     def toModel = Model.fromMap(HashMap("x" -> x, "y" -> y))
     
     def ~==[B <: Point](other: B) = (x ~== other.x) && (y ~== other.y)
-    
+	
+	
+	// COMPUTED	-----------------------
+	
+	
+	/**
+	  * A vector representation of this point
+	  */
+	def toVector = Vector3D(x, y)
+	
+	/**
+	  * @return A size representation of this point
+	  */
+	def toSize = Size(x, y)
+	
+	/**
+	  * An awt representation of this point
+	  */
+	def toAwtPoint = new java.awt.Point(x.toInt, y.toInt)
+	
+	/**
+	  * An awt geom representation of this point
+	  */
+	def toAwtPoint2D = new Point2D.Double(x, y)
+	
     
     // OPERATORS    -------------------
     
-    def unary_- = Point(-x, -y)
-    
-    /**
-	 * A translated position
-	 */
-	def +(vector: Vector3D) = Point(x + vector.x, y + vector.y)
-	
 	/**
 	 * Translated position over certain axis
 	 */
@@ -116,59 +135,23 @@ case class Point(x: Double, y: Double) extends ApproximatelyEquatable[Point] wit
     }
 	
 	/**
-	 * A translated position
-	 */
-	def -(vector: Vector3D) = this.+(-vector)
-	
-	/**
-	 * A vector between these points
-	 */
-	def -(other: Point) = toVector - other.toVector
-	
-	/**
 	 * Translated position over certain axis
 	 */
 	def -(decrease: Double, axis: Axis2D) = this.+(-decrease, axis)
     
     
     // OTHER    -----------------------
-    
-    /**
-     * A map of this point's coordinates
-     */
-	def toMap = HashMap(X -> x, Y -> y)
 	
 	/**
-	 * A vector representation of this point
-	 */
-	def toVector = Vector3D(x, y)
-	
-	/**
-	 * An awt representation of this point
-	 */
-	def toAwtPoint = new java.awt.Point(x.toInt, y.toInt)
-	
-	/**
-	 * An awt geom representation of this point
-	 */
-	def toAwtPoint2D = new Point2D.Double(x, y)
+	  * @param other Another point
+	  * @return The distance between these two points
+	  */
+	def distanceFrom(other: Point) = (this - other).toVector.length
 	
 	/**
 	 * Connects this point with another, forming a line
 	 */
 	def lineTo(other: Point) = Line(this, other)
-	
-	/**
-	 * This point's coordinate on the specified axis
-	 */
-	def along(axis: Axis2D) = 
-	{
-        axis match 
-        {
-            case X => x 
-            case Y => y
-        }
-	}
     
     /**
      * A copy of this point with specified x
@@ -198,14 +181,4 @@ case class Point(x: Double, y: Double) extends ApproximatelyEquatable[Point] wit
      * Point translated over Y axis
      */
     def plusY(increase: Double) = Point(x, y + increase)
-    
-    /**
-     * The top left corner of the area between these two points
-     */
-    def topLeft(other: Point) = Point(x min other.x, y min other.y)
-    
-    /**
-     * The bottom left corner of the area between these two points
-     */
-    def bottomRight(other: Point) = Point(x max other.x, y max other.y)
 }
