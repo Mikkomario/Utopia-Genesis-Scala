@@ -1,7 +1,5 @@
 package utopia.genesis.shape
 
-import scala.Vector
-
 object Axis2D
 {
     /**

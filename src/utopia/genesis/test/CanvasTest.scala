@@ -2,13 +2,10 @@ package utopia.genesis.test
 
 import java.awt.Color
 
-import utopia.flow.async.AsyncExtensions._
-
 import utopia.flow.async.ThreadPool
 import utopia.genesis.handling.Drawable
 import utopia.genesis.handling.immutable.DrawableHandler
-import utopia.genesis.view.Canvas
-import utopia.genesis.view.MainFrame
+import utopia.genesis.view.{Canvas, MainFrame, RepaintLoop}
 import utopia.genesis.util.Drawer
 import utopia.genesis.shape.shape2D.{Bounds, Circle, Point, ShapeConvertible, Size}
 import utopia.inception.handling.HandlerType
@@ -47,12 +44,8 @@ object CanvasTest extends App
 	
 	implicit val context: ExecutionContext = new ThreadPool("Test").executionContext
 	
-	canvas.startAutoRefresh()
+	val repaintLoop = new RepaintLoop(canvas)
+	repaintLoop.registerToStopOnceJVMCloses()
+	repaintLoop.startAsync()
     frame.display()
-	
-	println("Frame closing")
-	
-	canvas.stopAutoRefresh().waitFor()
-	
-	println("Closed succesfully")
 }

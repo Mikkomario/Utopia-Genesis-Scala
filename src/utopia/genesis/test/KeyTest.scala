@@ -1,18 +1,18 @@
 package utopia.genesis.test
 
-import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.{Vector3D, X, Y}
 import utopia.genesis.event.KeyStateEvent
 import java.awt.event.KeyEvent
 
 import utopia.genesis.util.Drawer
-import utopia.genesis.shape.shape2D.Line
-import utopia.genesis.shape.shape2D.Bounds
+import utopia.genesis.shape.shape2D.{Bounds, Line, Point, Size}
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import java.awt.Color
 
 import utopia.genesis.event.KeyTypedEvent
 import utopia.genesis.handling.{Drawable, KeyStateListener, KeyTypedListener}
+import utopia.inception.handling.immutable.Handleable
 
 /**
  * This is an interactive test for keyboard interactions. The square character should move according
@@ -23,8 +23,7 @@ import utopia.genesis.handling.{Drawable, KeyStateListener, KeyTypedListener}
  */
 object KeyTest extends App
 {
-    /* TODO: Return and fix code after refactoring is done
-    class TestObject(startPosition: Vector3D) extends KeyStateListener
+    class TestObject(startPosition: Point) extends KeyStateListener with Handleable
     {
         // ATTRIBUTES    -----------------
         
@@ -50,31 +49,29 @@ object KeyTest extends App
         }
     }
     
-    class View(private val testObj: TestObject, private val gameWorldSize: Vector3D, 
-            private val squareSide: Int) extends Drawable
+    class View(private val testObj: TestObject, private val gameWorldSize: Size,
+			   private val squareSide: Int) extends Drawable
     {
         // ATTRIBUTES    -----------------
         
-        private val gridSquares = Vector3D(gameWorldSize.x.toInt / squareSide, 
-                gameWorldSize.y.toInt / squareSide);
+        private val gridSquares = Size(gameWorldSize.width.toInt / squareSide,
+                gameWorldSize.height.toInt / squareSide)
         private val gridSize = gridSquares * squareSide
-        private val gridPosition = (gameWorldSize - gridSize) / 2
-        
-        private val squareSize = Vector3D(squareSide, squareSide)
+        private val gridPosition = ((gameWorldSize - gridSize) / 2).toPoint
+		
+        private val squareSize = Size(squareSide, squareSide)
         private val avatarSize = squareSize * 0.8
         
         def draw(drawer: Drawer) = 
         {
             // Draws the grid first
-            for (x <- 0 to gridSquares.x.toInt)
+            for (x <- 0 to gridSquares.width.toInt)
             {
-                drawer.draw(Line.ofVector(gridPosition + (Vector3D(squareSide) * x), 
-                        gridSize.yProjection));
+                drawer.draw(Line.ofVector(gridPosition + X(squareSide * x), gridSize.toVector.yProjection))
             }
-            for (y <- 0 to gridSquares.y.toInt)
+            for (y <- 0 to gridSquares.height.toInt)
             {
-                drawer.draw(Line.ofVector(gridPosition + (Vector3D(0, squareSide) * y), 
-                        gridSize.xProjection));
+                drawer.draw(Line.ofVector(gridPosition + Y(squareSide * y), gridSize.toVector.xProjection));
             }
             
             // Then draws the object
@@ -105,5 +102,5 @@ object KeyTest extends App
     
     handlers ++= (testObj, view, new KeyTypePrinter())
     
-    frame.display()*/
+    frame.display()
 }

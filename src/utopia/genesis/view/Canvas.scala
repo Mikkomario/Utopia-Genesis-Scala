@@ -115,6 +115,7 @@ class Canvas(val drawHandler: DrawableHandler, originalGameWorldSize: Size, val 
         if (refreshLoop.isEmpty)
         {
             val loop = new RepaintLoop(this, maxFPS)
+            loop.registerToStopOnceJVMCloses()
             loop.startAsync()
             refreshLoop = Some(loop)
         }
