@@ -48,10 +48,11 @@ class CanvasMouseEventGenerator(c: Canvas, val moveHandler: MouseMoveHandler,
     
     override def parent = None
     
-    override def allowsHandlingFrom(handlerType: HandlerType) = isActive
-    
     // This generator dies once canvas is no longer reachable
     override def isDead = canvas.get.isEmpty
+    
+    // Allows handling when canvas is visible
+    override def allowsHandlingFrom(handlerType: HandlerType) = canvas.get.exists { _.isShowing }
     
     override def act(duration: Duration) =
     {

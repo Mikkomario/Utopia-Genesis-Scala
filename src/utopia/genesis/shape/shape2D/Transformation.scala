@@ -1,7 +1,7 @@
 package utopia.genesis.shape.shape2D
 
 import java.awt.geom.AffineTransform
-import utopia.genesis.util.Extensions._
+
 import utopia.flow.generic.ValueConvertible
 import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.generic.TransformationType
@@ -12,9 +12,7 @@ import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
-import scala.Vector
-import utopia.genesis.shape.Vector3D
-import utopia.genesis.shape.Rotation
+import utopia.genesis.shape.{Rotation, Vector3D}
 
 object Transformation extends FromModelFactory[Transformation]
 {
@@ -80,11 +78,9 @@ object Transformation extends FromModelFactory[Transformation]
  * @author Mikko Hilpinen
  * @since 29.12.2016
  */
-// TODO: Rename position to translation
-case class Transformation(val translation: Vector3D = Vector3D.zero, 
-        val scaling: Vector3D = Vector3D.identity, val rotation: Rotation = Rotation.zero, 
-        val shear: Vector3D = Vector3D.zero, val useReverseOrder: Boolean = false) extends 
-        ValueConvertible with ModelConvertible
+case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector3D = Vector3D.identity,
+                          rotation: Rotation = Rotation.zero, shear: Vector3D = Vector3D.zero,
+                          useReverseOrder: Boolean = false) extends ValueConvertible with ModelConvertible
 {
     // COMPUTED PROPERTIES    -------
     
@@ -92,7 +88,7 @@ case class Transformation(val translation: Vector3D = Vector3D.zero,
     
     // TODO: Handle rotation data type
     override def toModel = Model(Vector("translation" -> translation, "scaling" -> scaling, 
-            "rotation" -> rotation.toDouble, "shear" -> shear));
+            "rotation" -> rotation.toDouble, "shear" -> shear))
     
     /**
      * The translation component of this transformation as a point
@@ -185,8 +181,7 @@ case class Transformation(val translation: Vector3D = Vector3D.zero,
     /**
      * Inverts this transformation
      */
-    def unary_- = Transformation(-translation, Vector3D.identity / scaling, -rotation, -shear, 
-            !useReverseOrder);
+    def unary_- = Transformation(-translation, Vector3D.identity / scaling, -rotation, -shear, !useReverseOrder)
     
     /**
      * Combines the two transformations together. The applied translation is not depended of the 
@@ -194,7 +189,7 @@ case class Transformation(val translation: Vector3D = Vector3D.zero,
      * transformation and then the second, use apply(Transformation) instead.
      */
     def +(other: Transformation) = Transformation(translation + other.translation, 
-            scaling * other.scaling, rotation + other.rotation, shear + other.shear, useReverseOrder);
+            scaling * other.scaling, rotation + other.rotation, shear + other.shear, useReverseOrder)
     
     /*
      * Negates a transformation from this transformation
@@ -233,7 +228,7 @@ case class Transformation(val translation: Vector3D = Vector3D.zero,
      * zero position and scaling of 2 will create a transformation with (2, 0, 0) position and
      * scaling 2
      */
-    def apply(other: Transformation): Transformation = (this + other).withTranslation(apply(other.translation));
+    def apply(other: Transformation): Transformation = (this + other).withTranslation(apply(other.translation))
     
     
     // OTHER METHODS    -------------
@@ -243,7 +238,7 @@ case class Transformation(val translation: Vector3D = Vector3D.zero,
      * @param absolute a vector in absolute world space
      * @return The absolute point in relative world space
      */
-    def invert(absolute: Point) = Point of toInvertedAffineTransform.transform(absolute.toAwtPoint2D, null);
+    def invert(absolute: Point) = Point of toInvertedAffineTransform.transform(absolute.toAwtPoint2D, null)
     
     /**
      * Inverse transforms an <b>absolute</b> coordinate point <b>into relative</b> space
@@ -289,12 +284,12 @@ case class Transformation(val translation: Vector3D = Vector3D.zero,
     
     /**
      * Rotates the transformation around an absolute origin point
-     * @param rotationRads the amount of rotation applied to this transformation
+     * @param rotation the amount of rotation applied to this transformation
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
     def absoluteRotated(rotation: Rotation, origin: Point) = 
-            withTranslation(translation.rotated(rotation, origin.toVector)).rotated(rotation);
+            withTranslation(translation.rotated(rotation, origin.toVector)).rotated(rotation)
     
     /**
      * Rotates the transformation around an absolute origin point
@@ -307,17 +302,17 @@ case class Transformation(val translation: Vector3D = Vector3D.zero,
     
     /**
      * Rotates the transformation around an absolute origin point
-     * @param rotationRads the amount of degrees the transformation is rotated (clockwise)
+     * @param rotationDegs the amount of degrees the transformation is rotated (clockwise)
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
     @deprecated("Please start using absoluteRotated instead", "v1.1.2")
     def absoluteRotatedDegs(rotationDegs: Double, origin: Point) = absoluteRotated(
-            Rotation ofDegrees rotationDegs, origin);
+            Rotation ofDegrees rotationDegs, origin)
     
     /**
      * Rotates the transformation around a relative origin point
-     * @param rotationRads the amount of rotation applied to this transformation
+     * @param rotation the amount of rotation applied to this transformation
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
@@ -334,7 +329,7 @@ case class Transformation(val translation: Vector3D = Vector3D.zero,
     
     /**
      * Rotates the transformation around an relative origin point
-     * @param rotationRads the amount of degrees the transformation is rotated (clockwise)
+     * @param rotationDegs sthe amount of degrees the transformation is rotated (clockwise)
      * @param origin the point of origin around which the transformation is rotated
      * @return the rotated transformation
      */
