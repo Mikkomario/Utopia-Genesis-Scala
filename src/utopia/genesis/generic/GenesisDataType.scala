@@ -69,8 +69,5 @@ object GenesisDataType
 sealed trait GenesisDataType
 {
     if (!GenesisDataType.isSetup)
-    {
-        throw new EnvironmentNotSetupException(
-                "GenesisDataType.setup() must be called before using this data type.")
-    }
+        throw EnvironmentNotSetupException("GenesisDataType.setup() must be called before using this data type.")
 }

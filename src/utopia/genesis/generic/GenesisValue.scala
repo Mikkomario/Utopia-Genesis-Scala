@@ -11,33 +11,6 @@ import utopia.genesis.shape.shape2D.Point
 
 object GenesisValue
 {
-    /**
-     * Wraps a 3d vector into a value
-     */
-    @deprecated("Replaced with the ValueConvertible trait. Use Vector3D#toValue instead", "v1.1")
-    def of(vector: Vector3D) = new Value(Some(vector), Vector3DType)
-    /**
-     * Wraps a line into a value
-     */
-    @deprecated("Replaced with the ValueConvertible trait. Use Line#toValue instead", "v1.1")
-    def of(line: Line) = new Value(Some(line), LineType)
-    /**
-     * Wraps a circle into a value
-     */
-    @deprecated("Replaced with the ValueConvertible trait. Use Circle#toValue instead", "v1.1")
-    def of(circle: Circle) = new Value(Some(circle), CircleType)
-    /**
-     * Wraps a set of bounds into a value
-     */
-    @deprecated("Replaced with the ValueConvertible trait. Use Bounds#toValue instead", "v1.1")
-    def of(rect: Bounds) = new Value(Some(rect), BoundsType)
-    /**
-     * Wraps a transformation into a value
-     */
-    @deprecated("Replaced with the ValueConvertible trait. Use Transformation#toValue instead", "v1.1")
-    def of(transformation: Transformation) = new Value(Some(transformation), TransformationType)
-    
-    
     implicit class GValue(val v: Value) extends AnyVal
     {
         /**
