@@ -28,7 +28,7 @@ class GridDrawer(worldSize: Size, val squareSize: Size) extends Drawable with Ha
     /**
      * The position of the top left corner of the grid
      */
-    private val position = (worldSize - size) / 2
+    private val position = ((worldSize - size) / 2).toPoint
     
     
     // IMPLEMENTED METHODS    --------

@@ -5,16 +5,21 @@ import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import java.awt.Font
 
+import utopia.flow.async.ThreadPool
 import utopia.genesis.util.Drawer
-import utopia.genesis.shape.shape2D.Bounds
+import utopia.genesis.shape.shape2D.{Bounds, Size}
 import utopia.genesis.view.CanvasMouseEventGenerator
-import utopia.genesis.handling.Drawable
+import utopia.genesis.handling.{ActorLoop, Drawable}
+import utopia.genesis.handling.mutable.{ActorHandler, DrawableHandler, MouseButtonStateHandler, MouseMoveHandler, MouseWheelHandler}
+import utopia.inception.handling.immutable.Handleable
+import utopia.inception.handling.mutable.HandlerRelay
+
+import scala.concurrent.ExecutionContext
 
 
 object CameraTest extends App
 {
-    /* TODO: Return and fix code after refactoring is done
-    class GridNumberDrawer(private val grid: GridDrawer) extends Drawable
+    class GridNumberDrawer(private val grid: GridDrawer) extends Drawable with Handleable
     {
         private val font = new Font("Arial", 0, 14)
         
@@ -28,30 +33,39 @@ object CameraTest extends App
             }
         }
     }
+	
+	// Creates handlers
+	val actorHandler = ActorHandler()
+	val mouseMoveHandler = MouseMoveHandler()
+	val mouseButtonHandler = MouseButtonStateHandler()
+	val mouseWheelHandler = MouseWheelHandler()
+	val drawHandler = DrawableHandler()
+	
+	val handlers = HandlerRelay(actorHandler, mouseMoveHandler, mouseButtonHandler, mouseWheelHandler, drawHandler)
+	
+	// Creates frame
+    val worldSize = Size(800, 600)
     
-    val worldSize = Vector3D(800, 600)
-    
-    val canvas = new Canvas(worldSize, 120)
+    val canvas = new Canvas(drawHandler, worldSize)
     val frame = new MainFrame(canvas, worldSize, "Camera Test")
     
-    val actorThread = new ActorThread(20, 120)
-    val mouseEventGen = new CanvasMouseEventGenerator(canvas)
-    actorThread.handler += mouseEventGen
+	// Sets up generators
+    val actorLoop = new ActorLoop(actorHandler, 20 to 120)
+    val mouseEventGen = new CanvasMouseEventGenerator(canvas, mouseMoveHandler, mouseButtonHandler, mouseWheelHandler)
+    actorHandler += mouseEventGen
     
-    val handlers = new HandlerRelay(canvas.handler, actorThread.handler, mouseEventGen.moveHandler)
-    
-    val grid = new GridDrawer(worldSize, Vector3D(80, 80))
+	// Creates test objects
+    val grid = new GridDrawer(worldSize, Size(80, 80))
     val numbers = new GridNumberDrawer(grid)
-    val camera = new MagnifierCamera(64)
+	val camera = new MagnifierCamera(64)
+ 
+	handlers ++= (grid, numbers, camera, camera.drawHandler)
+    camera.drawHandler ++= (grid, numbers)
     
-    handlers += grid
-    handlers += numbers
-    handlers += camera
-    handlers += camera.drawHandler
-    
-    camera.drawHandler += grid
-    camera.drawHandler += numbers
-    
-    actorThread.start()
-    frame.display()*/
+	// Starts the program
+	implicit val context: ExecutionContext = new ThreadPool("Test").executionContext
+	
+	actorLoop.startAsync()
+	canvas.startAutoRefresh(120)
+    frame.display()
 }

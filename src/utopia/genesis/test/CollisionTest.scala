@@ -1,10 +1,9 @@
 package utopia.genesis.test
 
 import utopia.genesis.generic.GenesisDataType
-import utopia.genesis.shape.Vector3D
-import utopia.genesis.shape.shape2D.Circle
+import utopia.genesis.shape.{Vector3D, X, Y}
+import utopia.genesis.shape.shape2D.{Circle, Line, Point}
 import utopia.genesis.util.Extensions._
-import utopia.genesis.shape.shape2D.Line
 
 /**
  * This test makes sure circle and line class projection and collision algorithms are working 
@@ -13,13 +12,12 @@ import utopia.genesis.shape.shape2D.Line
  */
 object CollisionTest extends App
 {
-    /* TODO: Return and fix code after refactoring is done
     GenesisDataType.setup()
     
-    val circle1 = Circle(Vector3D.zero, 2)
-    val circle2 = Circle(Vector3D(3), 2)
+    val circle1 = Circle(Point.origin, 2)
+    val circle2 = Circle(Point(3, 0), 2)
     
-    assert(circle1.projectedOver(Vector3D(1)) == Line(Vector3D(-2), Vector3D(2)))
+    assert(circle1.projectedOver(X) == Line(Point(-2, 0), Point(2, 0)))
     
     val mtv1 = circle1.collisionMtvWith(circle2)
     
@@ -41,22 +39,22 @@ object CollisionTest extends App
     assert(point2.y > 0)
     assert(point2.y < 3)
     
-    val line1 = Line(Vector3D(1.5, -3), Vector3D(1.5, 3))
+    val line1 = Line(Point(1.5, -3), Point(1.5, 3))
     
-    assert(line1.projectedOver(Vector3D(0, 1)) == Line(Vector3D(0, -3), Vector3D(0, 3)))
-    assert(line1.projectedOver(Vector3D(1)) == Line(Vector3D(1.5), Vector3D(1.5)))
+    assert(line1.projectedOver(Y) == Line(Point(0, -3), Point(0, 3)))
+    assert(line1.projectedOver(X) == Line(Point(1.5, 0), Point(1.5, 0)))
     assert(line1.collisionAxes.size == 2)
-    assert(line1.collisionAxes.exists { _ isParallelWith Vector3D(1) })
+    assert(line1.collisionAxes.exists { _ isParallelWith X })
     
     val mtv2 = circle1.collisionMtvWith(line1, line1.collisionAxes)
     
     assert(mtv2.isDefined)
     assert(mtv2.get == Vector3D(-0.5))
     
-    val collisionPoints2 = line1.circleIntersection(circle1, true).sortBy { _.y }
+    val collisionPoints2 = line1.circleIntersection(circle1).sortBy { _.y }
     
     println(collisionPoints2)
     assert(collisionPoints2 ~== collisionPoints1)
     
-    println("Success!")*/
+    println("Success!")
 }

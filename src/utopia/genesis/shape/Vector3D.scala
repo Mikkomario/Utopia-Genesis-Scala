@@ -343,11 +343,23 @@ case class Vector3D(override val x: Double = 0.0, override val y: Double = 0.0, 
      * Checks whether this vector is parallel with another vector (has same or opposite direction)
      */
     def isParallelWith(other: Vector3D) = crossProductLength(other) ~== 0.0
+	
+	/**
+	  * @param axis Target axis
+	  * @return Whether this vector is parallel to the specified axis
+	  */
+	def isParallelWith(axis: Axis): Boolean = isParallelWith(axis.toUnitVector)
     
     /**
      * Checks whether this vector is perpendicular to another vector (ie. (1, 0) vs. (0, 1))
      */
     def isPerpendicularTo(other: Vector3D) = dot(other) ~== 0.0
+	
+	/**
+	  * @param axis Target axis
+	  * @return Whether this vector is perpendicular to the specified axis
+	  */
+	def isPerpendicularTo(axis: Axis): Boolean = isPerpendicularTo(axis.toUnitVector)
     
     /**
      * Calculates the directional difference between the two vectors in radians. The difference is 
