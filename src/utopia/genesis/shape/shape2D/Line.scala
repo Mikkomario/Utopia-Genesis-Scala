@@ -103,6 +103,11 @@ case class Line(start: Point, end: Point) extends ShapeConvertible with
      */
     def center = (start + end) / 2
     
+    /**
+      * @return The bounds around this line
+      */
+    def bounds = Bounds.between(start, end)
+    
     
     // OPERATORS    --------------------
     

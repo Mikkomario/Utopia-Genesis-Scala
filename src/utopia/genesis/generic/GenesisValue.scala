@@ -2,12 +2,7 @@ package utopia.genesis.generic
 
 import utopia.genesis.shape.Vector3D
 import utopia.flow.datastructure.immutable.Value
-import utopia.genesis.shape.shape2D.Line
-import utopia.genesis.shape.shape2D.Circle
-import utopia.genesis.shape.shape2D.Size
-import utopia.genesis.shape.shape2D.Bounds
-import utopia.genesis.shape.shape2D.Transformation
-import utopia.genesis.shape.shape2D.Point
+import utopia.genesis.shape.shape2D.{Bounds, Circle, Line, Point, Rectangle, Size, Transformation}
 
 object GenesisValue
 {
@@ -39,9 +34,14 @@ object GenesisValue
         def circle = v.objectValue(CircleType).map { _.asInstanceOf[Circle] }
         
         /**
-         * A rectangle value of this value. None if the value couldn't be casted.
+         * A bounds value of this value. None if the value couldn't be casted.
          */
         def bounds = v.objectValue(BoundsType).map { _.asInstanceOf[Bounds] }
+    
+        /**
+          * @return A rectangle value of this value. None if this value couldn't be casted
+          */
+        def rectangle = v.objectValue(RectangleType).map { _.asInstanceOf[Rectangle] }
         
         /**
          * A transformation value of this value. None if the value couldn't be casted.
@@ -81,12 +81,20 @@ object GenesisValue
         def circleOr(default: => Circle = Circle(Point.origin, 0)) = circle.getOrElse(default)
         
         /**
-         * The rectangle value of this value, or the provided default value in case the value
+         * The bounds value of this value, or the provided default value in case the value
          * couldn't be cast.
-         * @param default the default rectangle value. Defaults to rectangle with zero position and
+         * @param default the default bounds value. Defaults to bounds with zero position and
          * size.
          */
         def boundsOr(default: => Bounds = Bounds.zero) = bounds.getOrElse(default)
+    
+        /**
+          * The rectangle value of this value, or the provided default value in case the value
+          * couldn't be cast.
+          * @param default the default rectangle value. Defaults to rectangle with zero position and
+          * size.
+          */
+        def rectangleOr(default: => Rectangle = Rectangle.zero) = rectangle.getOrElse(default)
         
         /**
          * The transformation value of this value, or the provided default value in case the value

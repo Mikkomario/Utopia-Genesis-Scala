@@ -51,6 +51,11 @@ case class Circle(origin: Point, radius: Double) extends ShapeConvertible with A
      */
     def area = math.Pi * radius * radius
     
+    /**
+      * @return The bounds around this circle
+      */
+    def bounds = Bounds.between(origin - (radius, radius), origin + (radius, radius))
+    
     
     // OPERATORS    -------------------
     

@@ -2,16 +2,11 @@ package utopia.genesis.generic
 
 import utopia.genesis.shape.Vector3D
 import utopia.flow.generic.DataType
-import utopia.genesis.shape.shape2D.Line
-import utopia.genesis.shape.shape2D.Circle
+import utopia.genesis.shape.shape2D.{Bounds, Circle, Line, Point, Rectangle, Size, Transformation}
 import utopia.flow.generic.AnyType
 import utopia.flow.generic.EnvironmentNotSetupException
 import utopia.flow.generic.ConversionHandler
 import utopia.flow.parse.JSONValueConverter
-import utopia.genesis.shape.shape2D.Size
-import utopia.genesis.shape.shape2D.Point
-import utopia.genesis.shape.shape2D.Bounds
-import utopia.genesis.shape.shape2D.Transformation
 
 /**
  * Vectors are used for representing motion, force and coordinates
@@ -34,9 +29,13 @@ object PointType extends DataType("Point", classOf[Point]) with GenesisDataType
  */
 object SizeType extends DataType("Size", classOf[Size]) with GenesisDataType
 /**
- * Rectangles are geometric shapes / areas that have both position and size
+ * Bounds are geometric shapes / areas that have both position and size. Bounds are always aligned on X- and Y axes
  */
 object BoundsType extends DataType("Bounds", classOf[Bounds]) with GenesisDataType
+/**
+  * Rectangles are geometric shapes that consist of 4 points, each angle being 90 degrees
+  */
+object RectangleType extends DataType("Rectangle", classOf[Rectangle]) with GenesisDataType
 /**
  * Transformations are used for transforming object states like position and scale
  */

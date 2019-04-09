@@ -106,10 +106,24 @@ trait VectorLike[Repr <: VectorLike[_]]
 	def +(other: VectorLike[_]) = combineWith(other, { _ + _ })
 	
 	/**
+	  * @param x X translation
+	  * @param more Y, Z, ... translation
+	  * @return A translated version of this element
+	  */
+	def +(x: Double, more: Double*) = combineDimensions(x +: more, { _ + _ })
+	
+	/**
 	  * @param other Another vectorlike element
 	  * @return The subtraction of these two elements
 	  */
 	def -(other: AnyVectorLike) = this + (-other)
+	
+	/**
+	  * @param x X translation (negative)
+	  * @param more Y, Z, ... translation (negative)
+	  * @return A translated version of this element
+	  */
+	def -(x: Double, more: Double*) = combineDimensions(x +: more, { _ - _ })
 	
 	/**
 	  * @param other Another vectorlike element
@@ -205,10 +219,12 @@ trait VectorLike[Repr <: VectorLike[_]]
 	  * @param merge A merge function
 	  * @return A new element with merged or copied dimensions
 	  */
-	def combineWith(other: VectorLike[_], merge: (Double, Double) => Double) =
+	def combineWith(other: VectorLike[_], merge: (Double, Double) => Double) = combineDimensions(other.dimensions, merge)
+	
+	private def combineDimensions(dimensions: Seq[Double], merge: (Double, Double) => Double) =
 	{
 		val myDimensions = dimensions
-		val otherDimensions = other.dimensions
+		val otherDimensions = dimensions
 		
 		val builder = new VectorBuilder[Double]()
 		for (i <- 0 until (myDimensions.size min otherDimensions.size) )

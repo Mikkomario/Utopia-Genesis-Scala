@@ -1,6 +1,5 @@
 package utopia.genesis.test
 
-import utopia.genesis.shape.Vector3D
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import java.awt.Font
