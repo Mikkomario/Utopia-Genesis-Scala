@@ -47,3 +47,5 @@ WindowKeyEventGenerator replaced with ConvertingKeyListener
 Canvas asynchronous refreshing separated to a new loop class (RepaintLoop)
 
 Deprecated methods removed from Vector3D. Some new deprecations.
+
+template.Tree renamed to TreeLike. Added immutable and mutable TreeLikes as well. XmlElement extends immutable.TreeLike
