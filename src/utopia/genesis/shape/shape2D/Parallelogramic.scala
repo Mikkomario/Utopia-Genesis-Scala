@@ -64,6 +64,8 @@ trait Parallelogramic extends Polygonic with TransformableShape[Parallelogram]
 	
 	// IMPLEMENTED	--------------
 	
+	override def center = topLeft + (top / 2) + (left / 2)
+	
 	override def corners = Vector(topLeft, topRight, bottomRight, bottomLeft)
 	
 	override def collisionAxes = Vector(top, left).map { _.normal2D }

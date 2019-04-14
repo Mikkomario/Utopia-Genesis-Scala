@@ -13,6 +13,7 @@ New classes for 2D shapes
     - Bounds
     - Rectangle
     - Parallelogram
+    - Triangle
 
 New traits for polygon shapes
     - Polygonic

@@ -70,6 +70,21 @@ trait Polygonic extends ShapeConvertible with Projectable with Area2D
 		Bounds(topLeft, (bottomRigth - topLeft).toSize)
 	}
 	
+	/**
+	  * @return The center point of this shape
+	  */
+	def center =
+	{
+		val c = corners
+		if (c.isEmpty)
+			Point.origin
+		else
+		{
+			val total = c.reduce { _ + _ }
+			total / c.size
+		}
+	}
+	
 	
 	// IMPLEMENTED	------------
 	
