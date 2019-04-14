@@ -13,7 +13,6 @@ import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
 import utopia.genesis.shape.Vector3D
 import utopia.genesis.shape.X
-import utopia.genesis.shape.Y
 
 object Bounds extends FromModelFactory[Bounds]
 {
@@ -88,15 +87,9 @@ object Bounds extends FromModelFactory[Bounds]
  * @author Mikko Hilpinen
  * @since 13.1.2017
  */
-case class Bounds(position: Point, size: Size) extends ShapeConvertible with Area2D with ValueConvertible with ModelConvertible
+case class Bounds(position: Point, size: Size) extends Rectangular with ValueConvertible with ModelConvertible
 {
     // COMPUTED PROPERTIES    ------------
-    
-    override def toShape = toAwt
-    
-    override def toValue = new Value(Some(this), BoundsType)
-    
-    override def toModel = Model(Vector("position" -> position, "size" -> size))
     
     /**
      * An awt counterpart of these bounds
@@ -104,69 +97,31 @@ case class Bounds(position: Point, size: Size) extends ShapeConvertible with Are
     def toAwt = new java.awt.Rectangle(position.x.toInt, position.y.toInt, width.toInt, height.toInt)
     
     /**
-     * The width of the rectangle / cube
-     */
-    def width = size.width
-    
-    /**
-     * The height of the rectangle / cube
-     */
-    def height = size.height
-    
-    /**
-     * The smallest (on all axes) coordinate that is contained within these bounds
-     */
-    def topLeft = position
-    
-    /**
-     * The largest (on all axes) coordinate that is contained within these bounds
-     */
-    def bottomRight = position + size.toVector
-    
-    /**
-     * The top right corner of this rectangle
-     */
-    def topRight = position + size.toVector.projectedOver(X)
-    
-    /**
-     * The bottom left corner of this rectangle
-     */
-    def bottomLeft = position + size.toVector.projectedOver(Y)
-    
-    /**
-     * The area of the x-y side of this rectangle in square pixels
-     */
-    def area = size.area
-    
-    /**
      * The diagonal line for this rectangle. Starts at the position coordinates and goes all the 
      * way to the opposite corner.
      */
     def diagonal = Line(topLeft, bottomRight)
     
-    /**
-     * The four corners of the this rectangle, in clockwise order starting from the
-     * rectangle's position.
-     */
-    def corners = Vector(topLeft, topRight, bottomRight, bottomLeft)
-    
-    /**
-     * The four corners of the x-y side of the rectangle, in clockwise order starting from the
-     * rectangle's position. All of the corners are projected to the x-y -plane.
-     */
-    @deprecated("Please use corners instead", "v1.1.2")
-    def corners2D = corners
-    
-    /**
-     * The four edges of the x-y side of the rectangle, in clockwise order starting from the x-wise edge.
-     * All of the edges are projected to the x-y -plane
-     */
-    def edges = Line.edgesForVertices(corners)
-    
     
     // IMPLEMENTED METHODS    ----------
     
-    override def contains(point: Point) = point.x >= topLeft.x && point.y >= topLeft.y && 
+    def topLeft = position
+    
+    override def width = size.width
+    
+    override def height = size.height
+    
+    override def toValue = new Value(Some(this), BoundsType)
+    
+    override def toModel = Model(Vector("position" -> position, "size" -> size))
+    
+    override def toShape = toAwt
+    
+    override def leftLength = size.height
+    
+    override def top = X(size.width)
+    
+    override def contains(point: Point) = point.x >= topLeft.x && point.y >= topLeft.y &&
             point.x <= bottomRight.x && point.y <= bottomRight.y
     
     
@@ -203,11 +158,11 @@ case class Bounds(position: Point, size: Size) extends ShapeConvertible with Are
     /**
      * Finds the intersection points between the edges of this rectangle and the provided circle
      */
-    def circleIntersection(circle: Circle) = edges.flatMap { _.circleIntersection(circle) }
+    def circleIntersection(circle: Circle) = sides.flatMap { _.circleIntersection(circle) }
     
     /**
      * Finds the intersection points between the edges of this rectangle and the provided line. 
      * Both shapes are projected to the x-y plane before the check.
      */
-    def lineIntersection(line: Line) = edges.flatMap { _.intersection(line) }
+    def lineIntersection(line: Line) = sides.flatMap { _.intersection(line) }
 }

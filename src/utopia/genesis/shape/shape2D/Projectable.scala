@@ -3,6 +3,25 @@ package utopia.genesis.shape.shape2D
 import utopia.genesis.util.Extensions._
 import utopia.genesis.shape.Axis
 import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.shape2D.Projectable.PointOrdering
+
+object Projectable
+{
+    private object PointOrdering extends Ordering[Point]
+    {
+        override def compare(v1: Point, v2: Point) =
+        {
+            if (v1.x < v2.x) { -1 }
+            else if (v1.x > v2.x) { 1 }
+            else
+            {
+                if (v1.y < v2.y) { -1 }
+                else if (v1.y > v2.y) { 1 }
+                else 0
+            }
+        }
+    }
+}
 
 /**
  * This trait is extended by shapes that can be projected over a specified axis
@@ -18,13 +37,21 @@ trait Projectable
      */
     def projectedOver(axis: Vector3D): Line
     
+    
+    // COMPUTED -------------------------------
+    
     /**
-     * Projects this shape, creating a line parallel to the provided axis
-     */
-    def projectedOver(axis: Axis): Line = projectedOver(axis.toUnitVector)
+      * @return An ordering for points, when it comes to projections
+      */
+    implicit def pointOrdering: Ordering[Point] = PointOrdering
     
     
     // OTHER METHODS    -----------------------
+    
+    /**
+      * Projects this shape, creating a line parallel to the provided axis
+      */
+    def projectedOver(axis: Axis): Line = projectedOver(axis.toUnitVector)
     
     /**
     * Calculates if / how much the projections of the two shapes overlap on the specified axis
@@ -70,9 +97,23 @@ trait Projectable
             Some(mtvs.get.minBy { _.length })
         }
         else
-        {
             None
-        }
+    }
+    
+    /**
+      * Checks whether a point lies in this object's projection on a certain axis
+      * @param point A point
+      * @param axis axis where the overlap is checked
+      * @return Whether the projected point is contained within this object's projection when considering only the
+      *         specified axis
+      */
+    def containsProjection(point: Point, axis: Vector3D) =
+    {
+        val pointProjection = point.toVector.projectedOver(axis).toPoint
+        val myProjection = projectedOver(axis)
+        
+        // Checks whether point lies on the projection. Points at the edge do count
+        comparePoints(myProjection.start, pointProjection) >= 0 && comparePoints(myProjection.end, pointProjection) <= 0
     }
     
     private def orderedProjectionOver(axis: Vector3D) = 
@@ -81,7 +122,7 @@ trait Projectable
         if (comparePoints(projection.start, projection.end) <= 0) projection else projection.reverse
     }
     
-    private def comparePoints(v1: Point, v2: Point) = 
+    protected def comparePoints(v1: Point, v2: Point) =
     {
         if (v1.x < v2.x) { -1 }
         else if (v1.x > v2.x) { 1 }

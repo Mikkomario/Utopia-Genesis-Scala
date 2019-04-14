@@ -6,7 +6,7 @@ package utopia.genesis.shape.shape2D
  * @author Mikko Hilpinen
  * @since 9.7.2017
  */
-trait TransformableShape[T]
+trait TransformableShape[+T]
 {
     /**
      * Transforms this instance with the specified transformation

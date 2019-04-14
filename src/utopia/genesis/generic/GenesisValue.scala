@@ -37,11 +37,6 @@ object GenesisValue
          * A bounds value of this value. None if the value couldn't be casted.
          */
         def bounds = v.objectValue(BoundsType).map { _.asInstanceOf[Bounds] }
-    
-        /**
-          * @return A rectangle value of this value. None if this value couldn't be casted
-          */
-        def rectangle = v.objectValue(RectangleType).map { _.asInstanceOf[Rectangle] }
         
         /**
          * A transformation value of this value. None if the value couldn't be casted.
@@ -87,14 +82,6 @@ object GenesisValue
          * size.
          */
         def boundsOr(default: => Bounds = Bounds.zero) = bounds.getOrElse(default)
-    
-        /**
-          * The rectangle value of this value, or the provided default value in case the value
-          * couldn't be cast.
-          * @param default the default rectangle value. Defaults to rectangle with zero position and
-          * size.
-          */
-        def rectangleOr(default: => Rectangle = Rectangle.zero) = rectangle.getOrElse(default)
         
         /**
          * The transformation value of this value, or the provided default value in case the value
@@ -104,5 +91,40 @@ object GenesisValue
          */
         def transformationOr(default: => Transformation = Transformation.identity) = 
                 transformation.getOrElse(default)
+    
+        /**
+          * @return 3D Vector o this value or a zero vector
+          */
+        def getVector3D = vector3DOr()
+    
+        /**
+          * @return Point of this value or a (0, 0) point
+          */
+        def getPoint = pointOr()
+    
+        /**
+          * @return Size of this value or 0 size
+          */
+        def getSize = sizeOr()
+    
+        /**
+          * @return Line of this value or a 0 -> 0 line
+          */
+        def getLine = lineOr()
+    
+        /**
+          * @return Circle of this value or a 0 sized circle
+          */
+        def getCircle = circleOr()
+    
+        /**
+          * @return Bounds of this value or a 0 bounds
+          */
+        def getBounds = boundsOr()
+    
+        /**
+          * @return Transformation of this value or an identity transformation
+          */
+        def getTransformation = transformationOr()
     }
 }

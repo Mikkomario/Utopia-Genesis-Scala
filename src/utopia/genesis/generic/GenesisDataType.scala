@@ -33,10 +33,6 @@ object SizeType extends DataType("Size", classOf[Size]) with GenesisDataType
  */
 object BoundsType extends DataType("Bounds", classOf[Bounds]) with GenesisDataType
 /**
-  * Rectangles are geometric shapes that consist of 4 points, each angle being 90 degrees
-  */
-object RectangleType extends DataType("Rectangle", classOf[Rectangle]) with GenesisDataType
-/**
  * Transformations are used for transforming object states like position and scale
  */
 object TransformationType extends DataType("Transformation", classOf[Transformation]) with GenesisDataType
@@ -59,7 +55,7 @@ object GenesisDataType
         isSetup = true
         
         DataType.setup()
-        DataType.introduceTypes(Vector3DType, LineType, CircleType, TransformationType)
+        DataType.introduceTypes(Vector3DType, PointType, SizeType, LineType, CircleType, TransformationType)
         ConversionHandler.addCaster(GenesisValueCaster)
         JSONValueConverter.introduce(GenesisJSONValueConverter)
     }

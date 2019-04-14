@@ -86,7 +86,7 @@ case class Circle(origin: Point, radius: Double) extends ShapeConvertible with A
     /**
      * Checks whether the circle contains the provided rectangle
      */
-    def contains(rectangle: Bounds): Boolean = rectangle.edges.forall(contains)
+    def contains(poly: Polygonic): Boolean = poly.corners.forall(contains)
     
     /**
      * Checks whether the other circle is contained within this circle's area

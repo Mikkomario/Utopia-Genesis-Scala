@@ -10,10 +10,20 @@ New classes for 2D shapes
     - Size
     - Point
     - Axis & Axis2D
+    - Bounds
+    - Rectangle
+    - Parallelogram
+
+New traits for polygon shapes
+    - Polygonic
+    - Parallelogramic
+    - Rectangular
 
 VectorLike trait for Vector3D, Point and Size
 
 Immutable Handler versions
+
+getX methods added to GenesisValue
 
 
 Updates & Changes
