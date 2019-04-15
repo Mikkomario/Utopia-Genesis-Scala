@@ -12,6 +12,8 @@ object VectorTest extends App
     
     val v1 = Vector3D(1, 1)
     
+    println(s"$v1 * ${ Vector3D.identity } = ${ v1 * Vector3D.identity }")
+    
     assert(v1 == Vector3D(1, 1))
     assert(v1 * 1 == v1)
     assert(v1 * Vector3D.identity == v1)
@@ -51,8 +53,8 @@ object VectorTest extends App
     println(Vector3D(-1, 7, 4) cross Vector3D(-5, 8, 4))
     assert(Vector3D(-1, 7, 4) cross Vector3D(-5, 8, 4) ~== Vector3D(-4, -16, 27))
     // (10, 0, 0) x (10, 0, -2) = (0, 20, 0)
-    println(Vector3D(10, 0, 0) cross Vector3D(10, 0, -2))
-    assert(Vector3D(10, 0, 0) cross Vector3D(10, 0, -2) ~== Vector3D(0, 20, 0))
+    println(Vector3D(10) cross Vector3D(10, 0, -2))
+    assert(Vector3D(10) cross Vector3D(10, 0, -2) ~== Vector3D(0, 20))
     
     // Tests normals
     assert(v1.normal2D isPerpendicularTo v1)

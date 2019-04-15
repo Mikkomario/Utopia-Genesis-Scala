@@ -1,24 +1,35 @@
 package utopia.genesis.handling
 
-import java.time.{Duration, Instant}
+import java.time.Instant
 
 import utopia.flow.async.Loop
 import utopia.flow.util.TimeExtensions._
 import utopia.flow.util.WaitTarget.Until
+import utopia.genesis.util.FPS
 
-class ActorLoop(private val handler: ActorHandler, val apsRange: Range) extends Loop
+class ActorLoop(private val handler: ActorHandler, val apsRange: Range = 15 to 60) extends Loop
 {
 	// ATTRIBUTES	-------------------
 	
 	/**
+	  * Minimum actions per second
+	  */
+	val minAPS = FPS(apsRange.start)
+	
+	/**
+	  * Maximum actions per second
+	  */
+	val maxAPS = FPS(apsRange.end)
+	
+	/**
 	  * @return The minimum interval between act calls
 	  */
-	def minInterval = apsToDuration(apsRange.end)
+	def minInterval = maxAPS.interval
 	
 	/**
 	  * @return The maximum interval passed to act calls (actual interval may be longer)
 	  */
-	def maxInterval = apsToDuration(apsRange.start)
+	def maxInterval = minAPS.interval
 	
 	private var lastActStarted = Instant.now()
 	
@@ -43,9 +54,4 @@ class ActorLoop(private val handler: ActorHandler, val apsRange: Range) extends 
 	  * The time between the end of the current run and the start of the next one
 	  */
 	override protected def nextWaitTarget = Until(lastActStarted + minInterval)
-	
-	
-	// OTHER	------------------------
-	
-	private def apsToDuration(aps: Int) = if (aps <= 0) Duration.ZERO else Duration.ofNanos((1000.0 / aps * 1000000).toLong)
 }

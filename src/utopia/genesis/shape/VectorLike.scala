@@ -214,7 +214,7 @@ trait VectorLike[Repr <: VectorLike[_]]
 	
 	/**
 	  * Merges this vectorlike element with another element using a merge function. Dimensions not present in one of the
-	  * elements will be taken from the other one
+	  * elements will be treated as 0
 	  * @param other Another vectorlike element
 	  * @param merge A merge function
 	  * @return A new element with merged or copied dimensions
@@ -223,7 +223,7 @@ trait VectorLike[Repr <: VectorLike[_]]
 	
 	private def combineDimensions(dimensions: Seq[Double], merge: (Double, Double) => Double) =
 	{
-		val myDimensions = dimensions
+		val myDimensions = this.dimensions
 		val otherDimensions = dimensions
 		
 		val builder = new VectorBuilder[Double]()
@@ -231,8 +231,8 @@ trait VectorLike[Repr <: VectorLike[_]]
 		{
 			builder += merge(myDimensions(i), otherDimensions(i))
 		}
-		for (i <- otherDimensions.size until myDimensions.size) { builder += myDimensions(i) }
-		for (i <- myDimensions.size until otherDimensions.size) { builder += otherDimensions(i) }
+		for (i <- otherDimensions.size until myDimensions.size) { builder += merge(myDimensions(i), 0) }
+		for (i <- myDimensions.size until otherDimensions.size) { builder += merge(0, otherDimensions(i)) }
 		
 		buildCopy(builder.result())
 	}

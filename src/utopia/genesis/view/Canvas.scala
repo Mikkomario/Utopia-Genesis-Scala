@@ -9,7 +9,7 @@ import java.awt.Graphics2D
 import java.awt.event.{ComponentAdapter, ComponentEvent}
 
 import utopia.genesis.view.ScalingPolicy.Crop
-import utopia.genesis.util.Drawer
+import utopia.genesis.util.{Drawer, FPS}
 import utopia.genesis.shape.shape2D.Transformation
 import utopia.genesis.shape.shape2D.Size
 import utopia.genesis.handling.DrawableHandler
@@ -110,7 +110,7 @@ class Canvas(val drawHandler: DrawableHandler, originalGameWorldSize: Size, val 
       * @param maxFPS The maximum frames (draws) per second
       * @param context Asynchronous execution context
       */
-    def startAutoRefresh(maxFPS: Int = 60)(implicit context: ExecutionContext) =
+    def startAutoRefresh(maxFPS: FPS = FPS.default)(implicit context: ExecutionContext): Unit =
     {
         if (refreshLoop.isEmpty)
         {
@@ -139,8 +139,7 @@ class Canvas(val drawHandler: DrawableHandler, originalGameWorldSize: Size, val 
             val prefferedXYRatio = prefferedGameWorldSize.width / prefferedGameWorldSize.height
             val newXYRatio = size.width / size.height
             
-            val preserveX = if (scalingPolicy == Crop) prefferedXYRatio <= newXYRatio else
-                                                       prefferedXYRatio > newXYRatio;
+            val preserveX = if (scalingPolicy == Crop) prefferedXYRatio <= newXYRatio else prefferedXYRatio > newXYRatio
             
             if (preserveX)
             {

@@ -1,17 +1,16 @@
 package utopia.genesis.view
 
-import utopia.flow.async.AsyncExtensions._
 import utopia.flow.util.TimeExtensions._
 import java.awt.Component
 import java.awt.event.{ComponentAdapter, ComponentEvent, HierarchyEvent, HierarchyListener}
-import java.time.{Duration, Instant}
+import java.time.Instant
 
 import javax.swing.SwingUtilities
 import utopia.flow.async.Loop
-import utopia.flow.util.WaitTarget.{Until, WaitDuration}
+import utopia.flow.util.WaitTarget.Until
 import utopia.flow.util.WaitUtils
+import utopia.genesis.util.FPS
 
-import scala.concurrent.Promise
 import scala.ref.WeakReference
 
 /**
@@ -19,15 +18,13 @@ import scala.ref.WeakReference
   * @param comp The target component
   * @param maxFPS Maximum frames (paints) per second (default = 60)
   */
-class RepaintLoop(comp: Component, val maxFPS: Int = 60) extends Loop
+class RepaintLoop(comp: Component, val maxFPS: FPS = FPS.default) extends Loop
 {
 	// ATTRIBUTES	-----------------
 	
 	private val component = WeakReference(comp)
 	
 	private var lastDrawTime = Instant.now()
-	
-	val refreshInterval = if (maxFPS > 0) Some(Duration.ofNanos((1000.0 / maxFPS * 1000000).toLong)) else None
 	
 	
 	// INITIAL CODE	-----------------
@@ -53,16 +50,8 @@ class RepaintLoop(comp: Component, val maxFPS: Int = 60) extends Loop
 		
 		if (component.get.exists { _.isDisplayable })
 		{
-			// Performs the redraw on swing thread
-			val completion = Promise[Unit]()
-			SwingUtilities.invokeLater(() =>
-			{
-				component.get.foreach { _.repaint() }
-				completion.success()
-			})
-			
-			// Waits until drawing is completed (has timeout for special cases)
-			completion.future.waitFor(Duration.ofSeconds(5))
+			// Repaints the component in the swing event thread. Waits until paint is finished.
+			SwingUtilities.invokeAndWait(() => component.get.foreach { _.repaint() })
 		}
 		else if (component.get.isEmpty)
 		{
@@ -74,8 +63,7 @@ class RepaintLoop(comp: Component, val maxFPS: Int = 60) extends Loop
 	/**
 	  * The time between the end of the current run and the start of the next one
 	  */
-	override protected def nextWaitTarget = refreshInterval.map {
-		d => Until(lastDrawTime + d) } getOrElse WaitDuration(Duration.ZERO)
+	override protected def nextWaitTarget = Until(lastDrawTime + maxFPS.interval)
 	
 	
 	// NESTED CLASSES	-----------------

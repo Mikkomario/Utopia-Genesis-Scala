@@ -4,7 +4,7 @@ import utopia.genesis.shape.{X, Y}
 import utopia.genesis.event.KeyStateEvent
 import java.awt.event.KeyEvent
 
-import utopia.genesis.util.Drawer
+import utopia.genesis.util.{Drawer, FPS}
 import utopia.genesis.shape.shape2D.{Bounds, Line, Point, Size}
 import utopia.genesis.view.{Canvas, ConvertingKeyListener, MainFrame}
 import java.awt.Color
@@ -112,6 +112,6 @@ object KeyTest extends App
     val keyEventGen = new ConvertingKeyListener(keyStateHandler, keyTypedHandler)
 	frame.addKeyListener(keyEventGen)
     
-    canvas.startAutoRefresh(120)
+    canvas.startAutoRefresh(FPS(120))
     frame.display()
 }
