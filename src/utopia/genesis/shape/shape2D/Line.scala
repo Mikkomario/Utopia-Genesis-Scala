@@ -108,6 +108,11 @@ case class Line(start: Point, end: Point) extends ShapeConvertible with
       */
     def bounds = Bounds.between(start, end)
     
+    /**
+      * @return The direction of this line
+      */
+    def direction = vector.direction
+    
     
     // OPERATORS    --------------------
     
@@ -256,11 +261,11 @@ case class Line(start: Point, end: Point) extends ShapeConvertible with
      * @param clippingPlaneNormal A normal vector for the clipping plane. The normal is perpendicular 
      * to the clipping plane itself. The positive direction of the normal is the portion / side 
      * that will be preserved of the line
-     * @return The clipped line. None if the lien is completely clipped off
+     * @return The clipped line. None if this line is completely clipped off
      */
-    def clipped(clippingPlanePoint: Vector3D, clippingPlaneNormal: Vector3D) = 
+    def clipped(clippingPlanePoint: Point, clippingPlaneNormal: Vector3D) =
     {
-        val origin = clippingPlanePoint dot clippingPlaneNormal
+        val origin = clippingPlanePoint.toVector dot clippingPlaneNormal
         val startDistance = start.toVector.dot(clippingPlaneNormal) - origin
         val endDistance = end.toVector.dot(clippingPlaneNormal) - origin
         

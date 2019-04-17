@@ -57,7 +57,7 @@ case class Rotation(radians: Double, direction: RotationDirection = Clockwise) e
 	
 	def properties = Vector(radians * direction.modifier)
 	
-	override def toString() = f"$degrees%1.2f degrees $direction"
+	override def toString = f"$degrees%1.2f degrees $direction"
 	
 	def ~==[B <: Rotation](other: B) = radians * direction.modifier ~== other.radians * direction.modifier
 	
