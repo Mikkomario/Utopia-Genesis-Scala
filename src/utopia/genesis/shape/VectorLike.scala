@@ -238,12 +238,24 @@ trait VectorLike[Repr <: VectorLike[_]]
 	}
 	
 	/**
+	  * @param other Another vectorlike element
+	  * @return The minimum combination of these two elements where each dimension is taken from the smaller alternative
+	  */
+	def min(other: VectorLike[_]) = combineWith(other, { _ min _ })
+	
+	/**
 	  * The top left corner of a bounds between these two elements. In other words,
 	  * creates a vector that has the smallest available value on each axis from the two candidates
 	  * @param other Another element
 	  * @return a minimum of these two elements on each axis
 	  */
-	def topLeft(other: VectorLike[_]) = combineWith(other, { _ min _ })
+	def topLeft(other: VectorLike[_]) = this min other
+	
+	/**
+	  * @param other Another vectorlike element
+	  * @return A maximum combination of these two elements where each dimension is taken from the larger alternative
+	  */
+	def max(other: VectorLike[_]) = combineWith(other, { _ max _ })
 	
 	/**
 	  * The bottom right corner of a bounds between the two vertices. In other words,
