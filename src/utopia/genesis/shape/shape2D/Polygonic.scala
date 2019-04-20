@@ -45,6 +45,7 @@ trait Polygonic extends ShapeConvertible with Projectable with Area2D with Trans
 					start = corner
 			}
 			
+			buffer += Line(start, c.head)
 			buffer.result()
 		}
 	}
@@ -59,7 +60,7 @@ trait Polygonic extends ShapeConvertible with Projectable with Area2D with Trans
 	  */
 	def rotations =
 	{
-		val e = edges
+		val e = sides
 		
 		if (e.size > 1)
 		{
@@ -248,7 +249,7 @@ trait Polygonic extends ShapeConvertible with Projectable with Area2D with Trans
 		if (index >= 0)
 			c(index % c.size)
 		else
-			c(c.size + (index % c.size) - 1)
+			c(c.size + (index % c.size))
 	}
 	
 	/**

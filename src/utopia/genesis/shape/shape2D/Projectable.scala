@@ -66,9 +66,7 @@ trait Projectable
         
         if (comparePoints(projection.end, otherProjection.start) <= 0 || 
                 comparePoints(projection.start, otherProjection.end) >= 0)
-        {
             None
-        }
         else 
         {
             val forwardsMtv = (otherProjection.end - projection.start).toVector
@@ -113,7 +111,7 @@ trait Projectable
         val myProjection = projectedOver(axis)
         
         // Checks whether point lies on the projection. Points at the edge do count
-        comparePoints(myProjection.start, pointProjection) >= 0 && comparePoints(myProjection.end, pointProjection) <= 0
+        comparePoints(myProjection.start, pointProjection) <= 0 && comparePoints(myProjection.end, pointProjection) >= 0
     }
     
     private def orderedProjectionOver(axis: Vector3D) = 
