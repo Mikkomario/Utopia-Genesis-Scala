@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="utopia-genesis-with-dependencies:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="a34f54cb-6443-4617-9ea2-d86bc0b4cc7c" name="Default Changelist" comment="" />
     <ignored path="../Utopia-Inception-Scala/out/" />
@@ -16,11 +21,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="320">
               <caret line="16" selection-start-line="16" selection-end-line="16" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/utopia/genesis/handling/mutable/MouseWheelHandler.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="17" column="71" lean-forward="true" selection-start-line="17" selection-start-column="71" selection-end-line="17" selection-end-column="71" />
+              <folding>
+                <element signature="e#41#71#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -60,13 +77,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/utopia/genesis/handling/immutable/MouseButtonStateHandler.scala" />
-        <option value="$PROJECT_DIR$/src/utopia/genesis/handling/immutable/MouseMoveHandler.scala" />
-        <option value="$PROJECT_DIR$/src/utopia/genesis/handling/immutable/MouseWheelHandler.scala" />
-        <option value="$PROJECT_DIR$/src/utopia/genesis/handling/mutable/DrawableHandler.scala" />
-        <option value="$PROJECT_DIR$/src/utopia/genesis/handling/immutable/KeyTypedHandler.scala" />
-        <option value="$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/async/ThreadPool.scala" />
-        <option value="$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/test/LoopTest.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/test/ActorTest.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/handling/ActorLoop.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/test/TransformationTest.scala" />
@@ -111,14 +121,20 @@
         <option value="$PROJECT_DIR$/src/utopia/genesis/generic/GenesisDataType.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/generic/GenesisValue.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Rectangle.scala" />
+        <option value="$PROJECT_DIR$/src/utopia/genesis/handling/mutable/ActorHandler.scala" />
+        <option value="$PROJECT_DIR$/src/utopia/genesis/handling/mutable/DrawableHandler.scala" />
+        <option value="$PROJECT_DIR$/src/utopia/genesis/handling/mutable/KeyStateHandler.scala" />
+        <option value="$PROJECT_DIR$/src/utopia/genesis/handling/mutable/KeyTypedHandler.scala" />
+        <option value="$PROJECT_DIR$/src/utopia/genesis/handling/mutable/MouseButtonStateHandler.scala" />
+        <option value="$PROJECT_DIR$/src/utopia/genesis/handling/mutable/MouseMoveHandler.scala" />
+        <option value="$PROJECT_DIR$/src/utopia/genesis/handling/mutable/MouseWheelHandler.scala" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="501" />
-    <option name="y" value="-30" />
-    <option name="width" value="2544" />
-    <option name="height" value="2112" />
+    <option name="x" value="-11" />
+    <option name="width" value="2450" />
+    <option name="height" value="2111" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -128,15 +144,25 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
       <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Utopia-Genesis-Scala" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Utopia-Genesis-Scala" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/utopia/genesis/handling" />
-    <property name="project.structure.last.edited" value="Modules" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="Scala Compiler" />
@@ -383,13 +409,21 @@
       <option name="project" value="LOCAL" />
       <updated>1554829959034</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Fixed a couple of warnings and built Genesis">
+      <created>1555783589380</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1555783589380</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25586015" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19586809" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -407,7 +441,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="10" weight="0.32943925" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.3271028" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24990067" />
@@ -438,70 +472,10 @@
     <MESSAGE value="Added data type support for point and size. DataTypeTest ran successfully" />
     <MESSAGE value="Rest of the tests finished" />
     <MESSAGE value="Started creating rectangle class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Started creating rectangle class" />
+    <MESSAGE value="Fixed a couple of warnings and built Genesis" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed a couple of warnings and built Genesis" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/async/CloseHook.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="521">
-          <caret line="29" column="44" selection-start-line="29" selection-start-column="44" selection-end-line="29" selection-end-column="44" />
-          <folding>
-            <element signature="e#27#63#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/test/CanvasTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-91">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/view/MainFrame.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="697">
-          <caret line="45" column="33" lean-forward="true" selection-start-line="45" selection-start-column="33" selection-end-line="45" selection-end-column="33" />
-          <folding>
-            <element signature="e#29#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/handling/Camera.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="916">
-          <caret line="52" column="7" selection-start-line="52" selection-start-column="7" selection-end-line="52" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/view/Canvas.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
-          <caret line="117" column="46" selection-start-line="117" selection-start-column="46" selection-end-line="117" selection-end-column="46" />
-          <folding>
-            <element signature="e#29#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Utopia-Inception-Scala/src/utopia/inception/handling/immutable/Handleable.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="11" column="1" lean-forward="true" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
-          <folding>
-            <element signature="e#45#77#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/Axis.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-371">
-          <caret line="10" column="11" lean-forward="true" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../Utopia-Inception-Scala/src/utopia/inception/handling/immutable/Handler.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="960">
@@ -875,10 +849,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/handling/mutable/ActorHandler.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/handling/mutable/DrawableHandler.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/handling/mutable/KeyStateHandler.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/handling/mutable/KeyTypedHandler.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/handling/mutable/MouseButtonStateHandler.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/handling/mutable/MouseMoveHandler.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="320">
           <caret line="16" selection-start-line="16" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/handling/mutable/MouseWheelHandler.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="17" column="71" lean-forward="true" selection-start-line="17" selection-start-column="71" selection-end-line="17" selection-end-column="71" />
+          <folding>
+            <element signature="e#41#71#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -888,10 +914,12 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
+          <last-edited>utopia-genesis-with-dependencies:jar</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
