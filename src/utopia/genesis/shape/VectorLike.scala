@@ -4,6 +4,21 @@ import scala.collection.immutable.{HashMap, VectorBuilder}
 
 import utopia.flow.util.CollectionExtensions._
 
+object VectorLike
+{
+	/**
+	  * Forms the average of the provided vectorLike elements. Elements must be non-empty.
+	  * @param elements Elements
+	  * @tparam A The result type
+	  * @return The average of the provided VectorLike elements
+	  */
+	def average[A <: VectorLike[A]](elements: Traversable[A]) =
+	{
+		val total = elements.reduce { _ + _ }
+		total / elements.size
+	}
+}
+
 /**
   * This trait is implemented by simple shape classes that can be represented as an vector of double numbers, each
   * matching an axis (X, Y, Z, ...)

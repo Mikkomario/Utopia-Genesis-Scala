@@ -114,7 +114,7 @@ class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[An
     /**
      * Applies a rotation to this angle
      */
-    def +(rotation: Rotation) = this + rotation.toDouble
+    def +(rotation: Rotation): Angle = this + rotation.toDouble
     
     /**
      * Applies a rotation (radians) to this angle in counter-clockwise direction
@@ -124,7 +124,7 @@ class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[An
     /**
      * Applies a negative rotation to this angle
      */
-    def -(rotation: Rotation) = this.-(rotation.toDouble)
+    def -(rotation: Rotation): Angle = this.-(rotation.toDouble)
     
     /**
      * Compares two angles without the requirement of being exactly equal

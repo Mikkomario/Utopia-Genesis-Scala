@@ -15,4 +15,9 @@ trait KeyTypedListener extends Handleable
       * @param event the newly occurred key typed event
      */
     def onKeyTyped(event: KeyTypedEvent)
+    
+    /**
+      * @return Whether this instance is receiving key typed events
+      */
+    def isReceivingKeyTypedEvents = allowsHandlingFrom(KeyTypedHandlerType)
 }

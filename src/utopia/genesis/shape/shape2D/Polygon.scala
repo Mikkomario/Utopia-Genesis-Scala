@@ -2,6 +2,18 @@ package utopia.genesis.shape.shape2D
 
 import utopia.genesis.shape.RotationDirection
 
+object Polygon
+{
+	/**
+	  * @param p1 Point 1
+	  * @param p2 Point 2
+	  * @param p3 Point 3
+	  * @param more Additional points
+	  * @return A polygon with specified corners
+	  */
+	def apply(p1: Point, p2: Point, p3: Point, more: Point*) = new Polygon(Vector(p1, p2, p3) ++ more)
+}
+
 /**
   * Polygons are used for representing more complex 2D shapes
   * @author Mikko Hilpinen

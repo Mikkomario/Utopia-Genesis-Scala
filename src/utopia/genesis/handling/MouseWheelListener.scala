@@ -20,4 +20,9 @@ trait MouseWheelListener extends Handleable
      * filter are informed to the instance. The default filter accepts all mouse wheel events.
      */
     def mouseWheelEventFilter: Filter[MouseWheelEvent] = AnyFilter
+    
+    /**
+      * @return Whether this instance is willing to receive mouse wheel events
+      */
+    def isReceivingMouseWheelEvents = allowsHandlingFrom(MouseWheelHandlerType)
 }

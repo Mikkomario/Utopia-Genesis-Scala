@@ -4,18 +4,6 @@ import java.time.Duration
 
 import utopia.inception.handling.Handleable
 
-object Actor
-{
-    implicit class MutableActor(val a: Actor with utopia.inception.handling.mutable.Handleable) extends AnyVal
-    {
-        /**
-          * Changes the activity state of this Actor
-          * @param newState Whether this actor's act(...) should be called
-          */
-        def isActive_=(newState: Boolean) = a.specifyHandlingState(ActorHandlerType, newState)
-    }
-}
-
 /**
  * Actors are instances that are called between certain intervals to perform some logical,
  * (duration based) operations.

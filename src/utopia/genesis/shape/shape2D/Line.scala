@@ -17,6 +17,14 @@ import utopia.genesis.generic.LineType
 
 object Line extends FromModelFactory[Line]
 {
+    // ATTRIBUTES   -------------------------
+    
+    /**
+      * A line between (0, 0) and (0, 0)
+      */
+    val zero = Line(Point.origin, Point.origin)
+    
+    
     // OPERATORS    -------------------------
     
     override def apply(model: template.Model[Property]) = Some(Line(model("start").pointOr(), model("end").pointOr()))

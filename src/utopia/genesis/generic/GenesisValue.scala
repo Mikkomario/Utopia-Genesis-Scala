@@ -60,7 +60,7 @@ object GenesisValue
          * be cast.
          * @param default The default line value. Defaults to a line from zero to zero.
          */
-        def lineOr(default: => Line = Line(Point.origin, Point.origin)) = line.getOrElse(default)
+        def lineOr(default: => Line = Line.zero) = line.getOrElse(default)
         
         /**
          * The size value of this value, or the provided default value if casting failed

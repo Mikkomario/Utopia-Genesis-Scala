@@ -24,4 +24,9 @@ trait MouseMoveListener extends Handleable
      * @param event The event that occurred.
      */
     def onMouseMove(event: MouseMoveEvent)
+    
+    /**
+      * @return Whether this instance is willing to receive mouse move events
+      */
+    def isReceivingMouseMoveEvents = allowsHandlingFrom(MouseMoveHandlerType)
 }

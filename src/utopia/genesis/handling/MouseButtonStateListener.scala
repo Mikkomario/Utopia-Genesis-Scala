@@ -11,6 +11,8 @@ import utopia.inception.util.{AnyFilter, Filter}
  */
 trait MouseButtonStateListener extends Handleable
 {
+    // ABSTRACT ---------------------------
+    
     /**
      * This method will be called in order to inform the listener about a new mouse button event
      * (a mouse button being pressed or released)
@@ -23,4 +25,12 @@ trait MouseButtonStateListener extends Handleable
      * about the events accepted by the filter. The default filter accepts all mouse button events.
      */
     def mouseButtonStateEventFilter: Filter[MouseButtonStateEvent] = AnyFilter
+    
+    
+    // COMPUTED ---------------------------
+    
+    /**
+      * @return Whether this instance is currently willing to receive events for mouse button state changes
+      */
+    def isReceivingMouseButtonStateEvents = allowsHandlingFrom(MouseButtonStateHandlerType)
 }

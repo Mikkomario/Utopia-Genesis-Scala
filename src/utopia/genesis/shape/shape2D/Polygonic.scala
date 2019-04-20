@@ -233,7 +233,7 @@ trait Polygonic extends ShapeConvertible with Projectable with Area2D with Trans
 	
 	override def contains(point: Point) = collisionAxes.forall { containsProjection(point, _) }
 	
-	override def transformedWith(transformation: Transformation) = Polygon(corners.map { transformation(_) } )
+	override def transformedWith(transformation: Transformation): Polygonic = Polygon(corners.map { transformation(_) } )
 	
 	
 	// OTHER	---------------

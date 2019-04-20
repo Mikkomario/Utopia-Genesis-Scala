@@ -21,4 +21,9 @@ trait KeyStateListener extends Handleable
      * accepts all key state events.
      */
     def keyStateEventFilter: Filter[KeyStateEvent] = AnyFilter
+    
+    /**
+      * @return Whether this instance is currently willing to receive key state events
+      */
+    def isReceivingKeyStateEvents = allowsHandlingFrom(KeyStateHandlerType)
 }

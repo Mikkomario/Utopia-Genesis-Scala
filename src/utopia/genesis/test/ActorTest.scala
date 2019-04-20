@@ -7,14 +7,14 @@ import utopia.flow.async.ThreadPool
 import utopia.flow.util.TimeExtensions._
 import utopia.flow.util.WaitUtils
 import utopia.genesis.handling.immutable.ActorHandler
-import utopia.genesis.handling.{Actor, ActorLoop}
-import utopia.inception.handling.mutable.Handleable
+import utopia.genesis.handling.ActorLoop
+import utopia.genesis.handling.mutable
 
 import scala.concurrent.ExecutionContext
 
 object ActorTest extends App
 {
-    class TestActor extends Actor with Handleable
+    class TestActor extends mutable.Actor
     {
         var timeCounted = Duration.ZERO
         def millisCounted = timeCounted.toMillis
@@ -44,7 +44,7 @@ object ActorTest extends App
     val waitDuration = Duration.ofSeconds(1)
     WaitUtils.wait(waitDuration, this)
     
-    actor2.isActive_=(false)
+    actor2.isActive = false
     
     println((waitDuration - actor1.timeCounted).toMillis)
     val millis1 = actor1.millisCounted
