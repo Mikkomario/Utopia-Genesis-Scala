@@ -1,11 +1,11 @@
 package utopia.genesis.event
 
-import utopia.genesis.util.Vector3D
-import utopia.flow.datastructure.immutable.Model
-import utopia.flow.datastructure.immutable.Value
-import utopia.genesis.generic.GenesisValue
+import utopia.flow.util.TimeExtensions._
+
 import utopia.inception.util.Filter
-import utopia.genesis.util.Area
+import utopia.genesis.shape.shape2D.Point
+import java.time.Duration
+import utopia.genesis.shape.shape2D.Area2D
 
 object MouseMoveEvent
 {
@@ -15,30 +15,32 @@ object MouseMoveEvent
      * Creates an event filter that only accepts mouse events originating from the mouse entering 
      * the specified area
      */
-    def enterAreaFilter(area: Area) = new Filter[MouseMoveEvent]({ _.enteredArea(area) });
+    def enterAreaFilter(area: Area2D): Filter[MouseMoveEvent] = e => e.enteredArea(area)
     
     /**
      * Creates an event filter that only accepts mouse events originating from the mouse exiting the
      * specified area
      */
-    def exitedAreaFilter(area: Area) = new Filter[MouseMoveEvent]({ _.exitedArea(area) });
+    def exitedAreaFilter(area: Area2D): Filter[MouseMoveEvent] = e => e.exitedArea(area)
     
     /**
      * Creates an event filter that only accepts events where the mouse cursor moved with enough
      * speed
      */
-    def minVelocityFilter(minVelocity: Double) = new Filter[MouseMoveEvent](
-            { _.velocity.length > minVelocity });
+    def minVelocityFilter(minVelocity: Double): Filter[MouseMoveEvent] = e => e.velocity.length >= minVelocity
 }
 
 /**
  * These events are generated when the mouse cursor moves
+  * @param mousePosition The current mouse position
+  * @param previousMousePosition The previous mouse position
+  * @param buttonStatus Current mouse button status
+  * @param duration The duration of the event (similar to act(...))
  * @author Mikko Hilpinen
  * @since 10.1.2017
  */
-class MouseMoveEvent(mousePosition: Vector3D, val previousMousePosition: Vector3D, 
-        buttonStatus: MouseButtonStatus, val durationMillis: Double) extends MouseEvent(
-        mousePosition, buttonStatus)
+case class MouseMoveEvent(mousePosition: Point, previousMousePosition: Point, buttonStatus: MouseButtonStatus,
+                          duration: Duration) extends MouseEvent
 {
     // COMPUTED PROPERTIES    -----------
     
@@ -50,7 +52,12 @@ class MouseMoveEvent(mousePosition: Vector3D, val previousMousePosition: Vector3
     /**
      * The velocity vector of the mouse cursor, in pixels per millisecond
      */
-    def velocity = transition / durationMillis
+    def velocity = (transition / durationMillis).toVector
+    
+    /**
+     * The duration of this event in duration format
+     */
+    def durationMillis = duration.toPreciseMillis
     
     
     // OTHER METHODS    -----------------
@@ -58,15 +65,15 @@ class MouseMoveEvent(mousePosition: Vector3D, val previousMousePosition: Vector3
     /**
      * Checks whether the mouse position was previously over a specified area
      */
-    def wasOverArea(area: Area) = area.contains2D(previousMousePosition)
+    def wasOverArea(area: Area2D) = area.contains(previousMousePosition)
     
     /**
      * Checks whether the mouse cursor just entered a specified area
      */
-    def enteredArea(area: Area) = !wasOverArea(area) && isOverArea(area)
+    def enteredArea(area: Area2D) = !wasOverArea(area) && isOverArea(area)
     
     /**
      * Checks whether the mouse cursor just exited a specified area
      */
-    def exitedArea(area: Area) = wasOverArea(area) && !isOverArea(area)
+    def exitedArea(area: Area2D) = wasOverArea(area) && !isOverArea(area)
 }

@@ -1,47 +1,70 @@
 package utopia.genesis.test
 
-import utopia.genesis.event.Actor
-import utopia.genesis.event.ActorThread
-import utopia.genesis.util.WaitUtil
-import utopia.genesis.event.ActorHandlerType
+import java.time.Duration
+
+import utopia.flow.async.AsyncExtensions._
+import utopia.flow.async.ThreadPool
+import utopia.flow.util.TimeExtensions._
+import utopia.flow.util.WaitUtils
+import utopia.genesis.handling.immutable.ActorHandler
+import utopia.genesis.handling.ActorLoop
+import utopia.genesis.handling.mutable
+
+import scala.concurrent.ExecutionContext
 
 object ActorTest extends App
 {
-    class TestActor extends Actor
+    class TestActor extends mutable.Actor
     {
-        var millisCounted = 0.0
-        
-        override def act(durationMillis: Double) = millisCounted += durationMillis
+        var timeCounted = Duration.ZERO
+        def millisCounted = timeCounted.toMillis
+        override def act(duration: Duration) =
+        {
+            timeCounted += duration
+            // println(timeCounted.toMillis)
+        }
     }
     
     val actor1 = new TestActor()
     val actor2 = new TestActor()
     
-    val thread = new ActorThread(20, 60)
-    thread.handler ++= (actor1, actor2)
+    val handler = ActorHandler(actor1, actor2)
+    val actorLoop = new ActorLoop(handler, 20 to 60)
+    
+    println(s"Interval: ${actorLoop.minInterval.toMillis} - ${actorLoop.maxInterval.toMillis}")
     
     assert(actor1.millisCounted == 0)
     assert(actor2.millisCounted == 0)
     
-    thread.start()
-    WaitUtil.waitMillis(1000, this)
+    implicit val context: ExecutionContext = new ThreadPool("Test", 2, 20, Duration.ofSeconds(10),
+        e => e.printStackTrace()).executionContext
     
-    actor2.specifyHandlingState(ActorHandlerType, false)
+    actorLoop.startAsync()
     
+    val waitDuration = Duration.ofSeconds(1)
+    WaitUtils.wait(waitDuration, this)
+    
+    actor2.isActive = false
+    
+    println((waitDuration - actor1.timeCounted).toMillis)
     val millis1 = actor1.millisCounted
     val millis2 = actor2.millisCounted
+    
+    println(millis1)
+    println(millis2)
     
     assert(millis1 > 500)
     assert(millis1 < 1500)
     assert(millis2 > 500)
     assert(millis2 < 1500)
     
-    WaitUtil.waitMillis(1000, this)
+    WaitUtils.wait(Duration.ofSeconds(1), this)
     
     assert(actor1.millisCounted > millis1 + 500)
     assert(actor2.millisCounted < millis2 + 500)
     
-    thread.ended = true
+    println("Waiting for loop to end")
+    actorLoop.stop().waitFor()
     
     println("Success")
 }

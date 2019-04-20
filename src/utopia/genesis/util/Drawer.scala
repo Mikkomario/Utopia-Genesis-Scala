@@ -10,6 +10,9 @@ import java.awt.Stroke
 import java.awt.Shape
 import java.awt.Paint
 import java.awt.Font
+import utopia.genesis.shape.shape2D.ShapeConvertible
+import utopia.genesis.shape.shape2D.Bounds
+import utopia.genesis.shape.shape2D.Transformation
 
 object Drawer
 {
@@ -36,8 +39,7 @@ object Drawer
  * @since 22.1.2017
  */
 class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color.WHITE), 
-        val edgeColor: Option[Paint] = Some(Color.BLACK)/*, 
-        private val transformContext: Vector[Transformation] = Vector()*/)
+        val edgeColor: Option[Paint] = Some(Color.BLACK))
 {
     // TODO: Add rendering hints
     
@@ -46,7 +48,38 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color
     private var children = Vector[Drawer]()
     
     
+    // COMPUTED ---------------------------
+    
+    /**
+      * @return A version of this drawer that only fills shapes. May return this drawer.
+      */
+    def onlyFill = if (edgeColor.isDefined) copy(fillColor, None) else this
+    
+    /**
+      * @return A version of this drawer that only draws edges of shapes. May return this drawer.
+      */
+    def onlyEdges = if (fillColor.isDefined) copy(None, edgeColor) else this
+    
+    
     // OTHER METHODS    -------------------
+    
+    /**
+      * Performs an operation, then disposes this drawer
+      * @param operation An operation
+      * @tparam U Arbitary result type
+      */
+    def disposeAfter[U](operation: Drawer => U) =
+    {
+        operation(this)
+        dispose()
+    }
+    
+    /**
+      * Creates a temporary copy of this drawer and performs an operation with it, after which it's disposed
+      * @param operation Operation performed with the drawer
+      * @tparam U Arbitary result type
+      */
+    def withCopy[U](operation: Drawer => U) = copy().disposeAfter(operation)
     
     /**
      * Copies this drawer, creating another graphics context. Changing the other context doesn't
@@ -58,7 +91,7 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color
     /**
      * Disposes this graphics context and every single drawer created from this drawer instance. The
      * responsibility to dispose the drawer lies at the topmost user. Disposing drawers on lower
-     * levels is fully optional. The drawer or any drawer created from this drawer cannot be used
+     * levels is fully optional. This drawer or any drawer created from this drawer cannot be used
      * after it has been disposed.
      */
     def dispose(): Unit = 
@@ -94,6 +127,9 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color
      */
     def drawTextCentered(text: String, font: Font, bounds: Bounds)
     {
+        // Sets the color, preferring edge color
+        edgeColor.orElse(fillColor).foreach { graphics.setPaint }
+        
         graphics.setFont(font)
         val metrics = graphics.getFontMetrics
         
@@ -122,7 +158,7 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color
      */
     def transformed(transform: Transformation): Drawer = transformed(transform.toAffineTransform)
     
-    /**
+    /*
      * Creates a transformed copy of this drawer so that it reads from absolute world space and 
      * projects them differently on another absolute world space
      * @param from The transformation with which the data is read
@@ -138,13 +174,24 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color
      * @param edgeColor the colour / paint used for the drawn edges. By default stays the same as it
      * was in the original
      */
-    def withColor(fillColor: Option[Paint], edgeColor: Option[Paint] = this.edgeColor) = 
-            copy(fillColor, edgeColor);
+    def withColor(fillColor: Option[Paint], edgeColor: Option[Paint] = this.edgeColor) = copy(fillColor, edgeColor)
     
     /**
      * Creates a new instance of this drawer with altered edge colour
      */
     def withEdgeColor(edgeColor: Option[Paint]) = withColor(fillColor, edgeColor)
+    
+    /**
+      * @param color The new fill color
+      * @return A version of this drawer with specified fill color
+      */
+    def withFillColor(color: Paint) = withColor(Some(color))
+    
+    /**
+      * @param color The new edge drawing color
+      * @return A version of this drawer with specified edge color
+      */
+    def withEdgeColor(color: Paint): Drawer = withEdgeColor(Some(color))
             
     /**
      * Creates a copy of this context with altered alpha (opacity / transparency) value.

@@ -1,41 +1,11 @@
 package utopia.genesis.generic
 
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import utopia.flow.datastructure.immutable.Value
-import utopia.genesis.util.Line
-import utopia.genesis.util.Circle
-import utopia.genesis.util.Transformation
-import utopia.genesis.util.Bounds
+import utopia.genesis.shape.shape2D.{Bounds, Circle, Line, Point, Rectangle, Size, Transformation}
 
 object GenesisValue
 {
-    /**
-     * Wraps a 3d vector into a value
-     */
-    @deprecated("Replaced with the ValueConvertible trait. Use Vector3D#toValue instead", "v1.1")
-    def of(vector: Vector3D) = new Value(Some(vector), Vector3DType)
-    /**
-     * Wraps a line into a value
-     */
-    @deprecated("Replaced with the ValueConvertible trait. Use Line#toValue instead", "v1.1")
-    def of(line: Line) = new Value(Some(line), LineType)
-    /**
-     * Wraps a circle into a value
-     */
-    @deprecated("Replaced with the ValueConvertible trait. Use Circle#toValue instead", "v1.1")
-    def of(circle: Circle) = new Value(Some(circle), CircleType)
-    /**
-     * Wraps a set of bounds into a value
-     */
-    @deprecated("Replaced with the ValueConvertible trait. Use Bounds#toValue instead", "v1.1")
-    def of(rect: Bounds) = new Value(Some(rect), BoundsType)
-    /**
-     * Wraps a transformation into a value
-     */
-    @deprecated("Replaced with the ValueConvertible trait. Use Transformation#toValue instead", "v1.1")
-    def of(transformation: Transformation) = new Value(Some(transformation), TransformationType)
-    
-    
     implicit class GValue(val v: Value) extends AnyVal
     {
         /**
@@ -44,9 +14,19 @@ object GenesisValue
         def vector3D = v.objectValue(Vector3DType).map { _.asInstanceOf[Vector3D] }
         
         /**
+         * A 2D point value of this value. None if this value couldn't be casted
+         */
+        def point = v.objectValue(PointType).map { _.asInstanceOf[Point] }
+        
+        /**
          * A line value of this value. None if the value couldn't be casted.
          */
         def line = v.objectValue(LineType).map { _.asInstanceOf[Line] }
+        
+        /**
+         * A size value of this value. None if this value couldn't be casted
+         */
+        def size = v.objectValue(SizeType).map { _.asInstanceOf[Size] }
         
         /**
          * A circle value of this value. None if the value couldn't be casted.
@@ -54,7 +34,7 @@ object GenesisValue
         def circle = v.objectValue(CircleType).map { _.asInstanceOf[Circle] }
         
         /**
-         * A rectangle value of this value. None if the value couldn't be casted.
+         * A bounds value of this value. None if the value couldn't be casted.
          */
         def bounds = v.objectValue(BoundsType).map { _.asInstanceOf[Bounds] }
         
@@ -71,11 +51,21 @@ object GenesisValue
         def vector3DOr(default: => Vector3D = Vector3D.zero) = vector3D.getOrElse(default)
         
         /**
+         * The point value of this value, or the provided default value in case casting failed
+         */
+        def pointOr(default: => Point = Point.origin) = point.getOrElse(default)
+        
+        /**
          * The line value of this value, or the provided default value in case the value couldn't
          * be cast.
          * @param default The default line value. Defaults to a line from zero to zero.
          */
-        def lineOr(default: => Line = Line(Vector3D.zero, Vector3D.zero)) = line.getOrElse(default)
+        def lineOr(default: => Line = Line.zero) = line.getOrElse(default)
+        
+        /**
+         * The size value of this value, or the provided default value if casting failed
+         */
+        def sizeOr(default: => Size = Size.zero) = size.getOrElse(default)
         
         /**
          * The circle value of this value, or the provided default value in case the value couldn't
@@ -83,15 +73,15 @@ object GenesisValue
          * @param default The default circle value. Defaults to a circle at zero origin with zero
          * radius.
          */
-        def circleOr(default: => Circle = Circle(Vector3D.zero, 0)) = circle.getOrElse(default)
+        def circleOr(default: => Circle = Circle(Point.origin, 0)) = circle.getOrElse(default)
         
         /**
-         * The rectangle value of this value, or the provided default value in case the value
+         * The bounds value of this value, or the provided default value in case the value
          * couldn't be cast.
-         * @param default the default rectangle value. Defaults to rectangle with zero position and
+         * @param default the default bounds value. Defaults to bounds with zero position and
          * size.
          */
-        def boundsOr(default: => Bounds = Bounds(Vector3D.zero, Vector3D.zero)) = bounds.getOrElse(default)
+        def boundsOr(default: => Bounds = Bounds.zero) = bounds.getOrElse(default)
         
         /**
          * The transformation value of this value, or the provided default value in case the value
@@ -101,5 +91,40 @@ object GenesisValue
          */
         def transformationOr(default: => Transformation = Transformation.identity) = 
                 transformation.getOrElse(default)
+    
+        /**
+          * @return 3D Vector o this value or a zero vector
+          */
+        def getVector3D = vector3DOr()
+    
+        /**
+          * @return Point of this value or a (0, 0) point
+          */
+        def getPoint = pointOr()
+    
+        /**
+          * @return Size of this value or 0 size
+          */
+        def getSize = sizeOr()
+    
+        /**
+          * @return Line of this value or a 0 -> 0 line
+          */
+        def getLine = lineOr()
+    
+        /**
+          * @return Circle of this value or a 0 sized circle
+          */
+        def getCircle = circleOr()
+    
+        /**
+          * @return Bounds of this value or a 0 bounds
+          */
+        def getBounds = boundsOr()
+    
+        /**
+          * @return Transformation of this value or an identity transformation
+          */
+        def getTransformation = transformationOr()
     }
 }

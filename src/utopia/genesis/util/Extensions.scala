@@ -6,6 +6,7 @@ import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.generic.Vector3DType
 import utopia.genesis.generic.LineType
 import utopia.genesis.generic.CircleType
+import scala.collection.mutable.ListBuffer
 
 /**
  * This object contains some implicit extensions introduced in Genesis
@@ -14,9 +15,74 @@ import utopia.genesis.generic.CircleType
  */
 object Extensions
 {
-    implicit class DoubleWithAlmostEquals(val d: Double) extends AnyVal
+    implicit class DoubleWithAlmostEquals[C](val d: C)(implicit f: C => Double) extends ApproximatelyEquatable[C]
     {
-        def ~==(d2: Double) = (d -d2).abs < 0.00001
+        /**
+         * Checks if the two double numbers are approximately equal using 0.00001 precision
+         */
+        def ~==[B <: C](d2: B) = (d -d2).abs < 0.00001
+    }
+    
+    implicit class seqWithAlmostEquals[B, C](val s: Seq[C])(implicit f: C => ApproximatelyEquatable[B]) extends ApproximatelyEquatable[Seq[B]]
+    {
+        def ~==[D <: Seq[B]](s2: D): Boolean = 
+        {
+            if (s.size == s2.size)
+            {
+                for { i <- 0 until s.size }
+                {
+                    if (s(i) !~== s2(i))
+                    {
+                        return false
+                    }
+                }
+                
+                true
+            }
+            else
+            {
+                false
+            }
+        }
+    }
+    
+    implicit class SeqWithDistinctMap[T](val s: Seq[T]) extends AnyVal
+    {
+        def withDistinct(compare: (T, T) => Boolean) = 
+        {
+            val buffer = ListBuffer[T]()
+            s.foreach { element => if (!buffer.exists { compare(_, element) }) buffer += element }
+            buffer.toVector
+        }
+    }
+    
+    implicit class FailableIterable[T](val c: Iterable[T]) extends AnyVal
+    {
+        /**
+         * This function maps values like a normal map function, but terminates immediately if 
+         * None is returned by the transform function
+         * @return The mapped collection or none if mapping failed for any element
+         */
+        def mapOrFail[B](f: T => Option[B]): Option[Vector[B]] = 
+        {
+            val iterator = c.iterator
+            val buffer = Vector.newBuilder[B]
+            
+            while (iterator.hasNext)
+            {
+                val result = f(iterator.next())
+                if (result.isDefined)
+                {
+                    buffer += result.get
+                }
+                else
+                {
+                    return None
+                }
+            }
+            
+            Some(buffer.result())
+        }
     }
     
     @deprecated("Replaced with the new drawer class", "v0.3")

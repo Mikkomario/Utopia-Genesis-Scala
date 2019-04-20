@@ -8,34 +8,45 @@ object KeyStateEvent
     /**
      * This event filter only accepts events caused by key presses
      */
-    val wasPressedFilter = new Filter[KeyStateEvent]({ _.isDown })
+    val wasPressedFilter: Filter[KeyStateEvent] = e => e.isDown
     
     /**
      * This event filter only accepts events caused by key releases
      */
-    val wasReleasedFilter = new Filter[KeyStateEvent]({ !_.isDown })
+    val wasReleasedFilter: Filter[KeyStateEvent] = e => e.isReleased
     
     /**
      * This event filter only accepts events for the specified key index
      */
-    def keyFilter(index: Int) = new Filter[KeyStateEvent]({ _.index == index })
+    def keyFilter(index: Int): Filter[KeyStateEvent] = e => e.index == index
     
     /**
      * This event filter only accepts events for the specified key index + location
      */
-    def keyFilter(index: Int, location: KeyLocation) = new Filter[KeyStateEvent](event => 
-            { event.index == index && event.location == location});
+    def keyFilter(index: Int, location: KeyLocation): Filter[KeyStateEvent] = e => e.index == index && e.location == location
     
     /**
      * This event filter only accepts events for the specified character key
      */
-    def keyFilter(char: Char) = new Filter[KeyStateEvent]({ _.isCharacter(char) })
+    def charFilter(char: Char): Filter[KeyStateEvent] = e => e.isCharacter(char)
+    
+    /**
+      * @param acceptedChars Characters that are accepted by the filter
+      * @return Event filter that only accepts events concerning specified characters
+      */
+    def charsFilter(acceptedChars: Seq[Char]): Filter[KeyStateEvent] = e => acceptedChars.exists(e.isCharacter)
     
     /**
      * This event filter only accepts events for the specified key indices
      */
-    def keyFilter(firstIndex: Int, otherIndices: Int*) = new Filter[KeyStateEvent](event => 
-            { event.index == firstIndex || otherIndices.contains(event.index) });
+    def keysFilter(firstIndex: Int, secondIndex: Int, moreIndices: Int*): Filter[KeyStateEvent] =
+        keysFilter(Vector(firstIndex, secondIndex) ++ moreIndices)
+    
+    /**
+      * @param acceptedKeys Keys that are accepted by the filter
+      * @return Event filter that only accepts events concerning specified keys
+      */
+    def keysFilter(acceptedKeys: Seq[Int]): Filter[KeyStateEvent] = e => acceptedKeys.contains(e.index)
 }
 
 /**
@@ -44,11 +55,15 @@ object KeyStateEvent
  * @author Mikko Hilpinen
  * @since 21.2.2017
  */
-class KeyStateEvent(val index: Int, val location: KeyLocation, val isDown: Boolean, 
-        val keyStatus: KeyStatus)
+case class KeyStateEvent(index: Int, location: KeyLocation, isDown: Boolean, keyStatus: KeyStatus)
 {
     /**
      * Checks whether the event concerns a specific character key
      */
     def isCharacter(char: Char) = index == KeyEvent.getExtendedKeyCodeForChar(char)
+    
+    /**
+      * @return Whether the key was just released
+      */
+    def isReleased = !isDown
 }

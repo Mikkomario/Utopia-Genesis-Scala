@@ -1,8 +1,7 @@
 package utopia.genesis.test
 
-import utopia.genesis.util.Transformation
-import utopia.genesis.util.Vector3D
-
+import utopia.genesis.shape.shape2D.{Line, Point, Transformation}
+import utopia.genesis.shape.{Rotation, Vector3D}
 import utopia.genesis.util.Extensions._
 
 /**
@@ -18,7 +17,7 @@ object TransformationTest extends App
     
     assert((-translation).position.x == -10)
     assert((-scaling).scaling.x == 0.5)
-    assert((-rotation).rotationDegs ~== -90)
+    assert((-rotation).rotationDegs ~== -90.0)
     
     /*
     assert(translation - translation == Transformation.identity)
@@ -42,9 +41,16 @@ object TransformationTest extends App
     assert(combo.invert(pos) == (-combo)(pos))
     assert(-(-combo) == combo)
     
-    val rotated = translation.absoluteRotatedDegs(90, Vector3D(20))
-    assert(rotated.position ~== Vector3D(20, -10))
-    assert(rotated.rotationDegs ~== 90)
+    val rotated = translation.absoluteRotated(Rotation.ofDegrees(90), Point(20, 0))
+    assert(rotated.position ~== Point(20, -10))
+    assert(rotated.rotationDegs ~== 90.0)
+    
+    val pos2 = Vector3D(19, -23)
+    val line = Line(pos.toPoint, pos2.toPoint)
+    val transformedLine = combo(line)
+    
+    assert(transformedLine == Line(combo(pos).toPoint, combo(pos2).toPoint))
+    assert(combo.invert(transformedLine) == line)
     
     println("Success")
 }

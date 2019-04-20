@@ -1,14 +1,11 @@
 package utopia.genesis.generic
 
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.Vector3D
 import utopia.flow.generic.DataType
-import utopia.genesis.util.Line
-import utopia.genesis.util.Circle
+import utopia.genesis.shape.shape2D.{Bounds, Circle, Line, Point, Rectangle, Size, Transformation}
 import utopia.flow.generic.AnyType
 import utopia.flow.generic.EnvironmentNotSetupException
 import utopia.flow.generic.ConversionHandler
-import utopia.genesis.util.Transformation
-import utopia.genesis.util.Bounds
 import utopia.flow.parse.JSONValueConverter
 
 /**
@@ -24,7 +21,15 @@ object LineType extends DataType("Line", classOf[Line]) with GenesisDataType
  */
 object CircleType extends DataType("Circle", classOf[Circle]) with GenesisDataType
 /**
- * Rectangles are geometric shapes / areas that have both position and size
+ * Points represent 2 dimensional coordinates
+ */
+object PointType extends DataType("Point", classOf[Point]) with GenesisDataType
+/**
+ * Size represents 2 dimensional widht + height
+ */
+object SizeType extends DataType("Size", classOf[Size]) with GenesisDataType
+/**
+ * Bounds are geometric shapes / areas that have both position and size. Bounds are always aligned on X- and Y axes
  */
 object BoundsType extends DataType("Bounds", classOf[Bounds]) with GenesisDataType
 /**
@@ -50,7 +55,7 @@ object GenesisDataType
         isSetup = true
         
         DataType.setup()
-        DataType.introduceTypes(Vector3DType, LineType, CircleType, TransformationType)
+        DataType.introduceTypes(Vector3DType, PointType, SizeType, LineType, CircleType, TransformationType)
         ConversionHandler.addCaster(GenesisValueCaster)
         JSONValueConverter.introduce(GenesisJSONValueConverter)
     }
@@ -59,8 +64,5 @@ object GenesisDataType
 sealed trait GenesisDataType
 {
     if (!GenesisDataType.isSetup)
-    {
-        throw new EnvironmentNotSetupException(
-                "GenesisDataType.setup() must be called before using this data type.")
-    }
+        throw EnvironmentNotSetupException("GenesisDataType.setup() must be called before using this data type.")
 }

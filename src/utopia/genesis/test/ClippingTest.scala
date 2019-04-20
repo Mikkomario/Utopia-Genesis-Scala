@@ -1,21 +1,16 @@
 package utopia.genesis.test
 
-import utopia.genesis.event.Drawable
-import utopia.genesis.util.Drawer
-import utopia.genesis.util.Vector3D
+import utopia.genesis.util.{DefaultSetup, DepthRange, Drawer}
+import utopia.genesis.shape.Vector3D
 import java.awt.Color
-import utopia.genesis.util.Line
-import utopia.genesis.view.Canvas
-import utopia.genesis.view.MainFrame
-import utopia.genesis.view.CanvasMouseEventGenerator
-import utopia.inception.handling.HandlerRelay
-import utopia.genesis.event.ActorThread
-import utopia.genesis.event.MouseMoveListener
+
+import utopia.flow.async.ThreadPool
 import utopia.genesis.event.MouseMoveEvent
-import utopia.genesis.util.ShapeConvertible
-import utopia.genesis.util.Circle
-import utopia.genesis.util.Bounds
-import utopia.genesis.util.DepthRange
+import utopia.genesis.handling.{Drawable, MouseMoveListener}
+import utopia.genesis.shape.shape2D.{Circle, Point, ShapeConvertible, Size}
+import utopia.inception.handling.immutable.Handleable
+
+import scala.concurrent.ExecutionContext
 
 /**
  * This test tests the drawer's clipping functionality
@@ -23,14 +18,13 @@ import utopia.genesis.util.DepthRange
  * @since 25.2.2017
  */
 object ClippingTest extends App
-{   
-    class HiddenShapeDrawer(val shapes: Iterable[ShapeConvertible]) 
-            extends Drawable with MouseMoveListener
+{
+    class HiddenShapeDrawer(val shapes: Iterable[ShapeConvertible]) extends Drawable with MouseMoveListener with Handleable
     {
-        override val depth = DepthRange.foreground
+        override val drawDepth = DepthRange.foreground
         
         private val clipRadius = 64
-        private var clip = Circle(Vector3D.zero, clipRadius)
+        private var clip = Circle(Point.origin, clipRadius)
         
         def draw(drawer: Drawer) = 
         {
@@ -42,22 +36,18 @@ object ClippingTest extends App
         
         def onMouseMove(event: MouseMoveEvent) = clip = Circle(event.mousePosition, clipRadius)
     }
+	
+	// Sets up the program
+	val worldSize = Size(800, 600)
+	
+	val setup = new DefaultSetup(worldSize, "Clipping Test")
+	
+    setup.registerObject(new GridDrawer(worldSize, Size(64, 64)))
+    setup.registerObject(new HiddenShapeDrawer(Vector(
+            Circle((worldSize / 2).toPoint, 32), Circle((worldSize * 0.7).toPoint, 64),
+            Circle((worldSize.xProjection + Vector3D(- 64, 64)).toPoint, 32))))
     
-    val worldSize = Vector3D(800, 600)
-    val canvas = new Canvas(worldSize, 120)
-    val frame = new MainFrame(canvas, worldSize, "Clipping Test")
-    
-    val actorThread = new ActorThread(20, 120)
-    val mouseGen = new CanvasMouseEventGenerator(canvas)
-    actorThread.handler += mouseGen
-    
-    val handlers = new HandlerRelay(actorThread.handler, canvas.handler, mouseGen.moveHandler)
-    
-    handlers += new GridDrawer(worldSize, Vector3D(64, 64))
-    handlers += new HiddenShapeDrawer(Vector(
-            Circle(worldSize / 2, 32), Circle(worldSize * 0.7, 64), 
-            Circle(worldSize.xProjection + Vector3D(- 64, 64), 32)));
-    
-    actorThread.start()
-    frame.display()
+	// Starts the program
+	implicit val context: ExecutionContext = new ThreadPool("Test").executionContext
+	setup.start()
 }

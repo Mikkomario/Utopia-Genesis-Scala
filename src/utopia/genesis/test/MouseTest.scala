@@ -1,24 +1,24 @@
 package utopia.genesis.test
 
-import utopia.genesis.util.Circle
-import utopia.genesis.event.Drawable
+import utopia.genesis.shape.shape2D.{Circle, Line, Point, Size, Transformation}
 import utopia.genesis.util.Drawer
 import java.awt.Color
-import utopia.genesis.event.MouseMoveListener
+
+import utopia.flow.async.ThreadPool
 import utopia.genesis.event.MouseMoveEvent
-import utopia.genesis.event.ActorThread
-import utopia.genesis.util.Vector3D
+import utopia.genesis.shape.X
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import utopia.genesis.view.CanvasMouseEventGenerator
-import utopia.inception.handling.HandlerRelay
-import utopia.genesis.util.Line
-import utopia.genesis.event.MouseButtonStateListener
 import utopia.genesis.event.MouseButtonStateEvent
 import utopia.genesis.event.MouseEvent
-import utopia.genesis.util.Transformation
-import utopia.genesis.event.MouseWheelListener
 import utopia.genesis.event.MouseWheelEvent
+import utopia.genesis.handling.mutable.{ActorHandler, DrawableHandler, MouseButtonStateHandler, MouseMoveHandler, MouseWheelHandler}
+import utopia.genesis.handling.{ActorLoop, Drawable, MouseButtonStateListener, MouseMoveListener, MouseWheelListener}
+import utopia.inception.handling.immutable.Handleable
+import utopia.inception.handling.mutable.HandlerRelay
+
+import scala.concurrent.ExecutionContext
 
 /**
  * This is a visual test for mouse event features. In the test, the two lines should point to the
@@ -30,22 +30,20 @@ import utopia.genesis.event.MouseWheelEvent
  */
 object MouseTest extends App
 {
-    class TestObject(position: Vector3D, radius: Double) extends Drawable with 
-            MouseMoveListener with MouseButtonStateListener with MouseWheelListener
-    {
-        override val depth = 0
+    class TestObject(position: Point, radius: Double) extends Drawable with
+            MouseMoveListener with MouseButtonStateListener with MouseWheelListener with Handleable
+	{
+        private val area = Circle(Point.origin, radius)
         
-        private val area = Circle(Vector3D.zero, radius)
-        
-        private var lastMousePosition = Vector3D.zero
+        private var lastMousePosition = Point.origin
         private var mouseOver = false
         private var isOn = false
-        private var transformation = Transformation.translation(position)
+        private var transformation = Transformation.translation(position.toVector)
         
         override def draw(drawer: Drawer) = 
         {
             val copy = drawer.withColor(Some(if (isOn) Color.BLUE else if (mouseOver) Color.CYAN 
-                    else Color.LIGHT_GRAY)).withAlpha(0.75);
+                    else Color.LIGHT_GRAY)).withAlpha(0.75)
             copy.transformed(transformation).draw(area)
             
             drawer.draw(Line(transformation.position, lastMousePosition))
@@ -54,7 +52,6 @@ object MouseTest extends App
         override def onMouseMove(event: MouseMoveEvent) = 
         {
             lastMousePosition = event.mousePosition
-            // TODO: Rename these transformation methods to something like 'toRelative' and 'toAbsolute'
             mouseOver = contains2D(event.mousePosition)
         }
         
@@ -65,37 +62,46 @@ object MouseTest extends App
         override def mouseButtonStateEventFilter = MouseButtonStateEvent.wasPressedFilter
         
         // Switches the state
-        override def onMouseButtonState(event: MouseButtonStateEvent) = 
-            if (contains2D(event.mousePosition)) isOn = !isOn;
+        override def onMouseButtonState(event: MouseButtonStateEvent) = if (contains2D(event.mousePosition)) isOn = !isOn
         
         override def onMouseWheelRotated(event: MouseWheelEvent) = 
-                transformation = transformation.scaled(1 + event.wheelTurn * 0.2);
+                transformation = transformation.scaled(1 + event.wheelTurn * 0.2)
         
-        private def contains2D(point: Vector3D) = area.contains2D(transformation.invert(point))
+        private def contains2D(point: Point) = area.contains(transformation.invert(point))
     }
     
-    // Creates the frame
-    val gameWorldSize = Vector3D(800, 600)
+    // Creates the handlers
+    val gameWorldSize = Size(800, 600)
     
-    val canvas = new Canvas(gameWorldSize, 120)
-    val frame = new MainFrame(canvas, gameWorldSize, "Mouse Test")
-    
+	val drawHandler = DrawableHandler()
+	val actorHandler = ActorHandler()
+	val mouseStateHandler = MouseButtonStateHandler()
+	val mouseMoveHandler = MouseMoveHandler()
+	val mouseWheelHandler = MouseWheelHandler()
+ 
+	val handlers = HandlerRelay(drawHandler, actorHandler, mouseStateHandler, mouseMoveHandler, mouseWheelHandler)
+	
     // Creates event generators
-    val actorThread = new ActorThread(10, 120)
-    val mouseEventGen = new CanvasMouseEventGenerator(canvas)
-    
-    actorThread.handler += mouseEventGen
-    
-    val handlers = new HandlerRelay(actorThread.handler, mouseEventGen.moveHandler, 
-            mouseEventGen.buttonStateHandler, mouseEventGen.wheelHandler, canvas.handler);
+    val actorLoop = new ActorLoop(actorHandler, 10 to 120)
     
     // Creates test objects
-    val area1 = new TestObject(gameWorldSize / 2, 128)
-    val area2 = new TestObject(gameWorldSize / 2 + Vector3D(128), 64)
+    val area1 = new TestObject((gameWorldSize / 2).toPoint, 128)
+    val area2 = new TestObject((gameWorldSize / 2).toPoint + X(128), 64)
     
     handlers ++= (area1, area2)
     
+	// Creates the frame
+	val canvas = new Canvas(drawHandler, gameWorldSize)
+	val frame = new MainFrame(canvas, gameWorldSize, "Mouse Test")
+	
+	val mouseEventGen = new CanvasMouseEventGenerator(canvas, mouseMoveHandler, mouseStateHandler, mouseWheelHandler)
+	actorHandler += mouseEventGen
+	
     // Displays the frame
+	implicit val context: ExecutionContext = new ThreadPool("Test").executionContext
+	
+	actorLoop.startAsync()
+	canvas.startAutoRefresh()
+	
     frame.display()
-    actorThread.start()
 }

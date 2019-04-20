@@ -1,9 +1,9 @@
 package utopia.genesis.event
 
-import utopia.genesis.util.Vector3D
-import utopia.genesis.util.Area
 import utopia.inception.util.Filter
 import utopia.genesis.event.MouseButton._
+import utopia.genesis.shape.shape2D.Area2D
+import utopia.genesis.shape.shape2D.Point
 
 object MouseEvent
 {
@@ -25,14 +25,14 @@ object MouseEvent
     /**
      * This filter only accepts mouse events where the mouse cursor is over the specified area
      */
-    def isOverAreaFilter(area: Area) = new Filter[MouseEvent]({ _.isOverArea(area) })
+    def isOverAreaFilter(area: Area2D): Filter[MouseEvent] = e => e.isOverArea(area)
     
     /**
      * This filter only accepts events where a mouse button with the specified index has the
      * specified status (down (true) or up (false))
      */
-    def buttonStatusFilter(buttonIndex: Int, requiredStatus: Boolean) = new Filter[MouseEvent](
-            { _.buttonStatus(buttonIndex) == requiredStatus });
+    def buttonStatusFilter(buttonIndex: Int, requiredStatus: Boolean): Filter[MouseEvent] =
+        e => e.buttonStatus(buttonIndex) == requiredStatus
     
     /**
      * This filter only accepts events where a mouse button has the
@@ -40,21 +40,34 @@ object MouseEvent
      * @param requiredStatus The status the button must have in order for the event to be included.
      * Defaults to true (down)
      */
-    def buttonStatusFilter(button: MouseButton, requiredStatus: Boolean = true): Filter[MouseEvent] = 
-            buttonStatusFilter(button.buttonIndex, requiredStatus);
+    def buttonStatusFilter(button: MouseButton, requiredStatus: Boolean = true): Filter[MouseEvent] =
+        e => e.buttonStatus(button) == requiredStatus
 }
 
 /**
- * This class contains the common properties shared between different mouse event types
+ * This trait contains the common properties shared between different mouse event types
  * @author Mikko Hilpinen
  * @since 19.2.2017
  */
-class MouseEvent(val mousePosition: Vector3D, val buttonStatus: MouseButtonStatus)
+trait MouseEvent
 {
-    // OTHER METHODS    -----------------
+    // ABSTRACT ----------------------
+    
+    /**
+      * @return The current position of the mouse
+      */
+    def mousePosition: Point
+    
+    /**
+      * @return The current mouse button status
+      */
+    def buttonStatus: MouseButtonStatus
+    
+    
+    // OTHER    ----------------------
     
     /**
      * Checks whether the mouse cursor is currently over the specified area
      */
-    def isOverArea(area: Area) = area.contains2D(mousePosition)
+    def isOverArea(area: Area2D) = area.contains(mousePosition)
 }

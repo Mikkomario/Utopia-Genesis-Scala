@@ -14,16 +14,16 @@ object ScalingPolicy
      * The resulting game world size will always be at least as large as the preferred 
      * game world size.
      */
-    case object EXTEND extends ScalingPolicy
+    case object Extend extends ScalingPolicy
     /**
      * The resulting game world size will at maximum be as large as the preferred game 
      * world size
      */
-    case object CROP extends ScalingPolicy
+    case object Crop extends ScalingPolicy
     /**
      * Vector projection is used when determining the actual game world size. The game 
      * world size may be cut horizontally and increased vertically, or vice versa, when 
      * necessary. The total area of the in game world is preserved.
      */
-    case object PROJECT extends ScalingPolicy
+    case object Project extends ScalingPolicy
 }

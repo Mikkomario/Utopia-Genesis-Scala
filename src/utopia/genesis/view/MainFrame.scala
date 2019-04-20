@@ -2,15 +2,18 @@ package utopia.genesis.view
 
 import javax.swing.JFrame
 import javax.swing.JPanel
-import utopia.genesis.util.Vector3D
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Toolkit
 import java.awt.Dimension
+
 import scala.collection.immutable.HashMap
-import java.awt.event.ComponentListener
-import java.awt.event.ComponentEvent
+import java.awt.event.{ComponentAdapter, ComponentEvent}
 import java.awt.Component
+
+import utopia.genesis.shape.shape2D.Size
+import utopia.genesis.shape.shape2D.Point
+import utopia.genesis.shape.shape2D.Bounds
 
 /**
  * This class is used for displaying game contents in a frame. The implementation supports
@@ -18,12 +21,16 @@ import java.awt.Component
  * @author Mikko Hilpinen
  * @since 25.12.2016
  */
-class MainFrame(initialContent: Component, val originalSize: Vector3D, title: String, 
-        borderless: Boolean = false, val usePadding: Boolean = true) extends JFrame with ComponentListener
+class MainFrame(initialContent: Component, val originalSize: Size, title: String, 
+        borderless: Boolean = false, val usePadding: Boolean = true) extends JFrame
 {
     // ATTRIBUTES    ------------
     
     private var _content = initialContent
+    
+    /**
+      * @return The current content displayed in this frame
+      */
     def content = _content
     def content_=(newContent: Component) = 
     {
@@ -38,40 +45,29 @@ class MainFrame(initialContent: Component, val originalSize: Vector3D, title: St
     
     // INITIAL CODE    ----------
     
-    { // Sets up the frame
-        if (borderless) { setUndecorated(true) }
+    // Sets up the frame
+    {
+        if (borderless) setUndecorated(true)
         
         setTitle(title)
         setLayout(new BorderLayout())
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
         
-        getContentPane().setBackground(Color.BLACK)
+        getContentPane.setBackground(Color.BLACK)
         setVisible(true)
         
-        val insets = getInsets()
-        setSize(originalSize.x.toInt + insets.left + insets.right, 
-                originalSize.y.toInt + insets.top + insets.bottom);
+        val insets = getInsets
+        setSize(originalSize.width.toInt + insets.left + insets.right,
+                originalSize.height.toInt + insets.top + insets.bottom)
                 
         setVisible(false)
         add(initialContent, BorderLayout.CENTER)
         
-        addComponentListener(this)
-    }
-    
-    
-    // IMPLEMENTED METHODS    ---
-    
-    override def componentResized(event: ComponentEvent) = 
-    {
-        if (event.getComponent == this)
+        addComponentListener(new ComponentAdapter
         {
-            updateContentSize()
-        }
+            override def componentResized(e: ComponentEvent) = updateContentSize()
+        })
     }
-    
-    override def componentMoved(event: ComponentEvent) = Unit
-    override def componentShown(event: ComponentEvent) = Unit
-    override def componentHidden(event: ComponentEvent) = Unit
     
     
     // OTHER METHODS    ---------
@@ -82,18 +78,17 @@ class MainFrame(initialContent: Component, val originalSize: Vector3D, title: St
      */
     def setFullScreen(showTaskBar: Boolean = false) = 
     {
-        var newSize = Toolkit.getDefaultToolkit.getScreenSize
-        var position = Vector3D.zero
+        var newSize = Size of Toolkit.getDefaultToolkit.getScreenSize
+        var position = Point.origin
         
         if (showTaskBar)
         {
             val insets = Toolkit.getDefaultToolkit.getScreenInsets(getGraphicsConfiguration)
-            newSize = new Dimension(newSize.width - insets.left - insets.right, 
-                                    newSize.height - insets.top - insets.bottom)
-            position = Vector3D(insets.left, insets.top)
+            newSize -= Size of insets
+            position = Point(insets.left, insets.top)
         }
         
-        setBounds(position + newSize)
+        setBounds(Bounds(position, newSize).toAwt)
     }
     
     /**
@@ -104,8 +99,7 @@ class MainFrame(initialContent: Component, val originalSize: Vector3D, title: St
     private def updateContentSize()
     {
         val insets = getInsets
-        val actualSize = Vector3D(getWidth - insets.left - insets.right, 
-                                 getHeight - insets.top - insets.bottom);
+        val actualSize = (Size of getSize()) - (Size of insets)
         
         if (usePadding)
         {
@@ -117,7 +111,7 @@ class MainFrame(initialContent: Component, val originalSize: Vector3D, title: St
                 val mainPanelSize = originalSize * scaling.y
                 content.setSize(mainPanelSize.toDimension)
                 
-                val paddingSize = Vector3D((actualSize.x - mainPanelSize.x) / 2, actualSize.y)
+                val paddingSize = Size((actualSize.width - mainPanelSize.width) / 2, actualSize.height)
                 setPadding(paddingSize.toDimension, BorderLayout.WEST, BorderLayout.EAST)
             }
             else if (scaling.y > scaling.x)
@@ -125,13 +119,13 @@ class MainFrame(initialContent: Component, val originalSize: Vector3D, title: St
                 val mainPanelSize = originalSize * scaling.x
                 content.setSize(mainPanelSize.toDimension)
                 
-                val paddingSize = Vector3D(actualSize.x, (actualSize.y - mainPanelSize.y) / 2)
+                val paddingSize = Size(actualSize.width, (actualSize.height - mainPanelSize.height) / 2)
                 setPadding(paddingSize.toDimension, BorderLayout.NORTH, BorderLayout.SOUTH)
             }
             else
             {
                 content.setSize((originalSize * scaling).toDimension)
-                if (!paddings.isEmpty) { paddings = HashMap() }
+                if (paddings.nonEmpty) { paddings = HashMap() }
             }
         }
         else
