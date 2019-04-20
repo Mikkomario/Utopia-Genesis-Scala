@@ -50,12 +50,15 @@ Main Features
 Usage Notes
 -----------
 
-    When using typeless values, please call GenesisDataType.setup() on program startup (replaces DataType.setup() from Flow)
+    When setting up a Genesis program, you can either use DefaultSetup or create your own and follow these instructions
+    (observe DefaultSetup source code when necessary)
 
-    ActorLoop and Canvas / RepaintLoop must be started separately in an asynchronous execution context (calling .startAsync()).
-    You can use ThreadPool from Flow to create an execution context.
+        When using typeless values, please call GenesisDataType.setup() on program startup (replaces DataType.setup() from Flow)
 
-    CanvasMouseEventGenerator must be added to an ActorHandler before it will work.
+        ActorLoop and Canvas / RepaintLoop must be started separately in an asynchronous execution context (calling .startAsync()).
+        You can use ThreadPool from Flow to create an execution context.
+
+        CanvasMouseEventGenerator must be added to an ActorHandler before it will work.
 
     When handling polygons, it's often better to accept Polygonic instead of Polygon to support wider range of classes.
 
@@ -92,6 +95,8 @@ v2  ----------------------------------------
         Immutable Handler versions
 
         getX methods added to GenesisValue
+
+        Setup class for quickly setting up Genesis environment
 
 
     Updates & Changes

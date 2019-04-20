@@ -4,17 +4,14 @@ import utopia.genesis.shape.{X, Y}
 import utopia.genesis.event.KeyStateEvent
 import java.awt.event.KeyEvent
 
-import utopia.genesis.util.{Drawer, FPS}
+import utopia.genesis.util.{DefaultSetup, Drawer}
 import utopia.genesis.shape.shape2D.{Bounds, Line, Point, Size}
-import utopia.genesis.view.{Canvas, ConvertingKeyListener, MainFrame}
 import java.awt.Color
 
 import utopia.flow.async.ThreadPool
 import utopia.genesis.event.KeyTypedEvent
-import utopia.genesis.handling.mutable.{DrawableHandler, KeyStateHandler, KeyTypedHandler}
 import utopia.genesis.handling.{Drawable, KeyStateListener, KeyTypedListener}
 import utopia.inception.handling.immutable.Handleable
-import utopia.inception.handling.mutable.HandlerRelay
 
 import scala.concurrent.ExecutionContext
 
@@ -27,7 +24,7 @@ import scala.concurrent.ExecutionContext
  */
 object KeyTest extends App
 {
-    class TestObject(startPosition: Point) extends KeyStateListener with Handleable
+    private class TestObject(startPosition: Point) extends KeyStateListener with Handleable
     {
         // ATTRIBUTES    -----------------
         
@@ -53,7 +50,7 @@ object KeyTest extends App
         }
     }
     
-    class View(private val testObj: TestObject, private val gameWorldSize: Size,
+    private class View(private val testObj: TestObject, private val gameWorldSize: Size,
 			   private val squareSide: Int) extends Drawable with Handleable
     {
         // ATTRIBUTES    -----------------
@@ -84,34 +81,22 @@ object KeyTest extends App
         }
     }
     
-    class KeyTypePrinter extends KeyTypedListener with Handleable
+    private class KeyTypePrinter extends KeyTypedListener with Handleable
     {
         override def onKeyTyped(event: KeyTypedEvent) = print(event.typedChar)
     }
 	
-	// Creates the handlers first
-	val drawHandler = DrawableHandler()
-	val keyStateHandler = KeyStateHandler()
-	val keyTypedHandler = KeyTypedHandler()
- 
-	val handlers = HandlerRelay(drawHandler, keyStateHandler, keyTypedHandler)
- 
-	// Next creates the test objects
+	// Sets up the program
 	val gameWorldSize = Size(800, 600)
-	val testObj = new TestObject(Point(3, 2))
-	val view = new View(testObj, gameWorldSize, 48)
 	
-	handlers ++= (testObj, view, new KeyTypePrinter())
+	val setup = new DefaultSetup(gameWorldSize, "Key Test")
 	
-	// Lastly creates the view elements and starts the program
+	private val testObj = new TestObject(Point(3, 2))
+	private val view = new View(testObj, gameWorldSize, 48)
+	
+	setup.registerObjects(testObj, view, new KeyTypePrinter())
+	
+	// Starts the program
     implicit val context: ExecutionContext = new ThreadPool("Test").executionContext
-	
-	val canvas = new Canvas(drawHandler, gameWorldSize)
-    val frame = new MainFrame(canvas, gameWorldSize, "KeyTest")
-    
-    val keyEventGen = new ConvertingKeyListener(keyStateHandler, keyTypedHandler)
-	frame.addKeyListener(keyEventGen)
-    
-    canvas.startAutoRefresh(FPS(120))
-    frame.display()
+	setup.start()
 }
