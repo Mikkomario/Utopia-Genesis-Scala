@@ -1,7 +1,6 @@
 package utopia.genesis.handling.mutable
 
 import utopia.genesis.handling
-import utopia.genesis.handling.Actor
 import utopia.inception.handling.mutable.DeepHandler
 
 object ActorHandler

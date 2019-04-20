@@ -1,8 +1,6 @@
 package utopia.genesis.handling.mutable
 
 import utopia.genesis.handling
-
-import utopia.genesis.handling.KeyTypedListener
 import utopia.inception.handling.mutable.DeepHandler
 
 object KeyTypedHandler

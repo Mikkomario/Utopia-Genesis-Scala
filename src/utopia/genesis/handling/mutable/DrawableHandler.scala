@@ -1,7 +1,6 @@
 package utopia.genesis.handling.mutable
 
 import utopia.genesis.handling
-import utopia.genesis.handling.Drawable
 import utopia.genesis.util.{DepthRange, Drawer}
 import utopia.inception.handling.mutable.DeepHandler
 
