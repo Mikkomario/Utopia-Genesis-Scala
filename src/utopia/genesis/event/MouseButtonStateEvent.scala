@@ -26,7 +26,7 @@ object MouseButtonStateEvent
     /**
      * This filter only accepts button events for the specific mouse button
      */
-    def buttonFilter(button: MouseButton): Filter[MouseButtonStateEvent] = buttonFilter(button.buttonIndex);
+    def buttonFilter(button: MouseButton): Filter[MouseButtonStateEvent] = buttonFilter(button.buttonIndex)
 }
 
 /**
