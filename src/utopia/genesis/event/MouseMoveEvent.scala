@@ -14,14 +14,16 @@ object MouseMoveEvent
     /**
      * Creates an event filter that only accepts mouse events originating from the mouse entering 
      * the specified area
+      * @param getArea A function for calculating the target area. Will be called each time an event needs to be filtered
      */
-    def enterAreaFilter(area: Area2D): Filter[MouseMoveEvent] = e => e.enteredArea(area)
+    def enterAreaFilter(getArea: => Area2D): Filter[MouseMoveEvent] = e => e.enteredArea(getArea)
     
     /**
      * Creates an event filter that only accepts mouse events originating from the mouse exiting the
      * specified area
+      * @param getArea A function for calculating the target area. Will be called each time an event needs to be filtered.
      */
-    def exitedAreaFilter(area: Area2D): Filter[MouseMoveEvent] = e => e.exitedArea(area)
+    def exitedAreaFilter(getArea: => Area2D): Filter[MouseMoveEvent] = e => e.exitedArea(getArea)
     
     /**
      * Creates an event filter that only accepts events where the mouse cursor moved with enough

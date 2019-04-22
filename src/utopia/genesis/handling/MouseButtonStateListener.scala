@@ -1,6 +1,7 @@
 package utopia.genesis.handling
 
-import utopia.genesis.event.{MouseButton, MouseButtonStateEvent}
+import utopia.genesis.event.{MouseButton, MouseButtonStateEvent, MouseEvent}
+import utopia.genesis.shape.shape2D.Area2D
 import utopia.inception.handling.Handleable
 import utopia.inception.util.{AnyFilter, Filter}
 
@@ -61,6 +62,62 @@ object MouseButtonStateListener
       * @return A new mouse button state listener
       */
     def onRightReleased(f: MouseButtonStateEvent => Unit) = onButtonReleased(MouseButton.Right, f)
+    
+    /**
+      * Creates a simple mouse button state listener that is called when a mouse button is pressed within a certain area
+      * @param button The target mouse button
+      * @param getArea A function for calculating the target area. Will be called for each incoming event
+      * @param f A function that will be called when a suitable event is received
+      * @return A new mouse button state listener
+      */
+    def onButtonPressedInside(button: MouseButton, getArea: => Area2D, f: MouseButtonStateEvent => Unit) = apply(f,
+        MouseButtonStateEvent.wasPressedFilter && MouseButtonStateEvent.buttonFilter(button) && MouseEvent.isOverAreaFilter(getArea))
+    
+    /**
+      * Creates a simple mouse button state listener that is called when the left mouse button is pressed within a certain area
+      * @param getArea A function for calculating the target area. Will be called for each incoming event
+      * @param f A function that will be called when a suitable event is received
+      * @return A new mouse button state listener
+      */
+    def onLeftPressedInside(getArea: => Area2D, f: MouseButtonStateEvent => Unit) =
+        onButtonPressedInside(MouseButton.Left, getArea, f)
+    
+    /**
+      * Creates a simple mouse button state listener that is called when the right mouse button is pressed within a certain area
+      * @param getArea A function for calculating the target area. Will be called for each incoming event
+      * @param f A function that will be called when a suitable event is received
+      * @return A new mouse button state listener
+      */
+    def onRightPressedInside(getArea: => Area2D, f: MouseButtonStateEvent => Unit) =
+        onButtonPressedInside(MouseButton.Right, getArea, f)
+    
+    /**
+      * Creates a simple mouse button state listener that is called when a mouse button is released within a certain area
+      * @param button The target mouse button
+      * @param getArea A function for calculating the target area. Will be called for each incoming event
+      * @param f A function that will be called when a suitable event is received
+      * @return A new mouse button state listener
+      */
+    def onButtonReleasedInside(button: MouseButton, getArea: => Area2D, f: MouseButtonStateEvent => Unit) = apply(f,
+        MouseButtonStateEvent.wasReleasedFilter && MouseButtonStateEvent.buttonFilter(button) && MouseEvent.isOverAreaFilter(getArea))
+    
+    /**
+      * Creates a simple mouse button state listener that is called when the left mouse button is released within a certain area
+      * @param getArea A function for calculating the target area. Will be called for each incoming event
+      * @param f A function that will be called when a suitable event is received
+      * @return A new mouse button state listener
+      */
+    def onLeftReleasedInside(getArea: => Area2D, f: MouseButtonStateEvent => Unit) =
+        onButtonReleasedInside(MouseButton.Left, getArea, f)
+    
+    /**
+      * Creates a simple mouse button state listener that is called when the right mouse button is released within a certain area
+      * @param getArea A function for calculating the target area. Will be called for each incoming event
+      * @param f A function that will be called when a suitable event is received
+      * @return A new mouse button state listener
+      */
+    def onRightReleasedInside(getArea: => Area2D, f: MouseButtonStateEvent => Unit) =
+        onButtonReleasedInside(MouseButton.Right, getArea, f)
 }
 
 /**

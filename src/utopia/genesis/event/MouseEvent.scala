@@ -24,8 +24,9 @@ object MouseEvent
     
     /**
      * This filter only accepts mouse events where the mouse cursor is over the specified area
+      * @param getArea A function for calculating the target area. Will be called each time an event is being filtered.
      */
-    def isOverAreaFilter(area: Area2D): Filter[MouseEvent] = e => e.isOverArea(area)
+    def isOverAreaFilter(getArea: => Area2D): Filter[MouseEvent] = e => e.isOverArea(getArea)
     
     /**
      * This filter only accepts events where a mouse button with the specified index has the
