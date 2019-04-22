@@ -57,13 +57,23 @@ object KeyStateEvent
  */
 case class KeyStateEvent(index: Int, location: KeyLocation, isDown: Boolean, keyStatus: KeyStatus)
 {
-    /**
-     * Checks whether the event concerns a specific character key
-     */
-    def isCharacter(char: Char) = index == KeyEvent.getExtendedKeyCodeForChar(char)
+    // COMPUTED ---------------------
     
     /**
       * @return Whether the key was just released
       */
     def isReleased = !isDown
+    
+    
+    // IMPLEMENTED  -----------------
+    
+    override def toString = s"$index ${ if (isDown) "was pressed" else "was released" } at location: $location"
+    
+    
+    // OTHER    ---------------------
+    
+    /**
+     * Checks whether the event concerns a specific character key
+     */
+    def isCharacter(char: Char) = index == KeyEvent.getExtendedKeyCodeForChar(char)
 }

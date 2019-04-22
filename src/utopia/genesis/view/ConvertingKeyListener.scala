@@ -4,14 +4,14 @@ import java.awt.event.{KeyEvent, KeyListener}
 
 import utopia.genesis.event.KeyLocation.Standard
 import utopia.genesis.event.{KeyLocation, KeyStateEvent, KeyStatus, KeyTypedEvent}
-import utopia.genesis.handling.{KeyStateHandler, KeyTypedHandler}
+import utopia.genesis.handling.{KeyStateListener, KeyTypedListener}
 
 /**
   * This key listener converts java.awt.KeyEvents to various Utopia Genesis key events
   * @author Mikko Hilpinen
   * @since 6.4.2019
   */
-class ConvertingKeyListener(val keyStateHandler: KeyStateHandler, val keyTypedHandler: KeyTypedHandler) extends KeyListener
+class ConvertingKeyListener(val keyStateHandler: KeyStateListener, val keyTypedHandler: KeyTypedListener) extends KeyListener
 {
 	// ATTRIBUTES	------------------
 	
@@ -42,7 +42,7 @@ class ConvertingKeyListener(val keyStateHandler: KeyStateHandler, val keyTypedHa
 		if (_keyStatus(e.getExtendedKeyCode, location) != newState)
 		{
 			_keyStatus += (e.getExtendedKeyCode, location, newState)
-			keyStateHandler.onKeyState(new KeyStateEvent(e.getExtendedKeyCode, location, newState, _keyStatus));
+			keyStateHandler.onKeyState(new KeyStateEvent(e.getExtendedKeyCode, location, newState, _keyStatus))
 		}
 	}
 }
