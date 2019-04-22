@@ -62,7 +62,11 @@ object MouseTest extends App
         override def mouseButtonStateEventFilter = MouseButtonStateEvent.wasPressedFilter
         
         // Switches the state
-        override def onMouseButtonState(event: MouseButtonStateEvent) = if (contains2D(event.mousePosition)) isOn = !isOn
+        override def onMouseButtonState(event: MouseButtonStateEvent) =
+		{
+			if (contains2D(event.mousePosition)) isOn = !isOn
+			false
+		}
         
         override def onMouseWheelRotated(event: MouseWheelEvent) = 
                 transformation = transformation.scaled(1 + event.wheelTurn * 0.2)

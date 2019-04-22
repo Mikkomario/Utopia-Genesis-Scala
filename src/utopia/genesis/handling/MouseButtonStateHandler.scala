@@ -21,11 +21,29 @@ trait MouseButtonStateHandler extends Handler[MouseButtonStateListener] with Mou
 	  */
 	override def handlerType = MouseButtonStateHandlerType
 	
-	/**
-	  * This method will be called in order to inform the listener about a new mouse button event
-	  * (a mouse button being pressed or released)
-	  * @param event The mouse event that occurred
-	  */
-	override def onMouseButtonState(event: MouseButtonStateEvent) = handle {
-		l => if (l.mouseButtonStateEventFilter(event)) l.onMouseButtonState(event) }
+	override def onMouseButtonState(event: MouseButtonStateEvent) =
+	{
+		if (event.isConsumed)
+		{
+			// If event is already consumed, doesn't worry about changing event state
+			handle { l => if (l.mouseButtonStateEventFilter(event)) l.onMouseButtonState(event) }
+			true
+		}
+		else
+		{
+			// Handles items until the event is consumed, after which continues with a consumed event
+			val view = handleView()
+			val consumedAtIndex = view.indexWhere {
+				l => if (l.mouseButtonStateEventFilter(event)) l.onMouseButtonState(event) else false }
+			if (consumedAtIndex >= 0)
+			{
+				val consumedEvent = event.consumed
+				view.drop(consumedAtIndex + 1).foreach {
+					l => if (l.mouseButtonStateEventFilter(consumedEvent)) l.onMouseButtonState(consumedEvent) }
+				true
+			}
+			else
+				false
+		}
+	}
 }

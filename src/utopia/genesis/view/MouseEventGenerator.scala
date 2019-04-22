@@ -84,13 +84,15 @@ class MouseEventGenerator(c: Component, val moveHandler: MouseMoveListener,
         override def mousePressed(e: MouseEvent) = 
         {
             buttonStatus += (e.getButton, true)
-            buttonHandler.onMouseButtonState(new MouseButtonStateEvent(e.getButton, true, lastMousePosition, buttonStatus))
+            buttonHandler.onMouseButtonState(new MouseButtonStateEvent(e.getButton, true, lastMousePosition,
+                buttonStatus, false))
         }
         
         override def mouseReleased(e: MouseEvent) = 
         {
             buttonStatus += (e.getButton, false)
-            buttonHandler.onMouseButtonState(new MouseButtonStateEvent(e.getButton, false, lastMousePosition, buttonStatus))
+            buttonHandler.onMouseButtonState(new MouseButtonStateEvent(e.getButton, false, lastMousePosition,
+                buttonStatus, false))
         }
         
         override def mouseClicked(e: MouseEvent) = Unit

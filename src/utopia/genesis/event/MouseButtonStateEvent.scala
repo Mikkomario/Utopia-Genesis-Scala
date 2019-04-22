@@ -2,7 +2,6 @@ package utopia.genesis.event
 
 import utopia.genesis.event.MouseButton._
 import utopia.inception.util.Filter
-import utopia.genesis.shape.Vector3D
 import utopia.genesis.shape.shape2D.Point
 
 object MouseButtonStateEvent
@@ -17,6 +16,11 @@ object MouseButtonStateEvent
      * state
      */
     val wasReleasedFilter: Filter[MouseButtonStateEvent] = e => e.wasReleased
+    
+    /**
+      * This filter only accepts events that haven't been marked as consumed
+      */
+    val notConsumedFilter: Filter[MouseButtonStateEvent] = e => !e.isConsumed
     
     /**
      * This filter only accepts button events for the specific button index
@@ -39,7 +43,7 @@ object MouseButtonStateEvent
  * @since 17.2.2017
  */
 case class MouseButtonStateEvent(buttonIndex: Int, isDown: Boolean, mousePosition: Point,
-                                 buttonStatus: MouseButtonStatus) extends MouseEvent
+                                 buttonStatus: MouseButtonStatus, isConsumed: Boolean) extends MouseEvent
 {
     // COMPUTED PROPERTIES    ------------
     
@@ -77,6 +81,11 @@ case class MouseButtonStateEvent(buttonIndex: Int, isDown: Boolean, mousePositio
      * Whether this event concerns the middle mouse button
      */
     def isMiddleMouseButton = isMouseButton(Middle)
+    
+    /**
+      * @return A consumed version of this event
+      */
+    def consumed = if (isConsumed) this else copy(isConsumed = true)
     
     
     // OTHER METHODS    ------------------
