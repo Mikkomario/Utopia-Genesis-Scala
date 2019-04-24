@@ -3,13 +3,13 @@ package utopia.genesis.util
 import java.awt.Graphics2D
 import java.awt.AlphaComposite
 import java.awt.geom.AffineTransform
-import scala.collection.mutable.Stack
-import java.awt.Color
 import java.awt.BasicStroke
 import java.awt.Stroke
 import java.awt.Shape
 import java.awt.Paint
 import java.awt.Font
+
+import utopia.genesis.color.Color
 import utopia.genesis.shape.shape2D.ShapeConvertible
 import utopia.genesis.shape.shape2D.Bounds
 import utopia.genesis.shape.shape2D.Transformation
@@ -23,8 +23,7 @@ object Drawer
     /**
      * Creates a rounded stroke instance
      */
-    def roundStroke(width: Double) = new BasicStroke(width.toFloat, BasicStroke.CAP_ROUND, 
-            BasicStroke.JOIN_ROUND);
+    def roundStroke(width: Double) = new BasicStroke(width.toFloat, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND)
 }
 
 /**
@@ -38,8 +37,8 @@ object Drawer
  * @author Mikko Hilpinen
  * @since 22.1.2017
  */
-class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color.WHITE), 
-        val edgeColor: Option[Paint] = Some(Color.BLACK))
+class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.awt.Color.WHITE),
+             val edgeColor: Option[Paint] = Some(java.awt.Color.BLACK))
 {
     // TODO: Add rendering hints
     
@@ -59,6 +58,16 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color
       * @return A version of this drawer that only draws edges of shapes. May return this drawer.
       */
     def onlyEdges = if (fillColor.isDefined) copy(None, edgeColor) else this
+    
+    /**
+      * @return A version of this drawer that only draws edges of shapes. May return this drawer.
+      */
+    def noFill = onlyEdges
+    
+    /**
+      * @return A version of this drawer that only fills shapes. May return this drawer.
+      */
+    def noEdges = onlyFill
     
     
     // OTHER METHODS    -------------------
@@ -188,11 +197,23 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(Color
     def withFillColor(color: Paint) = withColor(Some(color))
     
     /**
+      * @param color The new fill color
+      * @return A version of this drawer with specified fill color
+      */
+    def withFillColor(color: Color) = withColor(Some(color.toAwt))
+    
+    /**
       * @param color The new edge drawing color
       * @return A version of this drawer with specified edge color
       */
     def withEdgeColor(color: Paint): Drawer = withEdgeColor(Some(color))
-            
+    
+    /**
+      * @param color The new edge drawing color
+      * @return A version of this drawer with specified edge color
+      */
+    def withEdgeColor(color: Color): Drawer = withEdgeColor(color.toAwt)
+    
     /**
      * Creates a copy of this context with altered alpha (opacity / transparency) value.
      * @param alpha Between 0 and 1. 1 Means that the drawn elements are fully visible / not

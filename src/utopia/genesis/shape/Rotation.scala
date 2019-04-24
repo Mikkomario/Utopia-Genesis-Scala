@@ -1,10 +1,9 @@
 package utopia.genesis.shape
 
 import utopia.genesis.util.Extensions._
-
 import utopia.genesis.util.ApproximatelyEquatable
 import utopia.flow.util.Equatable
-import utopia.genesis.shape.RotationDirection.Clockwise
+import utopia.genesis.shape.RotationDirection.{Clockwise, Counterclockwise}
 
 object Rotation
 {
@@ -52,6 +51,16 @@ case class Rotation(radians: Double, direction: RotationDirection = Clockwise) e
 	 */
 	def toAngle = new Angle(toDouble)
 	
+	/**
+	  * @return A clockwise representation of this rotation. Double value is preserved.
+	  */
+	def clockwise = toDirection(Clockwise)
+	
+	/**
+	  * @return A counterclockwise representation of this rotation. Double value is preserved.
+	  */
+	def counterClockwise = toDirection(Counterclockwise)
+	
 	
 	// IMPLEMENTED    --------------------
 	
@@ -96,4 +105,13 @@ case class Rotation(radians: Double, direction: RotationDirection = Clockwise) e
 	 * Returns a divided version of this rotation
 	 */
 	def /(modifier: Double) = Rotation(radians / modifier, direction)
+	
+	
+	// OTHER	--------------------------
+	
+	/**
+	  * @param direction Target direction
+	  * @return A copy of this rotation where the direction is as specified. Double value stays the same.
+	  */
+	def toDirection(direction: RotationDirection) = if (direction == this.direction) this else Rotation(-radians, direction)
 }
