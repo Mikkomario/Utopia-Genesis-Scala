@@ -1,8 +1,10 @@
 package utopia.genesis.color
 
 import scala.language.implicitConversions
-
 import utopia.genesis.color.RGBChannel._
+import utopia.genesis.util.ApproximatelyEquatable
+import utopia.genesis.util.Extensions._
+
 import scala.collection.immutable.HashMap
 
 object RGB
@@ -106,7 +108,7 @@ object RGB
   * @author Mikko Hilpinen
   * @since 24.4.2019, v1+
   */
-case class RGB private(override val ratios: Map[RGBChannel, Double]) extends RGBLike[RGB]
+case class RGB private(override val ratios: Map[RGBChannel, Double]) extends RGBLike[RGB] with ApproximatelyEquatable[RGBLike[_]]
 {
 	// COMPUTED	------------------------
 	
@@ -134,7 +136,7 @@ case class RGB private(override val ratios: Map[RGBChannel, Double]) extends RGB
 				(60 * (r - g) / (max - min)) + 240
 		}
 		
-		val luminosity = (maxRatio + minRatio) / 2
+		val luminosity = (max + min) / 2
 		
 		val saturation =
 		{
@@ -152,6 +154,8 @@ case class RGB private(override val ratios: Map[RGBChannel, Double]) extends RGB
 	
 	// IMPLEMENTED	--------------------
 	
+	override def ~==[B <: RGBLike[_]](other: B) = RGBChannel.values.forall { c => ratio(c) ~== other.ratio(c) }
+	
 	override def withRatios(newRatios: Map[RGBChannel, Double]) = RGB.withRatios(newRatios)
 	
 	override def toString = s"R: ${percent(Red)}%, G: ${percent(Green)}%, B: ${percent(Blue)}%"
@@ -165,6 +169,20 @@ case class RGB private(override val ratios: Map[RGBChannel, Double]) extends RGB
 	  * @return The color ratio for that channel [0, 1]
 	  */
 	def apply(channel: RGBChannel): Double = ratios.getOrElse(channel, 0)
+	
+	/**
+	  * Multiplies the color values in this color
+	  * @param multiplier A multiplier
+	  * @return A multiplied version of this color
+	  */
+	def *(multiplier: Double) = RGB.withRatios(ratios.mapValues { _ * multiplier })
+	
+	/**
+	  * Divides the color values in this color
+	  * @param div A divider
+	  * @return A divided version of this color
+	  */
+	def /(div: Double) = this * (1/div)
 	
 	
 	// OTHER	------------------------

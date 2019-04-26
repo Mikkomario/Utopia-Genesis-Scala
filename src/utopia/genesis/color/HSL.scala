@@ -1,8 +1,9 @@
 package utopia.genesis.color
 
 import scala.language.implicitConversions
-
 import utopia.genesis.shape.Angle
+import utopia.genesis.util.ApproximatelyEquatable
+import utopia.genesis.util.Extensions._
 
 object HSL
 {
@@ -27,9 +28,10 @@ object HSL
 	  */
 	def apply(hue: Double, saturation: Double, luminosity: Double): HSL =
 	{
-		val h = if (hue < 0) hue % 360 + 360 else hue % 360
+		val hue2 = hue % 360
+		val h = if (hue2 < 0) hue2 + 360 else hue2
 		val s = 0.0 max saturation min 1.0
-		val l = 0.0 max saturation min 1.0
+		val l = 0.0 max luminosity min 1.0
 		
 		new HSL(h, s, l)
 	}
@@ -52,7 +54,8 @@ object HSL
   * @param saturation Color saturation [0, 1] where 0 is grayscale and 1 is fully saturated
   * @param luminosity Color luminosity [0, 1] where 0 is black and 1 is white
   */
-case class HSL private(override val hue: Double, override val saturation: Double, override val luminosity: Double) extends HSLLike[HSL]
+case class HSL private(override val hue: Double, override val saturation: Double, override val luminosity: Double)
+	extends HSLLike[HSL] with ApproximatelyEquatable[HSLLike[_]]
 {
 	// COMPUTED	------------------
 	
@@ -85,22 +88,30 @@ case class HSL private(override val hue: Double, override val saturation: Double
 	// IMPLEMENTED	--------------
 	
 	/**
+	  * Checks whether the two instances are approximately equal
+	  */
+	override def ~==[B <: HSLLike[_]](other: B) = (hue ~== other.hue) &&
+		(saturation ~== other.saturation) && (luminosity ~== other.luminosity)
+	
+	/**
 	  * @param hue New hue [0, 360[
 	  * @return A copy of this color with new hue
 	  */
-	def withHue(hue: Double) = HSL(hue, saturation, luminosity)
+	def withHue(hue: Double) = HSL.apply(hue, saturation, luminosity)
 	
 	/**
 	  * @param saturation New saturation [0, 1]
 	  * @return A copy of this color with new saturation
 	  */
-	def withSaturation(saturation: Double) = HSL(hue, saturation, luminosity)
+	def withSaturation(saturation: Double) = HSL.apply(hue, saturation, luminosity)
 	
 	/**
 	  * @param luminosity New luminosity [0, 1]
 	  * @return A copy of this color with new luminosity
 	  */
-	def withLuminosity(luminosity: Double) = HSL(hue, saturation, luminosity)
+	def withLuminosity(luminosity: Double) = HSL.apply(hue, saturation, luminosity)
+	
+	override def toString = s"Hue: $hue, Saturation: $saturationPercent%, Luminosity: $luminosityPercent%"
 	
 	
 	// OPERATORS	--------------

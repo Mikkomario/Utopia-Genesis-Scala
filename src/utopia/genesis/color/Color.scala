@@ -1,6 +1,9 @@
 package utopia.genesis.color
 
+import utopia.genesis.util.ApproximatelyEquatable
+
 import scala.language.implicitConversions
+import utopia.genesis.util.Extensions._
 
 object Color
 {
@@ -38,6 +41,15 @@ object Color
 	  * A cyan color (0, 1, 1)
 	  */
 	val cyan = Color(0, 1, 1)
+	
+	/**
+	  * The default black text color
+	  */
+	val textBlack = black.withAlpha(0.88)
+	/**
+	  * The default black text color for disabled / hint elements
+	  */
+	val textBlackDisabled = black.withAlpha(0.55)
 	
 	
 	// IMPLICITS	---------------------
@@ -79,6 +91,7 @@ object Color
   * @since 24.4.2019, v1+
   */
 case class Color private(private val data: Either[HSL, RGB], alpha: Double) extends RGBLike[Color] with HSLLike[Color]
+	with ApproximatelyEquatable[Color]
 {
 	// ATTRIBUTES	----------------------
 	
@@ -107,10 +120,25 @@ case class Color private(private val data: Either[HSL, RGB], alpha: Double) exte
 	/**
 	  * @return An awt representation of this color
 	  */
-	def toAwt = new java.awt.Color(rgb.redValue, rgb.blueValue, rgb.greenValue, (alpha * 255).toInt)
+	def toAwt = new java.awt.Color(rgb.redValue, rgb.greenValue, rgb.blueValue, (alpha * 255).toInt)
 	
 	
 	// IMPLEMENTED	----------------------
+	
+	override def ~==[B <: Color](other: B) =
+	{
+		// Alphas must match
+		if (alpha ~== other.alpha)
+		{
+			// Usually tests with RGB
+			if (data.isRight || other.data.isRight)
+				rgb ~== other.rgb
+			else
+				hsl ~== other.hsl
+		}
+		else
+			false
+	}
 	
 	override def ratios = rgb.ratios
 	

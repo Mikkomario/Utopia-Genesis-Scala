@@ -163,14 +163,29 @@ trait HSLLike[Repr <: HSLLike[Repr]]
 	def mapLuminosity(f: Double => Double) = withLuminosity(f(luminosity))
 	
 	/**
-	  * @param lightMod A lightening modifier > 0 where 0 is fully dark and 2 is twice as bright, 1 keeps this color as is
+	  * @param lightMod A lightening modifier > 0 where 2 is twice as bright, 1 keeps this color as is
 	  * @return A lightened version of this color
 	  */
-	def lightened(lightMod: Double) = timesLuminosity(lightMod)
+	def lightened(lightMod: Double) =
+	{
+		if (lightMod <= 0)
+			withLuminosity(0)
+		else
+		{
+			val o = luminosity
+			withLuminosity(1 - (1 - o) / lightMod)
+		}
+	}
 	
 	/**
-	  * @param darkMod A darkening modifier > 0 where 0 is fully light and 2 is twice as dark, 1 keeps this color as is
+	  * @param darkMod A darkening modifier > 0 where 2 is twice as dark, 1 keeps this color as is
 	  * @return A darkened version of this color
 	  */
-	def darkened(darkMod: Double) = lightened(1 / darkMod)
+	def darkened(darkMod: Double) =
+	{
+		if (darkMod <= 0)
+			withLuminosity(1)
+		else
+			timesLuminosity(1 / darkMod)
+	}
 }
