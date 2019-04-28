@@ -80,7 +80,7 @@ case class Point(override val x: Double, override val y: Double) extends VectorL
 {
     // IMPLEMENTED    -----------------
 	
-	lazy val dimensions = Vector(x, y)
+	override lazy val dimensions = Vector(x, y)
 	
 	override def buildCopy(dimensions: Vector[Double]) =
 	{
@@ -92,11 +92,13 @@ case class Point(override val x: Double, override val y: Double) extends VectorL
 			Point(dimensions(0), 0)
 	}
 	
-	def toValue = new Value(Some(this), PointType)
+	override def toValue = new Value(Some(this), PointType)
     
-    def toModel = Model.fromMap(HashMap("x" -> x, "y" -> y))
+    override def toModel = Model.fromMap(HashMap("x" -> x, "y" -> y))
     
-    def ~==[B <: Point](other: B) = (x ~== other.x) && (y ~== other.y)
+    override def ~==[B <: Point](other: B) = (x ~== other.x) && (y ~== other.y)
+	
+	override def toString = s"($x, $y)"
 	
 	
 	// COMPUTED	-----------------------

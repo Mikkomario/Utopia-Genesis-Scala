@@ -89,6 +89,8 @@ case class Size(width: Double, height: Double) extends VectorLike[Size] with App
     
     def ~==[B <: Size](other: B) = (width ~== other.width) && (height ~== other.height)
     
+    override def toString = s"$width x $height"
+    
     
     // OTHER    -----------------------------
     
