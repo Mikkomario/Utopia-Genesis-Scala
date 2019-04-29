@@ -165,4 +165,34 @@ case class Bounds(position: Point, size: Size) extends Rectangular with ValueCon
      * Both shapes are projected to the x-y plane before the check.
      */
     def lineIntersection(line: Line) = sides.flatMap { _.intersection(line) }
+    
+    /**
+      * Enlarges these bounds from the center
+      * @param enlargement The size enlargement
+      * @return A copy of these bounds with same center but increased size
+      */
+    def enlarged(enlargement: Size) = Bounds(position - enlargement / 2, size + enlargement)
+    
+    /**
+      * Enlarges these bounds from the center
+      * @param widthIncrease The increase in width
+      * @param heightIncrease The increase in height
+      * @return A copy of these bounds with same center but increased size
+      */
+    def enlarged(widthIncrease: Double, heightIncrease: Double): Bounds = enlarged(Size(widthIncrease, heightIncrease))
+    
+    /**
+      * Shrinks these bounds from the center
+      * @param shrinking The size decrease
+      * @return A copy of these bounds with same center but decreased size
+      */
+    def shrinked(shrinking: Size) = enlarged(-shrinking)
+    
+    /**
+      * Shrinks these bounds from the center
+      * @param widthDecrease The decrease in width
+      * @param heightDecrease The decrease in height
+      * @return A copy of these bounds with same center but decreased size
+      */
+    def shrinked(widthDecrease: Double, heightDecrease: Double): Bounds = shrinked(Size(widthDecrease, heightDecrease))
 }

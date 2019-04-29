@@ -36,6 +36,13 @@ object Size extends FromModelFactory[Size]
      * Converts awt insets into a size
      */
     def of(insets: Insets) = Size(insets.left + insets.right, insets.top + insets.bottom)
+    
+    /**
+      * Creates a square shaped size
+      * @param side Length of a single side
+      * @return A new size with equal width and height
+      */
+    def square(side: Double) = Size(side, side)
 }
 
 /**

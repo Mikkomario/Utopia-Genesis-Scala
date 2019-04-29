@@ -1,13 +1,7 @@
 package utopia.genesis.util
 
-import java.awt.Graphics2D
-import java.awt.AlphaComposite
+import java.awt.{AlphaComposite, BasicStroke, Font, Graphics, Graphics2D, Paint, Shape, Stroke}
 import java.awt.geom.AffineTransform
-import java.awt.BasicStroke
-import java.awt.Stroke
-import java.awt.Shape
-import java.awt.Paint
-import java.awt.Font
 
 import utopia.genesis.color.Color
 import utopia.genesis.shape.shape2D.ShapeConvertible
@@ -24,6 +18,14 @@ object Drawer
      * Creates a rounded stroke instance
      */
     def roundStroke(width: Double) = new BasicStroke(width.toFloat, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND)
+    
+    /**
+      * Creates a new temporary drawer for the duration of the operation by wrapping an awt graphics instance.
+      * Disposes the drawer afterwards.
+      * @param graphics A graphics instance
+      * @param f A function that uses the drawer
+      */
+    def use(graphics: Graphics)(f: Drawer => Unit) = new Drawer(graphics.create().asInstanceOf[Graphics2D]).disposeAfter(f)
 }
 
 /**
@@ -184,6 +186,13 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
      * was in the original
      */
     def withColor(fillColor: Option[Paint], edgeColor: Option[Paint] = this.edgeColor) = copy(fillColor, edgeColor)
+    
+    /**
+      * Creates a new instance of this drawer with altered colours
+      * @param fillColor the colour / paint used for filling the area
+      * @param edgeColor the colour / paint used for the drawn edges
+      */
+    def withColor(fillColor: Paint, edgeColor: Paint): Drawer = withColor(Some(fillColor), Some(edgeColor))
     
     /**
      * Creates a new instance of this drawer with altered edge colour

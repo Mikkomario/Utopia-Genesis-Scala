@@ -80,25 +80,24 @@ class Canvas(val drawHandler: DrawableHandler, originalGameWorldSize: Size, val 
     {
         super.paintComponent(g)
 
-        val drawer = new Drawer(g.create().asInstanceOf[Graphics2D])
-        
-        // Clears the previous drawings
-        if (clearPrevious)
+        Drawer.use(g)
         {
-            drawer.withCopy
-            {
-                d =>
-                    d.graphics.clearRect(0, 0, getWidth, getHeight)
-                    d.graphics.setColor(getBackground)
-                    d.graphics.fillRect(0, 0, getWidth, getHeight)
-            }
+            drawer =>
+                // Clears the previous drawings
+                if (clearPrevious)
+                {
+                    drawer.withCopy
+                    {
+                        d =>
+                            d.graphics.clearRect(0, 0, getWidth, getHeight)
+                            d.graphics.setColor(getBackground)
+                            d.graphics.fillRect(0, 0, getWidth, getHeight)
+                    }
+                }
+    
+                // Game world drawings are scaled, then drawn
+                drawHandler.draw(drawer.transformed(Transformation.scaling(scaling)))
         }
-        
-        // Game world drawings are scaled, then drawn
-        drawHandler.draw(drawer.transformed(Transformation.scaling(scaling)))
-        
-        // Disposes the created drawers afterwards
-        drawer.dispose()
     }
     
     
