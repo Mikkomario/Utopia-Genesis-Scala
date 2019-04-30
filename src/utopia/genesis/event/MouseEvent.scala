@@ -2,8 +2,7 @@ package utopia.genesis.event
 
 import utopia.inception.util.Filter
 import utopia.genesis.event.MouseButton._
-import utopia.genesis.shape.shape2D.Area2D
-import utopia.genesis.shape.shape2D.Point
+import utopia.genesis.shape.shape2D.{Area2D, Bounds, Point}
 
 object MouseEvent
 {
@@ -71,4 +70,10 @@ trait MouseEvent
      * Checks whether the mouse cursor is currently over the specified area
      */
     def isOverArea(area: Area2D) = area.contains(mousePosition)
+    
+    /**
+      * @param area Target area
+      * @return Mouse position relative to the specified area
+      */
+    def positionOverArea(area: Bounds) = mousePosition - area.position
 }

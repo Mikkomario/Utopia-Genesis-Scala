@@ -128,10 +128,24 @@ trait VectorLike[Repr <: VectorLike[_]]
 	def +(x: Double, more: Double*) = combineDimensions(x +: more, { _ + _ })
 	
 	/**
+	  * @param adjust Translation on target axis
+	  * @param axis Target axis
+	  * @return A copy of this element with one dimension translated
+	  */
+	def +(adjust: Double, axis: Axis) = map(_ + adjust, axis)
+	
+	/**
 	  * @param other Another vectorlike element
 	  * @return The subtraction of these two elements
 	  */
 	def -(other: AnyVectorLike) = this + (-other)
+	
+	/**
+	  * @param adjust Translation on target axis
+	  * @param axis Target axis
+	  * @return A copy of this element with one dimension translated
+	  */
+	def -(adjust: Double, axis: Axis) = this + (-adjust, axis)
 	
 	/**
 	  * @param x X translation (negative)
@@ -153,6 +167,13 @@ trait VectorLike[Repr <: VectorLike[_]]
 	def *(n: Double) = map { _ * n }
 	
 	/**
+	  * @param n A multiplier for specified axis
+	  * @param axis Target axis
+	  * @return A copy of this element with one dimension multiplied
+	  */
+	def *(n: Double, axis: Axis) = map(_ * n, axis)
+	
+	/**
 	  * @param other Another vectorlike element
 	  * @return This element divided on each axis of the provided element. Dividing by 0 is ignored
 	  */
@@ -163,6 +184,13 @@ trait VectorLike[Repr <: VectorLike[_]]
 	  * @return This element divided on all axes with the speficied divider
 	  */
 	def /(n: Double) = if (n == 0) buildCopy(dimensions) else map { _ / n }
+	
+	/**
+	  * @param n A divider for target axis
+	  * @param axis Target axis
+	  * @return This element divided on specified axis
+	  */
+	def /(n: Double, axis: Axis) = if (n == 0) buildCopy(dimensions) else map(_ / n, axis)
 	
 	
 	// OTHER	--------------------------

@@ -1,6 +1,7 @@
 package utopia.genesis.shape.shape2D
 
 import java.awt.geom.RoundRectangle2D
+
 import utopia.flow.generic.ValueConvertible
 import utopia.flow.datastructure.immutable.Value
 import utopia.genesis.generic.BoundsType
@@ -11,8 +12,7 @@ import utopia.flow.datastructure.template
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
-import utopia.genesis.shape.Vector3D
-import utopia.genesis.shape.X
+import utopia.genesis.shape.{Vector3D, VectorLike, X}
 
 object Bounds extends FromModelFactory[Bounds]
 {
@@ -125,6 +125,21 @@ case class Bounds(position: Point, size: Size) extends Rectangular with ValueCon
             point.x <= bottomRight.x && point.y <= bottomRight.y
     
     
+    // OPERATORS    --------------------
+    
+    /**
+      * @param translation Translation applied to these bounds
+      * @return A translated set of bounds
+      */
+    def +(translation: Point) = translated(position)
+    
+    /**
+      * @param translation Translation applied to these bounds
+      * @return A translated set of bounds
+      */
+    def -(translation: Point) = translated(-position)
+    
+    
     // OTHER METHODS    ----------------
     
     /**
@@ -195,4 +210,22 @@ case class Bounds(position: Point, size: Size) extends Rectangular with ValueCon
       * @return A copy of these bounds with same center but decreased size
       */
     def shrinked(widthDecrease: Double, heightDecrease: Double): Bounds = shrinked(Size(widthDecrease, heightDecrease))
+    
+    /**
+      * @param p New position
+      * @return A copy of these bounds with specified position
+      */
+    def withPosition(p: Point) = Bounds(p, size)
+    
+    /**
+      * @param s New size
+      * @return A copy of these bounds with specified size
+      */
+    def withSize(s: Size) = Bounds(position, s)
+    
+    /**
+      * @param translation Translation applied to position
+      * @return A copy of these bounds with translated position
+      */
+    def translated(translation: VectorLike[_]) = withPosition(position + translation)
 }

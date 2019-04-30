@@ -21,6 +21,18 @@ object Point extends FromModelFactory[Point]
     
     def apply(model: utopia.flow.datastructure.template.Model[Property]) = Some(
             Point(model("x").doubleOr(), model("y").doubleOr()))
+	
+	/**
+	  * @param l Position length-wise
+	  * @param b Position breadth-wise
+	  * @param axis Target axis that determines which direction is length
+	  * @return A new point
+	  */
+	def apply(l: Double, b: Double, axis: Axis2D): Point = axis match
+	{
+		case X => Point(l, b)
+		case Y => Point(b, l)
+	}
     
     /**
      * Converts an awt point to Utopia point

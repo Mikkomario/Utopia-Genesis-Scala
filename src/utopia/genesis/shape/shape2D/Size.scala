@@ -28,6 +28,19 @@ object Size extends FromModelFactory[Size]
             Size(model("width").doubleOr(), model("height").doubleOr()))
     
     /**
+      * Creates a new size
+      * @param length Length
+      * @param breadth Breadth
+      * @param axis Axis that determines which side length is for
+      * @return A new size
+      */
+    def apply(length: Double, breadth: Double, axis: Axis2D): Size = axis match
+    {
+        case X => Size(length, breadth)
+        case Y => Size(breadth, length)
+    }
+    
+    /**
      * Converts an awt dimension into size
      */
     def of(dimension: Dimension) = Size(dimension.width, dimension.height)
