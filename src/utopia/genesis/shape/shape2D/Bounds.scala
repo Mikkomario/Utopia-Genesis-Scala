@@ -131,13 +131,13 @@ case class Bounds(position: Point, size: Size) extends Rectangular with ValueCon
       * @param translation Translation applied to these bounds
       * @return A translated set of bounds
       */
-    def +(translation: Point) = translated(position)
+    def +(translation: Point) = translated(translation)
     
     /**
       * @param translation Translation applied to these bounds
       * @return A translated set of bounds
       */
-    def -(translation: Point) = translated(-position)
+    def -(translation: Point) = translated(-translation)
     
     
     // OTHER METHODS    ----------------
