@@ -121,6 +121,8 @@ case class Bounds(position: Point, size: Size) extends Rectangular with ValueCon
     
     override def top = X(size.width)
     
+    override def bottomRight = position + size
+    
     override def contains(point: Point) = point.x >= topLeft.x && point.y >= topLeft.y &&
             point.x <= bottomRight.x && point.y <= bottomRight.y
     
@@ -224,8 +226,27 @@ case class Bounds(position: Point, size: Size) extends Rectangular with ValueCon
     def withSize(s: Size) = Bounds(position, s)
     
     /**
+      * @param w New width
+      * @return A copy of these bounds with specified width
+      */
+    def withWidth(w: Double) = withSize(Size(w, height))
+    
+    /**
+      * @param h New height
+      * @return A copy of these bounds with specified height
+      */
+    def withHeight(h: Double) = withSize(Size(width, h))
+    
+    /**
       * @param translation Translation applied to position
       * @return A copy of these bounds with translated position
       */
     def translated(translation: VectorLike[_]) = withPosition(position + translation)
+    
+    /**
+      * @param x X-translation applied
+      * @param y Y-translation applied
+      * @return A copy of these bounds with translated position
+      */
+    def translated(x: Double, y: Double) = withPosition(position + (x, y))
 }
