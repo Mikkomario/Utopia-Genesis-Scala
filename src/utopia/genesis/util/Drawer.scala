@@ -195,6 +195,13 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
     def withColor(fillColor: Paint, edgeColor: Paint): Drawer = withColor(Some(fillColor), Some(edgeColor))
     
     /**
+      * Creates a new instance of this drawer with altered colours
+      * @param fillColor the colour / paint used for filling the area
+      * @param edgeColor the colour / paint used for the drawn edges
+      */
+    def withColor(fillColor: Color, edgeColor: Color): Drawer = withColor(fillColor.toAwt, edgeColor.toAwt)
+    
+    /**
      * Creates a new instance of this drawer with altered edge colour
      */
     def withEdgeColor(edgeColor: Option[Paint]) = withColor(fillColor, edgeColor)
