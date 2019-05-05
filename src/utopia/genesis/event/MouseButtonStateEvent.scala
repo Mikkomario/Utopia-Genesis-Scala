@@ -98,6 +98,11 @@ case class MouseButtonStateEvent(buttonIndex: Int, isDown: Boolean, mousePositio
     def consumed = if (isConsumed) this else copy(isConsumed = true)
     
     
+    // IMPLEMENTED  ----------------------
+    
+    override def toString = s"Mouse button ${ button getOrElse buttonIndex } was ${ if (wasPressed) "pressed" else "released" } at $mousePosition"
+    
+    
     // OTHER METHODS    ------------------
     
     /**
