@@ -1,5 +1,7 @@
 package utopia.genesis.util
 
+import java.awt.KeyboardFocusManager
+
 import utopia.flow.async.VolatileFlag
 import utopia.genesis.generic.GenesisDataType
 import utopia.genesis.handling.ActorLoop
@@ -79,7 +81,7 @@ class DefaultSetup(initialGameWorldSize: Size, title: String, val maxFPS: FPS = 
 	
 	// Registers generators
 	actorHandler += mouseEventGenerator
-	frame.addKeyListener(new ConvertingKeyListener(keyStateHandler, keyTypedHandler))
+	new ConvertingKeyListener(keyStateHandler, keyTypedHandler).register()
 	
 	
 	// COMPUTED	-----------------------

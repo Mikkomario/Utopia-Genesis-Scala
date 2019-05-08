@@ -1,5 +1,6 @@
 package utopia.genesis.handling
 
+import scala.language.implicitConversions
 import java.awt.event.KeyEvent
 
 import utopia.genesis.event.KeyStateEvent
@@ -8,6 +9,8 @@ import utopia.inception.util.{AnyFilter, Filter}
 
 object KeyStateListener
 {
+    implicit def functionToListener(f: KeyStateEvent => Unit): KeyStateListener = apply(f)
+    
     /**
       * Creates a simple key state listener that calls specified function on key state events
       * @param f A function that will be called on key state events

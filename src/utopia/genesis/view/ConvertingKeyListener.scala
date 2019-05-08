@@ -1,5 +1,6 @@
 package utopia.genesis.view
 
+import java.awt.{KeyEventDispatcher, KeyboardFocusManager}
 import java.awt.event.{KeyEvent, KeyListener}
 
 import utopia.genesis.event.KeyLocation.Standard
@@ -22,6 +23,21 @@ class ConvertingKeyListener(val keyStateHandler: KeyStateListener, val keyTypedH
 	  */
 	def keyStatus = _keyStatus
 	
+	/**
+	  * A keyboard event dispatcher from this key listener. Use when normal key listening doesn't work
+	  */
+	lazy val dispatcher: KeyEventDispatcher = (e: KeyEvent) =>
+	{
+		if (e.getID == KeyEvent.KEY_PRESSED)
+			keyPressed(e)
+		else if (e.getID == KeyEvent.KEY_RELEASED)
+			keyReleased(e)
+		else if (e.getID == KeyEvent.KEY_TYPED)
+			keyTyped(e)
+		
+		false
+	}
+	
 	
 	// IMPLEMENTED METHODS    --------
 	
@@ -33,6 +49,11 @@ class ConvertingKeyListener(val keyStateHandler: KeyStateListener, val keyTypedH
 	
 	
 	// OTHER METHODS    --------------
+	
+	/**
+	  * Registers this key listener to receive keyboard events
+	  */
+	def register() = KeyboardFocusManager.getCurrentKeyboardFocusManager.addKeyEventDispatcher(dispatcher)
 	
 	private def keyStateChanged(e: KeyEvent, newState: Boolean) =
 	{
