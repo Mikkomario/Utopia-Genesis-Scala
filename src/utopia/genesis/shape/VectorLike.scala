@@ -1,7 +1,7 @@
 package utopia.genesis.shape
 
 import scala.collection.immutable.{HashMap, VectorBuilder}
-
+import utopia.genesis.shape.Axis._
 import utopia.flow.util.CollectionExtensions._
 
 object VectorLike

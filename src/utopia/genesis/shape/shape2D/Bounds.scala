@@ -12,7 +12,8 @@ import utopia.flow.datastructure.template
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
-import utopia.genesis.shape.{Vector3D, VectorLike, X}
+import utopia.genesis.shape.{Vector3D, VectorLike}
+import utopia.genesis.shape.Axis._
 
 object Bounds extends FromModelFactory[Bounds]
 {

@@ -1,9 +1,10 @@
 package utopia.genesis.test
 
 import utopia.genesis.generic.GenesisDataType
-import utopia.genesis.shape.{Vector3D, X, Y}
+import utopia.genesis.shape.Vector3D
 import utopia.genesis.shape.shape2D.{Circle, Line, Point}
 import utopia.genesis.util.Extensions._
+import utopia.genesis.shape.Axis._
 
 /**
  * This test makes sure circle and line class projection and collision algorithms are working 

@@ -14,7 +14,8 @@ import scala.collection.immutable.HashMap
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.util.ApproximatelyEquatable
-import utopia.genesis.shape.{Axis2D, Vector3D, VectorLike, X, Y}
+import utopia.genesis.shape.{Axis2D, Vector3D, VectorLike}
+import utopia.genesis.shape.Axis._
 import java.awt.Insets
 
 object Size extends FromModelFactory[Size]

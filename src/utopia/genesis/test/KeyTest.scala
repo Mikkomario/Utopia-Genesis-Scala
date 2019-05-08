@@ -1,6 +1,6 @@
 package utopia.genesis.test
 
-import utopia.genesis.shape.{X, Y}
+import utopia.genesis.shape.Axis._
 import utopia.genesis.event.KeyStateEvent
 import java.awt.event.KeyEvent
 

@@ -1,7 +1,6 @@
 package utopia.genesis.shape
 
 import utopia.flow.datastructure
-
 import utopia.genesis.util.Extensions._
 import utopia.flow.generic.ValueConvertible
 import utopia.genesis.generic.Vector3DType
@@ -11,6 +10,8 @@ import utopia.flow.datastructure.immutable.Model
 import utopia.flow.generic.ValueConversions._
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
+import utopia.genesis.shape.Axis._
+
 import scala.collection.immutable.HashMap
 import utopia.genesis.util.ApproximatelyEquatable
 import utopia.genesis.shape.shape2D.Point

@@ -6,7 +6,7 @@ import java.awt.Color
 
 import utopia.flow.async.ThreadPool
 import utopia.genesis.event.MouseMoveEvent
-import utopia.genesis.shape.X
+import utopia.genesis.shape.Axis._
 import utopia.genesis.view.Canvas
 import utopia.genesis.view.MainFrame
 import utopia.genesis.view.CanvasMouseEventGenerator

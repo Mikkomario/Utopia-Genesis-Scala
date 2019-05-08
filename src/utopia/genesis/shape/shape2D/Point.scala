@@ -13,7 +13,8 @@ import utopia.flow.datastructure.immutable.Model
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.util.ApproximatelyEquatable
-import utopia.genesis.shape.{Axis, Axis2D, Vector3D, VectorLike, X, Y}
+import utopia.genesis.shape.{Axis, Axis2D, Vector3D, VectorLike}
+import utopia.genesis.shape.Axis._
 
 object Point extends FromModelFactory[Point]
 {
