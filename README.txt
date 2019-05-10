@@ -77,7 +77,8 @@ v2.1  ------------------------------------
 
         Functional constructors added for all mouse listeners and key listeners
 
-        MouseButtonStateEvent now contains value isConsumed that specifies whether a listener has consumed the event already
+        MouseButtonStateEvent and MouseWheelEvent now contain value isConsumed that specifies whether a listener
+        has consumed the event already.
 
         New RGB, HSL and Color classes to better handle colors
 
@@ -85,7 +86,8 @@ v2.1  ------------------------------------
     Changes & Updates
     -----------------
 
-        MouseButtonStateListeners now return a boolean that determines whether the event will be consumed or not
+        MouseButtonStateListeners and MouseWheelListeners now return a boolean that determines whether the event
+        will be consumed or not
 
 
 v2  ----------------------------------------

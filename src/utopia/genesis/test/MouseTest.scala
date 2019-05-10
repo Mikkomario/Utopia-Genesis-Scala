@@ -68,8 +68,11 @@ object MouseTest extends App
 			false
 		}
         
-        override def onMouseWheelRotated(event: MouseWheelEvent) = 
-                transformation = transformation.scaled(1 + event.wheelTurn * 0.2)
+        override def onMouseWheelRotated(event: MouseWheelEvent) =
+		{
+			transformation = transformation.scaled(1 + event.wheelTurn * 0.2)
+			false
+		}
         
         private def contains2D(point: Point) = area.contains(transformation.invert(point))
     }
