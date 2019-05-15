@@ -103,6 +103,23 @@ case class Bounds(position: Point, size: Size) extends Rectangular with ValueCon
      */
     def diagonal = Line(topLeft, bottomRight)
     
+    /**
+      * @return The x-coordinate of these bounds
+      */
+    def x = position.x
+    /**
+      * @return The y-coordinate of these bounds
+      */
+    def y = position.y
+    /**
+      * @return The right side x-coordinate
+      */
+    def rightX = x + width
+    /**
+      * @return The bottom side y-coordinate
+      */
+    def bottomY = y + height
+    
     
     // IMPLEMENTED METHODS    ----------
     
