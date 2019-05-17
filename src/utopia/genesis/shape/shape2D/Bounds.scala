@@ -62,6 +62,8 @@ object Bounds extends FromModelFactory[Bounds]
     {
         if (bounds.isEmpty)
             None
+        else if (bounds.size == 1)
+            Some(bounds.head)
         else
         {
             val topLeft = Point.topLeft(bounds.map{ _.topLeft })
