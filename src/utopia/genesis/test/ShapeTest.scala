@@ -2,7 +2,7 @@ package utopia.genesis.test
 
 import utopia.genesis.shape.Vector3D
 import utopia.genesis.generic.GenesisDataType
-import utopia.genesis.shape.shape2D.{Circle, Line, Point}
+import utopia.genesis.shape.shape2D.{Bounds, Circle, Line, Point, Size}
 
 /**
  * This test is for some intersection methods and other shape (line, circle) specific methods
@@ -40,10 +40,17 @@ object ShapeTest extends App
     assert(!circle2.contains(circle1))
     assert(!circle1.contains(Circle(Point(5, 0), 1)))
     
-    
     // Tests line clipping
     assert(line1.clipped(Point(5, 0), Vector3D(1)).get == Line(Point(5, 0), Point(10, 0)))
     assert(line1.clipped(Point(5, 2), Vector3D(-1)).get == Line(Point.origin, Point(5, 0)))
     assert(line1.clipped(Point(-2, -2), Vector3D(-1)).isEmpty)
     assert(line1.clipped(Point(1, 1), Vector3D(1, 1)).get == Line(Point(2, 0), Point(10, 0)))
+    
+    // Tests bounds combining
+    val bounds1 = Bounds(Point.origin, Size(20, 10))
+    val bounds2 = Bounds(Point(-30, -5), Size(5, 5))
+    
+    assert(Bounds.around(Vector(bounds1, bounds2)) == Bounds.between(Point(-30, -5), Point(20, 10)))
+    
+    println("Success!")
 }
