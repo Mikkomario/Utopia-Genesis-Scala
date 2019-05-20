@@ -89,6 +89,8 @@ v2.1  ------------------------------------
         MouseButtonStateListeners and MouseWheelListeners now return a boolean that determines whether the event
         will be consumed or not
 
+        New utility methods added to Bounds
+
 
 v2  ----------------------------------------
 
