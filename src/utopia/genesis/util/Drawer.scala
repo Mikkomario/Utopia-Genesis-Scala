@@ -4,9 +4,7 @@ import java.awt.{AlphaComposite, BasicStroke, Font, Graphics, Graphics2D, Paint,
 import java.awt.geom.AffineTransform
 
 import utopia.genesis.color.Color
-import utopia.genesis.shape.shape2D.ShapeConvertible
-import utopia.genesis.shape.shape2D.Bounds
-import utopia.genesis.shape.shape2D.Transformation
+import utopia.genesis.shape.shape2D.{Bounds, Point, ShapeConvertible, Transformation}
 
 object Drawer
 {
@@ -148,6 +146,21 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
         val y = bounds.position.y + (bounds.height - metrics.getHeight) / 2 + metrics.getAscent
         
         graphics.drawString(text, x.toInt, y.toInt)
+    }
+    
+    /**
+      * Draws a piece of text
+      * @param text The text that is drawn
+      * @param font Font used
+      * @param topLeft The top left position of the text
+      */
+    def drawText(text: String, font: Font, topLeft: Point) =
+    {
+        // Sets the color, preferring edge color
+        edgeColor.orElse(fillColor).foreach { graphics.setPaint }
+        graphics.setFont(font)
+        val metrics = graphics.getFontMetrics
+        graphics.drawString(text, topLeft.x.toInt, topLeft.y.toInt + metrics.getAscent)
     }
     
     /**
