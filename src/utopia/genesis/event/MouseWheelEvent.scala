@@ -15,4 +15,6 @@ case class MouseWheelEvent(wheelTurn: Double, mousePosition: Point, buttonStatus
 						   override val isConsumed: Boolean = false) extends MouseEvent with Consumable[MouseWheelEvent]
 {
 	override def consumed = if (isConsumed) this else copy(isConsumed = true)
+	
+	override def me = this
 }

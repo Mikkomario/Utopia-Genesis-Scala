@@ -95,6 +95,8 @@ case class MouseButtonStateEvent(buttonIndex: Int, isDown: Boolean, mousePositio
     
     override def consumed = if (isConsumed) this else copy(isConsumed = true)
     
+    override def me = this
+    
     
     // OTHER METHODS    ------------------
     
