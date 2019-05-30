@@ -82,6 +82,14 @@ object Bounds extends FromModelFactory[Bounds]
      * Creates a rectangle around line so that the line becomes one of the rectangle's diagonals
      */
     def aroundDiagonal(diagonal: Line) = between(diagonal.start, diagonal.end)
+    
+    /**
+      * Creates a set of bounds centered around a specific point
+      * @param center The center point of these bounds
+      * @param size The size of these bounds
+      * @return A new set of bounds
+      */
+    def centered(center: Point, size: Size) = Bounds(center - size / 2, size)
 }
 
 /**
