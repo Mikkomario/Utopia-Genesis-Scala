@@ -268,6 +268,14 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
     }
     
     /**
+      * Copies this graphics context, changing the stroke style in the process. It is usually better
+      * to pass a drawer instance with unmodified stroke where that is possible, since it is better
+      * optimised in the lower level implementation.
+      * @param strokeWidth The width of the new stroke
+      */
+    def withStroke(strokeWidth: Int): Drawer = withStroke(Drawer.defaultStroke(strokeWidth))
+    
+    /**
      * Creates a new instance of this drawer that has a clipped drawing area. The operation cannot
      * be reversed but the original instance can still be used for drawing without clipping.
      */

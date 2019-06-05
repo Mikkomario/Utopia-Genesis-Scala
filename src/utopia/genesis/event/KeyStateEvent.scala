@@ -54,6 +54,9 @@ object KeyStateEvent
  * button
  * @author Mikko Hilpinen
  * @since 21.2.2017
+  * @param index The index of the changed key
+  * @param location The specific location where the key was changed
+  * @param keyStatus The current overall key status
  */
 case class KeyStateEvent(index: Int, location: KeyLocation, isDown: Boolean, keyStatus: KeyStatus)
 {
