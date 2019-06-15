@@ -49,6 +49,11 @@ trait VectorLike[Repr <: VectorLike[_]]
 	// COMPUTED	---------------------
 	
 	/**
+	  * @return The x and y -dimensions of this vectorlike element
+	  */
+	def dimensions2D = dimensions.take(2)
+	
+	/**
 	  * @return The x-component of this vectorlike element
 	  */
 	def x = dimensions.getOrElse(0, 0)

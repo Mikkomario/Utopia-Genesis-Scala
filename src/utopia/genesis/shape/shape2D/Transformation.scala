@@ -12,7 +12,7 @@ import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
-import utopia.genesis.shape.{Rotation, Vector3D}
+import utopia.genesis.shape.{Rotation, Vector3D, VectorLike}
 
 object Transformation extends FromModelFactory[Transformation]
 {
@@ -381,12 +381,12 @@ case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector
     /**
      * Copies this transformation, changing the translation by the provided amount
      */
-    def translated(translation: Vector3D) = withTranslation(this.translation + translation)
+    def translated(translation: VectorLike[_]) = withTranslation(this.translation + translation)
     
     /**
      * Copies this transformation, changing the scaling by the provided amount
      */
-    def scaled(scaling: Vector3D) = withScaling(this.scaling * scaling)
+    def scaled(scaling: VectorLike[_]) = withScaling(this.scaling * scaling)
     
     /**
      * Copies this transformation, changing the scaling by the provided amount
@@ -413,5 +413,5 @@ case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector
     /**
      * Copies this transformation, changing the shearing by the provided amount
      */
-    def sheared(shearing: Vector3D) = withShear(shear + shearing)
+    def sheared(shearing: VectorLike[_]) = withShear(shear + shearing)
 }

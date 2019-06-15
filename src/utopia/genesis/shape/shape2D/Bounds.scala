@@ -266,6 +266,18 @@ case class Bounds(position: Point, size: Size) extends Rectangular with ValueCon
     def withHeight(h: Double) = withSize(Size(width, h))
     
     /**
+      * @param map A mapping function for position
+      * @return A copy of these bounds with mapped position
+      */
+    def mapPosition(map: Point => Point) = withPosition(map(position))
+    
+    /**
+      * @param map A mapping function for size
+      * @return A copy of these bounds with mapped size
+      */
+    def mapSize(map: Size => Size) = withSize(map(size))
+    
+    /**
       * @param translation Translation applied to position
       * @return A copy of these bounds with translated position
       */
@@ -277,4 +289,19 @@ case class Bounds(position: Point, size: Size) extends Rectangular with ValueCon
       * @return A copy of these bounds with translated position
       */
     def translated(x: Double, y: Double) = withPosition(position + (x, y))
+    
+    /**
+      * @param area Another area
+      * @return The intersection between these two areas. None if there is no intersection.
+      */
+    def within(area: Bounds) =
+    {
+        val newTopLeft = topLeft.bottomRight(area.topLeft)
+        val newBottomRight = bottomRight.topLeft(area.bottomRight)
+        
+        if (newTopLeft.x > newBottomRight.x || newTopLeft.y > newBottomRight.y)
+            None
+        else
+            Some(Bounds.between(newTopLeft, newBottomRight))
+    }
 }

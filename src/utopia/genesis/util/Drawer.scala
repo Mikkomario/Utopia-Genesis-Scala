@@ -1,6 +1,6 @@
 package utopia.genesis.util
 
-import java.awt.{AlphaComposite, BasicStroke, Font, Graphics, Graphics2D, Paint, Shape, Stroke}
+import java.awt.{AlphaComposite, BasicStroke, Font, Graphics, Graphics2D, Image, Paint, Shape, Stroke}
 import java.awt.geom.AffineTransform
 
 import utopia.genesis.color.Color
@@ -162,6 +162,24 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
         val metrics = graphics.getFontMetrics
         graphics.drawString(text, topLeft.x.toInt, topLeft.y.toInt + metrics.getAscent)
     }
+    
+    /**
+      * Draws an image
+      * @param image The image to be drawn
+      * @param position The position where the origin is drawn
+      * @param origin The relative position of the image's origin, the point which is placed at (0, 0) coordinates (default = (0, 0))
+      * @return Whether the image was fully loaded and drawn
+      */
+    def drawImage(image: utopia.genesis.image.Image, position: Point, origin: Point): Boolean = image.drawWith(this, position, origin)
+    
+    /**
+      * Draws an image
+      * @param image The image to be drawn
+      * @param position The position of the image's top left corner (default = (0, 0))
+      * @return Whether the image was fully loaded and drawn
+      */
+    def drawImage(image: Image, position: Point = Point.origin): Boolean =
+        graphics.drawImage(image, position.x.toInt, position.y.toInt, null)
     
     /**
      * Creates a transformed copy of this
