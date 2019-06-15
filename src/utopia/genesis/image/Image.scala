@@ -4,8 +4,9 @@ import java.awt.image.BufferedImage
 import java.nio.file.Path
 
 import javax.imageio.ImageIO
+import utopia.genesis.color.Color
 import utopia.genesis.shape.{Vector3D, VectorLike}
-import utopia.genesis.shape.shape2D.{Bounds, Point, Size, Transformation}
+import utopia.genesis.shape.shape2D.{Area2D, Bounds, Point, Size, Transformation}
 import utopia.genesis.util.Drawer
 
 import scala.util.Try
@@ -34,6 +35,14 @@ object Image
   */
 case class Image(private val source: BufferedImage, sourceScaling: Vector3D = Vector3D.identity)
 {
+	// ATTRIBUTES	----------------
+	
+	/**
+	  * The pixels that form this image (a single vector)
+	  */
+	lazy val pixels = PixelTable.fromBufferedImage(source)
+	
+	
 	// COMPUTED	--------------------
 	
 	/**
@@ -50,6 +59,16 @@ case class Image(private val source: BufferedImage, sourceScaling: Vector3D = Ve
 	  * @return The size of this image in pixels
 	  */
 	def size = Size(width, height)
+	
+	/**
+	  * @return A copy of this image that isn't scaled above 100%
+	  */
+	def downscaled = if (sourceScaling.dimensions2D.exists { _ > 1 }) Image(source, sourceScaling.map { _ min 1 }) else this
+	
+	/**
+	  * @return A copy of this image that isn't scaled below 100%
+	  */
+	def upscaled = if (sourceScaling.dimensions2D.exists { _ < 1 }) Image(source, sourceScaling.map { _ max 1 }) else this
 	
 	
 	// OPERATORS	----------------
@@ -92,7 +111,7 @@ case class Image(private val source: BufferedImage, sourceScaling: Vector3D = Ve
 	  */
 	def subImage(area: Bounds) =
 	{
-		area.within(Bounds(Point.origin, size)).map { _.mapPosition { _ / sourceScaling }.mapSize { _ / sourceScaling } } .map{
+		area.within(Bounds(Point.origin, size)).map { _ / sourceScaling }.map {
 			a => Image(source.getSubimage(a.x.toInt, a.y.toInt, a.width.toInt, a.height.toInt), sourceScaling) }.getOrElse(
 			Image(new BufferedImage(0, 0, source.getType)))
 	}
@@ -141,7 +160,43 @@ case class Image(private val source: BufferedImage, sourceScaling: Vector3D = Ve
 	  */
 	def fitting(area: Size) = this * (area / size).dimensions2D.min
 	
-	// def smallerThan(area: Size) = if (size.fi)
+	/**
+	  * @param area Target area (maximum)
+	  * @return A copy of this image that is smaller or equal to the target area. Shape is preserved.
+	  */
+	def smallerThan(area: Size) = if (size.fitsInto(area)) this else fitting(area)
+	
+	/**
+	  * @param area Target area (minimum)
+	  * @return A copy of this image that is larger or equal to the target area. Shape is preserved.
+	  */
+	def largerThan(area: Size) = if (area.fitsInto(size)) this else filling(area)
+	
+	/**
+	  * @param f A mapping function for pixel tables
+	  * @return A copy of this image with mapped pixels
+	  */
+	def mapPixelTable(f: PixelTable => PixelTable) = Image(f(pixels).toBufferedImage, sourceScaling)
+	
+	/**
+	  * @param f A function that maps pixel colors
+	  * @return A copy of this image with mapped pixels
+	  */
+	def mapPixels(f: Color => Color) = mapPixelTable { _.map(f) }
+	
+	/**
+	  * @param f A function that maps pixel colors, also taking relative pixel coordinate
+	  * @return A copy of this image with mapped pixels
+	  */
+	def mapPixelsWithIndex(f: (Color, Point) => Color) = mapPixelTable { _.mapWithIndex(f) }
+	
+	/**
+	  * @param area The mapped relative area
+	  * @param f A function that maps pixel colors
+	  * @return A copy of this image with pixels mapped within the target area
+	  */
+	def mapArea(area: Area2D)(f: Color => Color) = mapPixelsWithIndex {
+		(c, p) => if (area.contains(p * sourceScaling)) f(c) else c }
 }
 
 private class NoImageReaderAvailableException(message: String) extends RuntimeException(message)

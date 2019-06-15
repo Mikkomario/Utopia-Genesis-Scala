@@ -169,6 +169,34 @@ case class Bounds(position: Point, size: Size) extends Rectangular with ValueCon
       */
     def -(translation: Point) = translated(-translation)
     
+    /**
+      * Scales both position and size
+      * @param scaling A scaling factor
+      * @return A scaled version of these bounds
+      */
+    def *(scaling: VectorLike[_]) = Bounds(position * scaling, size * scaling)
+    
+    /**
+      * Scales both position and size
+      * @param scaling A scaling factor
+      * @return A scaled version of these bounds
+      */
+    def *(scaling: Double) = Bounds(position * scaling, size * scaling)
+    
+    /**
+      * Divides both position and size
+      * @param div A dividing factor
+      * @return A divided version of these bounds
+      */
+    def /(div: VectorLike[_]) = Bounds(position / div, size / div)
+    
+    /**
+      * Divides both position and size
+      * @param div A dividing factor
+      * @return A divided version of these bounds
+      */
+    def /(div: Double) = Bounds(position / div, size / div)
+    
     
     // OTHER METHODS    ----------------
     
