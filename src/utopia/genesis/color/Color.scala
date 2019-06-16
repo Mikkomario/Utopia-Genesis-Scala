@@ -83,6 +83,13 @@ object Color
 	  * @return A grayscale color with specified luminosity
 	  */
 	def gray(luminosity: Double) = apply(luminosity, luminosity, luminosity)
+	
+	/**
+	  * Converts an rgb-alpha value to a color
+	  * @param rgba An rgb value with alpha
+	  * @return A color based on the rgb value
+	  */
+	def fromInt(rgba: Int) = fromAwt(new java.awt.Color(rgba, true))
 }
 
 /**
@@ -122,10 +129,15 @@ case class Color private(private val data: Either[HSL, RGB], alpha: Double) exte
 	  */
 	def toAwt = new java.awt.Color(rgb.redValue, rgb.greenValue, rgb.blueValue, (alpha * 255).toInt)
 	
+	/**
+	  * @return An integer representation of this color. Contains rgb and alpha data.
+	  */
+	def toInt = toAwt.getRGB
+	
 	
 	// IMPLEMENTED	----------------------
 	
-	override def ~==[B <: Color](other: B) =
+	override def ~==(other: Color) =
 	{
 		// Alphas must match
 		if (alpha ~== other.alpha)

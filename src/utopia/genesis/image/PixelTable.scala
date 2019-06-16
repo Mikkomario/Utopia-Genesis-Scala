@@ -20,7 +20,7 @@ object PixelTable
 		val rawPixels = new Array[Int](w * h)
 		image.getRGB(0, 0, w, h, rawPixels, 0, w)
 		
-		val pixelVector = rawPixels.toVector.map { rgb => Color.fromAwt(new java.awt.Color(rgb)) }
+		val pixelVector = rawPixels.toVector.map(Color.fromInt)
 		
 		// color = array[y * scansize + x]
 		PixelTable((0 until h).map { y => (0 until w).map { x => pixelVector(y * w + x) }.toVector }.toVector)
@@ -60,7 +60,7 @@ case class PixelTable private(_pixels: Vector[Vector[Color]])
 	/**
 	  * @return A vector containing each pixel color rgb value
 	  */
-	private def toRGBVector = toVector.map { _.toAwt.getRGB }
+	private def toRGBVector = toVector.map { _.toInt }
 	
 	/**
 	  * @return A buffered image based on this pixel data
@@ -71,6 +71,16 @@ case class PixelTable private(_pixels: Vector[Vector[Color]])
 		writeToImageNoCheck(newImage, Point.origin)
 		newImage
 	}
+	
+	/**
+	  * @return A copy of this pixel table where x-axis is reversed
+	  */
+	def flippedHorizontally = PixelTable(_pixels.map { _.reverse })
+	
+	/**
+	  * @return A copy of this pixel table where y-axis is reversed
+	  */
+	def flippedVertically = PixelTable(_pixels.reverse)
 	
 	
 	// OPERATORS	-------------------

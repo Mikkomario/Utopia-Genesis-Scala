@@ -90,7 +90,7 @@ case class HSL private(override val hue: Double, override val saturation: Double
 	/**
 	  * Checks whether the two instances are approximately equal
 	  */
-	override def ~==[B <: HSLLike[_]](other: B) = (hue ~== other.hue) &&
+	override def ~==(other: HSLLike[_]) = (hue ~== other.hue) &&
 		(saturation ~== other.saturation) && (luminosity ~== other.luminosity)
 	
 	/**

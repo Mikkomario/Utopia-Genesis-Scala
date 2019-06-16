@@ -153,4 +153,10 @@ trait RGBLike[Repr <: RGBLike[Repr]]
 	  * @return A new RGB
 	  */
 	def withBlue(ratio: Double) = withRatio(Blue, ratio)
+	
+	/**
+	  * @param f A mapping function for single rgb ratios
+	  * @return A copy of this color with mapped rgb ratios
+	  */
+	def mapRatios(f: Double => Double) = withRatios(ratios.mapValues(f))
 }

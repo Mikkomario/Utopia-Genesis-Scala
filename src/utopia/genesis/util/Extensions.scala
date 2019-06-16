@@ -2,10 +2,6 @@ package utopia.genesis.util
 
 import java.awt.Graphics2D
 import java.awt.AlphaComposite
-import utopia.flow.datastructure.immutable.Value
-import utopia.genesis.generic.Vector3DType
-import utopia.genesis.generic.LineType
-import utopia.genesis.generic.CircleType
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -20,29 +16,17 @@ object Extensions
         /**
          * Checks if the two double numbers are approximately equal using 0.00001 precision
          */
-        def ~==[B <: C](d2: B) = (d -d2).abs < 0.00001
+        def ~==(d2: C) = (d -d2).abs < 0.00001
     }
     
     implicit class seqWithAlmostEquals[B, C](val s: Seq[C])(implicit f: C => ApproximatelyEquatable[B]) extends ApproximatelyEquatable[Seq[B]]
     {
-        def ~==[D <: Seq[B]](s2: D): Boolean = 
+        def ~==(s2: Seq[B]): Boolean =
         {
             if (s.size == s2.size)
-            {
-                for { i <- 0 until s.size }
-                {
-                    if (s(i) !~== s2(i))
-                    {
-                        return false
-                    }
-                }
-                
-                true
-            }
+                s.indices.forall { i => s(i) ~== s2(i) }
             else
-            {
                 false
-            }
         }
     }
     

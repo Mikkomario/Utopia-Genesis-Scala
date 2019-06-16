@@ -1,7 +1,7 @@
 package utopia.genesis.test
 
 import utopia.genesis.color.RGBChannel._
-import utopia.genesis.color.{HSL, RGB}
+import utopia.genesis.color.{Color, HSL, RGB}
 import utopia.genesis.shape.Angle
 
 /**

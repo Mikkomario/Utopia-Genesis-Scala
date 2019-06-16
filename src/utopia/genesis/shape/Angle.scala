@@ -1,6 +1,6 @@
 package utopia.genesis.shape
 
-import utopia.flow.util.Equatable
+import utopia.flow.util.{Equatable, RichComparable}
 import utopia.genesis.util.Extensions._
 import utopia.genesis.util.ApproximatelyEquatable
 import utopia.genesis.shape.RotationDirection.Counterclockwise
@@ -52,7 +52,7 @@ object Angle
  * @author Mikko Hilpinen
  * @since 30.6.2017
  */
-class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[Angle]
+class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[Angle] with RichComparable[Angle]
 {
     // ATTRIBUTES    ------------------
     
@@ -75,6 +75,11 @@ class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[An
     override def toString = f"$toDegrees%1.2f degrees"
     
     def toRotation = Rotation(toRadians)
+    
+    
+    // IMPLEMENTED  ------------------
+    
+    override def compareTo(o: Angle) = (toRadians - o.toRadians).toInt
     
     
     // OPERATORS    ------------------
@@ -129,5 +134,19 @@ class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[An
     /**
      * Compares two angles without the requirement of being exactly equal
      */
-    def ~==[B <: Angle](other: B) = toRadians ~== other.toRadians
+    def ~==(other: Angle) = toRadians ~== other.toRadians
+    
+    /**
+      * Multiplies this angle
+      * @param mod A multiplier
+      * @return A multiplied version of this angle
+      */
+    def *(mod: Double) = Angle.ofRadians(toRadians * mod)
+    
+    /**
+      * Divides this angle
+      * @param div A divider
+      * @return A divided version of this angle
+      */
+    def /(div: Double) = this * (1/div)
 }

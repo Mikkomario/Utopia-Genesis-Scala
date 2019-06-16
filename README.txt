@@ -91,6 +91,8 @@ v2.1  ------------------------------------
 
         New utility methods added to Bounds
 
+        Unnecessary type parameter removed from ApproximatelyEquatable methods
+
 
 v2  ----------------------------------------
 

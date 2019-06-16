@@ -61,6 +61,11 @@ case class Rotation(radians: Double, direction: RotationDirection = Clockwise) e
 	  */
 	def counterClockwise = toDirection(Counterclockwise)
 	
+	/**
+	  * @return A positive (clockwise) copy of this rotation
+	  */
+	def positive = toDirection(RotationDirection.positive)
+	
 	
 	// IMPLEMENTED    --------------------
 	
@@ -68,7 +73,7 @@ case class Rotation(radians: Double, direction: RotationDirection = Clockwise) e
 	
 	override def toString = f"$degrees%1.2f degrees $direction"
 	
-	def ~==[B <: Rotation](other: B) = radians * direction.modifier ~== other.radians * direction.modifier
+	def ~==(other: Rotation) = radians * direction.modifier ~== other.radians * direction.modifier
 	
 	
 	// OPERATORS    ----------------------

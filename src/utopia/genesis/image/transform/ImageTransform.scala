@@ -1,13 +1,13 @@
-package utopia.genesis.image
+package utopia.genesis.image.transform
 
-import java.awt.image.BufferedImage
+import utopia.genesis.image.Image
 
 /**
   * These filters are used for transforming image data
   * @author Mikko Hilpinen
   * @since 15.6.2019, v2.1+
   */
-trait ImageFilter
+trait ImageTransform
 {
 	// ABSTRACT	-------------------
 	
@@ -16,7 +16,7 @@ trait ImageFilter
 	  * @param source The source image
 	  * @return The transformed image
 	  */
-	def apply(source: BufferedImage): BufferedImage
+	def apply(source: Image): Image
 	
 	
 	// OPERATORS	---------------
@@ -26,5 +26,10 @@ trait ImageFilter
 	  * @param another Another image filter
 	  * @return A combination of these filters where the second filter is applied after the first one
 	  */
-	def +(another: ImageFilter) = AndImageFilter(this, another)
+	def +(another: ImageTransform): ImageTransform = AndImageTransform(this, another)
+}
+
+private case class AndImageTransform(first: ImageTransform, second: ImageTransform) extends ImageTransform
+{
+	override def apply(source: Image) = second(first(source))
 }

@@ -109,7 +109,7 @@ case class Point(override val x: Double, override val y: Double) extends VectorL
     
     override def toModel = Model.fromMap(HashMap("x" -> x, "y" -> y))
     
-    override def ~==[B <: Point](other: B) = (x ~== other.x) && (y ~== other.y)
+    override def ~==(other: Point) = (x ~== other.x) && (y ~== other.y)
 	
 	override def toString = s"($x, $y)"
 	

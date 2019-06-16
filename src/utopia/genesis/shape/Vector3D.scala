@@ -281,7 +281,7 @@ case class Vector3D(override val x: Double = 0.0, override val y: Double = 0.0, 
 	/**
 	  * Checks whether two vectors are approximately equal
 	  */
-	override def ~==[B <: Vector3D](other: B) = Vector3D.forall(this, other, { _ ~== _ })
+	override def ~==(other: Vector3D) = Vector3D.forall(this, other, { _ ~== _ })
     
     
     // OPERATORS    --------------------

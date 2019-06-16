@@ -154,7 +154,7 @@ case class RGB private(override val ratios: Map[RGBChannel, Double]) extends RGB
 	
 	// IMPLEMENTED	--------------------
 	
-	override def ~==[B <: RGBLike[_]](other: B) = RGBChannel.values.forall { c => ratio(c) ~== other.ratio(c) }
+	override def ~==(other: RGBLike[_]) = RGBChannel.values.forall { c => ratio(c) ~== other.ratio(c) }
 	
 	override def withRatios(newRatios: Map[RGBChannel, Double]) = RGB.withRatios(newRatios)
 	

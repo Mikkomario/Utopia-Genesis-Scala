@@ -108,7 +108,7 @@ case class Size(width: Double, height: Double) extends VectorLike[Size] with App
     
     def toModel = Model.fromMap(HashMap("width" -> width, "height" -> height))
     
-    def ~==[B <: Size](other: B) = (width ~== other.width) && (height ~== other.height)
+    def ~==(other: Size) = (width ~== other.width) && (height ~== other.height)
     
     override def toString = s"$width x $height"
     
