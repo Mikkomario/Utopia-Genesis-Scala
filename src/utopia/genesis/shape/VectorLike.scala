@@ -24,7 +24,7 @@ object VectorLike
   * matching an axis (X, Y, Z, ...)
   * @tparam Repr the concrete implementing class
   */
-trait VectorLike[Repr <: VectorLike[_]]
+trait VectorLike[+Repr <: VectorLike[_]]
 {
 	// TYPES	---------------------
 	

@@ -2,6 +2,7 @@ package utopia.genesis.shape.shape2D
 
 import utopia.genesis.util.Extensions._
 import java.awt.geom.Line2D
+
 import scala.collection.mutable.ListBuffer
 import utopia.flow.generic.ValueConvertible
 import utopia.flow.datastructure.immutable.Value
@@ -12,7 +13,7 @@ import utopia.flow.datastructure.template
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
-import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.{Path, Vector3D}
 import utopia.genesis.generic.LineType
 
 object Line extends FromModelFactory[Line]
@@ -77,8 +78,8 @@ object Line extends FromModelFactory[Line]
  * @author Mikko Hilpinen
  * @since 13.12.2016
  */
-case class Line(start: Point, end: Point) extends ShapeConvertible with
-        ValueConvertible with ModelConvertible with TransformableShape[Line] with Projectable
+case class Line(override val start: Point, override val end: Point) extends ShapeConvertible with
+        ValueConvertible with ModelConvertible with TransformableShape[Line] with Projectable with Path[Point]
 {
     // ATTRIBUTES    -------------------
     
@@ -129,16 +130,10 @@ case class Line(start: Point, end: Point) extends ShapeConvertible with
      */
     def ~==(other: Line) = (start ~== other.start) && (end ~== other.end)
     
-    /**
-     * Finds a position on this line
-     * @param t The length parameter. t = 1 will result in the end point of the line. If t is 
-     * between 0 and 1, the resulting point will lie on the line segment
-     * @return a point along the line
-     */
-    def apply(t: Double) = start + vector * t
-    
     
     // IMPLEMENTED METHODS    ----------
+    
+    override def apply(t: Double) = start + vector * t
     
     override def projectedOver(axis: Vector3D) = Line(start.toVector.projectedOver(axis).toPoint, 
             end.toVector.projectedOver(axis).toPoint)
