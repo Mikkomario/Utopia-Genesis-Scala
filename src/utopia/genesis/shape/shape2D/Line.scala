@@ -13,8 +13,9 @@ import utopia.flow.datastructure.template
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
-import utopia.genesis.shape.{Path, Vector3D}
+import utopia.genesis.shape.Vector3D
 import utopia.genesis.generic.LineType
+import utopia.genesis.shape.path.LinearPathLike
 
 object Line extends FromModelFactory[Line]
 {
@@ -79,7 +80,7 @@ object Line extends FromModelFactory[Line]
  * @since 13.12.2016
  */
 case class Line(override val start: Point, override val end: Point) extends ShapeConvertible with
-        ValueConvertible with ModelConvertible with TransformableShape[Line] with Projectable with Path[Point]
+        ValueConvertible with ModelConvertible with TransformableShape[Line] with Projectable with LinearPathLike[Point]
 {
     // ATTRIBUTES    -------------------
     
@@ -132,8 +133,6 @@ case class Line(override val start: Point, override val end: Point) extends Shap
     
     
     // IMPLEMENTED METHODS    ----------
-    
-    override def apply(t: Double) = start + vector * t
     
     override def projectedOver(axis: Vector3D) = Line(start.toVector.projectedOver(axis).toPoint, 
             end.toVector.projectedOver(axis).toPoint)

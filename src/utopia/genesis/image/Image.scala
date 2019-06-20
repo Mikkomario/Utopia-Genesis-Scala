@@ -8,7 +8,7 @@ import utopia.flow.datastructure.mutable.Lazy
 import utopia.genesis.color.Color
 import utopia.genesis.shape.{Vector3D, VectorLike}
 import utopia.genesis.shape.shape2D.{Area2D, Bounds, Point, Size, Transformation}
-import utopia.genesis.util.Drawer
+import utopia.genesis.util.{Drawer, Scalable}
 
 import scala.util.Try
 
@@ -44,7 +44,7 @@ object Image
   * @since 15.6.2019, v2.1+
   */
 case class Image private(private val source: BufferedImage, scaling: Vector3D,
-						 private val _pixels: Lazy[PixelTable])
+						 private val _pixels: Lazy[PixelTable]) extends Scalable[Image]
 {
 	// COMPUTED	--------------------
 	
@@ -108,7 +108,7 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D,
 	  * @param scaling The scaling factor
 	  * @return A scaled version of this image
 	  */
-	def *(scaling: Double): Image = this * Vector3D(scaling, scaling)
+	override def *(scaling: Double): Image = this * Vector3D(scaling, scaling)
 	
 	/**
 	  * Downscales this image
@@ -116,13 +116,6 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D,
 	  * @return A downscaled version of this image
 	  */
 	def /(divider: VectorLike[_]): Image = withScaling(scaling / divider)
-	
-	/**
-	  * Downscales this image
-	  * @param divider The dividing factor
-	  * @return A downscaled version of this image
-	  */
-	def /(divider: Double): Image = this / Vector3D(divider, divider)
 	
 	
 	// OTHER	--------------------

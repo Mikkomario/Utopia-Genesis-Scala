@@ -1,4 +1,6 @@
-package utopia.genesis.shape
+package utopia.genesis.shape.path
+
+import utopia.genesis.util.Arithmetic
 
 /**
   * Bezier functions can be used for calculating smooth paths between two points. This cubic implementation uses
@@ -6,7 +8,7 @@ package utopia.genesis.shape
   * @author Mikko Hilpinen
   * @since 19.6.2019, v2.1+
   */
-case class CubicBezier[+P <: VectorLike[P]](override val start: P, override val end: P, controlStart: P, controlEnd: P)
+case class CubicBezier[P <: Arithmetic[P, P]](override val start: P, override val end: P, controlStart: P, controlEnd: P)
 	extends Path[P]
 {
 	override def apply(t: Double) =

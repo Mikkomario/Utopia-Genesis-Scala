@@ -3,6 +3,7 @@ package utopia.genesis.shape
 import scala.collection.immutable.{HashMap, VectorBuilder}
 import utopia.genesis.shape.Axis._
 import utopia.flow.util.CollectionExtensions._
+import utopia.genesis.util.Arithmetic
 
 object VectorLike
 {
@@ -24,13 +25,8 @@ object VectorLike
   * matching an axis (X, Y, Z, ...)
   * @tparam Repr the concrete implementing class
   */
-trait VectorLike[+Repr <: VectorLike[_]]
+trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
 {
-	// TYPES	---------------------
-	
-	type AnyVectorLike = VectorLike[_ <: VectorLike[_]]
-	
-	
 	// ABSTRACT	---------------------
 	
 	/**
@@ -115,15 +111,10 @@ trait VectorLike[+Repr <: VectorLike[_]]
 	// OPERATORS	----------------------
 	
 	/**
-	  * This vectorlike element inverted
-	  */
-	def unary_- = map {-_}
-	
-	/**
 	  * @param other Another vectorlike element
 	  * @return The combination of these two elements
 	  */
-	def +(other: VectorLike[_]) = combineWith(other, { _ + _ })
+	override def +(other: VectorLike[_]) = combineWith(other, { _ + _ })
 	
 	/**
 	  * @param x X translation
@@ -143,7 +134,7 @@ trait VectorLike[+Repr <: VectorLike[_]]
 	  * @param other Another vectorlike element
 	  * @return The subtraction of these two elements
 	  */
-	def -(other: AnyVectorLike) = this + (-other)
+	override def -(other: VectorLike[_]) = combineWith(other, { _ - _ })
 	
 	/**
 	  * @param adjust Translation on target axis
@@ -169,7 +160,7 @@ trait VectorLike[+Repr <: VectorLike[_]]
 	  * @param n A multiplier for all axes
 	  * @return This element multiplied on all axes with the specified multiplier
 	  */
-	def *(n: Double) = map { _ * n }
+	override def *(n: Double) = map { _ * n }
 	
 	/**
 	  * @param n A multiplier for specified axis
@@ -183,12 +174,6 @@ trait VectorLike[+Repr <: VectorLike[_]]
 	  * @return This element divided on each axis of the provided element. Dividing by 0 is ignored
 	  */
 	def /(other: VectorLike[_]) = combineWith(other, { case (a, b) => if (b == 0) a else a / b })
-	
-	/**
-	  * @param n A divider for all axes
-	  * @return This element divided on all axes with the speficied divider
-	  */
-	def /(n: Double) = if (n == 0) buildCopy(dimensions) else map { _ / n }
 	
 	/**
 	  * @param n A divider for target axis

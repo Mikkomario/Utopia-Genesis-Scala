@@ -1,4 +1,4 @@
-package utopia.genesis.shape
+package utopia.genesis.shape.path
 
 /**
   * Paths form a sequence of points. They have a specified start and end point
@@ -7,6 +7,8 @@ package utopia.genesis.shape
   */
 trait Path[+P]
 {
+	// ABSTRACT	----------------
+	
 	/**
 	  * @return The starting point of this path
 	  */
@@ -21,4 +23,15 @@ trait Path[+P]
 	  * @return A point within this path (provided 0 <= t <= 1)
 	  */
 	def apply(t: Double): P
+	
+	
+	// OPERATORS	-------------
+	
+	/**
+	  * Continues this path with another
+	  * @param another Another path
+	  * @tparam B The type of resulting path
+	  * @return A path that starts with this path and continues with the another
+	  */
+	def +[B >: P](another: Path[B]) = CompoundPath(Vector(this, another))
 }
