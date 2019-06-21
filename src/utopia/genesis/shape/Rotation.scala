@@ -21,12 +21,40 @@ object Rotation
      * Converts a degree amount to a rotation
      */
     def ofDegrees(degrees: Double, direction: RotationDirection = Clockwise) = Rotation(degrees.toRadians, direction)
+	
+	/**
+	  * Calculates the rotation between two angles
+	  * @param start The start angle
+	  * @param end The end angle
+	  * @param direction The rotation direction used
+	  * @return A rotation from start to end with specified direction
+	  */
+	def between(start: Angle, end: Angle, direction: RotationDirection) =
+	{
+		if (start ~== end)
+			Rotation.ofRadians(2 * Math.PI, direction)
+		else
+		{
+			val rotationAmount =
+			{
+				if (direction == Clockwise)
+				{
+					if (end > start) end.toRadians - start.toRadians else end.toRadians + Math.PI * 2 - start.toRadians
+				}
+				else
+					if (start > end) start.toRadians - end.toRadians else start.toRadians + Math.PI * 2 - end.toRadians
+			}
+			Rotation.ofRadians(rotationAmount, direction)
+		}
+	}
 }
 
 /**
 * This class represents a rotation around a certain axis
 * @author Mikko Hilpinen
 * @since 21.11.2018
+  * @param radians The amount of radians to rotate
+  * @param direction The rotation direction (default = clockwise)
 **/
 case class Rotation(radians: Double, direction: RotationDirection = Clockwise) extends Equatable with 
         ApproximatelyEquatable[Rotation]

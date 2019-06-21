@@ -38,12 +38,12 @@ case class CompoundPath[+P](parts: Vector[Path[P]]) extends Path[P]
 		if (t <= 0)
 			parts.head(t * parts.size)
 		else if (t >= 1)
-			parts.last((t - (parts.size - 1) / parts.size) * parts.size)
+			parts.last((t - (parts.size - 1.0) / parts.size) * parts.size)
 		else
 		{
 			// Finds the curve that contains the target point and the 't' in that curve
 			val partIndex = (t * parts.size).toInt
-			val partT = (t - partIndex / parts.size) * parts.size
+			val partT = (t - partIndex.toDouble / parts.size) * parts.size
 			
 			parts(partIndex)(partT)
 		}

@@ -135,7 +135,7 @@ object BezierPath
 				val curveEnd = points(i + 1)
 				val (c1, c2) = controlPoints(i)
 				
-				CubicBezier(curveStart, c1, curveEnd, c2)
+				CubicBezier(curveStart, c1, c2, curveEnd)
 		}.toVector
 	}
 }

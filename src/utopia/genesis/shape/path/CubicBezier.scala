@@ -7,8 +7,12 @@ import utopia.genesis.util.Arithmetic
   * two control points, which define the shape of the path.
   * @author Mikko Hilpinen
   * @since 19.6.2019, v2.1+
+  * @param start The curve starting point
+  * @param controlStart The first control point
+  * @param controlEnd The second control point
+  * @param end The curve end point
   */
-case class CubicBezier[P <: Arithmetic[P, P]](override val start: P, override val end: P, controlStart: P, controlEnd: P)
+case class CubicBezier[P <: Arithmetic[P, P]](override val start: P, controlStart: P, controlEnd: P, override val end: P)
 	extends Path[P]
 {
 	override def apply(t: Double) =

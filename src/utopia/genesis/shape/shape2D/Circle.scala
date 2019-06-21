@@ -2,6 +2,7 @@ package utopia.genesis.shape.shape2D
 
 import utopia.genesis.util.Extensions._
 import java.awt.geom.Ellipse2D
+
 import utopia.flow.generic.ValueConvertible
 import utopia.genesis.generic.CircleType
 import utopia.flow.datastructure.immutable.Value
@@ -12,7 +13,8 @@ import utopia.flow.generic.FromModelFactory
 import utopia.genesis.generic.GenesisValue._
 import utopia.flow.datastructure.template
 import utopia.flow.datastructure.template.Property
-import utopia.genesis.shape.Vector3D
+import utopia.genesis.shape.path.Path
+import utopia.genesis.shape.{Angle, RotationDirection, Vector3D}
 
 object Circle extends FromModelFactory[Circle]
 {
@@ -63,6 +65,12 @@ case class Circle(origin: Point, radius: Double) extends ShapeConvertible with A
      * Scales the circle's radius by the provided amount
      */
     def *(d: Double) = copy(radius = radius * d)
+    
+    /**
+      * @param angle Target angle
+      * @return A point on this circle's edge at the specified angle
+      */
+    def apply(angle: Angle) = origin + Vector3D.lenDir(radius, angle)
     
     
     // IMPLEMENTED METHODS    ---------
