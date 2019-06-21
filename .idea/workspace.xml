@@ -7,32 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a34f54cb-6443-4617-9ea2-d86bc0b4cc7c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/path/CircularPath.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/utopia/genesis/test/BezierPathTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/util/CollectionExtensions.scala" beforeDir="false" afterPath="$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/util/CollectionExtensions.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/util/TimeExtensions.scala" beforeDir="false" afterPath="$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/util/TimeExtensions.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Utopia-Genesis-Scala.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Utopia-Genesis-Scala.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/Rotation.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/Rotation.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/path/BezierPath.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/path/BezierPath.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/path/CompoundPath.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/path/CompoundPath.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/path/CubicBezier.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/path/CubicBezier.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Circle.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Circle.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/ActorTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/ActorTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/BasicColorTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/BasicColorTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/CameraTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/CameraTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/CanvasTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/CanvasTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/ClippingTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/ClippingTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/CollisionTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/CollisionTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/DataTypeTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/DataTypeTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/GridDrawer.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/GridDrawer.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/KeyTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/KeyTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/MagnifierCamera.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/MagnifierCamera.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/MouseTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/MouseTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/ShapeTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/ShapeTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/TransformationTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/TransformationTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/VectorTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/VectorTest.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/test/ViewTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/ViewTest.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/utopia/genesis/test/BezierPathTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/BezierPathTest.scala" afterDir="false" />
     </list>
     <ignored path="../Utopia-Inception-Scala/out/" />
     <ignored path="../Utopia-Flow-Scala/out/" />
@@ -57,11 +33,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/utopia/genesis/test/BezierPathTest.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="460">
-              <caret line="23" column="26" lean-forward="true" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
+            <state relative-caret-position="409">
+              <caret line="29" column="62" lean-forward="true" selection-start-line="29" selection-start-column="62" selection-end-line="29" selection-end-column="62" />
               <folding>
                 <element signature="e#29#54#0" expanded="true" />
               </folding>
@@ -123,11 +99,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/path/BezierPath.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1309">
-              <caret line="134" column="33" lean-forward="true" selection-start-line="134" selection-start-column="33" selection-end-line="134" selection-end-column="33" />
+            <state relative-caret-position="540">
+              <caret line="32" column="117" lean-forward="true" selection-start-line="32" selection-start-column="117" selection-end-line="32" selection-end-column="117" />
             </state>
           </provider>
         </entry>
@@ -213,12 +189,12 @@
         <option value="$PROJECT_DIR$/test/utopia/genesis/test/KeyTest.scala" />
         <option value="$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/util/TimeExtensions.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/shape/path/CubicBezier.scala" />
-        <option value="$PROJECT_DIR$/src/utopia/genesis/shape/path/BezierPath.scala" />
         <option value="$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/util/CollectionExtensions.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/shape/path/CompoundPath.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Circle.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/shape/Rotation.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/shape/path/CircularPath.scala" />
+        <option value="$PROJECT_DIR$/src/utopia/genesis/shape/path/BezierPath.scala" />
         <option value="$PROJECT_DIR$/test/utopia/genesis/test/BezierPathTest.scala" />
       </list>
     </option>
@@ -636,11 +612,18 @@
       <option name="project" value="LOCAL" />
       <updated>1561047861298</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Flow: Added pairing to seqs and preciseMilli &amp; second to scala duration&#10;Genesis: Testing &amp; fixing bezier paths">
+      <created>1561106322774</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1561106322774</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
+    <frame x="-7" y="-7" width="2575" height="1415" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16779324" />
@@ -673,7 +656,6 @@
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Refactoring Genesis" />
     <MESSAGE value="Still refactoring Genesis" />
     <MESSAGE value="Genesis handler and event classes refactored" />
     <MESSAGE value="Refactored Canvas class. Separated repaint to separate loop class." />
@@ -698,7 +680,8 @@
     <MESSAGE value="Flow: Deprecated set method in lazy&#10;Genesis: Working on image transformations" />
     <MESSAGE value="Added a class for cubic bezier curve and one for compound bezier paths. Implementations haven't been tested yet" />
     <MESSAGE value="Made bezier paths accept any arithmetic element and not just vectors" />
-    <option name="LAST_COMMIT_MESSAGE" value="Made bezier paths accept any arithmetic element and not just vectors" />
+    <MESSAGE value="Flow: Added pairing to seqs and preciseMilli &amp; second to scala duration&#10;Genesis: Testing &amp; fixing bezier paths" />
+    <option name="LAST_COMMIT_MESSAGE" value="Flow: Added pairing to seqs and preciseMilli &amp; second to scala duration&#10;Genesis: Testing &amp; fixing bezier paths" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/AndImageTransform.scala" />
@@ -1001,13 +984,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/path/BezierPath.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1309">
-          <caret line="134" column="33" lean-forward="true" selection-start-line="134" selection-start-column="33" selection-end-line="134" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/util/CollectionExtensions.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
@@ -1068,11 +1044,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/utopia/genesis/test/BezierPathTest.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="23" column="26" lean-forward="true" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
+        <state relative-caret-position="409">
+          <caret line="29" column="62" lean-forward="true" selection-start-line="29" selection-start-column="62" selection-end-line="29" selection-end-column="62" />
           <folding>
             <element signature="e#29#54#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/path/BezierPath.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="32" column="117" lean-forward="true" selection-start-line="32" selection-start-column="117" selection-end-line="32" selection-end-column="117" />
         </state>
       </provider>
     </entry>

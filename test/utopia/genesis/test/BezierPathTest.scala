@@ -27,7 +27,7 @@ object BezierPathTest extends App
 	
 	// Compound bezier path
 	val points = Vector(Point(64, 64), Point(128, 32), Point(320, 128), Point(420, 300), Point(640, 400),
-		Point(700, 480), Point(400, 300), Point(120, 480))
+		Point(700, 480)/*, Point(400, 300), Point(120, 480)*/)
 	val path = BezierPath(points)
 	
 	// Single cubic bezier
