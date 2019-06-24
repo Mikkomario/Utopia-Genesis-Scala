@@ -18,6 +18,10 @@ trait Path[+P]
 	  */
 	def end: P
 	/**
+	  * @return The (approximate) length of this path
+	  */
+	def length: Double
+	/**
 	  * Calculates a point in this path
 	  * @param t The progress along this path [0, 1] where 0 is at the start of this path and 1 is at the end
 	  * @return A point within this path (provided 0 <= t <= 1)

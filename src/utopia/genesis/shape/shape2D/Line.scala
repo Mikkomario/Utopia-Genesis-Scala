@@ -134,7 +134,9 @@ case class Line(override val start: Point, override val end: Point) extends Shap
     
     // IMPLEMENTED METHODS    ----------
     
-    override def projectedOver(axis: Vector3D) = Line(start.toVector.projectedOver(axis).toPoint, 
+    override def length = vector.length
+    
+    override def projectedOver(axis: Vector3D) = Line(start.toVector.projectedOver(axis).toPoint,
             end.toVector.projectedOver(axis).toPoint)
     
     

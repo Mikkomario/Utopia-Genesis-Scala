@@ -15,6 +15,18 @@ import utopia.genesis.util.Arithmetic
 case class CubicBezier[P <: Arithmetic[P, P]](override val start: P, controlStart: P, controlEnd: P, override val end: P)
 	extends Path[P]
 {
+	// IMPLEMENTED	----------------------
+	
+	lazy val length =
+	{
+		// Approximates length using average of chord and container net lengths
+		// Source: https://stackoverflow.com/questions/29438398/cheap-way-of-calculating-cubic-bezier-length
+		val chord = end.distanceFrom(start)
+		val containerNet = start.distanceFrom(controlStart) + controlEnd.distanceFrom(controlStart) + end.distanceFrom(controlEnd)
+		
+		(containerNet + chord) / 2
+	}
+	
 	override def apply(t: Double) =
 	{
 		// Mathematic function from: https://en.wikipedia.org/wiki/B%C3%A9zier_curve
@@ -26,4 +38,14 @@ case class CubicBezier[P <: Arithmetic[P, P]](override val start: P, controlStar
 		
 		p0Term + p1Term + p2Term + p3Term
 	}
+	
+	
+	// OTHER	--------------------------
+	
+	/**
+	  * Standardizes this bezier's sequences so that t represents a % of traversed arc
+	  * @param sequenceCount The number of sequences used for calculating arc length at different points
+	  * @return A copy of this path with standardized t
+	  */
+	def withStandardizedVelocity(sequenceCount: Int) = StandardizedCubicBezier(this, sequenceCount)
 }

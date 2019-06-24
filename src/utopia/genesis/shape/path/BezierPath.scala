@@ -13,11 +13,12 @@ object BezierPath
 	/**
 	  * Calculates a bezier path between the specified points
 	  * @param points The points that form the path. Must be non-empty.
+	  * @param sequencesPerPart The number of sequences used for standardizing velocity or t within each part
 	  * @tparam P The type of path point
 	  * @return A bezier path between paths
 	  * @throws IllegalArgumentException If points is empty
 	  */
-	def apply[P <: Arithmetic[P, P]](points: Vector[P]) =
+	def apply[P <: Arithmetic[P, P]](points: Vector[P], sequencesPerPart: Int = 9) =
 	{
 		if (points.isEmpty)
 			throw new IllegalArgumentException("Bezier path must be initialized with at least 1 point")
@@ -26,7 +27,13 @@ object BezierPath
 		else if (points.size == 2)
 			LinearPath(points.head, points(1))
 		else
-			CompoundPath(calculatePath(points).toVector)
+		{
+			val paths = calculatePath(points)
+			if (sequencesPerPart > 0)
+				CompoundPath(paths.map { _.withStandardizedVelocity(sequencesPerPart) }.toVector)
+			else
+				CompoundPath(paths.toVector)
+		}
 	}
 	
 	private def calculatePath[P <: Arithmetic[P, P]](points: Seq[P]) =

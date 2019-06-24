@@ -107,6 +107,16 @@ trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
 	  */
 	def positive = map { _ max 0 }
 	
+	/**
+	  * The length of this vector
+	  */
+	def length = math.sqrt(this dot this)
+	
+	
+	// IMPLEMENTED	----------------------
+	
+	override def distanceFrom(another: VectorLike[_]) = (this - another).length
+	
 	
 	// OPERATORS	----------------------
 	
@@ -184,6 +194,11 @@ trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
 	
 	
 	// OTHER	--------------------------
+	
+	/**
+	  * The dot product between this and another vector
+	  */
+	def dot(other: VectorLike[_]) = (this * other).dimensions.sum
 	
 	/**
 	  * Maps all dimensions of this vectorlike element

@@ -9,6 +9,8 @@ object Arithmetic
 		override def *(mod: Double) = d * mod
 		
 		override def +(another: Double) = d + another
+		
+		override def distanceFrom(another: Double) = d - another
 	}
 }
 
@@ -24,4 +26,10 @@ trait Arithmetic[-N, +Repr] extends Scalable[Repr] with Combinable[N, Repr]
 	  * @return A subtraction of these items
 	  */
 	def -(another: N): Repr
+	
+	/**
+	  * @param another Another item
+	  * @return The distance starting from another item to this item
+	  */
+	def distanceFrom(another: N): Double
 }

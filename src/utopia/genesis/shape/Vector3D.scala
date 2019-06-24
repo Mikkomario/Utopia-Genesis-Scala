@@ -233,11 +233,6 @@ case class Vector3D(override val x: Double = 0.0, override val y: Double = 0.0, 
 	}
     
     /**
-     * The length of this vector
-     */
-    def length = math.sqrt(this dot this)
-    
-    /**
      * A normal for this vector
      */
     def normal = if (x == 0 && y == 0 && z != 0) Vector3D(1) else normal2D
@@ -298,11 +293,6 @@ case class Vector3D(override val x: Double = 0.0, override val y: Double = 0.0, 
     
     
     // OTHER METHODS    ----------------
-    
-    /**
-     * The dot product between this and another vector
-     */
-    def dot(other: Vector3D) = (this * other).toVector.sum
     
     /**
      * The cross product between this and another vector. The cross product is parallel with a

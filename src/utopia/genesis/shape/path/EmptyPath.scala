@@ -11,5 +11,7 @@ case class EmptyPath[P](point: P) extends Path[P]
 	
 	override def end = point
 	
+	override def length = 0.0
+	
 	override def apply(t: Double) = point
 }

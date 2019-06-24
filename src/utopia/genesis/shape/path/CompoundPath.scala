@@ -1,5 +1,7 @@
 package utopia.genesis.shape.path
 
+import utopia.flow.util.CollectionExtensions._
+
 object CompoundPath
 {
 	/**
@@ -28,6 +30,8 @@ case class CompoundPath[+P](parts: Vector[Path[P]]) extends Path[P]
 	
 	// IMPLEMENTED	-------------------
 	
+	lazy val length = parts.foldLeft(0.0) { _ + _.length }
+	
 	override def start = parts.head.start
 	
 	override def end = parts.last.end
@@ -36,16 +40,35 @@ case class CompoundPath[+P](parts: Vector[Path[P]]) extends Path[P]
 	{
 		// Handles cases where t is out of bounds
 		if (t <= 0)
-			parts.head(t * parts.size)
+			parts.head(t * (1 / (parts.head.length / length)))
 		else if (t >= 1)
-			parts.last((t - (parts.size - 1.0) / parts.size) * parts.size)
+		{
+			val lastLength = parts.last.length
+			val startT = (length - lastLength) / length
+			val tInPart = (t - startT) * (1 / (lastLength / length))
+			parts.last(tInPart)
+		}
 		else
 		{
-			// Finds the curve that contains the target point and the 't' in that curve
-			val partIndex = (t * parts.size).toInt
-			val partT = (t - partIndex.toDouble / parts.size) * parts.size
-			
-			parts(partIndex)(partT)
+			// Traverses paths until a suitable is found
+			val targetPosition = t * length
+			var traversed = 0.0
+			parts.findMap
+			{
+				part =>
+					val length = part.length
+					if (traversed + length >= targetPosition)
+					{
+						val positionInPart = targetPosition - traversed
+						val tInsidePart = positionInPart / length
+						Some(part(tInsidePart))
+					}
+					else
+					{
+						traversed += length
+						None
+					}
+			}.get
 		}
 	}
 }
