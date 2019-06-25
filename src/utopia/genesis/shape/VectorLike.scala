@@ -230,7 +230,6 @@ trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
 			val firstPart = myDimensions.take(mapIndex) :+ f(myDimensions(mapIndex))
 			buildCopy(firstPart ++ myDimensions.drop(mapIndex + 1))
 		}
-		
 	}
 	
 	/**

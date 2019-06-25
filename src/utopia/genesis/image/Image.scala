@@ -93,6 +93,14 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D,
 	  */
 	def flippedVertically = mapPixelTable { _.flippedVertically }
 	
+	/**
+	  * If this image is downscaled, lowers the source image resolution to match the current size of this image. Will not
+	  * affect non-scaled or upscaled images. Please note that <b>this operation cannot be reversed</b>
+	  * @return A copy of this image with (possibly) lowered source resolution
+	  */
+	def withMinimumResolution = if (scaling.dimensions2D.forall { _ >= 1 }) this else
+		withSourceResolution(size.min(Size(source.getWidth, source.getHeight)), true)
+	
 	
 	// OPERATORS	----------------
 	
@@ -240,6 +248,28 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D,
 		val destination = new BufferedImage(source.getWidth, source.getHeight, source.getType)
 		op.filter(source, destination)
 		Image(destination, scaling)
+	}
+	
+	/**
+	  * Creates a new image with altered source resolution. This method can be used when you wish to lower the original
+	  * image's resolution to speed up pixelwise operations. If you simply wish to change how this image looks in the
+	  * program, please use withSize instead
+	  * @param newSize The new source size
+	  * @param preserveUseSize Whether the resulting image should be scaled to match this image (default = false)
+	  * @return A new image with altered source resolution
+	  */
+	def withSourceResolution(newSize: Size, preserveUseSize: Boolean = false) =
+	{
+		if (source.getWidth == newSize.width.toInt && source.getHeight == newSize.height.toInt)
+			this
+		else
+		{
+			val scaledImage = source.getScaledInstance(newSize.width.toInt, newSize.height.toInt, java.awt.Image.SCALE_SMOOTH)
+			if (preserveUseSize)
+				Image(new BufferedImage(scaledImage), size.toVector / newSize)
+			else
+				Image(new BufferedImage(scaledImage))
+		}
 	}
 }
 
