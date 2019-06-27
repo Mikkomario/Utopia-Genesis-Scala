@@ -6,7 +6,8 @@ import java.nio.file.Path
 import javax.imageio.ImageIO
 import utopia.flow.datastructure.mutable.Lazy
 import utopia.genesis.color.Color
-import utopia.genesis.shape.{Vector3D, VectorLike}
+import utopia.genesis.image.transform.{Blur, HueAdjust, IncreaseContrast, Invert, Sharpen, Threshold}
+import utopia.genesis.shape.{Angle, Rotation, Vector3D, VectorLike}
 import utopia.genesis.shape.shape2D.{Area2D, Bounds, Point, Size, Transformation}
 import utopia.genesis.util.{Drawer, Scalable}
 
@@ -92,6 +93,16 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D,
 	  * @return A copy of this image where y-axis is reversed
 	  */
 	def flippedVertically = mapPixelTable { _.flippedVertically }
+	
+	/**
+	  * @return A copy of this image with increased contrast
+	  */
+	def withIncreasedContrast = IncreaseContrast(this)
+	
+	/**
+	  * @return A copy of this image with inverted colors
+	  */
+	def inverted = Invert(this)
 	
 	/**
 	  * If this image is downscaled, lowers the source image resolution to match the current size of this image. Will not
@@ -239,6 +250,44 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D,
 		(c, p) => if (area.contains(p * scaling)) f(c) else c }
 	
 	/**
+	  * Creates a blurred copy of this image
+	  * @param intensity The blurring intensity [0, 1], defaults to 1
+	  * @return A blurred version of this image
+	  */
+	def blurred(intensity: Int = 1) = Blur(intensity)(this)
+	
+	/**
+	  * Creates a sharpened copy of this image
+	  * @param intensity The sharpening intensity (default = 5)
+	  * @return A sharpened copy of this image
+	  */
+	def sharpened(intensity: Double = 5) = Sharpen(intensity)(this)
+	
+	/**
+	  * Creates a version of this image where the hue (color) of the image is shifted
+	  * @param hueAdjust The amount of shift applied to color hue
+	  * @return A new image with adjusted hue
+	  */
+	def withAdjustedHue(hueAdjust: Rotation) = mapPixels { _ + hueAdjust }
+	
+	/**
+	  * Creates a version of this image with a certain hue range adjusted
+	  * @param sourceHue The hue that is targeted
+	  * @param sourceRange The width of the targeted hue (larger angle means more hues are affected)
+	  * @param targetHue The new hue the source hue will become after transformation
+	  * @return A copy of this image with adjusted hue
+	  */
+	def withAdjustedHue(sourceHue: Angle, sourceRange: Angle, targetHue: Angle) =
+		HueAdjust(sourceHue, sourceRange, targetHue)(this)
+	
+	/**
+	  * Creates a copy of this image where each color channel is limited to a certain number of values
+	  * @param colorAmount The number of possible values for each color channel
+	  * @return A copy of this image with limited color options
+	  */
+	def withThreshold(colorAmount: Int) = Threshold(colorAmount)(this)
+	
+	/**
 	  * Applies a bufferedImageOp to this image, producing a new image
 	  * @param op The operation that is applied
 	  * @return A new image with operation applied
@@ -265,10 +314,23 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D,
 		else
 		{
 			val scaledImage = source.getScaledInstance(newSize.width.toInt, newSize.height.toInt, java.awt.Image.SCALE_SMOOTH)
+			val scaledAsBuffered = scaledImage match
+			{
+				case b: BufferedImage => b
+				case i =>
+					val buffered = new BufferedImage(i.getWidth(null), i.getHeight(null),
+						BufferedImage.TYPE_INT_ARGB)
+					val writeGraphics = buffered.createGraphics()
+					writeGraphics.drawImage(i, 0, 0, null)
+					writeGraphics.dispose()
+					
+					buffered
+			}
+			
 			if (preserveUseSize)
-				Image(new BufferedImage(scaledImage), size.toVector / newSize)
+				Image(scaledAsBuffered, size.toVector / newSize)
 			else
-				Image(new BufferedImage(scaledImage))
+				Image(scaledAsBuffered)
 		}
 	}
 }
