@@ -42,7 +42,7 @@ class MagnifierCamera(radius: Double) extends Camera[DrawableHandler] with Drawa
     // IMPLEMENTED METHODS    --------
     
     // Draws the edges of the projection area
-    override def draw(drawer: Drawer) = drawer.withColor(None).transformed(
+    override def draw(drawer: Drawer) = drawer.withPaint(None).transformed(
             projectionTransformation).draw(projectionArea)
     
     // Moves the camera 'lens' to the mouse position

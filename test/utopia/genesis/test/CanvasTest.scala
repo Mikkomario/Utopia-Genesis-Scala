@@ -25,7 +25,7 @@ object CanvasTest extends App
 	
 		override def allowsHandlingFrom(handlerType: HandlerType) = true
 	
-		override def draw(drawer: Drawer) = drawer.withEdgeColor(Color.RED).draw(shape)
+		override def draw(drawer: Drawer) = drawer.withEdgePaint(Color.RED).draw(shape)
     }
 	
 	val gameWorldSize = Size(800, 600)

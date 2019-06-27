@@ -28,9 +28,9 @@ object ClippingTest extends App
         
         def draw(drawer: Drawer) = 
         {
-            drawer.withEdgeColor(None).draw(clip)
+            drawer.withEdgePaint(None).draw(clip)
             
-            val clipped = drawer.withColor(Some(Color.RED)).clippedTo(clip)
+            val clipped = drawer.withPaint(Some(Color.RED)).clippedTo(clip)
             shapes.foreach(clipped.draw)
         }
         

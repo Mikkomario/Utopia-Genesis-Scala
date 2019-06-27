@@ -35,7 +35,7 @@ class GridDrawer(worldSize: Size, val squareSize: Size) extends Drawable with Ha
     
     def draw(drawer: Drawer) = 
     {
-        drawer.withEdgeColor(Some(Color.LIGHT_GRAY)).disposeAfter
+        drawer.withEdgePaint(Some(Color.LIGHT_GRAY)).disposeAfter
         {
             d =>
                 for (x <- 0 to squareAmounts.x.toInt)

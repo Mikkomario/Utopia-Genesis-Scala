@@ -37,8 +37,8 @@ object Drawer
  * @author Mikko Hilpinen
  * @since 22.1.2017
  */
-class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.awt.Color.WHITE),
-             val edgeColor: Option[Paint] = Some(java.awt.Color.BLACK))
+class Drawer(val graphics: Graphics2D, val fillPaint: Option[Paint] = Some(java.awt.Color.WHITE),
+             val edgePaint: Option[Paint] = Some(java.awt.Color.BLACK))
 {
     // TODO: Add rendering hints
     
@@ -52,12 +52,12 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
     /**
       * @return A version of this drawer that only fills shapes. May return this drawer.
       */
-    def onlyFill = if (edgeColor.isDefined) copy(fillColor, None) else this
+    def onlyFill = if (edgePaint.isDefined) copy(fillPaint, None) else this
     
     /**
       * @return A version of this drawer that only draws edges of shapes. May return this drawer.
       */
-    def onlyEdges = if (fillColor.isDefined) copy(None, edgeColor) else this
+    def onlyEdges = if (fillPaint.isDefined) copy(None, edgePaint) else this
     
     /**
       * @return A version of this drawer that only draws edges of shapes. May return this drawer.
@@ -92,10 +92,10 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
     
     /**
      * Copies this drawer, creating another graphics context. Changing the other context doesn't
-     * affect this one. This should be used when a lot of drawing is done and the graphics context 
+     * affect this one. This should be used when a lot of drawing is done and the graphics context
      * should be returned to its original state.
      */
-    def copy(): Drawer = copy(fillColor, edgeColor)
+    def copy(): Drawer = copy(fillPaint, edgePaint)
     
     /**
      * Disposes this graphics context and every single drawer created from this drawer instance. The
@@ -103,7 +103,7 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
      * levels is fully optional. This drawer or any drawer created from this drawer cannot be used
      * after it has been disposed.
      */
-    def dispose(): Unit = 
+    def dispose(): Unit =
     {
         children.foreach { _.dispose() }
         graphics.dispose()
@@ -112,16 +112,16 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
     /**
      * Draws and fills a shape
      */
-    def draw(shape: Shape) = 
+    def draw(shape: Shape) =
     {
-        if (fillColor.isDefined)
+        if (fillPaint.isDefined)
         {
-            graphics.setPaint(fillColor.get)
+            graphics.setPaint(fillPaint.get)
             graphics.fill(shape)
         }
-        if (edgeColor.isDefined)
+        if (edgePaint.isDefined)
         {
-            graphics.setPaint(edgeColor.get)
+            graphics.setPaint(edgePaint.get)
             graphics.draw(shape)
         }
     }
@@ -137,7 +137,7 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
     def drawTextCentered(text: String, font: Font, bounds: Bounds)
     {
         // Sets the color, preferring edge color
-        edgeColor.orElse(fillColor).foreach { graphics.setPaint }
+        edgePaint.orElse(fillPaint).foreach { graphics.setPaint }
         
         graphics.setFont(font)
         val metrics = graphics.getFontMetrics
@@ -157,7 +157,7 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
     def drawText(text: String, font: Font, topLeft: Point) =
     {
         // Sets the color, preferring edge color
-        edgeColor.orElse(fillColor).foreach { graphics.setPaint }
+        edgePaint.orElse(fillPaint).foreach { graphics.setPaint }
         graphics.setFont(font)
         val metrics = graphics.getFontMetrics
         graphics.drawString(text, topLeft.x.toInt, topLeft.y.toInt + metrics.getAscent)
@@ -183,10 +183,10 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
     
     /**
      * Creates a transformed copy of this
-     * drawer so that it will use the provided transformation to draw relative 
+     * drawer so that it will use the provided transformation to draw relative
      * elements into absolute space
      */
-    def transformed(transform: AffineTransform) = 
+    def transformed(transform: AffineTransform) =
     {
         val drawer = copy()
         drawer.graphics.transform(transform)
@@ -195,71 +195,116 @@ class Drawer(val graphics: Graphics2D, val fillColor: Option[Paint] = Some(java.
     
     /**
      * Creates a transformed copy of this
-     * drawer so that it will use the provided transformation to draw relative 
+     * drawer so that it will use the provided transformation to draw relative
      * elements into absolute space
      */
     def transformed(transform: Transformation): Drawer = transformed(transform.toAffineTransform)
     
     /*
-     * Creates a transformed copy of this drawer so that it reads from absolute world space and 
+     * Creates a transformed copy of this drawer so that it reads from absolute world space and
      * projects them differently on another absolute world space
      * @param from The transformation with which the data is read
      * @param to The transformation with which the data is projected (like in other transform
      * methods)
      */
-    //def transformed(from: Transformation, to: Transformation): Drawer = 
+    //def transformed(from: Transformation, to: Transformation): Drawer =
     //        transformed(from.toInvertedAffineTransform).transformed(to);
     
     /**
      * Creates a new instance of this drawer with altered colours
-     * @param fillColor the colour / paint used for filling the area
-     * @param edgeColor the colour / paint used for the drawn edges. By default stays the same as it
+     * @param fill the colour / paint used for filling the area
+     * @param edge the colour / paint used for the drawn edges. By default stays the same as it
      * was in the original
      */
-    def withColor(fillColor: Option[Paint], edgeColor: Option[Paint] = this.edgeColor) = copy(fillColor, edgeColor)
+    def withPaint(fill: Option[Paint], edge: Option[Paint] = this.edgePaint) = copy(fill, edge)
     
     /**
       * Creates a new instance of this drawer with altered colours
-      * @param fillColor the colour / paint used for filling the area
-      * @param edgeColor the colour / paint used for the drawn edges
+      * @param fill the colour / paint used for filling the area
+      * @param edge the colour / paint used for the drawn edges
       */
-    def withColor(fillColor: Paint, edgeColor: Paint): Drawer = withColor(Some(fillColor), Some(edgeColor))
+    def withPaint(fill: Paint, edge: Paint): Drawer = withPaint(Some(fill), Some(edge))
     
     /**
-      * Creates a new instance of this drawer with altered colours
-      * @param fillColor the colour / paint used for filling the area
-      * @param edgeColor the colour / paint used for the drawn edges
+      * Creates a new instance of this drawer with altered colors
+      * @param fill the color used for filling the area
+      * @param edge the color used for the drawn edges
       */
-    def withColor(fillColor: Color, edgeColor: Color): Drawer = withColor(fillColor.toAwt, edgeColor.toAwt)
+    def withColor(fill: Option[Color], edge: Option[Color]) = withPaint(fill.map { _.toAwt }, edge.map { _.toAwt })
+    
+    /**
+      * Creates a new instance of this drawer with altered colors
+      * @param fill the color used for filling the area
+      * @param edge the color used for the drawn edges
+      */
+    def withColor(fill: Color, edge: Color): Drawer = withPaint(fill.toAwt, edge.toAwt)
     
     /**
      * Creates a new instance of this drawer with altered edge colour
      */
-    def withEdgeColor(edgeColor: Option[Paint]) = withColor(fillColor, edgeColor)
-    
-    /**
-      * @param color The new fill color
-      * @return A version of this drawer with specified fill color
-      */
-    def withFillColor(color: Paint) = withColor(Some(color))
-    
-    /**
-      * @param color The new fill color
-      * @return A version of this drawer with specified fill color
-      */
-    def withFillColor(color: Color) = withColor(Some(color.toAwt))
+    def withEdgePaint(edge: Option[Paint]) = withPaint(fillPaint, edge)
     
     /**
       * @param color The new edge drawing color
       * @return A version of this drawer with specified edge color
       */
-    def withEdgeColor(color: Paint): Drawer = withEdgeColor(Some(color))
+    def withEdgePaint(color: Paint): Drawer = withEdgePaint(Some(color))
+    
+    /**
+      * Creates a new instance of this drawer with altered edge color
+      * @param edge The new edge color
+      * @return A copy of this drawer with altered color
+      */
+    def withEdgeColor(edge: Option[Color]) = withEdgePaint(edge.map { _.toAwt })
     
     /**
       * @param color The new edge drawing color
       * @return A version of this drawer with specified edge color
       */
-    def withEdgeColor(color: Color): Drawer = withEdgeColor(color.toAwt)
+    def withEdgeColor(color: Color): Drawer = withEdgePaint(color.toAwt)
+    
+    /**
+      * Creates a new drawer with altered fill color
+      * @param fill The new fill color
+      * @return A copy of this drawer with new fill color
+      */
+    def withFillPaint(fill: Option[Paint]) = withPaint(fill, edgePaint)
+    
+    /**
+      * @param color The new fill color
+      * @return A version of this drawer with specified fill color
+      */
+    def withFillPaint(color: Paint): Drawer = withFillPaint(Some(color))
+    
+    /**
+      * @param color The new fill color
+      * @return A version of this drawer with specified fill color
+      */
+    def withFillColor(color: Color) = withFillPaint(Some(color.toAwt))
+    
+    /**
+      * @param color The new edge drawing color
+      * @return A copy of this drawer with specified edge color and no fill
+      */
+    def onlyEdges(color: Paint) = withPaint(None, Some(color))
+    
+    /**
+      * @param color The new edge drawing color
+      * @return A copy of this drawer with specified edge color and no fill
+      */
+    def onlyEdges(color: Color): Drawer = onlyEdges(color.toAwt)
+    
+    /**
+      * @param color The new fill color
+      * @return A copy of this drawer with specified fill color and no edges
+      */
+    def onlyFill(color: Paint) = withPaint(Some(color), None)
+    
+    /**
+      * @param color The new fill color
+      * @return A copy of this drawer with specified fill color and no edges
+      */
+    def onlyFill(color: Color): Drawer = onlyFill(color.toAwt)
     
     /**
      * Creates a copy of this context with altered alpha (opacity / transparency) value.
