@@ -19,10 +19,11 @@ object Image
 	  * Creates a new image
 	  * @param image The original buffered image source
 	  * @param scaling The scaling applied to the image
+	  * @param alpha The maximum alpha value used when drawing this image [0, 1] (default = 1 = fully visible)
 	  * @return A new image
 	  */
-	def apply(image: BufferedImage, scaling: Vector3D = Vector3D.identity): Image = Image(image, scaling,
-		Lazy(PixelTable.fromBufferedImage(image)))
+	def apply(image: BufferedImage, scaling: Vector3D = Vector3D.identity, alpha: Double = 1.0): Image = Image(image,
+		scaling, alpha, Lazy(PixelTable.fromBufferedImage(image)))
 	
 	/**
 	  * Reads an image from a file
@@ -44,9 +45,22 @@ object Image
   * @author Mikko Hilpinen
   * @since 15.6.2019, v2.1+
   */
-case class Image private(private val source: BufferedImage, scaling: Vector3D,
+case class Image private(private val source: BufferedImage, scaling: Vector3D, alpha: Double,
 						 private val _pixels: Lazy[PixelTable]) extends Scalable[Image]
 {
+	// ATTRIBUTES	----------------
+	
+	/**
+	  * The size of the original image
+	  */
+	val sourceResolution = Size(source.getWidth, source.getHeight)
+	
+	/**
+	  * @return The size of this image in pixels
+	  */
+	val size = sourceResolution * scaling
+	
+	
 	// COMPUTED	--------------------
 	
 	/**
@@ -57,17 +71,12 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D,
 	/**
 	  * @return The width of this image in pixels
 	  */
-	def width = source.getWidth * scaling.x
+	def width = size.width
 	
 	/**
 	  * @return The height of this image in pixels
 	  */
-	def height = source.getHeight * scaling.y
-	
-	/**
-	  * @return The size of this image in pixels
-	  */
-	def size = Size(width, height)
+	def height = size.height
 	
 	/**
 	  * @return A copy of this image that isn't scaled above 100%
@@ -110,7 +119,7 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D,
 	  * @return A copy of this image with (possibly) lowered source resolution
 	  */
 	def withMinimumResolution = if (scaling.dimensions2D.forall { _ >= 1 }) this else
-		withSourceResolution(size.min(Size(source.getWidth, source.getHeight)), true)
+		withSourceResolution(size min sourceResolution, true)
 	
 	
 	// OPERATORS	----------------
@@ -138,6 +147,27 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D,
 	
 	
 	// OTHER	--------------------
+	
+	/**
+	  * Creates a copy of this image with adjusted alpha value (transparency)
+	  * @param newAlpha The new alpha value for this image [0, 1]
+	  * @return A new image
+	  */
+	def withAlpha(newAlpha: Double) = copy(alpha = newAlpha max 0 min 1)
+	
+	/**
+	  * Creates a copy of this image with mapped alpha value
+	  * @param f A funtion for mapping image max alpha
+	  * @return A copy of this image with mapped alpha
+	  */
+	def mapAlpha(f: Double => Double) = withAlpha(f(alpha))
+	
+	/**
+	  * Creates a copy of this image with mapped alpha value
+	  * @param alphaMod An alpha modifier
+	  * @return A copy of this image with modified alpha
+	  */
+	def timesAlpha(alphaMod: Double) = withAlpha(alpha * alphaMod)
 	
 	/**
 	  * Takes a sub-image from this image (meaning only a portion of this image)
@@ -173,7 +203,13 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D,
 	  * @return Whether this image was fully drawn
 	  */
 	def drawWith(drawer: Drawer, position: Point = Point.origin, origin: Point = Point.origin) =
-		drawer.transformed(Transformation.translation(position.toVector - origin).scaled(scaling)).drawImage(source)
+	{
+		val transformed = drawer.transformed(Transformation.translation(position.toVector - origin).scaled(scaling))
+		if (alpha == 1.0)
+			transformed.drawImage(source)
+		else
+			transformed.withAlpha(alpha).drawImage(source)
+	}
 	
 	/**
 	  * @param scaling A scaling modifier applied to the original image
@@ -226,7 +262,7 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D,
 	def mapPixelTable(f: PixelTable => PixelTable) =
 	{
 		val newPixels = f(pixels)
-		Image(newPixels.toBufferedImage, scaling, Lazy(newPixels))
+		Image(newPixels.toBufferedImage, scaling, alpha, Lazy(newPixels))
 	}
 	
 	/**
