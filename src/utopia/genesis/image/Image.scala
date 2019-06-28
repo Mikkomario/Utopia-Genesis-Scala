@@ -225,9 +225,17 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 	
 	/**
 	  * @param newSize The target size for this image
+	  * @param preserveShape Whether image shape should be preserved (default = false) (if dimensions would be shifted
+	  *                      while this is true, uses the smaller available scaling)
 	  * @return A copy of this image scaled to match the target size (dimensions might not be preserved)
 	  */
-	def withSize(newSize: Size) = this * (newSize / size)
+	def withSize(newSize: Size, preserveShape: Boolean = false) =
+	{
+		if (preserveShape)
+			this * ((newSize.width / width) min (newSize.height / height))
+		else
+			this * (newSize / size)
+	}
 	
 	/**
 	  * Scales this image, preserving shape.
@@ -368,6 +376,23 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 			else
 				Image(scaledAsBuffered)
 		}
+	}
+	
+	/**
+	  * Creates a copy of this image where the source data is limited to a certain resolution. The use size and the
+	  * aspect ratio of this image is preserved, however.
+	  * @param maxResolution The maximum resolution allowed for this image
+	  * @return A copy of this image with equal or smaller resolution than that specified
+	  */
+	def withMaxSourceResolution(maxResolution: Size) =
+	{
+		// Preserves shape
+		val scale = (maxResolution.width / width) min (maxResolution.height / height)
+		// Won't ever upscale
+		if (scale < 1)
+			withSourceResolution(size * scale, true)
+		else
+			this
 	}
 }
 

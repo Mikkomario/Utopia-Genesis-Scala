@@ -30,6 +30,21 @@ object Angle
      */
     val down = ofRadians(math.Pi / 2)
     
+    /**
+      * The red color angle when using HSL
+      */
+    val red = ofRadians(0)
+    
+    /**
+      * The green color angle when using HSL
+      */
+    val green = ofRadians(2 * math.Pi / 3)
+    
+    /**
+      * The blue color angle when using HSL
+      */
+    val blue = ofRadians(4 * math.Pi / 3)
+    
     
     // FACTORIES    ------------------------------
     
@@ -79,7 +94,7 @@ class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[An
     
     // IMPLEMENTED  ------------------
     
-    override def compareTo(o: Angle) = (toRadians - o.toRadians).toInt
+    override def compareTo(o: Angle) = ((toRadians - o.toRadians) * 1000).toInt
     
     
     // OPERATORS    ------------------

@@ -46,6 +46,17 @@ Main Features
         - Simple to use with Actor and ActorHandler traits
         - Easy to setup with ActorLoop
 
+    New Color representation
+        - Built-in support for both RGB and HSL color styles
+        - Various color transformations
+        - Implicit conversions between different styles
+        - Alpha support
+
+    Images and image processing
+        - New Image class for immutable image representation
+        - Image transformations for various image-altering operations
+        - Full support for image scaling and resizing simply by using affine transformations at draw time
+
 
 Usage Notes
 -----------
@@ -85,6 +96,8 @@ v2.1  ------------------------------------
         New Image and image transformation classes
 
         Various path funtions, including Bezier curves
+
+        Utility constructors added to Angle for HSL color support
 
 
     Changes & Updates

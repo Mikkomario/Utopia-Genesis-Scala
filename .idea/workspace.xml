@@ -7,8 +7,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a34f54cb-6443-4617-9ea2-d86bc0b4cc7c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/test/utopia/genesis/test/ImageTest.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Utopia-Genesis-Scala.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Utopia-Genesis-Scala.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utopia/genesis/image/Image.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/image/Image.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/image/transform/HueAdjust.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/image/transform/HueAdjust.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/image/transform/Threshold.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/image/transform/Threshold.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/Angle.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/Angle.scala" afterDir="false" />
     </list>
     <ignored path="../Utopia-Inception-Scala/out/" />
     <ignored path="../Utopia-Flow-Scala/out/" />
@@ -24,11 +30,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/Image.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="766">
-              <caret line="333" column="9" lean-forward="true" selection-start-line="333" selection-start-column="9" selection-end-line="333" selection-end-column="9" />
+            <state relative-caret-position="795">
+              <caret line="322" column="8" lean-forward="true" selection-start-line="322" selection-start-column="8" selection-end-line="322" selection-end-column="8" />
               <folding>
                 <element signature="e#30#84#0" expanded="true" />
               </folding>
@@ -37,28 +43,91 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/test/utopia/genesis/test/KeyTest.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1095">
+              <caret line="100" column="17" lean-forward="true" selection-start-line="87" selection-start-column="4" selection-end-line="100" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="700">
+              <caret line="53" column="8" lean-forward="true" selection-start-line="53" selection-start-column="8" selection-end-line="53" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/Threshold.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="5" column="27" selection-start-line="5" selection-start-column="27" selection-end-line="5" selection-end-column="27" />
+            <state relative-caret-position="180">
+              <caret line="9" column="86" selection-start-line="9" selection-start-column="86" selection-end-line="9" selection-end-column="86" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/Sharpen.scala">
+        <entry file="file://$PROJECT_DIR$/test/utopia/genesis/test/ImageTest.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="18" column="4" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
+            <state relative-caret-position="600">
+              <caret line="30" column="4" lean-forward="true" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
+              <folding>
+                <element signature="e#29#55#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/Invert.scala">
+        <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/HueAdjust.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+            <state relative-caret-position="340">
+              <caret line="17" column="4" lean-forward="true" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
+              <folding>
+                <element signature="e#40#73#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/Rotation.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="411">
+              <caret line="58" column="20" selection-start-line="58" selection-start-column="20" selection-end-line="58" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/util/RichComparable.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="271">
+              <caret line="39" column="28" lean-forward="true" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/Angle.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="104" column="7" lean-forward="true" selection-start-line="104" selection-start-column="7" selection-end-line="104" selection-end-column="7" />
+              <folding>
+                <element signature="e#30#81#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/utopia/genesis/color/HSL.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="851">
+              <caret line="60" column="4" lean-forward="true" selection-start-line="60" selection-start-column="4" selection-end-line="60" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -100,9 +169,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/utopia/genesis/image/transform/PixelTransform.scala" />
-        <option value="$PROJECT_DIR$/src/utopia/genesis/image/transform/RGBTransform.scala" />
-        <option value="$PROJECT_DIR$/src/utopia/genesis/image/transform/Threshold.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/image/transform/ConvolveTransform.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/image/transform/Sharpen.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/image/transform/Blur.scala" />
@@ -113,11 +179,8 @@
         <option value="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Point.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Size.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/util/Extensions.scala" />
-        <option value="$PROJECT_DIR$/README.txt" />
         <option value="$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/util/RichComparable.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/shape/RotationDirection.scala" />
-        <option value="$PROJECT_DIR$/src/utopia/genesis/shape/Angle.scala" />
-        <option value="$PROJECT_DIR$/src/utopia/genesis/image/transform/HueAdjust.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/shape/Path.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/util/Scalable.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/util/Combinable.scala" />
@@ -150,14 +213,20 @@
         <option value="$PROJECT_DIR$/src/utopia/genesis/shape/VectorLikeBuilder.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/shape/VectorLike.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/image/transform/IncreaseContrast.scala" />
+        <option value="$PROJECT_DIR$/src/utopia/genesis/util/Drawer.scala" />
         <option value="$PROJECT_DIR$/src/utopia/genesis/image/Image.scala" />
+        <option value="$PROJECT_DIR$/src/utopia/genesis/shape/Angle.scala" />
+        <option value="$PROJECT_DIR$/test/utopia/genesis/test/ImageTest.scala" />
+        <option value="$PROJECT_DIR$/src/utopia/genesis/image/transform/HueAdjust.scala" />
+        <option value="$PROJECT_DIR$/src/utopia/genesis/image/transform/Threshold.scala" />
+        <option value="$PROJECT_DIR$/README.txt" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-11" />
+    <option name="x" value="-12" />
     <option name="width" value="2454" />
-    <option name="height" value="2111" />
+    <option name="height" value="2112" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -212,6 +281,13 @@
               <item name="Utopia-Genesis-Scala" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="genesis" type="462c0819:PsiDirectoryNode" />
+              <item name="color" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Utopia-Genesis-Scala" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Utopia-Genesis-Scala" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="genesis" type="462c0819:PsiDirectoryNode" />
               <item name="image" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -219,7 +295,8 @@
               <item name="Utopia-Genesis-Scala" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="genesis" type="462c0819:PsiDirectoryNode" />
-              <item name="shape" type="462c0819:PsiDirectoryNode" />
+              <item name="image" type="462c0819:PsiDirectoryNode" />
+              <item name="transform" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Utopia-Genesis-Scala" type="b2602c69:ProjectViewProjectNode" />
@@ -227,22 +304,6 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="genesis" type="462c0819:PsiDirectoryNode" />
               <item name="shape" type="462c0819:PsiDirectoryNode" />
-              <item name="path" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Utopia-Genesis-Scala" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Utopia-Genesis-Scala" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="genesis" type="462c0819:PsiDirectoryNode" />
-              <item name="shape" type="462c0819:PsiDirectoryNode" />
-              <item name="shape2D" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Utopia-Genesis-Scala" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Utopia-Genesis-Scala" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="genesis" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Utopia-Genesis-Scala" type="b2602c69:ProjectViewProjectNode" />
@@ -254,13 +315,18 @@
               <item name="Utopia-Genesis-Scala" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Utopia-Genesis-Scala" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Utopia-Genesis-Scala" type="462c0819:PsiDirectoryNode" />
+              <item name="test-images" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -301,7 +367,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.BezierPathTest">
+  <component name="RunManager" selected="Application.ImageTest">
     <configuration name="BasicColorTest" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="utopia.genesis.test.BasicColorTest" />
       <module name="Utopia-Genesis-Scala" />
@@ -354,8 +420,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="DataTypeTest" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="utopia.genesis.test.DataTypeTest" />
+    <configuration name="ImageTest" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="utopia.genesis.test.ImageTest" />
       <module name="Utopia-Genesis-Scala" />
       <extension name="coverage">
         <pattern>
@@ -369,11 +435,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ImageTest" />
         <item itemvalue="Application.BezierPathTest" />
         <item itemvalue="Application.BasicColorTest" />
         <item itemvalue="Application.CameraTest" />
         <item itemvalue="Application.CollisionTest" />
-        <item itemvalue="Application.DataTypeTest" />
       </list>
     </recent_temporary>
   </component>
@@ -595,14 +661,35 @@
       <option name="project" value="LOCAL" />
       <updated>1561479378585</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Added some utility options to Image">
+      <created>1561656213558</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1561656213558</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Made it possible to alter image alpha at draw time">
+      <created>1561657094813</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1561657094813</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Changed drawer color method naming">
+      <created>1561658372687</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1561658372687</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="1636" height="1407" extended-state="0" />
+    <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.33375636" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.21073559" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -612,7 +699,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.208106" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.187841" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -620,7 +707,7 @@
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Messages" order="10" visible="true" weight="0.22509804" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.22369447" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.24990067" />
@@ -633,9 +720,6 @@
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Default parameters added to ThreadPool. Added test for Loops" />
-    <MESSAGE value="ActorLoop fixed" />
-    <MESSAGE value="Testing and fixing" />
     <MESSAGE value="Finished CloseHook" />
     <MESSAGE value="Added an immutable simple implementation of Handleable" />
     <MESSAGE value="Working on tests and building a common trait for Vector, Point, Size..." />
@@ -658,67 +742,16 @@
     <MESSAGE value="Flow: Added some collection extensions&#10;Genesis: Fixed compound bezier paths" />
     <MESSAGE value="Working on path t standardization" />
     <MESSAGE value="Finalizing image for testing and release" />
-    <option name="LAST_COMMIT_MESSAGE" value="Finalizing image for testing and release" />
+    <MESSAGE value="Added some utility options to Image" />
+    <MESSAGE value="Made it possible to alter image alpha at draw time" />
+    <MESSAGE value="Changed drawer color method naming" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changed drawer color method naming" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/PixelTable.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1460">
-          <caret line="73" column="4" lean-forward="true" selection-start-line="73" selection-start-column="4" selection-end-line="73" selection-end-column="4" />
-          <folding>
-            <element signature="e#30#65#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/ConvolveTransform.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="12" column="1" lean-forward="true" selection-start-line="12" selection-start-column="1" selection-end-line="12" selection-end-column="1" />
-          <folding>
-            <element signature="e#39#96#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/util/ApproximatelyEquatable.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="8" column="1" lean-forward="true" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Point.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="603">
-          <caret line="110" column="4" lean-forward="true" selection-start-line="110" selection-start-column="4" selection-end-line="110" selection-end-column="4" />
-          <folding>
-            <element signature="e#38#77#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Size.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="603">
-          <caret line="110" column="23" selection-start-line="110" selection-start-column="23" selection-end-line="110" selection-end-column="23" />
-          <folding>
-            <element signature="e#38#77#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/utopia/genesis/util/Extensions.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="3" column="30" selection-start-line="3" selection-start-column="30" selection-end-line="3" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/util/RichComparable.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
-          <caret line="27" column="3" lean-forward="true" selection-start-line="27" selection-start-column="3" selection-end-line="27" selection-end-column="3" />
         </state>
       </provider>
     </entry>
@@ -729,24 +762,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="93" column="78" selection-start-line="93" selection-start-column="78" selection-end-line="93" selection-end-column="78" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/utopia/genesis/color/Color.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2720">
           <caret line="139" column="34" selection-start-line="139" selection-start-column="34" selection-end-line="139" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/color/HSL.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1780">
-          <caret line="92" column="39" selection-start-line="92" selection-start-column="39" selection-end-line="92" selection-end-column="39" />
         </state>
       </provider>
     </entry>
@@ -805,24 +824,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/Rotation.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="30" column="8" lean-forward="true" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/utopia/genesis/color/RGB.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-191">
           <caret line="156" column="38" selection-start-line="156" selection-start-column="38" selection-end-line="156" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test/utopia/genesis/test/KeyTest.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1380">
-          <caret line="82" column="4" selection-start-line="82" selection-start-column="4" selection-end-line="82" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -837,16 +842,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="320">
           <caret line="93" column="11" lean-forward="true" selection-start-line="93" selection-start-column="11" selection-end-line="93" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/Angle.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="972">
-          <caret line="122" column="4" selection-start-line="122" selection-start-column="4" selection-end-line="122" selection-end-column="4" />
-          <folding>
-            <element signature="e#30#81#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -953,13 +948,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/VectorLikeBuilder.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/VectorLikeBuilder.scala" />
     <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/VectorLike.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="292">
@@ -994,16 +983,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/HueAdjust.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="15" column="1" lean-forward="true" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
-          <folding>
-            <element signature="e#40#73#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/IncreaseContrast.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="40">
@@ -1011,10 +990,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/Invert.scala">
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/util/Drawer.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+        <state relative-caret-position="5440">
+          <caret line="276" column="44" selection-start-line="276" selection-start-column="44" selection-end-line="276" selection-end-column="44" />
         </state>
       </provider>
     </entry>
@@ -1025,20 +1004,109 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/Threshold.scala">
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/Invert.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/utopia/genesis/test/CameraTest.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="100">
-          <caret line="5" column="27" selection-start-line="5" selection-start-column="27" selection-end-line="5" selection-end-column="27" />
+          <caret line="18" column="7" selection-start-line="18" selection-start-column="7" selection-end-line="18" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/utopia/genesis/test/KeyTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1095">
+          <caret line="100" column="17" lean-forward="true" selection-start-line="87" selection-start-column="4" selection-end-line="100" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test-images/mushrooms.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/color/HSL.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="851">
+          <caret line="60" column="4" lean-forward="true" selection-start-line="60" selection-start-column="4" selection-end-line="60" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_144/src.zip!/java/lang/Comparable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="653">
+          <caret line="135" column="15" selection-start-line="135" selection-start-column="15" selection-end-line="135" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Utopia-Flow-Scala/src/utopia/flow/util/RichComparable.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="39" column="28" lean-forward="true" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/Angle.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="104" column="7" lean-forward="true" selection-start-line="104" selection-start-column="7" selection-end-line="104" selection-end-column="7" />
+          <folding>
+            <element signature="e#30#81#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/Rotation.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="411">
+          <caret line="58" column="20" selection-start-line="58" selection-start-column="20" selection-end-line="58" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/utopia/genesis/test/ImageTest.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="30" column="4" lean-forward="true" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
+          <folding>
+            <element signature="e#29#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/HueAdjust.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="17" column="4" lean-forward="true" selection-start-line="17" selection-start-column="4" selection-end-line="17" selection-end-column="4" />
+          <folding>
+            <element signature="e#40#73#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/Image.scala">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="766">
-          <caret line="333" column="9" lean-forward="true" selection-start-line="333" selection-start-column="9" selection-end-line="333" selection-end-column="9" />
+        <state relative-caret-position="795">
+          <caret line="322" column="8" lean-forward="true" selection-start-line="322" selection-start-column="8" selection-end-line="322" selection-end-column="8" />
           <folding>
             <element signature="e#30#84#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utopia/genesis/image/transform/Threshold.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="9" column="86" selection-start-line="9" selection-start-column="86" selection-end-line="9" selection-end-column="86" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="700">
+          <caret line="53" column="8" lean-forward="true" selection-start-line="53" selection-start-column="8" selection-end-line="53" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -1053,7 +1121,6 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
-                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>

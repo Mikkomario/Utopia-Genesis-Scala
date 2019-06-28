@@ -7,5 +7,5 @@ package utopia.genesis.image.transform
   */
 case class Threshold(colorAmount: Int) extends RGBTransform
 {
-	override def apply(originalRatio: Double) = (originalRatio * colorAmount).toInt / colorAmount
+	override def apply(originalRatio: Double) = (originalRatio * colorAmount).round / colorAmount.toDouble
 }
