@@ -21,7 +21,7 @@ object ImageTest extends App
 {
 	// Generates the images
 	val original = Image.readFrom(Paths.get("test-images/mushrooms.png")).get
-		.withMaxSourceResolution(Size(128, 128)).withSize(Size(96, 96), true)
+		.withMaxSourceResolution(Size(128, 128)).withSize(Size(96, 96))
 	val leftPartBounds = Bounds(Point.origin, Size(57, 96))
 	val leftHalf = original.subImage(leftPartBounds)
 	val partiallyMapped = original.mapArea(leftPartBounds) { _ + Rotation.ofDegrees(90) }
@@ -41,7 +41,9 @@ object ImageTest extends App
 		new ImageDrawer(original.blurred(), Point(50, 150)),
 		new ImageDrawer(original.sharpened(), Point(150, 150)),
 		new ImageDrawer(original.withAdjustedHue(Angle.red, Angle.ofDegrees(90), Angle.blue), Point(250, 150)),
-		new ImageDrawer(original.withThreshold(3), Point(350, 150)))
+		new ImageDrawer(original.withThreshold(3), Point(350, 150)),
+		new ImageDrawer(original * 2, Point(450, 150))
+	)
 	
 	// Starts the program
 	implicit val context: ExecutionContext = new ThreadPool("Test").executionContext

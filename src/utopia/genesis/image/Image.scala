@@ -225,11 +225,11 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 	
 	/**
 	  * @param newSize The target size for this image
-	  * @param preserveShape Whether image shape should be preserved (default = false) (if dimensions would be shifted
+	  * @param preserveShape Whether image shape should be preserved (default = true) (if dimensions would be shifted
 	  *                      while this is true, uses the smaller available scaling)
 	  * @return A copy of this image scaled to match the target size (dimensions might not be preserved)
 	  */
-	def withSize(newSize: Size, preserveShape: Boolean = false) =
+	def withSize(newSize: Size, preserveShape: Boolean = true) =
 	{
 		if (preserveShape)
 			this * ((newSize.width / width) min (newSize.height / height))
