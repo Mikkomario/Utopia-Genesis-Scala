@@ -123,7 +123,7 @@ object GenesisValueCaster extends ValueCaster
             case VectorType => Some(Vector3D(value(0).doubleOr(), value(1).doubleOr(), value(2).doubleOr()))
             case PointType => Some(value.pointOr().toVector)
             case SizeType => Some(value.sizeOr().toVector)
-            case ModelType => Vector3D(value.modelOr())
+            case ModelType => Vector3D(value.modelOr()).toOption
             case LineType => Some(value.lineOr().vector)
             case _ => None
         }
@@ -136,7 +136,7 @@ object GenesisValueCaster extends ValueCaster
             case VectorType => Some(Point(value(0).doubleOr(), value(1).doubleOr()))
             case Vector3DType => Some(value.vector3DOr().toPoint)
             case SizeType => Some(value.sizeOr().toPoint)
-            case ModelType => Point(value.modelOr())
+            case ModelType => Point(value.modelOr()).toOption
             case _ => None
         }
     }
@@ -148,7 +148,7 @@ object GenesisValueCaster extends ValueCaster
             case VectorType => Some(Size(value(0).doubleOr(), value(1).doubleOr()))
             case Vector3DType => Some(value.vector3DOr().toSize)
             case PointType => Some(value.pointOr().toSize)
-            case ModelType => Size(value.modelOr())
+            case ModelType => Size(value.modelOr()).toOption
             case _ => None
         }
     }
@@ -159,14 +159,14 @@ object GenesisValueCaster extends ValueCaster
         {
             case BoundsType => Some(value.boundsOr().diagonal)
             case VectorType => Some(Line(value(0).pointOr(), value(1).pointOr()))
-            case ModelType => Line(value.modelOr())
+            case ModelType => Line(value.modelOr()).toOption
             case _ => None
         }
     }
     
     private def circleOf(value: Value): Option[Circle] = 
     {
-        if (value.dataType isOfType ModelType) Circle(value.modelOr()) else None
+        if (value.dataType isOfType ModelType) Circle(value.modelOr()).toOption else None
     }
     
     private def boundsOf(value: Value): Option[Bounds] = 
@@ -174,13 +174,13 @@ object GenesisValueCaster extends ValueCaster
         value.dataType match 
         {
             case LineType => Some(Bounds.aroundDiagonal(value.lineOr()))
-            case ModelType => Bounds(value.modelOr())
+            case ModelType => Bounds(value.modelOr()).toOption
             case _ => None
         }
     }
     
     private def transformationOf(value: Value): Option[Transformation] = 
     {
-        if (value.dataType isOfType ModelType) Transformation(value.modelOr()) else None
+        if (value.dataType isOfType ModelType) Transformation(value.modelOr()).toOption else None
     }
 }

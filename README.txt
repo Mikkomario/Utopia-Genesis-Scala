@@ -113,6 +113,8 @@ v2.1  ------------------------------------
 
         Unnecessary type parameter removed from ApproximatelyEquatable methods
 
+        Fixed errors from Flow changes
+
 
 v2  ----------------------------------------
 

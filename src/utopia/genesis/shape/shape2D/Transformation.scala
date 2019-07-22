@@ -14,6 +14,8 @@ import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
 import utopia.genesis.shape.{Rotation, Vector3D, VectorLike}
 
+import scala.util.Success
+
 object Transformation extends FromModelFactory[Transformation]
 {
     // ATTRIBUTES    -----------------
@@ -26,9 +28,9 @@ object Transformation extends FromModelFactory[Transformation]
     
     // OPERATORS    -----------------
     
-    override def apply(model: template.Model[Property]) = Some(Transformation(
-            model("translation").vector3DOr(), model("scaling").vector3DOr(Vector3D.identity), 
-            Rotation(model("rotation").doubleOr()), model("shear").vector3DOr()))
+    override def apply(model: template.Model[Property]) = Success(Transformation(
+            model("translation").getVector3D, model("scaling").vector3DOr(Vector3D.identity),
+            Rotation(model("rotation").getDouble), model("shear").getVector3D))
     
     
     // OTHER METHODS    --------------

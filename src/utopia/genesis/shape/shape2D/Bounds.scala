@@ -15,6 +15,8 @@ import utopia.genesis.generic.GenesisValue._
 import utopia.genesis.shape.{Vector3D, VectorLike}
 import utopia.genesis.shape.Axis._
 
+import scala.util.Success
+
 object Bounds extends FromModelFactory[Bounds]
 {
     // ATTRIBUTES    ----------------------
@@ -27,8 +29,7 @@ object Bounds extends FromModelFactory[Bounds]
     
     // OPERATORS    -----------------------
     
-    override def apply(model: template.Model[Property]) = Some(
-            Bounds(model("position").pointOr(), model("size").sizeOr()))
+    override def apply(model: template.Model[Property]) = Success(Bounds(model("position").getPoint, model("size").getSize))
     
     
     // OTHER METHODS    -------------------

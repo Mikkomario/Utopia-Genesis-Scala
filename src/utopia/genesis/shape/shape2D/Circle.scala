@@ -13,13 +13,13 @@ import utopia.flow.generic.FromModelFactory
 import utopia.genesis.generic.GenesisValue._
 import utopia.flow.datastructure.template
 import utopia.flow.datastructure.template.Property
-import utopia.genesis.shape.path.Path
-import utopia.genesis.shape.{Angle, RotationDirection, Vector3D}
+import utopia.genesis.shape.{Angle, Vector3D}
+
+import scala.util.Success
 
 object Circle extends FromModelFactory[Circle]
 {
-    override def apply(model: template.Model[Property]) = Some(Circle(model("origin").pointOr(), 
-            model("radius").doubleOr()))
+    override def apply(model: template.Model[Property]) = Success(Circle(model("origin").getPoint, model("radius").getDouble))
 }
 
 /**

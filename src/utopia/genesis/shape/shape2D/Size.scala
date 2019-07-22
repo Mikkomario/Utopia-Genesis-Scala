@@ -18,6 +18,8 @@ import utopia.genesis.shape.{Axis2D, Vector3D, VectorLike}
 import utopia.genesis.shape.Axis._
 import java.awt.Insets
 
+import scala.util.Success
+
 object Size extends FromModelFactory[Size]
 {
     /**
@@ -25,8 +27,8 @@ object Size extends FromModelFactory[Size]
      */
     val zero = Size(0, 0)
     
-    def apply(model: utopia.flow.datastructure.template.Model[Property]) = Some(
-            Size(model("width").doubleOr(), model("height").doubleOr()))
+    def apply(model: utopia.flow.datastructure.template.Model[Property]) = Success(
+            Size(model("width").getDouble, model("height").getDouble))
     
     /**
       * Creates a new size

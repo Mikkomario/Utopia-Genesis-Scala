@@ -17,6 +17,8 @@ import utopia.genesis.util.ApproximatelyEquatable
 import utopia.genesis.shape.shape2D.Point
 import utopia.genesis.shape.shape2D.Size
 
+import scala.util.Success
+
 object Vector3D extends FromModelFactory[Vector3D]
 {
     // ATTRIBUTES    --------------------
@@ -37,8 +39,8 @@ object Vector3D extends FromModelFactory[Vector3D]
     
     // OPERATORS    ---------------------
     
-    override def apply(model: datastructure.template.Model[Property]) = Some(Vector3D(
-            model("x").doubleOr(), model("y").doubleOr(), model("z").doubleOr()))
+    override def apply(model: datastructure.template.Model[Property]) = Success(Vector3D(
+            model("x").getDouble, model("y").getDouble, model("z").getDouble))
     
     
     // OTHER METHODS    -----------------

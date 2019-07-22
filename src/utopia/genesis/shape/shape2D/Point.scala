@@ -16,12 +16,14 @@ import utopia.genesis.util.ApproximatelyEquatable
 import utopia.genesis.shape.{Axis, Axis2D, Vector3D, VectorLike}
 import utopia.genesis.shape.Axis._
 
+import scala.util.Success
+
 object Point extends FromModelFactory[Point]
 {
     val origin = Point(0, 0)
     
-    def apply(model: utopia.flow.datastructure.template.Model[Property]) = Some(
-            Point(model("x").doubleOr(), model("y").doubleOr()))
+    def apply(model: utopia.flow.datastructure.template.Model[Property]) = Success(
+            Point(model("x").getDouble, model("y").getDouble))
 	
 	/**
 	  * @param l Position length-wise

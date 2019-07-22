@@ -17,6 +17,8 @@ import utopia.genesis.shape.Vector3D
 import utopia.genesis.generic.LineType
 import utopia.genesis.shape.path.LinearPathLike
 
+import scala.util.Success
+
 object Line extends FromModelFactory[Line]
 {
     // ATTRIBUTES   -------------------------
@@ -29,7 +31,7 @@ object Line extends FromModelFactory[Line]
     
     // OPERATORS    -------------------------
     
-    override def apply(model: template.Model[Property]) = Some(Line(model("start").pointOr(), model("end").pointOr()))
+    override def apply(model: template.Model[Property]) = Success(Line(model("start").getPoint, model("end").getPoint))
     
     
     // OTHER METHODS    ---------------------
