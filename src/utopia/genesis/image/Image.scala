@@ -122,6 +122,11 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 		withSourceResolution(size min sourceResolution, true)
 	
 	
+	// IMPLEMENTED	----------------
+	
+	override def toString = s"Image ($size ${(alpha * 100).toInt}% Alpha)"
+	
+	
 	// OPERATORS	----------------
 	
 	/**
