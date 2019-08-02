@@ -116,6 +116,12 @@ v2.1  ------------------------------------
         Fixed errors from Flow changes
 
 
+    Fixes
+    -----
+
+        Mouse event coordinates were incorrect in dialogs (windows with parent components). Now fixed.
+
+
 v2  ----------------------------------------
 
     New Features

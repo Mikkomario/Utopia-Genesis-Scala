@@ -68,12 +68,18 @@ class MouseEventGenerator(c: Component, val moveHandler: MouseMoveListener,
     
     // OTHER METHODS    --------------
     
+    @scala.annotation.tailrec
     private def pointInPanel(point: Point, panel: Component): Point =
     {
         val relativePoint = point - (Point of panel.getLocation)
-        val parent = panel.getParent
         
-        if (parent == null) relativePoint else pointInPanel(relativePoint, parent)
+        panel match
+        {
+            case w: java.awt.Window => relativePoint
+            case _ =>
+                val parent = panel.getParent
+                if (parent == null) relativePoint else pointInPanel(relativePoint, parent)
+        }
     }
     
     
