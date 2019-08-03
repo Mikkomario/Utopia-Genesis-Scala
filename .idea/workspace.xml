@@ -9,16 +9,6 @@
     <list default="true" id="a34f54cb-6443-4617-9ea2-d86bc0b4cc7c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../Utopia-Flow-Scala/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Utopia-Flow-Scala/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/generic/GenesisValueCaster.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/generic/GenesisValueCaster.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/Vector3D.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/Vector3D.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Bounds.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Bounds.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Circle.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Circle.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Line.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Line.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Point.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Point.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Rectangle.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Rectangle.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Size.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Size.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Transformation.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/shape2D/Transformation.scala" afterDir="false" />
     </list>
     <ignored path="../Utopia-Inception-Scala/out/" />
     <ignored path="../Utopia-Flow-Scala/out/" />
@@ -236,7 +226,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-12" />
     <option name="width" value="2454" />
     <option name="height" value="2112" />
@@ -624,11 +614,18 @@
       <option name="project" value="LOCAL" />
       <updated>1561745395107</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Fixed errors caused by Flow changes">
+      <created>1563812845347</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1563812845347</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="2575" height="1415" extended-state="6" />
+    <frame x="-7" y="-7" width="2575" height="1415" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16063619" />
@@ -662,7 +659,6 @@
     </layout>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added an immutable simple implementation of Handleable" />
     <MESSAGE value="Working on tests and building a common trait for Vector, Point, Size..." />
     <MESSAGE value="Added some new methods to seqs (getOrElse &amp; getOption)&#10;&#10;through collection extensions" />
     <MESSAGE value="Fixed an issue with Handlers only accepting mutable or immutable instances" />
@@ -687,7 +683,8 @@
     <MESSAGE value="Made it possible to alter image alpha at draw time" />
     <MESSAGE value="Changed drawer color method naming" />
     <MESSAGE value="Tested and fixed images and image transformations" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tested and fixed images and image transformations" />
+    <MESSAGE value="Fixed errors caused by Flow changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed errors caused by Flow changes" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/utopia/genesis/shape/CubicBezier.scala" />
