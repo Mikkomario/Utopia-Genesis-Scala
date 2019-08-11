@@ -1,5 +1,6 @@
 package utopia.genesis.image
 
+import utopia.genesis.animation.Animation
 import utopia.genesis.shape.shape2D.Size
 
 /**
@@ -7,7 +8,7 @@ import utopia.genesis.shape.shape2D.Size
   * @author Mikko Hilpinen
   * @since 15.6.2019, v2.1+
   */
-case class Strip(images: Vector[Image])
+case class Strip(images: Vector[Image]) extends Animation[Image]
 {
 	// ATTRIBUTES	-------------------
 	
@@ -36,6 +37,11 @@ case class Strip(images: Vector[Image])
 	  * @return A copy of this strip where the order of images is reversed
 	  */
 	def reverse = Strip(images.reverse)
+	
+	
+	// IMPLEMENTED	-------------------
+	
+	override def apply(progress: Double): Image = apply((length * progress).toInt)
 	
 	
 	// OPERATORS	-------------------

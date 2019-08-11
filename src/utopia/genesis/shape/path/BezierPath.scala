@@ -18,7 +18,7 @@ object BezierPath
 	  * @return A bezier path between paths
 	  * @throws IllegalArgumentException If points is empty
 	  */
-	def apply[P <: Arithmetic[P, P]](points: Vector[P], sequencesPerPart: Int = 6) =
+	def apply[P <: Arithmetic[P, P]](points: Seq[P], sequencesPerPart: Int = 6) =
 	{
 		if (points.isEmpty)
 			throw new IllegalArgumentException("Bezier path must be initialized with at least 1 point")

@@ -1,16 +1,20 @@
 package utopia.genesis.util
 
+import scala.language.implicitConversions
+
 object Arithmetic
 {
-	implicit class ArithMeticDouble(val d: Double) extends Arithmetic[Double, Double]
+	implicit def arithmeticDoubleBack(d: ArithMeticDouble) = d.d
+	
+	implicit class ArithMeticDouble(val d: Double) extends Arithmetic[ArithMeticDouble, ArithMeticDouble]
 	{
-		override def -(another: Double) = d - another
+		override def -(another: ArithMeticDouble) = d - another
 		
 		override def *(mod: Double) = d * mod
 		
-		override def +(another: Double) = d + another
+		override def +(another: ArithMeticDouble) = d + another
 		
-		override def distanceFrom(another: Double) = d - another
+		override def distanceFrom(another: ArithMeticDouble) = d - another
 	}
 }
 

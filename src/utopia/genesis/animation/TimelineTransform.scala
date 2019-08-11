@@ -7,8 +7,8 @@ import scala.concurrent.duration.{Duration, FiniteDuration}
   * @author Mikko Hilpinen
   * @since 11.8.2019, v2.1+
   */
-case class Timeline[-Origin, +Reflection](events: Seq[(Animation[Origin, Reflection, _], FiniteDuration)],
-										  delay: FiniteDuration = Duration.Zero)
+case class TimelineTransform[-Origin, +Reflection](events: Seq[(AnimatedTransform[Origin, Reflection], FiniteDuration)],
+												   delay: FiniteDuration = Duration.Zero)
 {
 	// ATTRIBUTES	----------------------
 	
@@ -38,9 +38,7 @@ case class Timeline[-Origin, +Reflection](events: Seq[(Animation[Origin, Reflect
 	{
 		if (events.isEmpty)
 			None
-		else if (passedTime < delay)
-			None
-		else
+		else if (contains(passedTime))
 		{
 			// Finds the current event and uses that to transform the original item
 			var timeLeft = passedTime - delay
@@ -55,7 +53,16 @@ case class Timeline[-Origin, +Reflection](events: Seq[(Animation[Origin, Reflect
 				
 			}.map { case (event, duration) => event(original, timeLeft / duration) }
 		}
+		else
+			None
 	}
+	
+	/**
+	  * Whether this timeline is active during the specified timestamp
+	  * @param timestamp A timestamp
+	  * @return Whether this timeline is active at the time
+	  */
+	def contains(timestamp: Duration) = timestamp > delay && timestamp <= duration
 	
 	/**
 	  * @param newDelay New delay for this timeline

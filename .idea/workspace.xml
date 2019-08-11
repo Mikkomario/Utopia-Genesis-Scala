@@ -7,13 +7,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a34f54cb-6443-4617-9ea2-d86bc0b4cc7c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/Animation.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/Story.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/Timeline.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/AnimatedTransform.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/CachedInterpolatedAnimation.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/CurvedAnimation.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/InterpolatedAnimation.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/StoryTransform.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/animation/Animation.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/Animation.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/animation/Story.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/animation/Timeline.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/TimelineTransform.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/image/Strip.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/image/Strip.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/path/BezierPath.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/path/BezierPath.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/path/Path.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/path/Path.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/util/Arithmetic.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/util/Arithmetic.scala" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -61,21 +67,21 @@
     <property name="settings.editor.selected.configurable" value="Scala Compiler" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Mikko\IdeaProjects\Utopia-Genesis-Scala\test" />
-    </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="utopia.genesis.shape.path" />
       <recent name="utopia.genesis.image.filter" />
       <recent name="utopia.genesis.handling" />
       <recent name="utopia.genesis.handling.mutable" />
     </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Mikko\IdeaProjects\Utopia-Genesis-Scala\src\utopia\genesis\handling" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="utopia.genesis.handling.mutable" />
       <recent name="utopia.genesis.handling.immutable" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Mikko\IdeaProjects\Utopia-Genesis-Scala\src\utopia\genesis\handling" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Mikko\IdeaProjects\Utopia-Genesis-Scala\test" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -419,7 +425,13 @@
       <option name="project" value="LOCAL" />
       <updated>1563812845347</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL−00036" summary="Working on animation classes">
+      <created>1565533645770</created>
+      <option name="number" value="LOCAL−00036" />
+      <option name="presentableId" value="LOCAL−00036" />
+      <updated>1565533645770</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -427,14 +439,15 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Working on tests and building a common trait for Vector, Point, Size..." />
     <MESSAGE value="Added some new methods to seqs (getOrElse &amp; getOption)&#10;&#10;through collection extensions" />
     <MESSAGE value="Fixed an issue with Handlers only accepting mutable or immutable instances" />
     <MESSAGE value="Added VectorLike trait and fixed errors" />
@@ -459,7 +472,8 @@
     <MESSAGE value="Changed drawer color method naming" />
     <MESSAGE value="Tested and fixed images and image transformations" />
     <MESSAGE value="Fixed errors caused by Flow changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed errors caused by Flow changes" />
+    <MESSAGE value="Working on animation classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Working on animation classes" />
   </component>
   <component name="masterDetails">
     <states>
