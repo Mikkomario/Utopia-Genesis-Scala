@@ -44,4 +44,16 @@ trait Path[+P] extends Animation[P]
 	  * @return A path that starts with this path and continues with the another
 	  */
 	def +[B >: P](another: Path[B]) = CompoundPath(Vector(this, another))
+	
+	
+	// OTHER	-----------------
+	
+	/**
+	  * Maps the values of this path
+	  * @param f A mapping function
+	  * @tparam A Type of map function input
+	  * @tparam B Type of map function output
+	  * @return A mapped version of this path
+	  */
+	def map[A >: P, B](f: A => B) = MappedPath[A, B](this, f)
 }

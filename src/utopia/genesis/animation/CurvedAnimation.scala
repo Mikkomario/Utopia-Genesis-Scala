@@ -2,6 +2,7 @@ package utopia.genesis.animation
 
 import utopia.genesis.util.Arithmetic._
 import utopia.genesis.shape.path.{BezierPath, CubicBezier, Path}
+import utopia.genesis.shape.shape2D.Point
 
 object CurvedAnimation
 {
@@ -19,12 +20,13 @@ object CurvedAnimation
 	/**
 	  * Creates a curved animation that traverses through the specified points
 	  * @param original Original animation
-	  * @param path Points along which the curve will traverse (generally you want points between 0 and 1)
+	  * @param path Points along which the curve will traverse (generally you want points between (0,0) and (1,1)).
+	  *             The y-axis represents mapped progress.
 	  * @tparam A Type of animation result
 	  * @return A new curved animation
 	  */
-	def apply[A](original: Animation[A], path: Seq[Double]) = new CurvedAnimation(original,
-		BezierPath(path.map { d => d: ArithMeticDouble }))
+	def apply[A](original: Animation[A], path: Seq[Point]) = new CurvedAnimation(original,
+		BezierPath[Point](path).map { p: Point => p.y })
 }
 
 /**

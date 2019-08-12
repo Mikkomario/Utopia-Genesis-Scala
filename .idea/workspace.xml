@@ -7,19 +7,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a34f54cb-6443-4617-9ea2-d86bc0b4cc7c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/AnimatedTransform.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/CachedInterpolatedAnimation.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/CurvedAnimation.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/InterpolatedAnimation.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/StoryTransform.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/path/MappedPath.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/animation/Animation.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/Animation.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/animation/Story.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/animation/Timeline.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/TimelineTransform.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/image/Strip.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/image/Strip.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/path/BezierPath.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/path/BezierPath.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/animation/CurvedAnimation.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/CurvedAnimation.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/path/Path.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/path/Path.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/util/Arithmetic.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/util/Arithmetic.scala" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -431,7 +422,13 @@
       <option name="presentableId" value="LOCAL−00036" />
       <updated>1565533645770</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL−00037" summary="Working on animation classes">
+      <created>1565556474161</created>
+      <option name="number" value="LOCAL−00037" />
+      <option name="presentableId" value="LOCAL−00037" />
+      <updated>1565556474161</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
