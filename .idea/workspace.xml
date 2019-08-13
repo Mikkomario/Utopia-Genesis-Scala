@@ -7,10 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a34f54cb-6443-4617-9ea2-d86bc0b4cc7c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/path/MappedPath.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/TimedAnimation.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/animation/CurvedAnimation.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/CurvedAnimation.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/path/Path.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/path/Path.scala" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -428,7 +426,13 @@
       <option name="presentableId" value="LOCAL−00037" />
       <updated>1565556474161</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL−00038" summary="Working on animation classes">
+      <created>1565632332877</created>
+      <option name="number" value="LOCAL−00038" />
+      <option name="presentableId" value="LOCAL−00038" />
+      <updated>1565632332877</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
