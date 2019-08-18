@@ -11,6 +11,7 @@ import utopia.genesis.handling.ActorLoop
 import utopia.genesis.handling.mutable
 
 import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.FiniteDuration
 
 object ActorTest extends App
 {
@@ -18,7 +19,7 @@ object ActorTest extends App
     {
         var timeCounted = Duration.ZERO
         def millisCounted = timeCounted.toMillis
-        override def act(duration: Duration) =
+        override def act(duration: FiniteDuration) =
         {
             timeCounted += duration
             // println(timeCounted.toMillis)

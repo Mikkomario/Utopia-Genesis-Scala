@@ -13,7 +13,7 @@ object FPS
 }
 
 /**
-  * APS represents actions per second
+  * Represents frames per second
   * @author Mikko Hilpinen
   * @since 15.4.2019, v2+
   * @param fps The frames / actions per second value of this FPS

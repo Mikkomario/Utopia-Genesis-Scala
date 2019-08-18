@@ -103,6 +103,8 @@ v2.1  ------------------------------------
     Changes & Updates
     -----------------
 
+        java.time.Duration replaced with scala.concurrent.FiniteDuration in Actor, MouseMoveListener and MouseEvent
+
         MouseButtonStateListeners and MouseWheelListeners now return a boolean that determines whether the event
         will be consumed or not
 

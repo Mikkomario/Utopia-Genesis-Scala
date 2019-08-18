@@ -1,11 +1,12 @@
 package utopia.genesis.event
 
 import utopia.flow.util.TimeExtensions._
-
 import utopia.inception.util.Filter
 import utopia.genesis.shape.shape2D.Point
-import java.time.Duration
+
 import utopia.genesis.shape.shape2D.Area2D
+
+import scala.concurrent.duration.FiniteDuration
 
 object MouseMoveEvent
 {
@@ -42,7 +43,7 @@ object MouseMoveEvent
  * @since 10.1.2017
  */
 case class MouseMoveEvent(mousePosition: Point, previousMousePosition: Point, buttonStatus: MouseButtonStatus,
-                          duration: Duration) extends MouseEvent
+                          duration: FiniteDuration) extends MouseEvent
 {
     // COMPUTED PROPERTIES    -----------
     

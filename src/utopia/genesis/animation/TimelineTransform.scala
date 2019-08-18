@@ -7,15 +7,16 @@ import scala.concurrent.duration.{Duration, FiniteDuration}
   * @author Mikko Hilpinen
   * @since 11.8.2019, v2.1+
   */
-case class TimelineTransform[-Origin, +Reflection](events: Seq[(AnimatedTransform[Origin, Reflection], FiniteDuration)],
+case class TimelineTransform[-Origin, +Reflection](events: Seq[TimedTransform[Origin, Reflection]],
 												   delay: FiniteDuration = Duration.Zero)
+	extends TimedTransform[Origin, Option[Reflection]]
 {
 	// ATTRIBUTES	----------------------
 	
 	/**
 	  * The duration of the active portion of this timeline
 	  */
-	lazy val activeDuration = events.foldLeft(Duration.Zero) { (total, event) => total + event._2 }
+	lazy val activeDuration = events.foldLeft[Duration](Duration.Zero) { (total, event) => total + event.duration }
 	
 	
 	// COMPUTED	--------------------------
@@ -28,13 +29,15 @@ case class TimelineTransform[-Origin, +Reflection](events: Seq[(AnimatedTransfor
 	
 	// OTHER	--------------------------
 	
+	override def apply(original: Origin, progress: Double): Option[Reflection] = apply(original, duration * progress)
+	
 	/**
 	  * Transforms an item based on the amount of passed time
 	  * @param original Original item
 	  * @param passedTime Amount of passed time
 	  * @return Transformed item. None if there is no active transformation for the specified time
 	  */
-	def apply(original: Origin, passedTime: Duration) =
+	override def apply(original: Origin, passedTime: Duration) =
 	{
 		if (events.isEmpty)
 			None
@@ -42,16 +45,16 @@ case class TimelineTransform[-Origin, +Reflection](events: Seq[(AnimatedTransfor
 		{
 			// Finds the current event and uses that to transform the original item
 			var timeLeft = passedTime - delay
-			events.find { case (_, duration) =>
-				if (timeLeft <= duration)
+			events.find { event =>
+				if (timeLeft <= event.duration)
 					true
 				else
 				{
-					timeLeft -= duration
+					timeLeft -= event.duration
 					false
 				}
 				
-			}.map { case (event, duration) => event(original, timeLeft / duration) }
+			}.map { event => event(original, timeLeft / event.duration) }
 		}
 		else
 			None

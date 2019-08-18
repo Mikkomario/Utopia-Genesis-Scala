@@ -1,7 +1,5 @@
 package utopia.genesis.test
 
-import java.time.Duration
-
 import utopia.flow.util.CollectionExtensions._
 import utopia.flow.util.TimeExtensions._
 import utopia.flow.async.ThreadPool
@@ -13,6 +11,7 @@ import utopia.genesis.util.{DefaultSetup, Drawer}
 import utopia.inception.handling.immutable.Handleable
 
 import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.FiniteDuration
 
 /**
   * Visual test for bezier paths
@@ -74,7 +73,7 @@ private class MovingObject(val path: Path[Point], val color: Color) extends Draw
 	
 	override def draw(drawer: Drawer) = drawer.withColor(color, Color.black).draw(Circle(position, 16))
 	
-	override def act(duration: Duration) =
+	override def act(duration: FiniteDuration) =
 	{
 		t = (t + duration.toPreciseSeconds / 5) % 1
 		position = path(t)

@@ -9,7 +9,7 @@ import scala.concurrent.duration.Duration
   * @author Mikko Hilpinen
   * @since 11.8.2019, v2.1+
   */
-case class StoryTransform[A](timelines: Seq[TimelineTransform[A, A]]) extends AnimatedTransform[A, A]
+case class StoryTransform[A](timelines: Seq[TimelineTransform[A, A]]) extends TimedTransform[A, A]
 {
 	// ATTRIBUTES	--------------------
 	
@@ -25,6 +25,8 @@ case class StoryTransform[A](timelines: Seq[TimelineTransform[A, A]]) extends An
 	
 	// IMPLEMENTED	--------------------
 	
+	override def duration = end
+	
 	override def apply(original: A, progress: Double): A = apply(original, start + (end - start) * progress)
 	
 	
@@ -36,6 +38,6 @@ case class StoryTransform[A](timelines: Seq[TimelineTransform[A, A]]) extends An
 	  * @param passedTime A timestamp inside or outside this story
 	  * @return Transformed version of the item, based on active timeline(s)
 	  */
-	def apply(original: A, passedTime: Duration) = timelines.foldLeft(original) { (current, timeline) =>
+	override def apply(original: A, passedTime: Duration) = timelines.foldLeft(original) { (current, timeline) =>
 		timeline(current, passedTime) getOrElse current }
 }

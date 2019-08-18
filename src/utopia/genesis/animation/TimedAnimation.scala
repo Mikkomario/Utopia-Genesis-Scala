@@ -4,14 +4,14 @@ import scala.concurrent.duration.{Duration, FiniteDuration}
 
 object TimedAnimation
 {
-	/**
+	/*
 	  * Wraps an animation by giving it duration
 	  * @param animation An animation
 	  * @param duration Targeted animation duration
 	  * @tparam A Type of animation result
 	  * @return A new timed animation
 	  */
-	def wrap[A](animation: Animation[A], duration: Duration) = TimedAnimationWrapper(animation, duration)
+	// def wrap[A](animation: Animation[A], duration: Duration) = TimedAnimationWrapper(animation, duration)
 }
 
 /**
@@ -19,6 +19,7 @@ object TimedAnimation
   * @author Mikko Hilpinen
   * @since 13.8.2019, v2.1+
   */
+@deprecated("This trait will likely be removed and replaced with transform and/or animator", "v2.1")
 trait TimedAnimation[+A, +Repr] extends Animation[A]
 {
 	// ABSTRACT	----------------------
@@ -50,10 +51,11 @@ trait TimedAnimation[+A, +Repr] extends Animation[A]
 	def timesSpeed(multiplier: Double) = withDuration(duration / multiplier)
 }
 
+/*
 case class TimedAnimationWrapper[+A](animation: Animation[A], duration: Duration) extends
 	TimedAnimation[A, TimedAnimationWrapper[A]]
 {
 	override def withDuration(newDuration: Duration) = TimedAnimationWrapper(animation, newDuration)
 	
 	override def apply(progress: Double) = animation(progress)
-}
+}*/

@@ -7,8 +7,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a34f54cb-6443-4617-9ea2-d86bc0b4cc7c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/TimedAnimation.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/Animator.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/SpriteAnimator.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/TimedTransform.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.txt" beforeDir="false" afterPath="$PROJECT_DIR$/README.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/animation/StoryTransform.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/StoryTransform.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/animation/TimedAnimation.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/TimedAnimation.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/animation/TimelineTransform.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/animation/TimelineTransform.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/event/MouseMoveEvent.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/event/MouseMoveEvent.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/handling/Actor.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/handling/Actor.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/handling/ActorHandler.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/handling/ActorHandler.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/handling/MouseOverListener.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/handling/MouseOverListener.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/util/FPS.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/util/FPS.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/view/MouseEventGenerator.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/view/MouseEventGenerator.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/utopia/genesis/test/ActorTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/ActorTest.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/utopia/genesis/test/BezierPathTest.scala" beforeDir="false" afterPath="$PROJECT_DIR$/test/utopia/genesis/test/BezierPathTest.scala" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -432,7 +446,13 @@
       <option name="presentableId" value="LOCAL−00038" />
       <updated>1565632332877</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL−00039" summary="Working on animation classes">
+      <created>1565713629731</created>
+      <option name="number" value="LOCAL−00039" />
+      <option name="presentableId" value="LOCAL−00039" />
+      <updated>1565713629732</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

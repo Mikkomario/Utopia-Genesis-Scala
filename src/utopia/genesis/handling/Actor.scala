@@ -1,8 +1,8 @@
 package utopia.genesis.handling
 
-import java.time.Duration
-
 import utopia.inception.handling.Handleable
+
+import scala.concurrent.duration.FiniteDuration
 
 /**
  * Actors are instances that are called between certain intervals to perform some logical,
@@ -20,7 +20,7 @@ trait Actor extends Handleable
      * state allows it.
      * @param duration The duration since the last act
      */
-    def act(duration: Duration)
+    def act(duration: FiniteDuration)
     
     
     // COMPUTED ------------------

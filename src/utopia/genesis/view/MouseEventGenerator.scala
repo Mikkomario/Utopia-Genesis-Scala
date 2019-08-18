@@ -2,13 +2,13 @@ package utopia.genesis.view
 
 import java.awt.{Component, MouseInfo}
 import java.awt.event.{MouseEvent, MouseListener, MouseWheelListener}
-import java.time.Duration
 
 import utopia.genesis.event.{MouseButtonStateEvent, MouseButtonStatus, MouseMoveEvent, MouseWheelEvent}
 import utopia.genesis.handling.{Actor, MouseButtonStateListener, MouseMoveListener}
 import utopia.genesis.shape.shape2D.Point
 import utopia.inception.handling.{HandlerType, Mortal}
 
+import scala.concurrent.duration.FiniteDuration
 import scala.ref.WeakReference
 
 /**
@@ -48,7 +48,7 @@ class MouseEventGenerator(c: Component, val moveHandler: MouseMoveListener,
     // Allows handling when component is visible
     override def allowsHandlingFrom(handlerType: HandlerType) = component.get.exists { _.isShowing }
     
-    override def act(duration: Duration) =
+    override def act(duration: FiniteDuration) =
     {
         component.get.foreach
         {
