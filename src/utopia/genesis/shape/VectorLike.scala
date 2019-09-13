@@ -3,7 +3,7 @@ package utopia.genesis.shape
 import scala.collection.immutable.{HashMap, VectorBuilder}
 import utopia.genesis.shape.Axis._
 import utopia.flow.util.CollectionExtensions._
-import utopia.genesis.util.Arithmetic
+import utopia.genesis.util.{Arithmetic, Distance}
 
 object VectorLike
 {
@@ -25,7 +25,7 @@ object VectorLike
   * matching an axis (X, Y, Z, ...)
   * @tparam Repr the concrete implementing class
   */
-trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
+trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr] with Distance with Dimensional[Double]
 {
 	// ABSTRACT	---------------------
 	
@@ -42,27 +42,34 @@ trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
 	def buildCopy(dimensions: Vector[Double]): Repr
 	
 	
+	// IMPLEMENTED	-----------------
+	
+	def along(axis: Axis) =
+	{
+		val index = axis match
+		{
+			case X => 0
+			case Y => 1
+			case Z => 2
+		}
+		dimensions.getOrElse(index, 0)
+	}
+	
+	override def length = math.sqrt(this dot this)
+	
+	override def +(other: VectorLike[_]) = combineWith(other, { _ + _ })
+	
+	override def -(other: VectorLike[_]) = combineWith(other, { _ - _ })
+	
+	override def *(n: Double) = map { _ * n }
+	
+	
 	// COMPUTED	---------------------
 	
 	/**
 	  * @return The x and y -dimensions of this vectorlike element
 	  */
 	def dimensions2D = dimensions.take(2)
-	
-	/**
-	  * @return The x-component of this vectorlike element
-	  */
-	def x = dimensions.getOrElse(0, 0)
-	
-	/**
-	  * @return The y-component of this vectorlike element
-	  */
-	def y = dimensions.getOrElse(1, 0)
-	
-	/**
-	  * @return The z-component of this vectorlike element (0 if this element doesn't have a z component)
-	  */
-	def z = dimensions.getOrElse(2, 0)
 	
 	/**
 	  * @return A projection of this vectorlike element as a vector along the x-axis (only contains x-component)
@@ -107,24 +114,8 @@ trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
 	  */
 	def positive = map { _ max 0 }
 	
-	/**
-	  * The length of this vector
-	  */
-	def length = math.sqrt(this dot this)
-	
-	
-	// IMPLEMENTED	----------------------
-	
-	override def distanceFrom(another: VectorLike[_]) = (this - another).length
-	
 	
 	// OPERATORS	----------------------
-	
-	/**
-	  * @param other Another vectorlike element
-	  * @return The combination of these two elements
-	  */
-	override def +(other: VectorLike[_]) = combineWith(other, { _ + _ })
 	
 	/**
 	  * @param x X translation
@@ -139,12 +130,6 @@ trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
 	  * @return A copy of this element with one dimension translated
 	  */
 	def +(adjust: Double, axis: Axis) = map(_ + adjust, axis)
-	
-	/**
-	  * @param other Another vectorlike element
-	  * @return The subtraction of these two elements
-	  */
-	override def -(other: VectorLike[_]) = combineWith(other, { _ - _ })
 	
 	/**
 	  * @param adjust Translation on target axis
@@ -165,12 +150,6 @@ trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
 	  * @return This element multiplied on each axis of the provided element
 	  */
 	def *(other: VectorLike[_]) = combineWith(other, { _ * _ })
-	
-	/**
-	  * @param n A multiplier for all axes
-	  * @return This element multiplied on all axes with the specified multiplier
-	  */
-	override def *(n: Double) = map { _ * n }
 	
 	/**
 	  * @param n A multiplier for specified axis
@@ -231,22 +210,6 @@ trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
 			buildCopy(firstPart ++ myDimensions.drop(mapIndex + 1))
 		}
 	}
-	
-	/**
-	  * A coordinate of this element along the specified axis
-	  */
-	def along(axis: Axis) = axis match
-	{
-		case X => x
-		case Y => y
-		case Z => z
-	}
-	
-	/**
-	  * @param axis Target axis
-	  * @return The length of this element along the axis perpendicular to the provided axis
-	  */
-	def perpendicularTo(axis: Axis2D) = along(axis.perpendicular)
 	
 	/**
 	  * @param axis Target axis

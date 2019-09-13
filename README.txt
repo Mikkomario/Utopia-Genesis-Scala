@@ -26,6 +26,7 @@ Main Features
         - Vector projection fully supported with shape intersection and collision handling in mind
             - This feature is extended in the Utopia Conflict project
         - Typeless value support for the basic shapes
+        - Supporting classes for velocity and acceleration included for movement vectors
 
     Advanced 2D graphics with Drawable trait
         - Easy painting of all 2D shapes
@@ -99,6 +100,8 @@ v2.1  ------------------------------------
 
         Utility constructors added to Angle for HSL color support
 
+        Velocity & Acceleration classes added
+
 
     Changes & Updates
     -----------------
@@ -116,6 +119,11 @@ v2.1  ------------------------------------
         Unnecessary type parameter removed from ApproximatelyEquatable methods
 
         Fixed errors from Flow changes
+
+        MouseMoveEvent.velocity now returns a Velocity instead of a Vector3D, also transition now returns a
+        Vector3D instead of a Point
+
+        Changed standardized cubic bezier to a more generic standaradized velocity path
 
 
     Fixes

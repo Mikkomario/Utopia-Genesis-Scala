@@ -4,17 +4,17 @@ import scala.language.implicitConversions
 
 object Arithmetic
 {
-	implicit def arithmeticDoubleBack(d: ArithMeticDouble) = d.d
+	implicit def arithmeticDoubleBack(d: ArithMeticDouble): Double = d.d
 	
-	implicit class ArithMeticDouble(val d: Double) extends Arithmetic[ArithMeticDouble, ArithMeticDouble]
+	implicit class ArithMeticDouble(val d: Double) extends Arithmetic[ArithMeticDouble, ArithMeticDouble] with Distance
 	{
+		override def length = d
+		
 		override def -(another: ArithMeticDouble) = d - another
 		
 		override def *(mod: Double) = d * mod
 		
 		override def +(another: ArithMeticDouble) = d + another
-		
-		override def distanceFrom(another: ArithMeticDouble) = d - another
 	}
 }
 
@@ -30,10 +30,4 @@ trait Arithmetic[-N, +Repr] extends Scalable[Repr] with Combinable[N, Repr]
 	  * @return A subtraction of these items
 	  */
 	def -(another: N): Repr
-	
-	/**
-	  * @param another Another item
-	  * @return The distance starting from another item to this item
-	  */
-	def distanceFrom(another: N): Double
 }

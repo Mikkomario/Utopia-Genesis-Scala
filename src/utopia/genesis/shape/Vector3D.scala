@@ -17,6 +17,7 @@ import utopia.genesis.util.ApproximatelyEquatable
 import utopia.genesis.shape.shape2D.Point
 import utopia.genesis.shape.shape2D.Size
 
+import scala.concurrent.duration.Duration
 import scala.util.Success
 
 object Vector3D extends FromModelFactory[Vector3D]
@@ -419,6 +420,13 @@ case class Vector3D(override val x: Double = 0.0, override val y: Double = 0.0, 
      * @return The rotated vector
      */
     def rotatedDegs(rotationDegs: Double, origin: Vector3D = Vector3D.zero) = rotated(Rotation ofDegrees rotationDegs)
-    
+	
+	/**
+	  * Converts this vector to a velocity vector
+	  * @param time Duration of this transition
+	  * @return A velocity vector
+	  */
+	def traversedIn(time: Duration) = Velocity(this, time)
+	
     private def calculateDirection(x: Double, y: Double) = math.atan2(y, x)
 }

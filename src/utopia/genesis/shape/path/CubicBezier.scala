@@ -1,6 +1,21 @@
 package utopia.genesis.shape.path
 
-import utopia.genesis.util.Arithmetic
+import utopia.genesis.util.Arithmetic.ArithMeticDouble
+import utopia.genesis.util.{Arithmetic, Distance}
+
+object CubicBezier
+{
+	/**
+	  * Creates a new curve out of double numbers
+	  * @param start The curve starting point
+	  * @param controlStart The first control point
+	  * @param controlEnd The second control point
+	  * @param end The curve end point
+	  * @return A new cubic bezier for doubles
+	  */
+	def apply(start: Double, controlStart: Double, controlEnd: Double, end: Double) =
+		new CubicBezier[ArithMeticDouble](start, controlStart, controlEnd, end)
+}
 
 /**
   * Bezier functions can be used for calculating smooth paths between two points. This cubic implementation uses
@@ -12,7 +27,7 @@ import utopia.genesis.util.Arithmetic
   * @param controlEnd The second control point
   * @param end The curve end point
   */
-case class CubicBezier[P <: Arithmetic[P, P]](override val start: P, controlStart: P, controlEnd: P, override val end: P)
+case class CubicBezier[P <: Arithmetic[P, P] with Distance](override val start: P, controlStart: P, controlEnd: P, override val end: P)
 	extends Path[P]
 {
 	// IMPLEMENTED	----------------------
@@ -21,8 +36,8 @@ case class CubicBezier[P <: Arithmetic[P, P]](override val start: P, controlStar
 	{
 		// Approximates length using average of chord and container net lengths
 		// Source: https://stackoverflow.com/questions/29438398/cheap-way-of-calculating-cubic-bezier-length
-		val chord = end.distanceFrom(start)
-		val containerNet = start.distanceFrom(controlStart) + controlEnd.distanceFrom(controlStart) + end.distanceFrom(controlEnd)
+		val chord = (end - start).length
+		val containerNet = (start - controlStart).length + (controlEnd - controlStart).length + (end - controlEnd).length
 		
 		(containerNet + chord) / 2
 	}
@@ -47,5 +62,5 @@ case class CubicBezier[P <: Arithmetic[P, P]](override val start: P, controlStar
 	  * @param sequenceCount The number of sequences used for calculating arc length at different points
 	  * @return A copy of this path with standardized t
 	  */
-	def withStandardizedVelocity(sequenceCount: Int) = StandardizedCubicBezier(this, sequenceCount)
+	def withStandardizedVelocity(sequenceCount: Int) = StandardVelocityPath(this, sequenceCount)
 }

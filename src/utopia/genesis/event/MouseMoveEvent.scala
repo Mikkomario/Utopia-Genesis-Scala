@@ -1,9 +1,9 @@
 package utopia.genesis.event
 
 import utopia.flow.util.TimeExtensions._
+import utopia.genesis.shape.LinearVelocity
 import utopia.inception.util.Filter
 import utopia.genesis.shape.shape2D.Point
-
 import utopia.genesis.shape.shape2D.Area2D
 
 import scala.concurrent.duration.FiniteDuration
@@ -30,7 +30,7 @@ object MouseMoveEvent
      * Creates an event filter that only accepts events where the mouse cursor moved with enough
      * speed
      */
-    def minVelocityFilter(minVelocity: Double): Filter[MouseMoveEvent] = e => e.velocity.length >= minVelocity
+    def minVelocityFilter(minVelocity: LinearVelocity): Filter[MouseMoveEvent] = e => e.velocity.linear >= minVelocity
 }
 
 /**
@@ -50,12 +50,12 @@ case class MouseMoveEvent(mousePosition: Point, previousMousePosition: Point, bu
     /**
      * The movement vector for the mouse cursor for the duration of the event
      */
-    def transition = mousePosition - previousMousePosition
+    def transition = (mousePosition - previousMousePosition).toVector
     
     /**
-     * The velocity vector of the mouse cursor, in pixels per millisecond
+     * The velocity vector of the mouse cursor (in pixels)
      */
-    def velocity = (transition / durationMillis).toVector
+    def velocity = transition.traversedIn(duration)
     
     /**
      * The duration of this event in duration format

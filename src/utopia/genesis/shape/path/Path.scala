@@ -1,13 +1,14 @@
 package utopia.genesis.shape.path
 
 import utopia.genesis.animation.Animation
+import utopia.genesis.util.Distance
 
 /**
   * Paths form a sequence of points. They have a specified start and end point
   * @author Mikko Hilpinen
   * @since 19.6.2019, v2.1+
   */
-trait Path[+P] extends Animation[P]
+trait Path[+P] extends Animation[P] with Distance
 {
 	// ABSTRACT	----------------
 	
@@ -19,20 +20,6 @@ trait Path[+P] extends Animation[P]
 	  * @return The end point of this path
 	  */
 	def end: P
-	/**
-	  * @return The (approximate) length of this path
-	  */
-	def length: Double
-	
-	
-	// IMPLEMENTED	--------------
-	
-	/**
-	  * Calculates a point in this path
-	  * @param t The progress along this path [0, 1] where 0 is at the start of this path and 1 is at the end
-	  * @return A point within this path (provided 0 <= t <= 1)
-	  */
-	override def apply(t: Double): P
 	
 	
 	// OPERATORS	-------------
