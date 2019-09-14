@@ -322,12 +322,6 @@ case class Vector3D(override val x: Double = 0.0, override val y: Double = 0.0, 
 			case Z => zProjection
 		}
 	}
-	
-    /**
-     * Projects this vector over the another vector. The projected vector will be parallel to the
-     * provided vector parameter
-     */
-    def projectedOver(other: Vector3D) = other * (dot(other) / other.dot(other))
     
     /**
      * Calculates the scalar projection of this vector over the other vector. This is the same as 

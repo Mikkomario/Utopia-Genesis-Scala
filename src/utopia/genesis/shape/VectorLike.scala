@@ -25,7 +25,8 @@ object VectorLike
   * matching an axis (X, Y, Z, ...)
   * @tparam Repr the concrete implementing class
   */
-trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr] with Distance with Dimensional[Double]
+trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Repr] with Distance with Dimensional[Double]
+	with VectorProjectable[Vector3D]
 {
 	// ABSTRACT	---------------------
 	
@@ -63,6 +64,14 @@ trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
 	
 	override def *(n: Double) = map { _ * n }
 	
+	def projectedOver(other: Vector3D) = other * (dot(other) / other.dot(other))
+	
+	override def xProjection = X(x)
+	
+	override def yProjection = Y(y)
+	
+	override def zProjection = Z(z)
+	
 	
 	// COMPUTED	---------------------
 	
@@ -70,21 +79,6 @@ trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
 	  * @return The x and y -dimensions of this vectorlike element
 	  */
 	def dimensions2D = dimensions.take(2)
-	
-	/**
-	  * @return A projection of this vectorlike element as a vector along the x-axis (only contains x-component)
-	  */
-	def xProjection = X(x)
-	
-	/**
-	  * @return A projection of this vectorlike element as a vector along the y-axis (only contains y-component)
-	  */
-	def yProjection = Y(y)
-	
-	/**
-	  * @return A projection of this vectorlike element as a vector along the z-axis (only contains z-component)
-	  */
-	def zProjection = Z(z)
 	
 	/**
 	  * A coordinate map representation of this vectorlike element
@@ -209,17 +203,6 @@ trait VectorLike[+Repr <: VectorLike[_]] extends Arithmetic[VectorLike[_], Repr]
 			val firstPart = myDimensions.take(mapIndex) :+ f(myDimensions(mapIndex))
 			buildCopy(firstPart ++ myDimensions.drop(mapIndex + 1))
 		}
-	}
-	
-	/**
-	  * @param axis Target axis
-	  * @return A vector projection of this element over the specified axis
-	  */
-	def projectedOver(axis: Axis) = axis match
-	{
-		case X => xProjection
-		case Y => yProjection
-		case Z => zProjection
 	}
 	
 	/**

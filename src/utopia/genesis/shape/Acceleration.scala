@@ -3,7 +3,7 @@ package utopia.genesis.shape
 import utopia.genesis.util.Arithmetic
 import utopia.flow.util.TimeExtensions._
 
-import scala.concurrent.duration.Duration
+import scala.concurrent.duration.{Duration, TimeUnit}
 
 object Acceleration
 {
@@ -11,6 +11,14 @@ object Acceleration
 	  * A zero acceleration
 	  */
 	val zero = Acceleration(Velocity.zero, 1.seconds)
+	
+	/**
+	  * @param velocityChange Amount of velocity change in 1 time unit
+	  * @param timeUnit Time unit used (implicit)
+	  * @return A new acceleration
+	  */
+	def apply(velocityChange: Vector3D)(implicit timeUnit: TimeUnit): Acceleration =
+		new Acceleration(Velocity(velocityChange), Duration(1, timeUnit))
 }
 
 /**
@@ -20,6 +28,7 @@ object Acceleration
   */
 case class Acceleration(override val amount: Velocity, override val duration: Duration) extends
 	Change[Velocity, Acceleration] with Arithmetic[Acceleration, Acceleration] with Dimensional[LinearAcceleration]
+	with VectorProjectable[Acceleration]
 {
 	// COMPUTED	-----------------------
 	
@@ -47,7 +56,9 @@ case class Acceleration(override val amount: Velocity, override val duration: Du
 	
 	override def +(another: Acceleration) = Acceleration(amount + another(duration), duration)
 	
-	override def toString = s"${perMilliSecond.transition} / ms^2"
+	override def toString = s"${perMilliSecond.transition}/ms^2"
 	
 	override def along(axis: Axis) = LinearAcceleration(amount.along(axis), duration)
+	
+	override def projectedOver(vector: Vector3D) = Acceleration(amount.projectedOver(vector), duration)
 }
