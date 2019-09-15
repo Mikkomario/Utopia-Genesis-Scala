@@ -7,17 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a34f54cb-6443-4617-9ea2-d86bc0b4cc7c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/VectorProjectable.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utopia/genesis/util/Signed.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/utopia/genesis/test/VelocityTest.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/Acceleration.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/Acceleration.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/LinearAcceleration.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/LinearAcceleration.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/LinearVelocity.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/LinearVelocity.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/Vector3D.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/Vector3D.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/VectorLike.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/VectorLike.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/shape/Velocity.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/shape/Velocity.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/util/Arithmetic.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/util/Arithmetic.scala" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -453,7 +443,13 @@
       <option name="presentableId" value="LOCAL−00040" />
       <updated>1568371975598</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL−00041" summary="Tested and debugged velocity &amp; acceleration classes">
+      <created>1568467753330</created>
+      <option name="number" value="LOCAL−00041" />
+      <option name="presentableId" value="LOCAL−00041" />
+      <updated>1568467753330</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -470,7 +466,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixed an issue with Handlers only accepting mutable or immutable instances" />
     <MESSAGE value="Added VectorLike trait and fixed errors" />
     <MESSAGE value="MouseTest succeeded. Fix to mouse event generator&#10;&#10;also removed warnings from Transformation" />
     <MESSAGE value="Clipping test completed" />
@@ -495,7 +490,8 @@
     <MESSAGE value="Fixed errors caused by Flow changes" />
     <MESSAGE value="Working on animation classes" />
     <MESSAGE value="Added velocity and acceleration classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added velocity and acceleration classes" />
+    <MESSAGE value="Tested and debugged velocity &amp; acceleration classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tested and debugged velocity &amp; acceleration classes" />
   </component>
   <component name="masterDetails">
     <states>
