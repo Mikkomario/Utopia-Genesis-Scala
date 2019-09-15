@@ -21,26 +21,41 @@ object KeyStateListener
         new FunctionalKeyStateListener(f, filter)
     
     /**
+      * Creates a simple key state listener that calls specified function on certain key presses
+      * @param f A function that will be called
+      * @return A new key state listener
+      */
+    def onKeyPressed(targetKeyIndex: Int, f: KeyStateEvent => Unit) = apply(f, KeyStateEvent.wasPressedFilter &&
+        KeyStateEvent.keyFilter(targetKeyIndex))
+    
+    /**
       * Creates a simple key state listener that calls specified function on key presses
       * @param f A function that will be called
       * @return A new key state listener
       */
-    def onKeyPressed(f: KeyStateEvent => Unit) = apply(f, KeyStateEvent.wasPressedFilter)
+    def onAnyKeyPressed(f: KeyStateEvent => Unit) = apply(f, KeyStateEvent.wasPressedFilter)
     
     /**
       * Creates a simple key state listener that calls specified function on key releases
       * @param f A function that will be called
       * @return A new key state listener
       */
-    def onKeyReleased(f: KeyStateEvent => Unit) = apply(f, KeyStateEvent.wasReleasedFilter)
+    def onKeyReleased(targetKeyIndex: Int, f: KeyStateEvent => Unit) = apply(f, KeyStateEvent.wasReleasedFilter &&
+        KeyStateEvent.keyFilter(targetKeyIndex))
+    
+    /**
+      * Creates a simple key state listener that calls specified function on key releases
+      * @param f A function that will be called
+      * @return A new key state listener
+      */
+    def onAnyKeyReleased(f: KeyStateEvent => Unit) = apply(f, KeyStateEvent.wasReleasedFilter)
     
     /**
       * Creates a simple key state listener that calls specified function each time enter is pressed
       * @param f A function that will be called
       * @return A new key state listener
       */
-    def onEnterPressed(f: KeyStateEvent => Unit) = apply(f, KeyStateEvent.wasPressedFilter &&
-        KeyStateEvent.keyFilter(KeyEvent.VK_ENTER))
+    def onEnterPressed(f: KeyStateEvent => Unit) = onKeyPressed(KeyEvent.VK_ENTER, f)
 }
 
 /**
