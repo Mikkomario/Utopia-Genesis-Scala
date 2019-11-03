@@ -5,6 +5,7 @@ import utopia.genesis.util.Extensions._
 import utopia.genesis.util.ApproximatelyEquatable
 import utopia.genesis.shape.RotationDirection.Counterclockwise
 import utopia.genesis.shape.RotationDirection.Clockwise
+import utopia.genesis.shape.shape2D.Direction2D
 
 object Angle
 {
@@ -58,6 +59,21 @@ object Angle
      * is converted to radians internally)
      */
     def ofDegrees(degrees: Double) = new Angle(degrees.toRadians)
+    
+    
+    // OTHER    ----------------------------------
+    
+    /**
+     * @param direction Target direction
+     * @return The angle that will take an object towards specified direction
+     */
+    def towards(direction: Direction2D) = direction match
+    {
+        case Direction2D.Right => right
+        case Direction2D.Down => down
+        case Direction2D.Left => left
+        case Direction2D.Up => up
+    }
 }
 
 /**
