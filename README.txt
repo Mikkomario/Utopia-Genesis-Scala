@@ -114,7 +114,7 @@ v2.1  ------------------------------------
         Drawer withColor separated to withColor that works with utopia.genesis.colo.Color class and withPaint
         that works with java.awt.Paint class
 
-        Some utility methods to Size (for determining whether size is zero or negative)
+        Some utility methods to Size (for determining whether size is zero or negative and for fitting into another size)
 
         New utility methods added to Bounds
 

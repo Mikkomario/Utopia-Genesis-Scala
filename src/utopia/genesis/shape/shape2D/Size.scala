@@ -168,4 +168,23 @@ case class Size(width: Double, height: Double) extends VectorLike[Size] with App
       * @return Whether this size would fit into the other size
       */
     def fitsInto(another: Size) = width <= another.width && height <= another.height
+    
+    /**
+     * @param another Another size
+     * @return A copy of this size that fits into specified size. If this size already fits, returns this.
+     */
+    def fittedInto(another: Size) =
+    {
+        if (width <= another.width)
+        {
+            if (height <= another.height)
+                this
+            else
+                withHeight(another.height)
+        }
+        else if (height <= another.height)
+            withWidth(another.width)
+        else
+            another
+    }
 }

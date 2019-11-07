@@ -78,6 +78,13 @@ object RGB
 	def gray(luminosity: Double) = withRatios(RGBChannel.values.map { _ -> luminosity }.toMap)
 	
 	/**
+	 * Creates a grayscale color
+	 * @param value Color value [0, 255] where 0 is black and 255 is white
+	 * @return A new RGB color
+	 */
+	def grayWithValue(value: Int) = gray(value / 255.0)
+	
+	/**
 	  * Creates a new RGB with specified color ratios
 	  * @param ratios Ratios per channel [0, 1]
 	  * @return A new RGB color
