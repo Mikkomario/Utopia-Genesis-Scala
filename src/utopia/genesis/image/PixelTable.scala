@@ -8,6 +8,11 @@ import utopia.genesis.shape.shape2D.{Area2D, Bounds, Point, Size}
 object PixelTable
 {
 	/**
+	 * An empty pixel table
+	 */
+	val empty = PixelTable(Vector())
+	
+	/**
 	  * Converts a buffered image to a pixel table
 	  * @param image The source image
 	  * @return A pixel table based on the image
@@ -64,6 +69,7 @@ case class PixelTable private(_pixels: Vector[Vector[Color]])
 	
 	/**
 	  * @return A buffered image based on this pixel data
+	 *  @throws IllegalArgumentException If this pixel table is empty
 	  */
 	def toBufferedImage =
 	{

@@ -1,7 +1,8 @@
 package utopia.genesis.image
 
 import java.awt.image.{BufferedImage, BufferedImageOp}
-import java.nio.file.Path
+import java.io.FileNotFoundException
+import java.nio.file.{Files, Path}
 
 import javax.imageio.ImageIO
 import utopia.flow.datastructure.mutable.Lazy
@@ -11,10 +12,15 @@ import utopia.genesis.shape.{Angle, Rotation, Vector3D, VectorLike}
 import utopia.genesis.shape.shape2D.{Area2D, Bounds, Point, Size, Transformation}
 import utopia.genesis.util.{Drawer, Scalable}
 
-import scala.util.Try
+import scala.util.{Failure, Success, Try}
 
 object Image
 {
+	/**
+	 * A zero sized image with no pixel data
+	 */
+	val empty = new Image(None, Vector3D.identity, 1.0, new Lazy(() => PixelTable.empty))
+	
 	/**
 	  * Creates a new image
 	  * @param image The original buffered image source
@@ -22,7 +28,7 @@ object Image
 	  * @param alpha The maximum alpha value used when drawing this image [0, 1] (default = 1 = fully visible)
 	  * @return A new image
 	  */
-	def apply(image: BufferedImage, scaling: Vector3D = Vector3D.identity, alpha: Double = 1.0): Image = Image(image,
+	def apply(image: BufferedImage, scaling: Vector3D = Vector3D.identity, alpha: Double = 1.0): Image = Image(Some(image),
 		scaling, alpha, Lazy(PixelTable.fromBufferedImage(image)))
 	
 	/**
@@ -30,13 +36,34 @@ object Image
 	  * @param path The path the image is read from
 	  * @return The read image wrapped in Try
 	  */
-	def readFrom(path: Path) = Try
+	def readFrom(path: Path) =
 	{
-		val result = ImageIO.read(path.toFile)
-		if (result == null)
-			throw new NoImageReaderAvailableException("Cannot read image from file: " + path.toString)
+		// Checks that file exists
+		if (Files.exists(path))
+		{
+			Try
+			{
+				// Tries to read the file
+				val result = ImageIO.read(path.toFile)
+				if (result == null)
+					throw new NoImageReaderAvailableException("Cannot read image from file: " + path.toString)
+				else
+					apply(result)
+			}
+		}
 		else
-			apply(result)
+			Failure(new FileNotFoundException(s"No (image) file at: ${Try{ path.toAbsolutePath }.getOrElse(path) }"))
+	}
+	
+	/**
+	 * Reads an image from a file. If image is not available, returns an empty image.
+	 * @param path The path this image is read from
+	 * @return Read image, which may be empty
+	 */
+	def readOrEmpty(path: Path) = readFrom(path) match
+	{
+		case Success(img) => img
+		case Failure(_) => empty
 	}
 }
 
@@ -45,7 +72,7 @@ object Image
   * @author Mikko Hilpinen
   * @since 15.6.2019, v2.1+
   */
-case class Image private(private val source: BufferedImage, scaling: Vector3D, alpha: Double,
+case class Image private(private val source: Option[BufferedImage], scaling: Vector3D, alpha: Double,
 						 private val _pixels: Lazy[PixelTable]) extends Scalable[Image]
 {
 	// ATTRIBUTES	----------------
@@ -53,7 +80,7 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 	/**
 	  * The size of the original image
 	  */
-	val sourceResolution = Size(source.getWidth, source.getHeight)
+	val sourceResolution = source.map { s => Size(s.getWidth, s.getHeight) }.getOrElse(Size.zero)
 	
 	/**
 	  * @return The size of this image in pixels
@@ -119,7 +146,7 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 	  * @return A copy of this image with (possibly) lowered source resolution
 	  */
 	def withMinimumResolution = if (scaling.dimensions2D.forall { _ >= 1 }) this else
-		withSourceResolution(size min sourceResolution, true)
+		withSourceResolution(size min sourceResolution, preserveUseSize = true)
 	
 	
 	// IMPLEMENTED	----------------
@@ -181,9 +208,9 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 	  */
 	def subImage(area: Bounds) =
 	{
-		area.within(Bounds(Point.origin, size)).map { _ / scaling }.map {
-			a => Image(source.getSubimage(a.x.toInt, a.y.toInt, a.width.toInt, a.height.toInt), scaling) }.getOrElse(
-			Image(new BufferedImage(0, 0, source.getType)))
+		source.map { s => area.within(Bounds(Point.origin, size)).map { _ / scaling }.map {
+			a => Image(s.getSubimage(a.x.toInt, a.y.toInt, a.width.toInt, a.height.toInt), scaling) }.getOrElse(
+			Image(new BufferedImage(0, 0, s.getType))) }.getOrElse(this)
 	}
 	
 	/**
@@ -209,11 +236,13 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 	  */
 	def drawWith(drawer: Drawer, position: Point = Point.origin, origin: Point = Point.origin) =
 	{
-		val transformed = drawer.transformed(Transformation.translation(position.toVector - origin).scaled(scaling))
-		if (alpha == 1.0)
-			transformed.drawImage(source)
-		else
-			transformed.withAlpha(alpha).drawImage(source)
+		source.forall { s =>
+			val transformed = drawer.transformed(Transformation.translation(position.toVector - origin).scaled(scaling))
+			if (alpha == 1.0)
+				transformed.drawImage(s)
+			else
+				transformed.withAlpha(alpha).drawImage(s)
+		}
 	}
 	
 	/**
@@ -247,14 +276,14 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 	  * @param area An area
 	  * @return A copy of this image that matches the specified area, but may be larger if shape preservation demands it.
 	  */
-	def filling(area: Size) = this * (area / size).dimensions2D.max
+	def filling(area: Size) = if (size.nonZero) this * (area / size).dimensions2D.max else this
 	
 	/**
 	  * Scales this image, preserving shape.
 	  * @param area An area
 	  * @return A copy of this image that matches the specified area, but may be smaller if shape preservation demands it.
 	  */
-	def fitting(area: Size) = this * (area / size).dimensions2D.min
+	def fitting(area: Size) = if (size.nonZero) this * (area / size).dimensions2D.min else this
 	
 	/**
 	  * @param area Target area (maximum)
@@ -274,8 +303,13 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 	  */
 	def mapPixelTable(f: PixelTable => PixelTable) =
 	{
-		val newPixels = f(pixels)
-		Image(newPixels.toBufferedImage, scaling, alpha, Lazy(newPixels))
+		if (source.isDefined)
+		{
+			val newPixels = f(pixels)
+			Image(Some(newPixels.toBufferedImage), scaling, alpha, Lazy(newPixels))
+		}
+		else
+			this
 	}
 	
 	/**
@@ -343,10 +377,19 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 	  */
 	def filterWith(op: BufferedImageOp) =
 	{
-		val destination = new BufferedImage(source.getWidth, source.getHeight, source.getType)
-		op.filter(source, destination)
-		Image(destination, scaling)
+		source.map { s =>
+			val destination = new BufferedImage(s.getWidth, s.getHeight, s.getType)
+			op.filter(s, destination)
+			Image(destination, scaling)
+			
+		}.getOrElse(this)
 	}
+	
+	/**
+	 * @param hue Hue for every pixel in this image
+	 * @return A new image with all pixels set to provided color. Original alpha channel is preserved, however.
+	 */
+	def withColorOverlay(hue: Color) = mapPixels { c => hue.withAlpha(c.alpha) }
 	
 	/**
 	  * Creates a new image with altered source resolution. This method can be used when you wish to lower the original
@@ -358,29 +401,34 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 	  */
 	def withSourceResolution(newSize: Size, preserveUseSize: Boolean = false) =
 	{
-		if (source.getWidth == newSize.width.toInt && source.getHeight == newSize.height.toInt)
-			this
-		else
-		{
-			val scaledImage = source.getScaledInstance(newSize.width.toInt, newSize.height.toInt, java.awt.Image.SCALE_SMOOTH)
-			val scaledAsBuffered = scaledImage match
-			{
-				case b: BufferedImage => b
-				case i =>
-					val buffered = new BufferedImage(i.getWidth(null), i.getHeight(null),
-						BufferedImage.TYPE_INT_ARGB)
-					val writeGraphics = buffered.createGraphics()
-					writeGraphics.drawImage(i, 0, 0, null)
-					writeGraphics.dispose()
-					
-					buffered
-			}
-			
-			if (preserveUseSize)
-				Image(scaledAsBuffered, size.toVector / newSize)
+		source.map { s =>
+			// Won't copy into 0 or negative size
+			if (newSize.isNegative)
+				Image.empty
+			else if (s.getWidth == newSize.width.toInt && s.getHeight == newSize.height.toInt)
+				this
 			else
-				Image(scaledAsBuffered)
-		}
+			{
+				val scaledImage = s.getScaledInstance(newSize.width.toInt, newSize.height.toInt, java.awt.Image.SCALE_SMOOTH)
+				val scaledAsBuffered = scaledImage match
+				{
+					case b: BufferedImage => b
+					case i =>
+						val buffered = new BufferedImage(i.getWidth(null), i.getHeight(null),
+							BufferedImage.TYPE_INT_ARGB)
+						val writeGraphics = buffered.createGraphics()
+						writeGraphics.drawImage(i, 0, 0, null)
+						writeGraphics.dispose()
+						
+						buffered
+				}
+				
+				if (preserveUseSize)
+					Image(scaledAsBuffered, size.toVector / newSize)
+				else
+					Image(scaledAsBuffered)
+			}
+		}.getOrElse(this)
 	}
 	
 	/**
@@ -391,11 +439,16 @@ case class Image private(private val source: BufferedImage, scaling: Vector3D, a
 	  */
 	def withMaxSourceResolution(maxResolution: Size) =
 	{
-		// Preserves shape
-		val scale = (maxResolution.width / width) min (maxResolution.height / height)
-		// Won't ever upscale
-		if (scale < 1)
-			withSourceResolution(size * scale, true)
+		if (source.isDefined)
+		{
+			// Preserves shape
+			val scale = (maxResolution.width / width) min (maxResolution.height / height)
+			// Won't ever upscale
+			if (scale < 1)
+				withSourceResolution(size * scale, preserveUseSize = true)
+			else
+				this
+		}
 		else
 			this
 	}

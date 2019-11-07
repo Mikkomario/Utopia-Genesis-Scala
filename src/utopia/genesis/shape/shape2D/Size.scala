@@ -72,6 +72,26 @@ case class Size(width: Double, height: Double) extends VectorLike[Size] with App
     // COMPUTED    --------------------------
     
     /**
+     * @return whether this size is positive (not zero or smaller)
+     */
+    def isPositive = width > 0 && height > 0
+    
+    /**
+     * @return Whether this size is zero or smaller
+     */
+    def isNegative = !isPositive
+    
+    /**
+     * @return Whether this size has zero area (width and/or height is zero). Zero sizes cannot be divided with
+     */
+    def isZero = width == 0 || height == 0
+    
+    /**
+     * @return Whether this size has a non-zero area (positive or negative)
+     */
+    def nonZero = !isZero
+    
+    /**
      * The area of this size (width * height)
      */
     def area = width * height
