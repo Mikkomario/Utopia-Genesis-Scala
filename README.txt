@@ -102,6 +102,8 @@ v2.1  ------------------------------------
 
         Velocity & Acceleration classes added
 
+        Couple new utility filters in KeyStateEvent
+
 
     Changes & Updates
     -----------------

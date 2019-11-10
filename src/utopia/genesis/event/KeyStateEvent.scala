@@ -16,6 +16,11 @@ object KeyStateEvent
     val wasReleasedFilter: Filter[KeyStateEvent] = e => e.isReleased
     
     /**
+     * This event filter only accepts key events while control key is being held down (includes presses of ctrl key itself)
+     */
+    val controlDownFilter: Filter[KeyStateEvent] = e => e.keyStatus.apply(KeyEvent.VK_CONTROL)
+    
+    /**
      * This event filter only accepts events for the specified key index
      */
     def keyFilter(index: Int): Filter[KeyStateEvent] = e => e.index == index
@@ -47,6 +52,12 @@ object KeyStateEvent
       * @return Event filter that only accepts events concerning specified keys
       */
     def keysFilter(acceptedKeys: Seq[Int]): Filter[KeyStateEvent] = e => acceptedKeys.contains(e.index)
+    
+    /**
+     * @param char Target combo character
+     * @return A filter that only accepts events where control is being held down while specified character key is pressed
+     */
+    def controlCharComboFilter(char: Char): Filter[KeyStateEvent] = controlDownFilter && wasPressedFilter && charFilter(char)
 }
 
 /**
