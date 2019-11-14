@@ -1,6 +1,6 @@
 package utopia.genesis.handling
 
-import utopia.genesis.event.Consumable
+import utopia.genesis.event.{Consumable, ConsumeEvent}
 import utopia.inception.handling.Handleable
 
 /**
@@ -16,13 +16,14 @@ trait ConsumableEventHandler[Listener <: Handleable, Event <: Consumable[Event]]
 	  * Informs a listener about an event
 	  * @param listener A listener
 	  * @param event An event
-	  * @return Whether the event should be marked as consumed afterwards
+	  * @return A consume event if the event was consumed during this process
 	  */
-	override protected def inform(listener: Listener, event: Event): Boolean
+	override protected def inform(listener: Listener, event: Event): Option[ConsumeEvent]
 	
 	
 	// OTHER	--------------------
 	
-	override def distribute(event: Event): Boolean = event.distributeAmong(handleView().toVector) {
-		(l, e) => if (eventFilterFor(l)(e)) inform(l, e) else false }
+	override def distribute(event: Event): Option[ConsumeEvent] = event.distributeAmong(handleView().toVector) {
+		(l, e) => if (eventFilterFor(l)(e)) inform(l, e) else None
+	}
 }

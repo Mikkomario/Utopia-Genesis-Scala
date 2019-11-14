@@ -129,6 +129,9 @@ v2.1  ------------------------------------
 
         Changed standardized cubic bezier to a more generic standaradized velocity path
 
+        Consumed events now track an event about when they were consumed. Consuming event listeners now need to generate
+        said events instead of returning boolean values.
+
 
     Fixes
     -----

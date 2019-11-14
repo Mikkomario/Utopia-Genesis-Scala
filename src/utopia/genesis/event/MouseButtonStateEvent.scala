@@ -48,7 +48,7 @@ object MouseButtonStateEvent
  * @since 17.2.2017
  */
 case class MouseButtonStateEvent(buttonIndex: Int, isDown: Boolean, mousePosition: Point,
-                                 buttonStatus: MouseButtonStatus, override val isConsumed: Boolean)
+                                 buttonStatus: MouseButtonStatus, override val consumeEvent: Option[ConsumeEvent] = None)
     extends MouseEvent with Consumable[MouseButtonStateEvent]
 {
     // COMPUTED PROPERTIES    ------------
@@ -93,7 +93,7 @@ case class MouseButtonStateEvent(buttonIndex: Int, isDown: Boolean, mousePositio
     
     override def toString = s"Mouse button ${ button getOrElse buttonIndex } was ${ if (wasPressed) "pressed" else "released" } at $mousePosition"
     
-    override def consumed = if (isConsumed) this else copy(isConsumed = true)
+    override def consumed(event: ConsumeEvent) = if (isConsumed) this else copy(consumeEvent = Some(event))
     
     override def me = this
     

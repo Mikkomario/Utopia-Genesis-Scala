@@ -65,13 +65,13 @@ object MouseTest extends App
         override def onMouseButtonState(event: MouseButtonStateEvent) =
 		{
 			if (contains2D(event.mousePosition)) isOn = !isOn
-			false
+			None
 		}
         
         override def onMouseWheelRotated(event: MouseWheelEvent) =
 		{
 			transformation = transformation.scaled(1 + event.wheelTurn * 0.2)
-			false
+			None
 		}
         
         private def contains2D(point: Point) = area.contains(transformation.invert(point))

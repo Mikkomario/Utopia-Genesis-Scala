@@ -1,6 +1,6 @@
 package utopia.genesis.handling
 
-import utopia.genesis.event.MouseWheelEvent
+import utopia.genesis.event.{ConsumeEvent, MouseWheelEvent}
 import utopia.genesis.shape.shape2D.Area2D
 import utopia.inception.handling.Handleable
 import utopia.inception.util.{AnyFilter, Filter}
@@ -13,7 +13,7 @@ object MouseWheelListener
       * @param filter A filter that specifies, which events will trigger the function (default = no filtering)
       * @return A new mouse event listener
       */
-    def apply(f: MouseWheelEvent => Boolean, filter: Filter[MouseWheelEvent] = AnyFilter): MouseWheelListener =
+    def apply(f: MouseWheelEvent => Option[ConsumeEvent], filter: Filter[MouseWheelEvent] = AnyFilter): MouseWheelListener =
         new FunctionalMouseWheelListener(f, filter)
     
     /**
@@ -22,7 +22,7 @@ object MouseWheelListener
       * @param f A function that will be called on wheel rotations
       * @return A new mouse event listener
       */
-    def onWheelInsideArea(getArea: => Area2D, f: MouseWheelEvent => Boolean) = apply(f, e => e.isOverArea(getArea))
+    def onWheelInsideArea(getArea: => Area2D, f: MouseWheelEvent => Option[ConsumeEvent]) = apply(f, e => e.isOverArea(getArea))
 }
 
 /**
@@ -33,9 +33,9 @@ trait MouseWheelListener extends Handleable
 {
     /**
      * This method is called whenever the mouse wheel rotates
-      * @return Whether the event should be marked as consumed for the following listeners
+      * @return If the event was consumed during this process, should return the consume event
      */
-    def onMouseWheelRotated(event: MouseWheelEvent): Boolean
+    def onMouseWheelRotated(event: MouseWheelEvent): Option[ConsumeEvent]
     
     /**
      * This filter is applied to the events incoming to the listener. Only events accepted by this
@@ -49,7 +49,7 @@ trait MouseWheelListener extends Handleable
     def isReceivingMouseWheelEvents = allowsHandlingFrom(MouseWheelHandlerType)
 }
 
-private class FunctionalMouseWheelListener(val f: MouseWheelEvent => Boolean, val filter: Filter[MouseWheelEvent])
+private class FunctionalMouseWheelListener(val f: MouseWheelEvent => Option[ConsumeEvent], val filter: Filter[MouseWheelEvent])
     extends MouseWheelListener with utopia.inception.handling.immutable.Handleable
 {
     override def onMouseWheelRotated(event: MouseWheelEvent) = f(event)

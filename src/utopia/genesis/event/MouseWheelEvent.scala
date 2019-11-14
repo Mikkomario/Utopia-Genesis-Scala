@@ -12,9 +12,9 @@ import utopia.genesis.shape.shape2D.Point
   * @param buttonStatus Current mouse button status
  */
 case class MouseWheelEvent(wheelTurn: Double, mousePosition: Point, buttonStatus: MouseButtonStatus,
-						   override val isConsumed: Boolean = false) extends MouseEvent with Consumable[MouseWheelEvent]
+						   override val consumeEvent: Option[ConsumeEvent] = None) extends MouseEvent with Consumable[MouseWheelEvent]
 {
-	override def consumed = if (isConsumed) this else copy(isConsumed = true)
+	override def consumed(event: ConsumeEvent) = if (isConsumed) this else copy(consumeEvent = Some(event))
 	
 	override def me = this
 }

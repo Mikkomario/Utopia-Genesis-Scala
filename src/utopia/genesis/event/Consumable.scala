@@ -18,49 +18,66 @@ trait Consumable[+Repr]
 	// ABSTRACT	---------------------
 	
 	/**
-	  * @return Whether this item has been consumed already
+	  * @return An consume event if this item has already been consumed
 	  */
-	def isConsumed: Boolean
-	/**
-	  * @return A consumed version of this item
-	  */
-	def consumed: Repr
+	def consumeEvent: Option[ConsumeEvent]
 	/**
 	  * @return This item as 'Repr'
 	  */
 	def me: Repr
+	/**
+	  * @param consumeEvent A consume event
+	  * @return A consumed version of this item
+	  */
+	def consumed(consumeEvent: ConsumeEvent): Repr
+	
+	
+	// COMPUTED	--------------------
+	
+	/**
+	  * @return Whether this event has already been consumed
+	  */
+	def isConsumed = consumeEvent.isDefined
 	
 	
 	// OTHER	--------------------
 	
 	/**
+	  * @param by Description of entity that consumed this event
+	  * @return A consumed copy of this consumable (call by name)
+	  */
+	def consumed(by: => String): Repr = consumed(new ConsumeEvent(() => by))
+	
+	/**
 	  * Handles this consumable item using a number of possibly consuming operations
 	  * @param hasNext A function that returns whether there are still operations left
-	  * @param take Performs a single operation on this consumable item. Returns whether this was consumed.
+	  * @param take Performs a single operation on this consumable item. Returns a consume event if this event is / was consumed.
 	  * @return Whether this event should now be considered consumed
 	  */
-	def handleWith(hasNext: => Boolean, take: Repr => Boolean) =
+	def handleWith(hasNext: => Boolean)(take: Repr => Option[ConsumeEvent]): Option[ConsumeEvent] =
 	{
 		if (isConsumed)
 		{
 			while (hasNext) { take(me) }
-			true
+			consumeEvent
 		}
 		else
 		{
-			var wasConsumed = false
+			var con: Option[ConsumeEvent] = None
 			var event = me
 			while (hasNext)
 			{
-				if (wasConsumed)
+				if (con.isDefined)
 					take(event)
-				else if (take(event))
+				else
 				{
-					wasConsumed = true
-					event = consumed
+					con = take(event)
+					if (con.isDefined)
+						event = consumed(con.get)
 				}
+				
 			}
-			wasConsumed
+			con
 		}
 	}
 	
@@ -71,7 +88,7 @@ trait Consumable[+Repr]
 	  * @tparam L The type of the listeners
 	  * @return Whether this event should now be considered consumed
 	  */
-	def distributeAmong[L](listeners: Seq[L])(call: (L, Repr) => Boolean) =
+	def distributeAmong[L](listeners: Seq[L])(call: (L, Repr) => Option[ConsumeEvent]) =
 	{
 		var nextIndex = 0
 		def hasNext = nextIndex < listeners.size
@@ -81,6 +98,6 @@ trait Consumable[+Repr]
 			call(listeners(nextIndex - 1), c)
 		}
 		
-		handleWith(hasNext, take)
+		handleWith(hasNext)(take)
 	}
 }
