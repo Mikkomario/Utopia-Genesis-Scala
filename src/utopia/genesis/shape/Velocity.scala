@@ -49,6 +49,11 @@ case class Velocity(transition: Vector3D, override val duration: Duration) exten
 	  */
 	def in2D = if (transition.z == 0) this else copy(transition = transition.in2D)
 	
+	/**
+	  * @return Whether this velocity is actually stationary (zero)
+	  */
+	def isZero = transition.isZero
+	
 	
 	// IMPLEMENTED	-------------
 	

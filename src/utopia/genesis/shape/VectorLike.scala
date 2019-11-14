@@ -76,6 +76,11 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	// COMPUTED	---------------------
 	
 	/**
+	  * @return Whether all of this instance's dimensions are zero
+	  */
+	def isZero = dimensions.forall { _ == 0 }
+	
+	/**
 	  * @return The x and y -dimensions of this vectorlike element
 	  */
 	def dimensions2D = dimensions.take(2)

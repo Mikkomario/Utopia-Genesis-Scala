@@ -33,6 +33,11 @@ case class Acceleration(override val amount: Velocity, override val duration: Du
 	// COMPUTED	-----------------------
 	
 	/**
+	  * @return Whether this acceleration doesn't actually affect velocity in any way (is zero acceleration)
+	  */
+	def isZero = amount.isZero
+	
+	/**
 	  * @return Direction of this acceleration
 	  */
 	def direction = amount.direction

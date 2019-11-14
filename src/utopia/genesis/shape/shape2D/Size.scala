@@ -84,7 +84,7 @@ case class Size(width: Double, height: Double) extends VectorLike[Size] with App
     /**
      * @return Whether this size has zero area (width and/or height is zero). Zero sizes cannot be divided with
      */
-    def isZero = width == 0 || height == 0
+    override def isZero = width == 0 || height == 0
     
     /**
      * @return Whether this size has a non-zero area (positive or negative)
