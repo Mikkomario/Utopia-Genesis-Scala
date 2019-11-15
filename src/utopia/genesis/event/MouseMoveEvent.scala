@@ -43,7 +43,7 @@ object MouseMoveEvent
  * @since 10.1.2017
  */
 case class MouseMoveEvent(mousePosition: Point, previousMousePosition: Point, buttonStatus: MouseButtonStatus,
-                          duration: FiniteDuration) extends MouseEvent
+                          duration: FiniteDuration) extends MouseEvent[MouseMoveEvent]
 {
     // COMPUTED PROPERTIES    -----------
     
@@ -61,6 +61,12 @@ case class MouseMoveEvent(mousePosition: Point, previousMousePosition: Point, bu
      * The duration of this event in duration format
      */
     def durationMillis = duration.toPreciseMillis
+    
+    
+    // IMPLEMENTED  ---------------------
+    
+    def mapPosition(f: Point => Point) = copy(mousePosition = f(mousePosition),
+        previousMousePosition = f(previousMousePosition))
     
     
     // OTHER METHODS    -----------------

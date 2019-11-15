@@ -110,8 +110,7 @@ v2.1  ------------------------------------
 
         java.time.Duration replaced with scala.concurrent.FiniteDuration in Actor, MouseMoveListener and MouseEvent
 
-        MouseButtonStateListeners and MouseWheelListeners now return a boolean that determines whether the event
-        will be consumed or not
+        MouseButtonStateListeners and MouseWheelListeners now return a consume event if they consumed incoming events
 
         Drawer withColor separated to withColor that works with utopia.genesis.colo.Color class and withPaint
         that works with java.awt.Paint class
@@ -128,9 +127,6 @@ v2.1  ------------------------------------
         Vector3D instead of a Point
 
         Changed standardized cubic bezier to a more generic standaradized velocity path
-
-        Consumed events now track an event about when they were consumed. Consuming event listeners now need to generate
-        said events instead of returning boolean values.
 
 
     Fixes
