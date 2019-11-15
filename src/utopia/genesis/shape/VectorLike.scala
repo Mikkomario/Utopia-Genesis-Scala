@@ -58,9 +58,9 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	
 	override def length = math.sqrt(this dot this)
 	
-	override def +(other: VectorLike[_]) = combineWith(other, { _ + _ })
+	override def +(other: VectorLike[_]) = combineWith(other) { _ + _ }
 	
-	override def -(other: VectorLike[_]) = combineWith(other, { _ - _ })
+	override def -(other: VectorLike[_]) = combineWith(other) { _ - _ }
 	
 	override def *(n: Double) = map { _ * n }
 	
@@ -148,7 +148,7 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  * @param other Another vectorlike element
 	  * @return This element multiplied on each axis of the provided element
 	  */
-	def *(other: VectorLike[_]) = combineWith(other, { _ * _ })
+	def *(other: VectorLike[_]) = combineWith(other) { _ * _ }
 	
 	/**
 	  * @param n A multiplier for specified axis
@@ -161,7 +161,7 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  * @param other Another vectorlike element
 	  * @return This element divided on each axis of the provided element. Dividing by 0 is ignored
 	  */
-	def /(other: VectorLike[_]) = combineWith(other, { case (a, b) => if (b == 0) a else a / b })
+	def /(other: VectorLike[_]) = combineWith(other) { case (a, b) => if (b == 0) a else a / b }
 	
 	/**
 	  * @param n A divider for target axis
@@ -217,7 +217,7 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  * @param merge A merge function
 	  * @return A new element with merged or copied dimensions
 	  */
-	def combineWith(other: VectorLike[_], merge: (Double, Double) => Double) = combineDimensions(other.dimensions, merge)
+	def combineWith(other: VectorLike[_])(merge: (Double, Double) => Double) = combineDimensions(other.dimensions, merge)
 	
 	private def combineDimensions(dimensions: Seq[Double], merge: (Double, Double) => Double) =
 	{
@@ -239,7 +239,7 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  * @param other Another vectorlike element
 	  * @return The minimum combination of these two elements where each dimension is taken from the smaller alternative
 	  */
-	def min(other: VectorLike[_]) = combineWith(other, { _ min _ })
+	def min(other: VectorLike[_]) = combineWith(other) { _ min _ }
 	
 	/**
 	  * The top left corner of a bounds between these two elements. In other words,
@@ -253,7 +253,7 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  * @param other Another vectorlike element
 	  * @return A maximum combination of these two elements where each dimension is taken from the larger alternative
 	  */
-	def max(other: VectorLike[_]) = combineWith(other, { _ max _ })
+	def max(other: VectorLike[_]) = combineWith(other) { _ max _ }
 	
 	/**
 	  * The bottom right corner of a bounds between the two vertices. In other words,
@@ -261,5 +261,5 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  * @param other Another element
 	  * @return A maximum of these two elements on each axis
 	  */
-	def bottomRight(other: VectorLike[_]) = combineWith(other, { _ max _ })
+	def bottomRight(other: VectorLike[_]) = combineWith(other) { _ max _ }
 }

@@ -128,6 +128,8 @@ v2.1  ------------------------------------
 
         Changed standardized cubic bezier to a more generic standaradized velocity path
 
+        VectorLike.combineWith(...) -syntax changed to include two parameter lists
+
 
     Fixes
     -----
