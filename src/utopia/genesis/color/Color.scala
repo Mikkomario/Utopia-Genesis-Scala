@@ -5,6 +5,8 @@ import utopia.genesis.util.ApproximatelyEquatable
 import scala.language.implicitConversions
 import utopia.genesis.util.Extensions._
 
+import scala.util.Try
+
 object Color
 {
 	// ATTRIBUTES	---------------------
@@ -90,6 +92,13 @@ object Color
 	  * @return A color based on the rgb value
 	  */
 	def fromInt(rgba: Int) = fromAwt(new java.awt.Color(rgba, true))
+	
+	/**
+	 * Converts a hex value to a color value
+	 * @param hex A color hex value (Eg. "#FFFFFF")
+	 * @return A color value for the hex. Failure if value couldn't be decoded.
+	 */
+	def fromHex(hex: String) = Try[Color](java.awt.Color.decode(hex))
 }
 
 /**
