@@ -4,6 +4,8 @@ import java.awt.image.{BufferedImage, BufferedImageOp}
 import java.io.FileNotFoundException
 import java.nio.file.{Files, Path}
 
+import utopia.flow.util.AutoClose._
+import utopia.flow.util.NullSafe._
 import javax.imageio.ImageIO
 import utopia.flow.datastructure.mutable.Lazy
 import utopia.genesis.color.Color
@@ -34,21 +36,24 @@ object Image
 	/**
 	  * Reads an image from a file
 	  * @param path The path the image is read from
+	  * @param readClass Class through which the resource is read from.
+	  *                  Leave to None when reading files outside program resources. (Default = None)
 	  * @return The read image wrapped in Try
 	  */
-	def readFrom(path: Path) =
+	def readFrom(path: Path, readClass: Option[Class[_]] = None) =
 	{
-		// Checks that file exists
-		if (Files.exists(path))
+		// Checks that file exists (not available with class read method)
+		if (readClass.isDefined || Files.exists(path))
 		{
-			Try
+			// ImageIO and class may return null. Image is read through class, if one  is provided
+			val readResult = Try { readClass.map { c => c.getResourceAsStream("/" + path.toString).toOption
+				.flatMap { _.consume { stream => ImageIO.read(stream).toOption } } }
+				.getOrElse { ImageIO.read(path.toFile).toOption } }
+			
+			readResult.flatMap
 			{
-				// Tries to read the file
-				val result = ImageIO.read(path.toFile)
-				if (result == null)
-					throw new NoImageReaderAvailableException("Cannot read image from file: " + path.toString)
-				else
-					apply(result)
+				case Some(result) => Success(apply(result))
+				case None => Failure(new NoImageReaderAvailableException("Cannot read image from file: " + path.toString))
 			}
 		}
 		else
@@ -57,10 +62,12 @@ object Image
 	
 	/**
 	 * Reads an image from a file. If image is not available, returns an empty image.
-	 * @param path The path this image is read from
+	 * @param path       The path this image is read from
+	  * @param readClass Class through which the resource is read from.
+	  *                  Leave to None when reading files outside program resources. (Default = None)
 	 * @return Read image, which may be empty
 	 */
-	def readOrEmpty(path: Path) = readFrom(path) match
+	def readOrEmpty(path: Path, readClass: Option[Class[_]] = None) = readFrom(path, readClass) match
 	{
 		case Success(img) => img
 		case Failure(_) => empty
