@@ -50,7 +50,7 @@ object Point extends FromModelFactory[Point]
     /**
      * Converts a coordinate map into a point
      */
-    def of(map: Map[Axis, Double]) = Point(map.getOrElse(X, 0), map.getOrElse(Y, 0))
+    def of[K >: Axis2D](map: Map[K, Double]) = Point(map.getOrElse(X, 0), map.getOrElse(Y, 0))
     
     /**
      * A combination of the points with minimum x and y coordinates
