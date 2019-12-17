@@ -82,7 +82,7 @@ Available Extensions
         - Approximately equals (~==) support for Double
 
 
-v2.1  ------------------------------------
+v2.1 (beta)  ------------------------------------
 
     New Features
     ------------
@@ -129,6 +129,8 @@ v2.1  ------------------------------------
         Changed standardized cubic bezier to a more generic standaradized velocity path
 
         VectorLike.combineWith(...) -syntax changed to include two parameter lists
+
+        Point from map creation altered to accept other super types of Axis2D as keys
 
 
     Fixes

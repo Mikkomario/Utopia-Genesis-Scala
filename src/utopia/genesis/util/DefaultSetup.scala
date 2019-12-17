@@ -1,7 +1,5 @@
 package utopia.genesis.util
 
-import java.awt.KeyboardFocusManager
-
 import utopia.flow.async.VolatileFlag
 import utopia.genesis.generic.GenesisDataType
 import utopia.genesis.handling.ActorLoop
