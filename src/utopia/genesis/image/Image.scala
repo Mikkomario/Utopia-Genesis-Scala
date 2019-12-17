@@ -72,6 +72,28 @@ object Image
 		case Success(img) => img
 		case Failure(_) => empty
 	}
+	
+	/**
+	  * Converts an awt image to Genesis image class
+	  * @param awtImage An awt image (buffered images are prefferred because they can be simply wrapped)
+	  * @return A genesis image
+	  */
+	def from(awtImage: java.awt.Image) =
+	{
+		awtImage match {
+			case bufferedImage: BufferedImage => apply(bufferedImage) // Uses buffered image as is
+			case otherType: java.awt.Image =>
+				// Creates a new buffered image and draws original image on the new image
+				val buffer = new BufferedImage(otherType.getWidth(null),
+					otherType.getHeight(null), BufferedImage.TYPE_INT_ARGB)
+				
+				val g = buffer.createGraphics()
+				g.drawImage(otherType, 0, 0, null)
+				g.dispose()
+				
+				apply(buffer)
+		}
+	}
 }
 
 /**
