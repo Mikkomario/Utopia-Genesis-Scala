@@ -41,9 +41,9 @@ class ConvertingKeyListener(val keyStateHandler: KeyStateListener, val keyTypedH
 	
 	// IMPLEMENTED METHODS    --------
 	
-	override def keyPressed(e: KeyEvent) = keyStateChanged(e, true)
+	override def keyPressed(e: KeyEvent) = keyStateChanged(e, newState = true)
 	
-	override def keyReleased(e: KeyEvent) = keyStateChanged(e, false)
+	override def keyReleased(e: KeyEvent) = keyStateChanged(e, newState = false)
 	
 	override def keyTyped(e: KeyEvent) = keyTypedHandler.onKeyTyped(KeyTypedEvent(e.getKeyChar, _keyStatus))
 	
@@ -54,6 +54,11 @@ class ConvertingKeyListener(val keyStateHandler: KeyStateListener, val keyTypedH
 	  * Registers this key listener to receive keyboard events
 	  */
 	def register() = KeyboardFocusManager.getCurrentKeyboardFocusManager.addKeyEventDispatcher(dispatcher)
+	
+	/**
+	 * Removes this key listener from receiving further keyboard events
+	 */
+	def unregister() = KeyboardFocusManager.getCurrentKeyboardFocusManager.removeKeyEventDispatcher(dispatcher)
 	
 	private def keyStateChanged(e: KeyEvent, newState: Boolean) =
 	{
