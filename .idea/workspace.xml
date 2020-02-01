@@ -6,10 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a34f54cb-6443-4617-9ea2-d86bc0b4cc7c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utopia/genesis/image/Image.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/utopia/genesis/image/Image.scala" afterDir="false" />
-    </list>
+    <list default="true" id="a34f54cb-6443-4617-9ea2-d86bc0b4cc7c" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -456,7 +453,13 @@
       <option name="presentableId" value="LOCAL−00042" />
       <updated>1573561423014</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL−00043" summary="Added conversion from awt image to Image">
+      <created>1576587042442</created>
+      <option name="number" value="LOCAL−00043" />
+      <option name="presentableId" value="LOCAL−00043" />
+      <updated>1576587042442</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -473,7 +476,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="MouseTest succeeded. Fix to mouse event generator&#10;&#10;also removed warnings from Transformation" />
     <MESSAGE value="Clipping test completed" />
     <MESSAGE value="Added data type support for point and size. DataTypeTest ran successfully" />
     <MESSAGE value="Rest of the tests finished" />
@@ -498,6 +500,7 @@
     <MESSAGE value="Added velocity and acceleration classes" />
     <MESSAGE value="Tested and debugged velocity &amp; acceleration classes" />
     <MESSAGE value="added new artifact" />
-    <option name="LAST_COMMIT_MESSAGE" value="added new artifact" />
+    <MESSAGE value="Added conversion from awt image to Image" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added conversion from awt image to Image" />
   </component>
 </project>
