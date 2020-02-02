@@ -333,4 +333,44 @@ case class Bounds(position: Point, size: Size) extends Rectangular with ValueCon
         else
             Some(Bounds.between(newTopLeft, newBottomRight))
     }
+    
+    /**
+      * @param maxHeight Maximum height of resulting bounds
+      * @return A top part of these bounds with up to a specific height
+      */
+    def topSlice(maxHeight: Double) = if (height <= maxHeight) this else withHeight(maxHeight)
+    
+    /**
+      * @param maxHeight Maximum height of resulting bounds
+      * @return A bottom part of these bounds with up to a specific height
+      */
+    def bottomSlice(maxHeight: Double) = if (height <= maxHeight) this else
+        Bounds(position.plusY(height - maxHeight), Size(width, maxHeight))
+    
+    /**
+      * @param maxWidth Maximum width of resulting bounds
+      * @return A leftmost part of these bounds with up to a specific width
+      */
+    def leftSlice(maxWidth: Double) = if (width <= maxWidth) this else withWidth(maxWidth)
+    
+    /**
+      * @param maxWidth Maximum width of resulting bounds
+      * @return A rightmost part of these bounds with up to a specific width
+      */
+    def rightSlice(maxWidth: Double) = if (width <= maxWidth) this else
+        Bounds(position.plusX(width - maxWidth), Size(maxWidth, height))
+    
+    /**
+      * Slices these bounds from a specific direction
+      * @param direction The direction from which these bounds are sliced
+      * @param maxLength The maximum length of the taken are (parallel to 'direction')
+      * @return A slice of these bounds
+      */
+    def slice(direction: Direction2D, maxLength: Double) = direction match
+    {
+        case Direction2D.Up => topSlice(maxLength)
+        case Direction2D.Down => bottomSlice(maxLength)
+        case Direction2D.Left => leftSlice(maxLength)
+        case Direction2D.Right => rightSlice(maxLength)
+    }
 }

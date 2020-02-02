@@ -52,5 +52,8 @@ object ShapeTest extends App
     
     assert(Bounds.around(Vector(bounds1, bounds2)) == Bounds.between(Point(-30, -5), Point(20, 10)))
     
+    // Tests some other bounds methods
+    assert(bounds1.bottomSlice(5) == Bounds(Point(0, 5), Size(20, 5)))
+    
     println("Success!")
 }
