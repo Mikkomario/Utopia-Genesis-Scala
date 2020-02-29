@@ -54,6 +54,12 @@ object KeyStateEvent
     def keysFilter(acceptedKeys: Seq[Int]): Filter[KeyStateEvent] = e => acceptedKeys.contains(e.index)
     
     /**
+      * @param notAcceptedKeys Keys that are not accepted by the filter
+      * @return A filter that accepts events for all keys except those specified
+      */
+    def notKeysFilter(notAcceptedKeys: Seq[Int]): Filter[KeyStateEvent] = e => !notAcceptedKeys.contains(e.index)
+    
+    /**
      * @param char Target combo character
      * @return A filter that only accepts events where control is being held down while specified character key is pressed
      */
