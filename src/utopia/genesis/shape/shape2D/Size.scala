@@ -114,6 +114,8 @@ case class Size(width: Double, height: Double) extends VectorLike[Size] with App
     
     // IMPLEMENTED    -----------------------
     
+    override protected def repr = this
+    
     lazy val dimensions = Vector(width, height)
     
     override def buildCopy(dimensions: Vector[Double]) =

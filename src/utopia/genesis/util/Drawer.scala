@@ -4,7 +4,7 @@ import java.awt.{AlphaComposite, BasicStroke, Font, Graphics, Graphics2D, Image,
 import java.awt.geom.AffineTransform
 
 import utopia.genesis.color.Color
-import utopia.genesis.shape.shape2D.{Bounds, Point, ShapeConvertible, Transformation}
+import utopia.genesis.shape.shape2D.{Bounds, Point, ShapeConvertible, Size, Transformation}
 
 object Drawer
 {
@@ -134,18 +134,9 @@ class Drawer(val graphics: Graphics2D, val fillPaint: Option[Paint] = Some(java.
     /**
      * Draws a piece of text so that it is centered in a set of bounds
      */
-    def drawTextCentered(text: String, font: Font, bounds: Bounds)
+    def drawTextCentered(text: String, font: Font, bounds: Bounds) =
     {
-        // Sets the color, preferring edge color
-        edgePaint.orElse(fillPaint).foreach { graphics.setPaint }
-        
-        graphics.setFont(font)
-        val metrics = graphics.getFontMetrics
-        
-        val x = bounds.position.x + (bounds.width - metrics.stringWidth(text)) / 2
-        val y = bounds.position.y + (bounds.height - metrics.getHeight) / 2 + metrics.getAscent
-        
-        graphics.drawString(text, x.toInt, y.toInt)
+        drawTextPositioned(text, font) { textSize => bounds.topLeft + (bounds.size - textSize) / 2 }
     }
     
     /**
@@ -161,6 +152,26 @@ class Drawer(val graphics: Graphics2D, val fillPaint: Option[Paint] = Some(java.
         graphics.setFont(font)
         val metrics = graphics.getFontMetrics
         graphics.drawString(text, topLeft.x.toInt, topLeft.y.toInt + metrics.getAscent)
+    }
+    
+    /**
+      * Draws a piece of text. Text display size affects the positioning
+      * @param text Text to draw
+      * @param font Font to use
+      * @param getTextTopLeft A function for determining the position of the <b>top-left</b> corner of the drawn
+      *                       text when text size is known.
+      */
+    def drawTextPositioned(text: String, font: Font)(getTextTopLeft: Size => Point) =
+    {
+        // Sets up the graphics context
+        edgePaint.orElse(fillPaint).foreach(graphics.setPaint)
+        graphics.setFont(font)
+        val metrics = graphics.getFontMetrics
+        
+        val textSize = Size(metrics.stringWidth(text), metrics.getHeight)
+        val textTopLeft = getTextTopLeft(textSize)
+        
+        graphics.drawString(text, textTopLeft.x.toInt, textTopLeft.y.toInt + metrics.getAscent)
     }
     
     /**

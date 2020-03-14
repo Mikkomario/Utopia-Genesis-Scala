@@ -42,19 +42,15 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  */
 	def buildCopy(dimensions: Vector[Double]): Repr
 	
+	/**
+	  * @return This instance as 'Repr'
+	  */
+	protected def repr: Repr
+	
 	
 	// IMPLEMENTED	-----------------
 	
-	def along(axis: Axis) =
-	{
-		val index = axis match
-		{
-			case X => 0
-			case Y => 1
-			case Z => 2
-		}
-		dimensions.getOrElse(index, 0)
-	}
+	def along(axis: Axis) = dimensions.getOrElse(indexForAxis(axis), 0)
 	
 	override def length = math.sqrt(this dot this)
 	
@@ -168,7 +164,7 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  * @param axis Target axis
 	  * @return This element divided on specified axis
 	  */
-	def /(n: Double, axis: Axis) = if (n == 0) buildCopy(dimensions) else map(_ / n, axis)
+	def /(n: Double, axis: Axis) = if (n == 0) repr else map(_ / n, axis)
 	
 	
 	// OTHER	--------------------------
@@ -194,15 +190,10 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	def map(f: Double => Double, along: Axis) =
 	{
 		val myDimensions = dimensions
-		val mapIndex = along match
-		{
-			case X => 0
-			case Y => 1
-			case Z => 2
-		}
+		val mapIndex = indexForAxis(along)
 		
 		if (myDimensions.size <= mapIndex)
-			buildCopy(dimensions)
+			repr
 		else
 		{
 			val firstPart = myDimensions.take(mapIndex) :+ f(myDimensions(mapIndex))
@@ -262,4 +253,49 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  * @return A maximum of these two elements on each axis
 	  */
 	def bottomRight(other: VectorLike[_]) = combineWith(other) { _ max _ }
+	
+	/**
+	  * Creates a copy of this vectorlike instance with a single dimension replaced
+	  * @param amount New amount for the specified dimension
+	  * @param axis Axis that determines target dimension
+	  * @return A copy of this vectorlike instance with specified dimension replaced
+	  */
+	def withDimension(amount: Double, axis: Axis) =
+	{
+		val targetIndex = indexForAxis(axis)
+		val myDimensions = dimensions
+		val newDimensions =
+		{
+			if (targetIndex < myDimensions.size)
+				myDimensions.updated(targetIndex, amount)
+			else
+				myDimensions.padTo(targetIndex, 0.0) :+ amount
+		}
+		buildCopy(newDimensions)
+	}
+	
+	/**
+	  * @param axis Target axis
+	  * @return Whether this vectorlike instance has a positive value for specified dimension
+	  */
+	def isPositiveAlong(axis: Axis) = along(axis) >= 0
+	
+	/**
+	  * @param axis Target axis
+	  * @return A copy of this vectorlike instance with a non-negative value for the specified dimension
+	  */
+	def positiveAlong(axis: Axis) =
+	{
+		if (isPositiveAlong(axis))
+			repr
+		else
+			withDimension(0.0, axis)
+	}
+	
+	private def indexForAxis(axis: Axis) = axis match
+	{
+		case X => 0
+		case Y => 1
+		case Z => 2
+	}
 }

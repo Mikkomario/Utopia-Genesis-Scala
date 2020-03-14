@@ -10,6 +10,8 @@ import utopia.genesis.shape.Axis2D
  */
 sealed trait Direction2D
 {
+	// ABSTRACT	-------------------------------
+	
 	/**
 	 * @return Axis used for determining this side
 	 */

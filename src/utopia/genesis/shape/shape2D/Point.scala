@@ -51,6 +51,13 @@ object Point extends FromModelFactory[Point]
      * Converts a coordinate map into a point
      */
     def of[K >: Axis2D](map: Map[K, Double]) = Point(map.getOrElse(X, 0), map.getOrElse(Y, 0))
+	
+	/**
+	  * Creates a new point by calling specified function for both axes (X and Y)
+	  * @param f A function that is called for specified axes
+	  * @return Point with function results as values
+	  */
+	def calculateWith(f: Axis2D => Double) = Point(f(X), f(Y))
     
     /**
      * A combination of the points with minimum x and y coordinates
@@ -112,6 +119,8 @@ case class Point(override val x: Double, override val y: Double) extends VectorL
     override def toModel = Model.fromMap(HashMap("x" -> x, "y" -> y))
     
     override def ~==(other: Point) = (x ~== other.x) && (y ~== other.y)
+	
+	override protected def repr = this
 	
 	override def toString = s"($x, $y)"
 	
