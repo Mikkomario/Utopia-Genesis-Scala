@@ -161,6 +161,7 @@ class Drawer(val graphics: Graphics2D, val fillPaint: Option[Paint] = Some(java.
       * @param getTextTopLeft A function for determining the position of the <b>top-left</b> corner of the drawn
       *                       text when text size is known.
       */
+        // TODO: Handle multiline text
     def drawTextPositioned(text: String, font: Font)(getTextTopLeft: Size => Point) =
     {
         // Sets up the graphics context
