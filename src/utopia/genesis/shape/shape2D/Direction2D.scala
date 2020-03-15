@@ -102,6 +102,16 @@ object Direction2D
 	def vertical = Vector[Direction2D](Up, Down)
 	
 	/**
+	  * @param axis Target axis
+	  * @return Directions along that axis
+	  */
+	def along(axis: Axis2D) = axis match
+	{
+		case X => horizontal
+		case Y => vertical
+	}
+	
+	/**
 	 * @param axis Target axis
 	 * @param isPositive Whether direction should be positive (true) or negative (false)
 	 * @return A direction
