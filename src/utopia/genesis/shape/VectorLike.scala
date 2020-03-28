@@ -124,7 +124,7 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  * @param axis Target axis
 	  * @return A copy of this element with one dimension translated
 	  */
-	def +(adjust: Double, axis: Axis) = map(_ + adjust, axis)
+	def +(adjust: Double, axis: Axis) = mapAxis(axis) { _ + adjust }
 	
 	/**
 	  * @param adjust Translation on target axis
@@ -151,7 +151,7 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  * @param axis Target axis
 	  * @return A copy of this element with one dimension multiplied
 	  */
-	def *(n: Double, axis: Axis) = map(_ * n, axis)
+	def *(n: Double, axis: Axis) = mapAxis(axis) { _ * n }
 	
 	/**
 	  * @param other Another vectorlike element
@@ -164,7 +164,7 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  * @param axis Target axis
 	  * @return This element divided on specified axis
 	  */
-	def /(n: Double, axis: Axis) = if (n == 0) repr else map(_ / n, axis)
+	def /(n: Double, axis: Axis) = if (n == 0) repr else mapAxis(axis) { _ / n }
 	
 	
 	// OTHER	--------------------------
@@ -187,6 +187,7 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 	  * @param along the axis that specifies the mapped coordinate
 	  * @return A copy of this element with the mapped coordinate
 	  */
+	@deprecated("Replaced with mapAxis", "v2.1")
 	def map(f: Double => Double, along: Axis) =
 	{
 		val myDimensions = dimensions
@@ -194,6 +195,26 @@ trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Re
 		
 		if (myDimensions.size <= mapIndex)
 			repr
+		else
+		{
+			val firstPart = myDimensions.take(mapIndex) :+ f(myDimensions(mapIndex))
+			buildCopy(firstPart ++ myDimensions.drop(mapIndex + 1))
+		}
+	}
+	
+	/**
+	  * Maps a single coordinate in this vectorlike element
+	  * @param axis Targeted axis
+	  * @param f A mapping function
+	  * @return A copy of this vectorlike element with mapped coordinate
+	  */
+	def mapAxis(axis: Axis)(f: Double => Double) =
+	{
+		val myDimensions = dimensions
+		val mapIndex = indexForAxis(axis)
+		
+		if (myDimensions.size <= mapIndex)
+			buildCopy(myDimensions.padTo(mapIndex, 0.0) :+ f(0.0))
 		else
 		{
 			val firstPart = myDimensions.take(mapIndex) :+ f(myDimensions(mapIndex))

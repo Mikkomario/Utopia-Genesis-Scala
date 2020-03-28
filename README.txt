@@ -132,6 +132,9 @@ v2.1 (beta)  ------------------------------------
 
         Point from map creation altered to accept other super types of Axis2D as keys
 
+        map(Axis, Double => Double) was replaced with mapAxis(Axis)(Double => Double). The previous implementation is
+        deprecated and will be removed in a future release.
+
 
     Fixes
     -----

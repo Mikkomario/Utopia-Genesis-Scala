@@ -1,10 +1,13 @@
 package utopia.genesis.util
 
-import java.awt.{AlphaComposite, BasicStroke, Font, Graphics, Graphics2D, Image, Paint, Shape, Stroke}
+import java.awt.{AlphaComposite, BasicStroke, Font, Graphics, Graphics2D, Image, Paint, Shape, Stroke, Toolkit}
 import java.awt.geom.AffineTransform
 
 import utopia.genesis.color.Color
 import utopia.genesis.shape.shape2D.{Bounds, Point, ShapeConvertible, Size, Transformation}
+import utopia.flow.util.NullSafe._
+
+import scala.util.Try
 
 object Drawer
 {
@@ -148,8 +151,7 @@ class Drawer(val graphics: Graphics2D, val fillPaint: Option[Paint] = Some(java.
     def drawText(text: String, font: Font, topLeft: Point) =
     {
         // Sets the color, preferring edge color
-        edgePaint.orElse(fillPaint).foreach { graphics.setPaint }
-        graphics.setFont(font)
+        prepareForTextDraw(font)
         val metrics = graphics.getFontMetrics
         graphics.drawString(text, topLeft.x.toInt, topLeft.y.toInt + metrics.getAscent)
     }
@@ -165,8 +167,7 @@ class Drawer(val graphics: Graphics2D, val fillPaint: Option[Paint] = Some(java.
     def drawTextPositioned(text: String, font: Font)(getTextTopLeft: Size => Point) =
     {
         // Sets up the graphics context
-        edgePaint.orElse(fillPaint).foreach(graphics.setPaint)
-        graphics.setFont(font)
+        prepareForTextDraw(font)
         val metrics = graphics.getFontMetrics
         
         val textSize = Size(metrics.stringWidth(text), metrics.getHeight)
@@ -366,6 +367,16 @@ class Drawer(val graphics: Graphics2D, val fillPaint: Option[Paint] = Some(java.
      * be reversed but the original instance can still be used for drawing without clipping.
      */
     def clippedTo(shape: ShapeConvertible): Drawer = clippedTo(shape.toShape)
+    
+    private def prepareForTextDraw(font: Font) =
+    {
+        edgePaint.orElse(fillPaint).foreach(graphics.setPaint)
+        graphics.setFont(font)
+        
+        // Sets rendering hints based on desktop settings
+        Try { Toolkit.getDefaultToolkit.getDesktopProperty("awt.font.desktophints").toOption
+            .map { _.asInstanceOf[java.util.Map[_, _]] }.foreach(graphics.setRenderingHints) }
+    }
     
     private def copy(fillColor: Option[Paint], edgeColor: Option[Paint]) = 
     {
