@@ -1,6 +1,6 @@
 package utopia.genesis.animation.animator
 
-import utopia.flow.datastructure.mutable.Lazy
+import utopia.flow.async.VolatileLazy
 import utopia.genesis.handling.mutable.{Actor, Drawable}
 import utopia.genesis.util.Drawer
 
@@ -22,7 +22,7 @@ trait Animator[A] extends Actor with Drawable
 	  */
 	var speedModifier = 1.0
 	private var _progress: Duration = Duration.Zero
-	private lazy val cached = Lazy { apply(_progress / animationDuration) }
+	private lazy val cached = VolatileLazy { apply(_progress / animationDuration) }
 	
 	
 	// ABSTRACT	-----------------------

@@ -8,6 +8,27 @@ import utopia.genesis.util.Drawer
 
 import scala.concurrent.duration.Duration
 
+object SpriteDrawer
+{
+	/**
+	  * @param sprite A sprite animation (image + image origin)
+	  * @param transformation Initial transformation state
+	  * @return A new sprite drawer
+	  */
+	def apply(sprite: TimedAnimation[(Image, Point)], transformation: Transformation) =
+		new SpriteDrawer(new PointerWithEvents(sprite), new PointerWithEvents(transformation))
+	
+	/**
+	  * @param strip A strip of images
+	  * @param origin Image origin (relative to image top-left)
+	  * @param duration Strip completion duration
+	  * @param transformation Initial transformation state
+	  * @return A new sprite drawer
+	  */
+	def apply(strip: Strip, origin: Point, duration: Duration, transformation: Transformation): SpriteDrawer =
+		apply(strip.map { _ -> origin }.over(duration), transformation)
+}
+
 /**
   * Used for drawing animated sprites using a specific transformation state
   * @author Mikko Hilpinen

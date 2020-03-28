@@ -41,6 +41,19 @@ object Transformation extends FromModelFactory[Transformation]
     def translation(amount: Vector3D) = Transformation(translation = amount)
     
     /**
+      * @param x Translation x-wise
+      * @param y Translation y-wise
+      * @return A new translation transformation
+      */
+    def translation(x: Double, y: Double): Transformation = translation(Vector3D(x, y))
+    
+    /**
+      * @param amount Translation amount (position)
+      * @return A transformation that sets an object to specified position
+      */
+    def position(amount: Point) = translation(amount.toVector)
+    
+    /**
      * This transformation scales the target by the provided amount
      */
     def scaling(amount: Vector3D) = Transformation(scaling = amount)

@@ -23,6 +23,13 @@ object Rotation
     def ofDegrees(degrees: Double, direction: RotationDirection = Clockwise) = Rotation(degrees.toRadians, direction)
 	
 	/**
+	  * @param circles The number of full circles (360 degrees or 2Pi radians) rotated
+	  * @param direction Rotation direction (default = Clockwise)
+	  * @return A new rotation
+	  */
+	def ofCircles(circles: Double, direction: RotationDirection = Clockwise) = Rotation(circles * 2 * math.Pi)
+	
+	/**
 	  * Calculates the rotation between two angles
 	  * @param start The start angle
 	  * @param end The end angle
@@ -32,17 +39,17 @@ object Rotation
 	def between(start: Angle, end: Angle, direction: RotationDirection) =
 	{
 		if (start ~== end)
-			Rotation.ofRadians(2 * Math.PI, direction)
+			Rotation.ofRadians(2 * math.Pi, direction)
 		else
 		{
 			val rotationAmount =
 			{
 				if (direction == Clockwise)
 				{
-					if (end > start) end.toRadians - start.toRadians else end.toRadians + Math.PI * 2 - start.toRadians
+					if (end > start) end.toRadians - start.toRadians else end.toRadians + math.Pi * 2 - start.toRadians
 				}
 				else
-					if (start > end) start.toRadians - end.toRadians else start.toRadians + Math.PI * 2 - end.toRadians
+					if (start > end) start.toRadians - end.toRadians else start.toRadians + math.Pi * 2 - end.toRadians
 			}
 			Rotation.ofRadians(rotationAmount, direction)
 		}
