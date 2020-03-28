@@ -220,11 +220,11 @@ case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector
     /**
      * Transforms a shape <b>from relative space to absolute space</b>
      */
-    def apply[B](relative: TransformableShape[B]) = relative.transformedWith(this)
+    def apply[B](relative: TransformProjectable[B]) = relative.transformedWith(this)
     
     /**
-     * Combines the two transformations together. The end result is effectively same as transforming 
-     * the target with the provided transformation, then with this transformation.<p>
+     * Combines these two transformations together. The end result is effectively same as transforming
+     * a target with the provided transformation 'other', then with 'this' transformation.<p>
      * Please notice that the scaling and rotation affect the scaling and translation applied (for
      * example, adding translation of (1, 0, 0) to a transformation with
      * zero position and scaling of 2 will create a transformation with (2, 0, 0) position and
@@ -252,7 +252,7 @@ case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector
     /**
      * Transforms a shape <b>from absolute space to relative space</b>
      */
-    def invert[B](absolute: TransformableShape[B]) = absolute.transformedWith(-this)
+    def invert[B](absolute: TransformProjectable[B]) = absolute.transformedWith(-this)
     
     /**
      * Converts an absolute coordinate into a relative one. Same as calling invert(Vector3D)
@@ -267,7 +267,7 @@ case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector
     /**
      * Converts an absolute shape to a relative one. Same as calling invert(...)
      */
-    def toRelative[B](absolute: TransformableShape[B]) = invert(absolute)
+    def toRelative[B](absolute: TransformProjectable[B]) = invert(absolute)
     
     /**
      * Converts a relative coordinate into an absolute one. Same as calling apply(Point)
@@ -282,7 +282,7 @@ case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector
     /**
      * Converts a relative shape to an absolute one. Same as calling apply(...)
      */
-    def toAbsolute[B](relative: TransformableShape[B]) = apply(relative)
+    def toAbsolute[B](relative: TransformProjectable[B]) = apply(relative)
     
     /**
      * Rotates the transformation around an absolute origin point

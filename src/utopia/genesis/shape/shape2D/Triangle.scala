@@ -20,7 +20,7 @@ object Triangle
   * @param side1 The first side of this triangle as a vector
   * @param side2 The second side of this triangle as a vector
   */
-case class Triangle(origin: Point, side1: Vector3D, side2: Vector3D) extends Polygonic with TransformableShape[Triangle]
+case class Triangle(origin: Point, side1: Vector3D, side2: Vector3D) extends Polygonic with TransformProjectable[Triangle]
 {
 	// IMPLEMENTED	----------------
 	

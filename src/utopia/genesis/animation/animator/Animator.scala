@@ -1,4 +1,4 @@
-package utopia.genesis.animation
+package utopia.genesis.animation.animator
 
 import utopia.flow.datastructure.mutable.Lazy
 import utopia.genesis.handling.mutable.{Actor, Drawable}
@@ -10,6 +10,7 @@ import scala.concurrent.duration.{Duration, FiniteDuration}
   * Used for drawing animations with or without transformations. Mutable.
   * @author Mikko Hilpinen
   * @since 18.8.2019, v2.1+
+  * @tparam A Type of animation result that is also drawn
   */
 trait Animator[A] extends Actor with Drawable
 {
@@ -21,7 +22,7 @@ trait Animator[A] extends Actor with Drawable
 	  */
 	var speedModifier = 1.0
 	private var _progress: Duration = Duration.Zero
-	private lazy val cached = new Lazy(() => apply(_progress / animationDuration))
+	private lazy val cached = Lazy { apply(_progress / animationDuration) }
 	
 	
 	// ABSTRACT	-----------------------
@@ -55,7 +56,11 @@ trait Animator[A] extends Actor with Drawable
 	  * Changes this animation's progress
 	  * @param newProgress The new progress of this animation
 	  */
-	def progress_=(newProgress: Double) = _progress = newProgress * animationDuration
+	def progress_=(newProgress: Double) =
+	{
+		_progress = newProgress * animationDuration
+		cached.reset()
+	}
 	
 	
 	// IMPLEMENTED	--------------------
@@ -66,7 +71,7 @@ trait Animator[A] extends Actor with Drawable
 		val mod = speedModifier
 		if (mod != 0)
 		{
-			_progress += duration * speedModifier
+			_progress += duration * mod
 			val ad = animationDuration
 			// Resets progress if past animation duration
 			while (_progress > ad) { _progress -= ad }
@@ -78,6 +83,15 @@ trait Animator[A] extends Actor with Drawable
 	
 	
 	// OTHER	----------------------
+	
+	/**
+	  * Resets the current animation progress
+	  */
+	def reset() =
+	{
+		_progress = Duration.Zero
+		cached.reset()
+	}
 	
 	/**
 	  * Stops this animation by setting the speed modifier to 0

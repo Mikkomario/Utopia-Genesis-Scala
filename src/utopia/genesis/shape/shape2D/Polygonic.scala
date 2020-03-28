@@ -13,7 +13,7 @@ import scala.collection.immutable.VectorBuilder
   * @author Mikko Hilpinen
   * @since 14.4.2019, v2+
   */
-trait Polygonic extends ShapeConvertible with Projectable with Area2D with TransformableShape[Polygonic]
+trait Polygonic extends ShapeConvertible with Projectable with Area2D with TransformProjectable[Polygonic]
 {
 	// ABSTRACT	----------------
 	

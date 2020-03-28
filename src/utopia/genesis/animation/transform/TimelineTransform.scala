@@ -1,4 +1,4 @@
-package utopia.genesis.animation
+package utopia.genesis.animation.transform
 
 import scala.concurrent.duration.{Duration, FiniteDuration}
 

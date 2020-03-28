@@ -1,61 +1,88 @@
 package utopia.genesis.animation
 
-import scala.concurrent.duration.{Duration, FiniteDuration}
+import utopia.genesis.animation.TimedAnimation.{MapAnimation, RepeatingAnimation}
+import utopia.genesis.animation.transform.{AnimatedTransform, TimedAnimationWithTranform}
 
-object TimedAnimation
-{
-	/*
-	  * Wraps an animation by giving it duration
-	  * @param animation An animation
-	  * @param duration Targeted animation duration
-	  * @tparam A Type of animation result
-	  * @return A new timed animation
-	  */
-	// def wrap[A](animation: Animation[A], duration: Duration) = TimedAnimationWrapper(animation, duration)
-}
+import scala.concurrent.duration.Duration
 
 /**
-  * This type of animation has a specific duration
+  * A common trait for animations that have a time element
   * @author Mikko Hilpinen
-  * @since 13.8.2019, v2.1+
+  * @since 28.3.2020, v2.1
   */
-@deprecated("This trait will likely be removed and replaced with transform and/or animator", "v2.1")
-trait TimedAnimation[+A, +Repr] extends Animation[A]
+trait TimedAnimation[+A] extends Animation[A]
 {
-	// ABSTRACT	----------------------
+	// ABSTRACT	----------------------------
 	
 	/**
-	  * @return The duration this animation takes to complete
+	  * @return The duration of this transform
 	  */
 	def duration: Duration
 	
+	
+	// IMPLEMENTED	------------------------
+	
+	override def map[B](f: A => B): TimedAnimation[B] = new MapAnimation(this)(f)
+	
+	override def repeated(times: Int): TimedAnimation[A] = new RepeatingAnimation[A](this, times)
+	
+	override def transformedWith[O >: A, R](transform: AnimatedTransform[O, R]) =
+		TimedAnimationWithTranform.wrapTimedAnimation(this, transform)
+	
+	
+	// OTHER	----------------------------
+	
 	/**
-	  * @param newDuration Target duration
-	  * @return A copy of this animation with specified duration
+	  * @param passedTime Amount of passed time since animation start
+	  * @return Animation's progress at specified time
 	  */
-	def withDuration(newDuration: Duration): Repr
+	def apply(passedTime: Duration): A = apply(passedTime / duration)
 	
-	
+	/**
+	  * @param passedTime Amount of passed time since animation start
+	  * @return Animation's progress at specified time. If time is larger than the duration of this transform,
+	  *         this animation is repeated.
+	  */
+	def repeating(passedTime: Duration) =
+	{
+		val d = duration.toNanos
+		apply((passedTime.toNanos % d) / d.toDouble)
+	}
+}
+
+object TimedAnimation
+{
 	// OTHER	-----------------------
 	
 	/**
-	  * @param timePoint The amount of time passed in this animation
-	  * @return This animation's state at specified time point
+	  * Wraps another animation and gives it a duration
+	  * @param animation Animation
+	  * @param duration Duration for the animation
+	  * @tparam A Type of animation result
+	  * @return Provided animation with a duration
 	  */
-	def apply(timePoint: FiniteDuration): A = apply(timePoint / duration)
+	def wrap[A](animation: Animation[A], duration: Duration): TimedAnimation[A] =
+		new TimedAnimationWrapper[A](animation, duration)
 	
-	/**
-	  * @param multiplier Animation speed multiplier
-	  * @return A copy of this animation with multiplied animation speed
-	  */
-	def timesSpeed(multiplier: Double) = withDuration(duration / multiplier)
+	
+	// NESTED	-----------------------
+	
+	private class TimedAnimationWrapper[+A](wrapped: Animation[A], override val duration: Duration) extends TimedAnimation[A]
+	{
+		override def apply(progress: Double) = wrapped(progress)
+	}
+	
+	private class MapAnimation[A, +B](original: TimedAnimation[A])(f: A => B) extends TimedAnimation[B]
+	{
+		override def duration = original.duration
+		
+		override def apply(progress: Double) = f(original(progress))
+	}
+	
+	private class RepeatingAnimation[+A](original: TimedAnimation[A], repeats: Int) extends TimedAnimation[A]
+	{
+		override def duration = original.duration * repeats
+		
+		override def apply(progress: Double) = original((progress * repeats) % 1)
+	}
 }
-
-/*
-case class TimedAnimationWrapper[+A](animation: Animation[A], duration: Duration) extends
-	TimedAnimation[A, TimedAnimationWrapper[A]]
-{
-	override def withDuration(newDuration: Duration) = TimedAnimationWrapper(animation, newDuration)
-	
-	override def apply(progress: Double) = animation(progress)
-}*/

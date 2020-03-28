@@ -105,6 +105,9 @@ class Angle(rawRadians: Double) extends Equatable with ApproximatelyEquatable[An
     
     override def toString = f"$toDegrees%1.2f degrees"
     
+    /**
+      * @return A rotation that will turn an item from 0 radians to this angle
+      */
     def toRotation = Rotation(toRadians)
     
     

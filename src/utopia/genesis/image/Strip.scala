@@ -2,6 +2,7 @@ package utopia.genesis.image
 
 import utopia.genesis.animation.Animation
 import utopia.genesis.shape.shape2D.Size
+import utopia.genesis.util.FPS
 
 /**
   * A strip consists of multiple sequential images
@@ -44,7 +45,7 @@ case class Strip(images: Vector[Image]) extends Animation[Image]
 	override def apply(progress: Double): Image = apply((length * progress).toInt)
 	
 	
-	// OPERATORS	-------------------
+	// OTHER	-----------------------
 	
 	/**
 	  * Finds a specific image from this strip
@@ -58,4 +59,10 @@ case class Strip(images: Vector[Image]) extends Animation[Image]
 		else
 			images(length + (index % length))
 	}
+	
+	/**
+	  * @param fps Animation speed in frames per second
+	  * @return An animation based on this strip with specified animation speed
+	  */
+	def toTimedAnimation(fps: FPS) = over(images.size * fps.interval)
 }

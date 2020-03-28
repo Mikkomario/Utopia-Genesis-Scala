@@ -1,8 +1,7 @@
-package utopia.genesis.animation
-
-import utopia.flow.util.CollectionExtensions._
+package utopia.genesis.animation.transform
 
 import scala.concurrent.duration.Duration
+import utopia.flow.util.CollectionExtensions._
 
 /**
   * Used for transforming an instance using possibly multiple timelines and layers of transformations
