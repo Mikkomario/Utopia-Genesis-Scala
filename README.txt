@@ -1,6 +1,7 @@
 UTOPIA GENESIS
 --------------
 
+
 Required Libraries
 ------------------
     - Utopia Flow
@@ -26,6 +27,7 @@ Main Features
         - Vector projection fully supported with shape intersection and collision handling in mind
             - This feature is extended in the Utopia Conflict project
         - Typeless value support for the basic shapes
+        - Supporting classes for velocity and acceleration included for movement vectors
 
     Advanced 2D graphics with Drawable trait
         - Easy painting of all 2D shapes
@@ -45,6 +47,17 @@ Main Features
         - Won't break even when frame rate gets low (program logic prioritized over slowdown, customizable)
         - Simple to use with Actor and ActorHandler traits
         - Easy to setup with ActorLoop
+
+    New Color representation
+        - Built-in support for both RGB and HSL color styles
+        - Various color transformations
+        - Implicit conversions between different styles
+        - Alpha support
+
+    Images and image processing
+        - New Image class for immutable image representation
+        - Image transformations for various image-altering operations
+        - Full support for image scaling and resizing simply by using affine transformations at draw time
 
 
 Usage Notes
@@ -68,6 +81,77 @@ Available Extensions
 
     utopia.genesis.util.Extensions
         - Approximately equals (~==) support for Double
+
+
+v2.1 ------------------------------------
+
+    New Features
+    ------------
+
+        Functional constructors added for all mouse listeners and key listeners
+
+        MouseButtonStateEvent and MouseWheelEvent now contain value isConsumed that specifies whether a listener
+        has consumed the event already.
+
+        New RGB, HSL and Color classes to better handle colors
+
+        New Image and image transformation classes
+
+        Various path funtions, including Bezier curves
+
+        Utility constructors added to Angle for HSL color support
+
+        Velocity & Acceleration classes added
+
+        Couple new utility filters in KeyStateEvent
+
+        New methods in Drawer for text drawing
+
+
+    Changes & Updates
+    -----------------
+
+        java.time.Duration replaced with scala.concurrent.FiniteDuration in Actor, MouseMoveListener and MouseEvent
+
+        MouseButtonStateListeners and MouseWheelListeners now return a consume event if they consumed incoming events.
+        Listener classes now use multiple parameter lists when cosntructing function-based listeners.
+
+        Drawer withColor separated to withColor that works with utopia.genesis.colo.Color class and withPaint
+        that works with java.awt.Paint class
+
+        Some utility methods to Size (for determining whether size is zero or negative and for fitting into another size)
+
+        New utility methods added to Bounds
+
+        Unnecessary type parameter removed from ApproximatelyEquatable methods
+
+        Fixed errors from Flow changes
+
+        MouseMoveEvent.velocity now returns a Velocity instead of a Vector3D, also transition now returns a
+        Vector3D instead of a Point
+
+        Changed standardized cubic bezier to a more generic standaradized velocity path
+
+        VectorLike.combineWith(...) -syntax changed to include two parameter lists
+
+        Point from map creation altered to accept other super types of Axis2D as keys
+
+        map(Axis, Double => Double) was replaced with mapAxis(Axis)(Double => Double). The previous implementation is
+        deprecated and will be removed in a future release.
+
+        Drawer text drawing now uses anti-alising for better draw quality
+
+
+    Fixes
+    -----
+
+        Mouse event coordinates were incorrect in dialogs (windows with parent components). Now fixed.
+
+
+    Required Libraries
+    ------------------
+        - Utopia Flow v1.6.1+
+        - Utopia Inception v2+
 
 
 v2  ----------------------------------------

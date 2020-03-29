@@ -44,4 +44,14 @@ object RotationDirection
      * All possible values of this trait / enum
      */
     val values = Vector[RotationDirection](Clockwise, Counterclockwise)
+    
+    /**
+      * @return The positive rotation direction
+      */
+    def positive = Clockwise
+    
+    /**
+      * @return The negative rotation direction
+      */
+    def negative = Counterclockwise
 }

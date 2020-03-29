@@ -5,15 +5,15 @@ package utopia.genesis.util
  * @author Mikko Hilpinen
  * @since 1.8.2017
  */
-trait ApproximatelyEquatable[-T]
+trait ApproximatelyEquatable[-A]
 {
     /**
      * Checks whether the two instances are approximately equal
      */
-    def ~==[B <: T](other: B): Boolean
+    def ~==(other: A): Boolean
     
     /**
      * Checks whether the two instances are <b>not</b> approximately equal
      */
-    def !~==[B <: T](other: B) = !(~==(other))
+    def !~==(other: A) = !(this ~== other)
 }

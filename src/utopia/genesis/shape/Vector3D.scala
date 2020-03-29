@@ -1,7 +1,6 @@
 package utopia.genesis.shape
 
 import utopia.flow.datastructure
-
 import utopia.genesis.util.Extensions._
 import utopia.flow.generic.ValueConvertible
 import utopia.genesis.generic.Vector3DType
@@ -11,10 +10,15 @@ import utopia.flow.datastructure.immutable.Model
 import utopia.flow.generic.ValueConversions._
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
+import utopia.genesis.shape.Axis._
+
 import scala.collection.immutable.HashMap
 import utopia.genesis.util.ApproximatelyEquatable
 import utopia.genesis.shape.shape2D.Point
 import utopia.genesis.shape.shape2D.Size
+
+import scala.concurrent.duration.Duration
+import scala.util.Success
 
 object Vector3D extends FromModelFactory[Vector3D]
 {
@@ -36,8 +40,8 @@ object Vector3D extends FromModelFactory[Vector3D]
     
     // OPERATORS    ---------------------
     
-    override def apply(model: datastructure.template.Model[Property]) = Some(Vector3D(
-            model("x").doubleOr(), model("y").doubleOr(), model("z").doubleOr()))
+    override def apply(model: datastructure.template.Model[Property]) = Success(Vector3D(
+            model("x").getDouble, model("y").getDouble, model("z").getDouble))
     
     
     // OTHER METHODS    -----------------
@@ -232,11 +236,6 @@ case class Vector3D(override val x: Double = 0.0, override val y: Double = 0.0, 
 	}
     
     /**
-     * The length of this vector
-     */
-    def length = math.sqrt(this dot this)
-    
-    /**
      * A normal for this vector
      */
     def normal = if (x == 0 && y == 0 && z != 0) Vector3D(1) else normal2D
@@ -248,6 +247,10 @@ case class Vector3D(override val x: Double = 0.0, override val y: Double = 0.0, 
     
 	
 	// IMPLEMENTED	--------------------
+	
+	override def toString = s"($x, $y, $z)"
+	
+	override protected def repr = this
 	
 	override def toValue = new Value(Some(this), Vector3DType)
 	
@@ -278,7 +281,7 @@ case class Vector3D(override val x: Double = 0.0, override val y: Double = 0.0, 
 	/**
 	  * Checks whether two vectors are approximately equal
 	  */
-	override def ~==[B <: Vector3D](other: B) = Vector3D.forall(this, other, { _ ~== _ })
+	override def ~==(other: Vector3D) = Vector3D.forall(this, other, { _ ~== _ })
     
     
     // OPERATORS    --------------------
@@ -295,11 +298,6 @@ case class Vector3D(override val x: Double = 0.0, override val y: Double = 0.0, 
     
     
     // OTHER METHODS    ----------------
-    
-    /**
-     * The dot product between this and another vector
-     */
-    def dot(other: Vector3D) = (this * other).toVector.sum
     
     /**
      * The cross product between this and another vector. The cross product is parallel with a
@@ -326,12 +324,6 @@ case class Vector3D(override val x: Double = 0.0, override val y: Double = 0.0, 
 			case Z => zProjection
 		}
 	}
-	
-    /**
-     * Projects this vector over the another vector. The projected vector will be parallel to the
-     * provided vector parameter
-     */
-    def projectedOver(other: Vector3D) = other * (dot(other) / other.dot(other))
     
     /**
      * Calculates the scalar projection of this vector over the other vector. This is the same as 
@@ -424,6 +416,13 @@ case class Vector3D(override val x: Double = 0.0, override val y: Double = 0.0, 
      * @return The rotated vector
      */
     def rotatedDegs(rotationDegs: Double, origin: Vector3D = Vector3D.zero) = rotated(Rotation ofDegrees rotationDegs)
-    
+	
+	/**
+	  * Converts this vector to a velocity vector
+	  * @param time Duration of this transition
+	  * @return A velocity vector
+	  */
+	def traversedIn(time: Duration) = Velocity(this, time)
+	
     private def calculateDirection(x: Double, y: Double) = math.atan2(y, x)
 }

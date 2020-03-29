@@ -2,7 +2,6 @@ package utopia.genesis.view
 
 import utopia.flow.util.TimeExtensions._
 import java.awt.Component
-import java.awt.event.{ComponentAdapter, ComponentEvent, HierarchyEvent, HierarchyListener}
 import java.time.Instant
 
 import javax.swing.SwingUtilities
@@ -30,7 +29,7 @@ class RepaintLoop(comp: Component, val maxFPS: FPS = FPS.default) extends Loop
 	// INITIAL CODE	-----------------
 	
 	// Starts listening to component state changes
-	comp.addComponentListener(new ComponentListener())
+	// comp.addComponentListener(new ComponentListener())
 	
 	
 	// IMPLEMENTED	-----------------
@@ -43,7 +42,7 @@ class RepaintLoop(comp: Component, val maxFPS: FPS = FPS.default) extends Loop
 		// Waits until component is displayable
 		while (!isBroken && component.get.exists { c => !c.isDisplayable || !c.isShowing })
 		{
-			WaitUtils.waitUntilNotified(waitLock)
+			WaitUtils.wait(maxFPS.interval * 3, waitLock)
 		}
 		
 		lastDrawTime = Instant.now()
@@ -68,17 +67,20 @@ class RepaintLoop(comp: Component, val maxFPS: FPS = FPS.default) extends Loop
 	
 	// NESTED CLASSES	-----------------
 	
+	/* For some reason, component listening didn't work at all
 	private class ComponentListener extends ComponentAdapter with HierarchyListener
 	{
 		override def hierarchyChanged(e: HierarchyEvent) =
 		{
+			println("Notifies loop")
 			WaitUtils.notify(waitLock)
 		}
 		
 		override def componentShown(e: ComponentEvent) =
 		{
 			// When component is shown, reawakens the loop
+			println("Notifies loop")
 			WaitUtils.notify(waitLock)
 		}
-	}
+	}*/
 }

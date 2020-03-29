@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="utopia-genesis-with-sources">
+    <output-path>$PROJECT_DIR$/out/artifacts/utopia_genesis_with_sources</output-path>
+    <root id="archive" name="utopia-genesis-with-sources.jar">
+      <element id="module-source" name="Utopia-Genesis-Scala" />
+      <element id="module-output" name="Utopia-Genesis-Scala" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

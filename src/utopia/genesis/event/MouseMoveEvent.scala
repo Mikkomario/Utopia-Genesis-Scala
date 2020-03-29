@@ -1,11 +1,12 @@
 package utopia.genesis.event
 
 import utopia.flow.util.TimeExtensions._
-
+import utopia.genesis.shape.LinearVelocity
 import utopia.inception.util.Filter
 import utopia.genesis.shape.shape2D.Point
-import java.time.Duration
 import utopia.genesis.shape.shape2D.Area2D
+
+import scala.concurrent.duration.FiniteDuration
 
 object MouseMoveEvent
 {
@@ -14,20 +15,22 @@ object MouseMoveEvent
     /**
      * Creates an event filter that only accepts mouse events originating from the mouse entering 
      * the specified area
+      * @param getArea A function for calculating the target area. Will be called each time an event needs to be filtered
      */
-    def enterAreaFilter(area: Area2D): Filter[MouseMoveEvent] = e => e.enteredArea(area)
+    def enterAreaFilter(getArea: => Area2D): Filter[MouseMoveEvent] = e => e.enteredArea(getArea)
     
     /**
      * Creates an event filter that only accepts mouse events originating from the mouse exiting the
      * specified area
+      * @param getArea A function for calculating the target area. Will be called each time an event needs to be filtered.
      */
-    def exitedAreaFilter(area: Area2D): Filter[MouseMoveEvent] = e => e.exitedArea(area)
+    def exitedAreaFilter(getArea: => Area2D): Filter[MouseMoveEvent] = e => e.exitedArea(getArea)
     
     /**
      * Creates an event filter that only accepts events where the mouse cursor moved with enough
      * speed
      */
-    def minVelocityFilter(minVelocity: Double): Filter[MouseMoveEvent] = e => e.velocity.length >= minVelocity
+    def minVelocityFilter(minVelocity: LinearVelocity): Filter[MouseMoveEvent] = e => e.velocity.linear >= minVelocity
 }
 
 /**
@@ -40,24 +43,30 @@ object MouseMoveEvent
  * @since 10.1.2017
  */
 case class MouseMoveEvent(mousePosition: Point, previousMousePosition: Point, buttonStatus: MouseButtonStatus,
-                          duration: Duration) extends MouseEvent
+                          duration: FiniteDuration) extends MouseEvent[MouseMoveEvent]
 {
     // COMPUTED PROPERTIES    -----------
     
     /**
      * The movement vector for the mouse cursor for the duration of the event
      */
-    def transition = mousePosition - previousMousePosition
+    def transition = (mousePosition - previousMousePosition).toVector
     
     /**
-     * The velocity vector of the mouse cursor, in pixels per millisecond
+     * The velocity vector of the mouse cursor (in pixels)
      */
-    def velocity = (transition / durationMillis).toVector
+    def velocity = transition.traversedIn(duration)
     
     /**
      * The duration of this event in duration format
      */
     def durationMillis = duration.toPreciseMillis
+    
+    
+    // IMPLEMENTED  ---------------------
+    
+    def mapPosition(f: Point => Point) = copy(mousePosition = f(mousePosition),
+        previousMousePosition = f(previousMousePosition))
     
     
     // OTHER METHODS    -----------------

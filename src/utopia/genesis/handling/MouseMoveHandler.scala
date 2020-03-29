@@ -14,13 +14,13 @@ case object MouseMoveHandlerType extends HandlerType
 /**
   * MouseMoveHandlers distribute mouse move events among multiple listeners
   */
-trait MouseMoveHandler extends Handler[MouseMoveListener] with MouseMoveListener
+trait MouseMoveHandler extends EventHandler[MouseMoveListener, MouseMoveEvent] with MouseMoveListener
 {
-	/**
-	  * @return The type of this handler
-	  */
 	override def handlerType = MouseMoveHandlerType
 	
-	override def onMouseMove(event: MouseMoveEvent) = handle {
-		l => if (l.mouseMoveEventFilter(event)) l.onMouseMove(event) }
+	override def onMouseMove(event: MouseMoveEvent) = distribute(event)
+	
+	override protected def eventFilterFor(listener: MouseMoveListener) = listener.mouseMoveEventFilter
+	
+	override protected def inform(listener: MouseMoveListener, event: MouseMoveEvent) = listener.onMouseMove(event)
 }

@@ -13,14 +13,29 @@ import utopia.flow.datastructure.immutable.Model
 import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.util.ApproximatelyEquatable
-import utopia.genesis.shape.{Axis, Axis2D, Vector3D, VectorLike, X, Y}
+import utopia.genesis.shape.{Axis, Axis2D, Vector3D, VectorLike}
+import utopia.genesis.shape.Axis._
+
+import scala.util.Success
 
 object Point extends FromModelFactory[Point]
 {
     val origin = Point(0, 0)
     
-    def apply(model: utopia.flow.datastructure.template.Model[Property]) = Some(
-            Point(model("x").doubleOr(), model("y").doubleOr()))
+    def apply(model: utopia.flow.datastructure.template.Model[Property]) = Success(
+            Point(model("x").getDouble, model("y").getDouble))
+	
+	/**
+	  * @param l Position length-wise
+	  * @param b Position breadth-wise
+	  * @param axis Target axis that determines which direction is length
+	  * @return A new point
+	  */
+	def apply(l: Double, b: Double, axis: Axis2D): Point = axis match
+	{
+		case X => Point(l, b)
+		case Y => Point(b, l)
+	}
     
     /**
      * Converts an awt point to Utopia point
@@ -35,7 +50,14 @@ object Point extends FromModelFactory[Point]
     /**
      * Converts a coordinate map into a point
      */
-    def of(map: Map[Axis, Double]) = Point(map.getOrElse(X, 0), map.getOrElse(Y, 0))
+    def of[K >: Axis2D](map: Map[K, Double]) = Point(map.getOrElse(X, 0), map.getOrElse(Y, 0))
+	
+	/**
+	  * Creates a new point by calling specified function for both axes (X and Y)
+	  * @param f A function that is called for specified axes
+	  * @return Point with function results as values
+	  */
+	def calculateWith(f: Axis2D => Double) = Point(f(X), f(Y))
     
     /**
      * A combination of the points with minimum x and y coordinates
@@ -80,7 +102,7 @@ case class Point(override val x: Double, override val y: Double) extends VectorL
 {
     // IMPLEMENTED    -----------------
 	
-	lazy val dimensions = Vector(x, y)
+	override lazy val dimensions = Vector(x, y)
 	
 	override def buildCopy(dimensions: Vector[Double]) =
 	{
@@ -92,11 +114,15 @@ case class Point(override val x: Double, override val y: Double) extends VectorL
 			Point(dimensions(0), 0)
 	}
 	
-	def toValue = new Value(Some(this), PointType)
+	override def toValue = new Value(Some(this), PointType)
     
-    def toModel = Model.fromMap(HashMap("x" -> x, "y" -> y))
+    override def toModel = Model.fromMap(HashMap("x" -> x, "y" -> y))
     
-    def ~==[B <: Point](other: B) = (x ~== other.x) && (y ~== other.y)
+    override def ~==(other: Point) = (x ~== other.x) && (y ~== other.y)
+	
+	override protected def repr = this
+	
+	override def toString = s"($x, $y)"
 	
 	
 	// COMPUTED	-----------------------

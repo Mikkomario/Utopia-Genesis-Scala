@@ -1,8 +1,9 @@
 package utopia.genesis.shape
 
 import scala.collection.immutable.{HashMap, VectorBuilder}
-
+import utopia.genesis.shape.Axis._
 import utopia.flow.util.CollectionExtensions._
+import utopia.genesis.util.{Arithmetic, Distance}
 
 object VectorLike
 {
@@ -24,13 +25,9 @@ object VectorLike
   * matching an axis (X, Y, Z, ...)
   * @tparam Repr the concrete implementing class
   */
-trait VectorLike[Repr <: VectorLike[_]]
+trait VectorLike[+Repr <: VectorLike[Repr]] extends Arithmetic[VectorLike[_], Repr] with Distance with Dimensional[Double]
+	with VectorProjectable[Vector3D]
 {
-	// TYPES	---------------------
-	
-	type AnyVectorLike = VectorLike[_ <: VectorLike[_]]
-	
-	
 	// ABSTRACT	---------------------
 	
 	/**
@@ -45,38 +42,44 @@ trait VectorLike[Repr <: VectorLike[_]]
 	  */
 	def buildCopy(dimensions: Vector[Double]): Repr
 	
+	/**
+	  * @return This instance as 'Repr'
+	  */
+	protected def repr: Repr
+	
+	
+	// IMPLEMENTED	-----------------
+	
+	def along(axis: Axis) = dimensions.getOrElse(indexForAxis(axis), 0)
+	
+	override def length = math.sqrt(this dot this)
+	
+	override def +(other: VectorLike[_]) = combineWith(other) { _ + _ }
+	
+	override def -(other: VectorLike[_]) = combineWith(other) { _ - _ }
+	
+	override def *(n: Double) = map { _ * n }
+	
+	def projectedOver(other: Vector3D) = other * (dot(other) / other.dot(other))
+	
+	override def xProjection = X(x)
+	
+	override def yProjection = Y(y)
+	
+	override def zProjection = Z(z)
+	
 	
 	// COMPUTED	---------------------
 	
 	/**
-	  * @return The x-component of this vectorlike element
+	  * @return Whether all of this instance's dimensions are zero
 	  */
-	def x = dimensions.getOrElse(0, 0)
+	def isZero = dimensions.forall { _ == 0 }
 	
 	/**
-	  * @return The y-component of this vectorlike element
+	  * @return The x and y -dimensions of this vectorlike element
 	  */
-	def y = dimensions.getOrElse(1, 0)
-	
-	/**
-	  * @return The z-component of this vectorlike element (0 if this element doesn't have a z component)
-	  */
-	def z = dimensions.getOrElse(2, 0)
-	
-	/**
-	  * @return A projection of this vectorlike element as a vector along the x-axis (only contains x-component)
-	  */
-	def xProjection = X(x)
-	
-	/**
-	  * @return A projection of this vectorlike element as a vector along the y-axis (only contains y-component)
-	  */
-	def yProjection = Y(y)
-	
-	/**
-	  * @return A projection of this vectorlike element as a vector along the z-axis (only contains z-component)
-	  */
-	def zProjection = Z(z)
+	def dimensions2D = dimensions.take(2)
 	
 	/**
 	  * A coordinate map representation of this vectorlike element
@@ -110,17 +113,6 @@ trait VectorLike[Repr <: VectorLike[_]]
 	// OPERATORS	----------------------
 	
 	/**
-	  * This vectorlike element inverted
-	  */
-	def unary_- = map {-_}
-	
-	/**
-	  * @param other Another vectorlike element
-	  * @return The combination of these two elements
-	  */
-	def +(other: VectorLike[_]) = combineWith(other, { _ + _ })
-	
-	/**
 	  * @param x X translation
 	  * @param more Y, Z, ... translation
 	  * @return A translated version of this element
@@ -128,10 +120,18 @@ trait VectorLike[Repr <: VectorLike[_]]
 	def +(x: Double, more: Double*) = combineDimensions(x +: more, { _ + _ })
 	
 	/**
-	  * @param other Another vectorlike element
-	  * @return The subtraction of these two elements
+	  * @param adjust Translation on target axis
+	  * @param axis Target axis
+	  * @return A copy of this element with one dimension translated
 	  */
-	def -(other: AnyVectorLike) = this + (-other)
+	def +(adjust: Double, axis: Axis) = mapAxis(axis) { _ + adjust }
+	
+	/**
+	  * @param adjust Translation on target axis
+	  * @param axis Target axis
+	  * @return A copy of this element with one dimension translated
+	  */
+	def -(adjust: Double, axis: Axis) = this + (-adjust, axis)
 	
 	/**
 	  * @param x X translation (negative)
@@ -144,28 +144,35 @@ trait VectorLike[Repr <: VectorLike[_]]
 	  * @param other Another vectorlike element
 	  * @return This element multiplied on each axis of the provided element
 	  */
-	def *(other: VectorLike[_]) = combineWith(other, { _ * _ })
+	def *(other: VectorLike[_]) = combineWith(other) { _ * _ }
 	
 	/**
-	  * @param n A multiplier for all axes
-	  * @return This element multiplied on all axes with the specified multiplier
+	  * @param n A multiplier for specified axis
+	  * @param axis Target axis
+	  * @return A copy of this element with one dimension multiplied
 	  */
-	def *(n: Double) = map { _ * n }
+	def *(n: Double, axis: Axis) = mapAxis(axis) { _ * n }
 	
 	/**
 	  * @param other Another vectorlike element
 	  * @return This element divided on each axis of the provided element. Dividing by 0 is ignored
 	  */
-	def /(other: VectorLike[_]) = combineWith(other, { case (a, b) => if (b == 0) a else a / b })
+	def /(other: VectorLike[_]) = combineWith(other) { case (a, b) => if (b == 0) a else a / b }
 	
 	/**
-	  * @param n A divider for all axes
-	  * @return This element divided on all axes with the speficied divider
+	  * @param n A divider for target axis
+	  * @param axis Target axis
+	  * @return This element divided on specified axis
 	  */
-	def /(n: Double) = if (n == 0) buildCopy(dimensions) else map { _ / n }
+	def /(n: Double, axis: Axis) = if (n == 0) repr else mapAxis(axis) { _ / n }
 	
 	
 	// OTHER	--------------------------
+	
+	/**
+	  * The dot product between this and another vector
+	  */
+	def dot(other: VectorLike[_]) = (this * other).dimensions.sum
 	
 	/**
 	  * Maps all dimensions of this vectorlike element
@@ -180,51 +187,39 @@ trait VectorLike[Repr <: VectorLike[_]]
 	  * @param along the axis that specifies the mapped coordinate
 	  * @return A copy of this element with the mapped coordinate
 	  */
+	@deprecated("Replaced with mapAxis", "v2.1")
 	def map(f: Double => Double, along: Axis) =
 	{
 		val myDimensions = dimensions
-		val mapIndex = along match
-		{
-			case X => 0
-			case Y => 1
-			case Z => 2
-		}
+		val mapIndex = indexForAxis(along)
 		
 		if (myDimensions.size <= mapIndex)
-			buildCopy(dimensions)
+			repr
 		else
 		{
 			val firstPart = myDimensions.take(mapIndex) :+ f(myDimensions(mapIndex))
 			buildCopy(firstPart ++ myDimensions.drop(mapIndex + 1))
 		}
+	}
+	
+	/**
+	  * Maps a single coordinate in this vectorlike element
+	  * @param axis Targeted axis
+	  * @param f A mapping function
+	  * @return A copy of this vectorlike element with mapped coordinate
+	  */
+	def mapAxis(axis: Axis)(f: Double => Double) =
+	{
+		val myDimensions = dimensions
+		val mapIndex = indexForAxis(axis)
 		
-	}
-	
-	/**
-	  * A coordinate of this element along the specified axis
-	  */
-	def along(axis: Axis) = axis match
-	{
-		case X => x
-		case Y => y
-		case Z => z
-	}
-	
-	/**
-	  * @param axis Target axis
-	  * @return The length of this element along the axis perpendicular to the provided axis
-	  */
-	def perpendicularTo(axis: Axis2D) = along(axis.perpendicular)
-	
-	/**
-	  * @param axis Target axis
-	  * @return A vector projection of this element over the specified axis
-	  */
-	def projectedOver(axis: Axis) = axis match
-	{
-		case X => xProjection
-		case Y => yProjection
-		case Z => zProjection
+		if (myDimensions.size <= mapIndex)
+			buildCopy(myDimensions.padTo(mapIndex, 0.0) :+ f(0.0))
+		else
+		{
+			val firstPart = myDimensions.take(mapIndex) :+ f(myDimensions(mapIndex))
+			buildCopy(firstPart ++ myDimensions.drop(mapIndex + 1))
+		}
 	}
 	
 	/**
@@ -234,7 +229,7 @@ trait VectorLike[Repr <: VectorLike[_]]
 	  * @param merge A merge function
 	  * @return A new element with merged or copied dimensions
 	  */
-	def combineWith(other: VectorLike[_], merge: (Double, Double) => Double) = combineDimensions(other.dimensions, merge)
+	def combineWith(other: VectorLike[_])(merge: (Double, Double) => Double) = combineDimensions(other.dimensions, merge)
 	
 	private def combineDimensions(dimensions: Seq[Double], merge: (Double, Double) => Double) =
 	{
@@ -256,7 +251,7 @@ trait VectorLike[Repr <: VectorLike[_]]
 	  * @param other Another vectorlike element
 	  * @return The minimum combination of these two elements where each dimension is taken from the smaller alternative
 	  */
-	def min(other: VectorLike[_]) = combineWith(other, { _ min _ })
+	def min(other: VectorLike[_]) = combineWith(other) { _ min _ }
 	
 	/**
 	  * The top left corner of a bounds between these two elements. In other words,
@@ -270,7 +265,7 @@ trait VectorLike[Repr <: VectorLike[_]]
 	  * @param other Another vectorlike element
 	  * @return A maximum combination of these two elements where each dimension is taken from the larger alternative
 	  */
-	def max(other: VectorLike[_]) = combineWith(other, { _ max _ })
+	def max(other: VectorLike[_]) = combineWith(other) { _ max _ }
 	
 	/**
 	  * The bottom right corner of a bounds between the two vertices. In other words,
@@ -278,5 +273,50 @@ trait VectorLike[Repr <: VectorLike[_]]
 	  * @param other Another element
 	  * @return A maximum of these two elements on each axis
 	  */
-	def bottomRight(other: VectorLike[_]) = combineWith(other, { _ max _ })
+	def bottomRight(other: VectorLike[_]) = combineWith(other) { _ max _ }
+	
+	/**
+	  * Creates a copy of this vectorlike instance with a single dimension replaced
+	  * @param amount New amount for the specified dimension
+	  * @param axis Axis that determines target dimension
+	  * @return A copy of this vectorlike instance with specified dimension replaced
+	  */
+	def withDimension(amount: Double, axis: Axis) =
+	{
+		val targetIndex = indexForAxis(axis)
+		val myDimensions = dimensions
+		val newDimensions =
+		{
+			if (targetIndex < myDimensions.size)
+				myDimensions.updated(targetIndex, amount)
+			else
+				myDimensions.padTo(targetIndex, 0.0) :+ amount
+		}
+		buildCopy(newDimensions)
+	}
+	
+	/**
+	  * @param axis Target axis
+	  * @return Whether this vectorlike instance has a positive value for specified dimension
+	  */
+	def isPositiveAlong(axis: Axis) = along(axis) >= 0
+	
+	/**
+	  * @param axis Target axis
+	  * @return A copy of this vectorlike instance with a non-negative value for the specified dimension
+	  */
+	def positiveAlong(axis: Axis) =
+	{
+		if (isPositiveAlong(axis))
+			repr
+		else
+			withDimension(0.0, axis)
+	}
+	
+	private def indexForAxis(axis: Axis) = axis match
+	{
+		case X => 0
+		case Y => 1
+		case Z => 2
+	}
 }

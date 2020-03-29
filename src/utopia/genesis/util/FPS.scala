@@ -1,6 +1,8 @@
 package utopia.genesis.util
 
-import java.time.Duration
+import java.util.concurrent.TimeUnit
+
+import scala.concurrent.duration.FiniteDuration
 
 object FPS
 {
@@ -11,7 +13,7 @@ object FPS
 }
 
 /**
-  * APS represents actions per second
+  * Represents frames per second
   * @author Mikko Hilpinen
   * @since 15.4.2019, v2+
   * @param fps The frames / actions per second value of this FPS
@@ -23,7 +25,7 @@ case class FPS(fps: Int)
 	/**
 	  * The interval between iterations
 	  */
-	val interval = Duration.ofNanos((1000.0 / fps * 1000000).toLong)
+	val interval = FiniteDuration((1000.0 / fps * 1000000).toLong, TimeUnit.NANOSECONDS)
 	
 	
 	// OPERATORS	-----------------

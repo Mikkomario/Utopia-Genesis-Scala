@@ -11,16 +11,13 @@ case object MouseWheelHandlerType extends HandlerType
 	override def supportedClass = classOf[MouseWheelListener]
 }
 
-trait MouseWheelHandler extends Handler[MouseWheelListener] with MouseWheelListener
+trait MouseWheelHandler extends ConsumableEventHandler[MouseWheelListener, MouseWheelEvent] with MouseWheelListener
 {
-	/**
-	  * @return The type of this handler
-	  */
 	override def handlerType = MouseWheelHandlerType
 	
-	/**
-	  * This method is called whenever the mouse wheel rotates
-	  */
-	override def onMouseWheelRotated(event: MouseWheelEvent) = handle {
-		l => if (l.mouseWheelEventFilter(event)) l.onMouseWheelRotated(event) }
+	override def onMouseWheelRotated(event: MouseWheelEvent) = distribute(event)
+	
+	override protected def inform(listener: MouseWheelListener, event: MouseWheelEvent) = listener.onMouseWheelRotated(event)
+	
+	override protected def eventFilterFor(listener: MouseWheelListener) = listener.mouseWheelEventFilter
 }

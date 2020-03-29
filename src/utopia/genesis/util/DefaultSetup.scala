@@ -79,7 +79,7 @@ class DefaultSetup(initialGameWorldSize: Size, title: String, val maxFPS: FPS = 
 	
 	// Registers generators
 	actorHandler += mouseEventGenerator
-	frame.addKeyListener(new ConvertingKeyListener(keyStateHandler, keyTypedHandler))
+	new ConvertingKeyListener(keyStateHandler, keyTypedHandler).register()
 	
 	
 	// COMPUTED	-----------------------

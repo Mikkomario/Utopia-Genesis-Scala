@@ -1,8 +1,8 @@
 package utopia.genesis.handling
 
-import java.time.Duration
-
 import utopia.inception.handling.{Handler, HandlerType}
+
+import scala.concurrent.duration.FiniteDuration
 
 /**
   * This is the handler type instance for all handlers that operate on Actor instances
@@ -26,5 +26,5 @@ trait ActorHandler extends Handler[Actor] with Actor
 	  */
 	override def handlerType = ActorHandlerType
 	
-	override def act(duration: Duration) = handle { _.act(duration) }
+	override def act(duration: FiniteDuration) = handle { _.act(duration) }
 }

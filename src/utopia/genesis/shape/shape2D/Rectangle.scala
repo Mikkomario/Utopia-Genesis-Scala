@@ -2,26 +2,31 @@ package utopia.genesis.shape.shape2D
 
 import utopia.flow.generic.ValueConversions._
 import utopia.genesis.generic.GenesisValue._
-import utopia.flow.datastructure.immutable.Model
+import utopia.flow.datastructure.immutable.{Model, ModelDeclaration}
 import utopia.flow.datastructure.template
 import utopia.flow.datastructure.template.Property
-import utopia.flow.generic.{FromModelFactory, ModelConvertible}
+import utopia.flow.generic.{DoubleType, FromModelFactory, ModelConvertible}
+import utopia.genesis.generic.{PointType, Vector3DType}
 import utopia.genesis.shape.Vector3D
+
+import scala.util.Try
 
 object Rectangle extends FromModelFactory[Rectangle]
 {
+	/**
+	  * A rectangle at origin position with zero size
+	  */
 	val zero = Rectangle(Point.origin, Vector3D.zero, 0)
 	
-	override def apply(model: template.Model[Property]): Option[Rectangle] =
+	/**
+	  * A schema used when converting models to rectangles
+	  */
+	val schema = ModelDeclaration("topLeft" -> PointType, "top" -> Vector3DType, "leftEdgeLength" -> DoubleType)
+	
+	override def apply(model: template.Model[Property]): Try[Rectangle] =
 	{
-		val topLeft = model("topLeft").point
-		val topEdge = model("top").vector3D
-		val leftEdgeLength = model("leftEdgeLength").double
-		
-		if (topLeft.isDefined && topEdge.isDefined && leftEdgeLength.isDefined)
-			Some(Rectangle(topLeft.get, topEdge.get, leftEdgeLength.get))
-		else
-			None
+		schema.validate(model).toTry.map { valid => Rectangle(valid("topLeft").getPoint, valid("top").getVector3D,
+			valid("leftEdgeLength").getDouble) }
 	}
 }
 

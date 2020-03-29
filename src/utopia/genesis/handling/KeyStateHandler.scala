@@ -14,15 +14,13 @@ case object KeyStateHandlerType extends HandlerType
 /**
   * Key state handlers distribute key state events among multiple listeners
   */
-trait KeyStateHandler extends Handler[KeyStateListener] with KeyStateListener
+trait KeyStateHandler extends EventHandler[KeyStateListener, KeyStateEvent] with KeyStateListener
 {
-	/**
-	  * @return The type of this handler
-	  */
 	override def handlerType = KeyStateHandlerType
 	
-	/**
-	  * This method will be called when the keyboard state changes
-	  */
-	override def onKeyState(event: KeyStateEvent) = handle { l => if (l.keyStateEventFilter(event)) l.onKeyState(event) }
+	override def onKeyState(event: KeyStateEvent) = distribute(event)
+	
+	override protected def eventFilterFor(listener: KeyStateListener) = listener.keyStateEventFilter
+	
+	override protected def inform(listener: KeyStateListener, event: KeyStateEvent) = listener.onKeyState(event)
 }

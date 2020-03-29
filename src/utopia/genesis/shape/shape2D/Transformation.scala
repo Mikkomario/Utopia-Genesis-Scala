@@ -12,7 +12,9 @@ import utopia.flow.generic.FromModelFactory
 import utopia.flow.datastructure.template
 import utopia.flow.datastructure.template.Property
 import utopia.genesis.generic.GenesisValue._
-import utopia.genesis.shape.{Rotation, Vector3D}
+import utopia.genesis.shape.{Rotation, Vector3D, VectorLike}
+
+import scala.util.Success
 
 object Transformation extends FromModelFactory[Transformation]
 {
@@ -26,9 +28,9 @@ object Transformation extends FromModelFactory[Transformation]
     
     // OPERATORS    -----------------
     
-    override def apply(model: template.Model[Property]) = Some(Transformation(
-            model("translation").vector3DOr(), model("scaling").vector3DOr(Vector3D.identity), 
-            Rotation(model("rotation").doubleOr()), model("shear").vector3DOr()))
+    override def apply(model: template.Model[Property]) = Success(Transformation(
+            model("translation").getVector3D, model("scaling").vector3DOr(Vector3D.identity),
+            Rotation(model("rotation").getDouble), model("shear").getVector3D))
     
     
     // OTHER METHODS    --------------
@@ -37,6 +39,19 @@ object Transformation extends FromModelFactory[Transformation]
      * This transformation moves the coordinates of the target by the provided amount
      */
     def translation(amount: Vector3D) = Transformation(translation = amount)
+    
+    /**
+      * @param x Translation x-wise
+      * @param y Translation y-wise
+      * @return A new translation transformation
+      */
+    def translation(x: Double, y: Double): Transformation = translation(Vector3D(x, y))
+    
+    /**
+      * @param amount Translation amount (position)
+      * @return A transformation that sets an object to specified position
+      */
+    def position(amount: Point) = translation(amount.toVector)
     
     /**
      * This transformation scales the target by the provided amount
@@ -218,11 +233,11 @@ case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector
     /**
      * Transforms a shape <b>from relative space to absolute space</b>
      */
-    def apply[B](relative: TransformableShape[B]) = relative.transformedWith(this)
+    def apply[B](relative: TransformProjectable[B]) = relative.transformedWith(this)
     
     /**
-     * Combines the two transformations together. The end result is effectively same as transforming 
-     * the target with the provided transformation, then with this transformation.<p>
+     * Combines these two transformations together. The end result is effectively same as transforming
+     * a target with the provided transformation 'other', then with 'this' transformation.<p>
      * Please notice that the scaling and rotation affect the scaling and translation applied (for
      * example, adding translation of (1, 0, 0) to a transformation with
      * zero position and scaling of 2 will create a transformation with (2, 0, 0) position and
@@ -250,7 +265,7 @@ case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector
     /**
      * Transforms a shape <b>from absolute space to relative space</b>
      */
-    def invert[B](absolute: TransformableShape[B]) = absolute.transformedWith(-this)
+    def invert[B](absolute: TransformProjectable[B]) = absolute.transformedWith(-this)
     
     /**
      * Converts an absolute coordinate into a relative one. Same as calling invert(Vector3D)
@@ -265,7 +280,7 @@ case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector
     /**
      * Converts an absolute shape to a relative one. Same as calling invert(...)
      */
-    def toRelative[B](absolute: TransformableShape[B]) = invert(absolute)
+    def toRelative[B](absolute: TransformProjectable[B]) = invert(absolute)
     
     /**
      * Converts a relative coordinate into an absolute one. Same as calling apply(Point)
@@ -280,7 +295,7 @@ case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector
     /**
      * Converts a relative shape to an absolute one. Same as calling apply(...)
      */
-    def toAbsolute[B](relative: TransformableShape[B]) = apply(relative)
+    def toAbsolute[B](relative: TransformProjectable[B]) = apply(relative)
     
     /**
      * Rotates the transformation around an absolute origin point
@@ -381,12 +396,12 @@ case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector
     /**
      * Copies this transformation, changing the translation by the provided amount
      */
-    def translated(translation: Vector3D) = withTranslation(this.translation + translation)
+    def translated(translation: VectorLike[_]) = withTranslation(this.translation + translation)
     
     /**
      * Copies this transformation, changing the scaling by the provided amount
      */
-    def scaled(scaling: Vector3D) = withScaling(this.scaling * scaling)
+    def scaled(scaling: VectorLike[_]) = withScaling(this.scaling * scaling)
     
     /**
      * Copies this transformation, changing the scaling by the provided amount
@@ -413,5 +428,5 @@ case class Transformation(translation: Vector3D = Vector3D.zero, scaling: Vector
     /**
      * Copies this transformation, changing the shearing by the provided amount
      */
-    def sheared(shearing: Vector3D) = withShear(shear + shearing)
+    def sheared(shearing: VectorLike[_]) = withShear(shear + shearing)
 }

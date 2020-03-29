@@ -16,6 +16,11 @@ object KeyStateEvent
     val wasReleasedFilter: Filter[KeyStateEvent] = e => e.isReleased
     
     /**
+     * This event filter only accepts key events while control key is being held down (includes presses of ctrl key itself)
+     */
+    val controlDownFilter: Filter[KeyStateEvent] = e => e.keyStatus.apply(KeyEvent.VK_CONTROL)
+    
+    /**
      * This event filter only accepts events for the specified key index
      */
     def keyFilter(index: Int): Filter[KeyStateEvent] = e => e.index == index
@@ -47,6 +52,18 @@ object KeyStateEvent
       * @return Event filter that only accepts events concerning specified keys
       */
     def keysFilter(acceptedKeys: Seq[Int]): Filter[KeyStateEvent] = e => acceptedKeys.contains(e.index)
+    
+    /**
+      * @param notAcceptedKeys Keys that are not accepted by the filter
+      * @return A filter that accepts events for all keys except those specified
+      */
+    def notKeysFilter(notAcceptedKeys: Seq[Int]): Filter[KeyStateEvent] = e => !notAcceptedKeys.contains(e.index)
+    
+    /**
+     * @param char Target combo character
+     * @return A filter that only accepts events where control is being held down while specified character key is pressed
+     */
+    def controlCharComboFilter(char: Char): Filter[KeyStateEvent] = controlDownFilter && wasPressedFilter && charFilter(char)
 }
 
 /**
@@ -54,16 +71,29 @@ object KeyStateEvent
  * button
  * @author Mikko Hilpinen
  * @since 21.2.2017
+  * @param index The index of the changed key
+  * @param location The specific location where the key was changed
+  * @param keyStatus The current overall key status
  */
 case class KeyStateEvent(index: Int, location: KeyLocation, isDown: Boolean, keyStatus: KeyStatus)
 {
-    /**
-     * Checks whether the event concerns a specific character key
-     */
-    def isCharacter(char: Char) = index == KeyEvent.getExtendedKeyCodeForChar(char)
+    // COMPUTED ---------------------
     
     /**
       * @return Whether the key was just released
       */
     def isReleased = !isDown
+    
+    
+    // IMPLEMENTED  -----------------
+    
+    override def toString = s"$index ${ if (isDown) "was pressed" else "was released" } at location: $location"
+    
+    
+    // OTHER    ---------------------
+    
+    /**
+     * Checks whether the event concerns a specific character key
+     */
+    def isCharacter(char: Char) = index == KeyEvent.getExtendedKeyCodeForChar(char)
 }

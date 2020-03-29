@@ -1,9 +1,9 @@
 package utopia.genesis.handling
 
-import java.time.Duration
-
 import utopia.genesis.event.MouseMoveEvent
 import utopia.genesis.shape.shape2D.Point
+
+import scala.concurrent.duration.FiniteDuration
 
 /**
  * This mouse event listener is interested to continually receive events while the mouse cursor is
@@ -27,7 +27,7 @@ trait MouseOverListener extends MouseMoveListener with Actor
      * This method will be repeatedly called while the mouse cursor remains over a specified area
      * @param duration The duration since the last update
      */
-    def onMouseOver(duration: Duration)
+    def onMouseOver(duration: FiniteDuration)
     
     /**
      * This method is used for determining whether a specified coordinate is considered to be
@@ -41,5 +41,5 @@ trait MouseOverListener extends MouseMoveListener with Actor
     
     override def onMouseMove(event: MouseMoveEvent) = _mousePosition = event.mousePosition
     
-    override def act(duration: Duration) = if (contains(mousePosition)) onMouseOver(duration)
+    override def act(duration: FiniteDuration) = if (contains(mousePosition)) onMouseOver(duration)
 }

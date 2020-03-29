@@ -8,7 +8,7 @@ import utopia.genesis.shape.Vector3D
   * @author Mikko Hilpinen
   * @since 14.4.2019
   */
-trait Parallelogramic extends Polygonic with TransformableShape[Parallelogram]
+trait Parallelogramic extends Polygonic with TransformProjectable[Parallelogram]
 {
 	// ABSTRACT	------------------
 	
