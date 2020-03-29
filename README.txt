@@ -1,6 +1,7 @@
 UTOPIA GENESIS
 --------------
 
+
 Required Libraries
 ------------------
     - Utopia Flow
@@ -82,7 +83,7 @@ Available Extensions
         - Approximately equals (~==) support for Double
 
 
-v2.1 (beta)  ------------------------------------
+v2.1 ------------------------------------
 
     New Features
     ------------
@@ -103,6 +104,8 @@ v2.1 (beta)  ------------------------------------
         Velocity & Acceleration classes added
 
         Couple new utility filters in KeyStateEvent
+
+        New methods in Drawer for text drawing
 
 
     Changes & Updates
@@ -136,11 +139,19 @@ v2.1 (beta)  ------------------------------------
         map(Axis, Double => Double) was replaced with mapAxis(Axis)(Double => Double). The previous implementation is
         deprecated and will be removed in a future release.
 
+        Drawer text drawing now uses anti-alising for better draw quality
+
 
     Fixes
     -----
 
         Mouse event coordinates were incorrect in dialogs (windows with parent components). Now fixed.
+
+
+    Required Libraries
+    ------------------
+        - Utopia Flow v1.6.1+
+        - Utopia Inception v2+
 
 
 v2  ----------------------------------------
