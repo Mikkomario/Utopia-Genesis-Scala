@@ -110,7 +110,8 @@ v2.1 (beta)  ------------------------------------
 
         java.time.Duration replaced with scala.concurrent.FiniteDuration in Actor, MouseMoveListener and MouseEvent
 
-        MouseButtonStateListeners and MouseWheelListeners now return a consume event if they consumed incoming events
+        MouseButtonStateListeners and MouseWheelListeners now return a consume event if they consumed incoming events.
+        Listener classes now use multiple parameter lists when cosntructing function-based listeners.
 
         Drawer withColor separated to withColor that works with utopia.genesis.colo.Color class and withPaint
         that works with java.awt.Paint class

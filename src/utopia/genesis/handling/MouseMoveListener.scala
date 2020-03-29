@@ -9,11 +9,11 @@ object MouseMoveListener
 {
     /**
       * Creates a new mouse move listener that calls the specified function
-      * @param f A function that is called on mouse events
       * @param filter A filter that determines which events trigger the function (default = no filtering)
+      * @param f A function that is called on mouse events
       * @return A new mouse move listener
       */
-    def apply(f: MouseMoveEvent => Unit, filter: Filter[MouseMoveEvent] = AnyFilter): MouseMoveListener =
+    def apply(filter: Filter[MouseMoveEvent] = AnyFilter)(f: MouseMoveEvent => Unit): MouseMoveListener =
         new FunctionalMouseMoveListener(f, filter)
     
     /**
@@ -21,14 +21,14 @@ object MouseMoveListener
       * @param f A function that is called on mouse events
       * @return A new mouse move listener
       */
-    def onLeftDragged(f: MouseMoveEvent => Unit) = apply(f, MouseEvent.isLeftDownFilter)
+    def onLeftDragged(f: MouseMoveEvent => Unit) = apply(MouseEvent.isLeftDownFilter)(f)
     
     /**
       * Creates a new mouse move listener that calls specified function on drags (with right mouse button)
       * @param f A function that is called on mouse events
       * @return A new mouse move listener
       */
-    def onRightDragged(f: MouseMoveEvent => Unit) = apply(f, MouseEvent.isRightDownFilter)
+    def onRightDragged(f: MouseMoveEvent => Unit) = apply(MouseEvent.isRightDownFilter)(f)
     
     /**
       * Creates a new mouse move listener that calls specified function each time mouse enters specified area
@@ -36,7 +36,7 @@ object MouseMoveListener
       * @param f A function that is called on mouse events
       * @return A new mouse move listener
       */
-    def onEnter(getArea: => Area2D, f: MouseMoveEvent => Unit) = apply(f, e => e.enteredArea(getArea))
+    def onEnter(getArea: => Area2D)(f: MouseMoveEvent => Unit) = apply { e => e.enteredArea(getArea) }(f)
     
     /**
       * Creates a new mouse move listener that calls specified function each time mouse exits specified area
@@ -44,7 +44,7 @@ object MouseMoveListener
       * @param f A function that is called on mouse events
       * @return A new mouse move listener
       */
-    def onExit(getArea: => Area2D, f: MouseMoveEvent => Unit) = apply(f, e => e.exitedArea(getArea))
+    def onExit(getArea: => Area2D)(f: MouseMoveEvent => Unit) = apply { e => e.exitedArea(getArea) }(f)
 }
 
 /**

@@ -9,12 +9,11 @@ object MouseButtonStateListener
 {
     /**
       * Creates a new simple mouse button state listener
-      * @param function A function that will be called when event is received
       * @param filter A filter that determines, which events will come through (default = no filtering)
+      * @param function A function that will be called when event is received
       * @return A mouse button state listener
       */
-    def apply(function: MouseButtonStateEvent => Option[ConsumeEvent],
-              filter: Filter[MouseButtonStateEvent] = AnyFilter): MouseButtonStateListener =
+    def apply(filter: Filter[MouseButtonStateEvent] = AnyFilter)(function: MouseButtonStateEvent => Option[ConsumeEvent]): MouseButtonStateListener =
         new FunctionalMouseButtonStateListener(function, filter)
     
     /**
@@ -23,22 +22,22 @@ object MouseButtonStateListener
       * @param f A function that will be called when the button is pressed
       * @return A new mouse button state listener
       */
-    def onButtonPressed(button: MouseButton, f: MouseButtonStateEvent => Option[ConsumeEvent]) = apply(f,
-        MouseButtonStateEvent.wasPressedFilter && MouseButtonStateEvent.buttonFilter(button))
+    def onButtonPressed(button: MouseButton)(f: MouseButtonStateEvent => Option[ConsumeEvent]) =
+        apply(MouseButtonStateEvent.wasPressedFilter && MouseButtonStateEvent.buttonFilter(button))(f)
     
     /**
       * Creates a simple mouse button state listener that is called when left mouse button is pressed
       * @param f A function that will be called
       * @return A new mouse button state listener
       */
-    def onLeftPressed(f: MouseButtonStateEvent => Option[ConsumeEvent]) = onButtonPressed(MouseButton.Left, f)
+    def onLeftPressed(f: MouseButtonStateEvent => Option[ConsumeEvent]) = onButtonPressed(MouseButton.Left)(f)
     
     /**
       * Creates a simple mouse button state listener that is called when right mouse button is pressed
       * @param f A function that will be called
       * @return A new mouse button state listener
       */
-    def onRightPressed(f: MouseButtonStateEvent => Option[ConsumeEvent]) = onButtonPressed(MouseButton.Right, f)
+    def onRightPressed(f: MouseButtonStateEvent => Option[ConsumeEvent]) = onButtonPressed(MouseButton.Right)(f)
     
     /**
       * Creates a new simple mouse button state listener that is called on mouse button releases
@@ -46,22 +45,24 @@ object MouseButtonStateListener
       * @param f A function that will be called when the button is released
       * @return A new mouse button state listener
       */
-    def onButtonReleased(button: MouseButton, f: MouseButtonStateEvent => Option[ConsumeEvent]) = apply(f,
-        MouseButtonStateEvent.wasReleasedFilter && MouseButtonStateEvent.buttonFilter(button))
+    def onButtonReleased(button: MouseButton)(f: MouseButtonStateEvent => Option[ConsumeEvent]) =
+        apply(MouseButtonStateEvent.wasReleasedFilter && MouseButtonStateEvent.buttonFilter(button))(f)
     
     /**
       * Creates a simple mouse button state listener that is called when left mouse button is released
       * @param f A function that will be called
       * @return A new mouse button state listener
       */
-    def onLeftReleased(f: MouseButtonStateEvent => Option[ConsumeEvent]) = onButtonReleased(MouseButton.Left, f)
+    def onLeftReleased(f: MouseButtonStateEvent => Option[ConsumeEvent]) =
+        onButtonReleased(MouseButton.Left)(f)
     
     /**
       * Creates a simple mouse button state listener that is called when right mouse button is released
       * @param f A function that will be called
       * @return A new mouse button state listener
       */
-    def onRightReleased(f: MouseButtonStateEvent => Option[ConsumeEvent]) = onButtonReleased(MouseButton.Right, f)
+    def onRightReleased(f: MouseButtonStateEvent => Option[ConsumeEvent]) =
+        onButtonReleased(MouseButton.Right)(f)
     
     /**
       * Creates a simple mouse button state listener that is called when a mouse button is pressed within a certain area
@@ -70,8 +71,8 @@ object MouseButtonStateListener
       * @param f A function that will be called when a suitable event is received
       * @return A new mouse button state listener
       */
-    def onButtonPressedInside(button: MouseButton, getArea: => Area2D, f: MouseButtonStateEvent => Option[ConsumeEvent]) = apply(f,
-        MouseButtonStateEvent.wasPressedFilter && MouseButtonStateEvent.buttonFilter(button) && MouseEvent.isOverAreaFilter(getArea))
+    def onButtonPressedInside(button: MouseButton)(getArea: => Area2D)(f: MouseButtonStateEvent => Option[ConsumeEvent]) =
+        apply(MouseButtonStateEvent.wasPressedFilter && MouseButtonStateEvent.buttonFilter(button) && MouseEvent.isOverAreaFilter(getArea))(f)
     
     /**
       * Creates a simple mouse button state listener that is called when the left mouse button is pressed within a certain area
@@ -79,8 +80,8 @@ object MouseButtonStateListener
       * @param f A function that will be called when a suitable event is received
       * @return A new mouse button state listener
       */
-    def onLeftPressedInside(getArea: => Area2D, f: MouseButtonStateEvent => Option[ConsumeEvent]) =
-        onButtonPressedInside(MouseButton.Left, getArea, f)
+    def onLeftPressedInside(getArea: => Area2D)(f: MouseButtonStateEvent => Option[ConsumeEvent]) =
+        onButtonPressedInside(MouseButton.Left)(getArea)(f)
     
     /**
       * Creates a simple mouse button state listener that is called when the right mouse button is pressed within a certain area
@@ -88,8 +89,8 @@ object MouseButtonStateListener
       * @param f A function that will be called when a suitable event is received
       * @return A new mouse button state listener
       */
-    def onRightPressedInside(getArea: => Area2D, f: MouseButtonStateEvent => Option[ConsumeEvent]) =
-        onButtonPressedInside(MouseButton.Right, getArea, f)
+    def onRightPressedInside(getArea: => Area2D)(f: MouseButtonStateEvent => Option[ConsumeEvent]) =
+        onButtonPressedInside(MouseButton.Right)(getArea)(f)
     
     /**
       * Creates a simple mouse button state listener that is called when a mouse button is released within a certain area
@@ -98,8 +99,8 @@ object MouseButtonStateListener
       * @param f A function that will be called when a suitable event is received
       * @return A new mouse button state listener
       */
-    def onButtonReleasedInside(button: MouseButton, getArea: => Area2D, f: MouseButtonStateEvent => Option[ConsumeEvent]) = apply(f,
-        MouseButtonStateEvent.wasReleasedFilter && MouseButtonStateEvent.buttonFilter(button) && MouseEvent.isOverAreaFilter(getArea))
+    def onButtonReleasedInside(button: MouseButton)(getArea: => Area2D)(f: MouseButtonStateEvent => Option[ConsumeEvent]) =
+        apply(MouseButtonStateEvent.wasReleasedFilter && MouseButtonStateEvent.buttonFilter(button) && MouseEvent.isOverAreaFilter(getArea))(f)
     
     /**
       * Creates a simple mouse button state listener that is called when the left mouse button is released within a certain area
@@ -107,8 +108,8 @@ object MouseButtonStateListener
       * @param f A function that will be called when a suitable event is received
       * @return A new mouse button state listener
       */
-    def onLeftReleasedInside(getArea: => Area2D, f: MouseButtonStateEvent => Option[ConsumeEvent]) =
-        onButtonReleasedInside(MouseButton.Left, getArea, f)
+    def onLeftReleasedInside(getArea: => Area2D)(f: MouseButtonStateEvent => Option[ConsumeEvent]) =
+        onButtonReleasedInside(MouseButton.Left)(getArea)(f)
     
     /**
       * Creates a simple mouse button state listener that is called when the right mouse button is released within a certain area
@@ -116,8 +117,8 @@ object MouseButtonStateListener
       * @param f A function that will be called when a suitable event is received
       * @return A new mouse button state listener
       */
-    def onRightReleasedInside(getArea: => Area2D, f: MouseButtonStateEvent => Option[ConsumeEvent]) =
-        onButtonReleasedInside(MouseButton.Right, getArea, f)
+    def onRightReleasedInside(getArea: => Area2D)(f: MouseButtonStateEvent => Option[ConsumeEvent]) =
+        onButtonReleasedInside(MouseButton.Right)(getArea)(f)
 }
 
 /**

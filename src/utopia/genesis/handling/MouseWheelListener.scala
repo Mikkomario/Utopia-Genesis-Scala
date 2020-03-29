@@ -9,11 +9,11 @@ object MouseWheelListener
 {
     /**
       * Creates a new mouse wheel listener that calls specified function on wheel rotations
-      * @param f A function that will be called on wheel rotations
       * @param filter A filter that specifies, which events will trigger the function (default = no filtering)
+      * @param f A function that will be called on wheel rotations
       * @return A new mouse event listener
       */
-    def apply(f: MouseWheelEvent => Option[ConsumeEvent], filter: Filter[MouseWheelEvent] = AnyFilter): MouseWheelListener =
+    def apply(filter: Filter[MouseWheelEvent] = AnyFilter)(f: MouseWheelEvent => Option[ConsumeEvent]): MouseWheelListener =
         new FunctionalMouseWheelListener(f, filter)
     
     /**
@@ -22,7 +22,17 @@ object MouseWheelListener
       * @param f A function that will be called on wheel rotations
       * @return A new mouse event listener
       */
-    def onWheelInsideArea(getArea: => Area2D, f: MouseWheelEvent => Option[ConsumeEvent]) = apply(f, e => e.isOverArea(getArea))
+    def onWheelInsideArea(getArea: => Area2D)(f: MouseWheelEvent => Option[ConsumeEvent]) =
+        apply { e => e.isOverArea(getArea) }(f)
+    
+    /**
+      * Creates a new mouse wheel listener that calls specified function on wheel rotations inside a specific area
+      * @param getArea A function for getting the target area
+      * @param f A function that will be called on wheel rotations
+      * @return A new mouse event listener
+      */
+    def onWheelInsideAreaNoConsume(getArea: => Area2D)(f: MouseWheelEvent => Unit) =
+        onWheelInsideArea(getArea) { e => f(e); None }
 }
 
 /**

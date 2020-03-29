@@ -9,15 +9,15 @@ import utopia.inception.util.{AnyFilter, Filter}
 
 object KeyStateListener
 {
-    implicit def functionToListener(f: KeyStateEvent => Unit): KeyStateListener = apply(f)
+    implicit def functionToListener(f: KeyStateEvent => Unit): KeyStateListener = apply()(f)
     
     /**
       * Creates a simple key state listener that calls specified function on key state events
+      * @param filter A filter that determines when the function is called (default = no filtering)
       * @param f A function that will be called on key state events
-      * @param filter A filter that determines when the function is called
       * @return A new key state listener
       */
-    def apply(f: KeyStateEvent => Unit, filter: Filter[KeyStateEvent] = AnyFilter): KeyStateListener =
+    def apply(filter: Filter[KeyStateEvent] = AnyFilter)(f: KeyStateEvent => Unit): KeyStateListener =
         new FunctionalKeyStateListener(f, filter)
     
     /**
@@ -25,37 +25,37 @@ object KeyStateListener
       * @param f A function that will be called
       * @return A new key state listener
       */
-    def onKeyPressed(targetKeyIndex: Int, f: KeyStateEvent => Unit) = apply(f, KeyStateEvent.wasPressedFilter &&
-        KeyStateEvent.keyFilter(targetKeyIndex))
+    def onKeyPressed(targetKeyIndex: Int)(f: KeyStateEvent => Unit) = apply(KeyStateEvent.wasPressedFilter &&
+        KeyStateEvent.keyFilter(targetKeyIndex))(f)
     
     /**
       * Creates a simple key state listener that calls specified function on key presses
       * @param f A function that will be called
       * @return A new key state listener
       */
-    def onAnyKeyPressed(f: KeyStateEvent => Unit) = apply(f, KeyStateEvent.wasPressedFilter)
+    def onAnyKeyPressed(f: KeyStateEvent => Unit) = apply(KeyStateEvent.wasPressedFilter)(f)
     
     /**
       * Creates a simple key state listener that calls specified function on key releases
       * @param f A function that will be called
       * @return A new key state listener
       */
-    def onKeyReleased(targetKeyIndex: Int, f: KeyStateEvent => Unit) = apply(f, KeyStateEvent.wasReleasedFilter &&
-        KeyStateEvent.keyFilter(targetKeyIndex))
+    def onKeyReleased(targetKeyIndex: Int)(f: KeyStateEvent => Unit) = apply(KeyStateEvent.wasReleasedFilter &&
+        KeyStateEvent.keyFilter(targetKeyIndex))(f)
     
     /**
       * Creates a simple key state listener that calls specified function on key releases
       * @param f A function that will be called
       * @return A new key state listener
       */
-    def onAnyKeyReleased(f: KeyStateEvent => Unit) = apply(f, KeyStateEvent.wasReleasedFilter)
+    def onAnyKeyReleased(f: KeyStateEvent => Unit) = apply(KeyStateEvent.wasReleasedFilter)(f)
     
     /**
       * Creates a simple key state listener that calls specified function each time enter is pressed
       * @param f A function that will be called
       * @return A new key state listener
       */
-    def onEnterPressed(f: KeyStateEvent => Unit) = onKeyPressed(KeyEvent.VK_ENTER, f)
+    def onEnterPressed(f: KeyStateEvent => Unit) = onKeyPressed(KeyEvent.VK_ENTER)(f)
 }
 
 /**
